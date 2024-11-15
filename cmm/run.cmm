@@ -1,0 +1,53 @@
+; Based on "Trace32(R) Demo scripts"
+; @Copyright: (C) 1989-2020 Lauterbach GmbH, licensed for use with TRACE32(R) only
+;  Copyright 2020, 2023-2024 NXP
+;
+;  NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be used strictly
+;  in accordance with the applicable license terms.  By expressly accepting
+;  such terms or by downloading, installing, activating and/or otherwise using
+;  the software, you are agreeing that you have read, and that you agree to
+;  comply with and are bound by, such license terms.  If you do not agree to
+;  be bound by the applicable license terms, then you may not retain,
+;  install, activate or otherwise use the software.
+;
+;  This file contains sample code only. It is not part of the production code deliverables.
+
+
+DO device.cmm FLASH ../output_AED/s32k344_gptp_example_aed.elf JTAG_INIT 0 EMPTY EMPTY EMPTY
+
+b.s _end_of_eunit_test
+b.s undefined_handler
+b.s HardFault_Handler
+
+data.list
+
+register.set pc Reset_Handler
+
+go main
+
+; Trace Window configuration
+WinCLEAR
+Mode.Hll
+
+TOOLBAR   ON
+STATUSBAR ON
+WinPAGE.RESet
+
+WinPAGE.Create P000
+WinCLEAR
+
+; Show: gPTP estimated time offset, GMAC counters and freerunning timer
+WinPOS 142.14 0.0 126. 31. 0. 0. W001
+v.w rGptpDataStruct.rPerDeviceParams.rEstimGmOffset \
+    Gmac_apxBases[0]->TX_PACKET_COUNT_GOOD_BAD \
+    Gmac_apxBases[0]->RX_PACKETS_COUNT_GOOD_BAD \
+    Gmac_apxBases[0]->MAC_SYSTEM_TIME_SECONDS \
+    Gmac_apxBases[0]->MAC_SYSTEM_TIME_NANOSECONDS \
+    svu64FreeRunningGptpTimer
+
+; Show code
+WinPOS 0.0 0.0 137. 31. 16. 1. W000
+WinTABS 10. 10. 25.
+List.auto
+
+WinPAGE.select P000

@@ -1,0 +1,3 @@
+FILTER_SDKs_SHOW_LATEST_VERSIONS=false
+com.freescale.s32ds.cross.sdk.support.attachedSDKs=PlatformSDK_S32K3_S32K344_M7_4.0.0_PATH|Debug_FLASH|Debug_RAM\:PlatformSDK_S32K3_S32K344_M7_5.0.0_PATH|output_AED
+eclipse.preferences.version=1

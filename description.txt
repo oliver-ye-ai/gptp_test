@@ -1,0 +1,28 @@
+1. Example Description
+    This package demonstrates the usage of gPTP Stack.
+    It contains the gPTP Stack, porting layer suporting S32K344 platform, and example application.
+
+2. Installation steps
+    2.1 Hardware installation
+        2.1.1 Supported boards
+            S32K3-T-BOX REVC
+        2.1.2 Debugger
+            Lauterbach debugger must be connected to relevant connector.
+    2.2 Software installation
+        2.2.1 Importing the S32 Design Studio project
+            After opening S32 Design Studio, go to "File -> New -> S32DS Project From Example -> S32K3xx_M7 gPTP BETA 0.9.0 Example Projects" and select this example. Then click on "Finish".
+            The project will be copied into you current workspace.
+
+3. Generating, building and running the example application
+    3.1 Generating the S32 configuration
+        Before running the example a configuration needs to be generated. Switch to the peripherals view and select this project.
+        Click "Update Code".
+        All files are now successfully generated.
+    3.2 Compiling the application
+        Switch back to code view.
+        Build the only configuration called output_AED via the hammer icon.
+        Wait for the build action to be completed before continuing to the next step. Check the compiler console for error messages; upon completion, the *.elf binary file
+        should be created.
+    3.3 Running the application on the board
+        Open Trace32
+        Run cmm/run.cmm to debug.

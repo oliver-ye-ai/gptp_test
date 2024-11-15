@@ -1,0 +1,530 @@
+; Based on "Trace32(R) Demo scripts"
+; @Copyright: (C) 1989-2020 Lauterbach GmbH, licensed for use with TRACE32(R) only
+;  Copyright 2020, 2023-2024 NXP
+;
+;  NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be used strictly
+;  in accordance with the applicable license terms.  By expressly accepting
+;  such terms or by downloading, installing, activating and/or otherwise using
+;  the software, you are agreeing that you have read, and that you agree to
+;  comply with and are bound by, such license terms.  If you do not agree to
+;  be bound by the applicable license terms, then you may not retain,
+;  install, activate or otherwise use the software.
+;
+;  This file contains sample code only. It is not part of the production code deliverables.
+;========================================================================
+LOCAL &load_to
+LOCAL &elf_file
+LOCAL &load_params
+LOCAL &core_no
+LOCAL &multicore
+LOCAL &core_list
+LOCAL &hse_available
+
+ENTRY &load_to &elf_file &load_params &core_no &multicore &core_list &custom_param
+
+&hse_available=0
+
+;IF "&core_no"=="0"
+;(
+;)
+;ELSE IF "&core_no"=="1"
+;(
+;)
+;ELSE
+;(
+;    print "[BEART] No core specified. Defaulting to M7_0"
+;    &core_no="0"
+;)
+
+;PLIST
+;PBREAK.Set 19.
+
+;Winclear
+system.down
+SYStem.Reset
+symbol.sourcepath.reset
+Break.RESet
+SYStem.CPU S32K344-M7-0
+;SYStem.Config.core 1. 1.
+SYStem.Config debugporttype JTAG
+IF COMBIPROBE()||UTRACE()
+(
+    SYStem.CONFIG.DEBUGPORTTYPE SWD
+    SYStem.CONFIG.CONNECTOR MIPI20T
+)
+SYStem.Option TRST ON
+SYStem.Option ResBreak OFF      ;  nTRST is connected to nSRST => ResBreak MUST be OFF
+SYStem.Option WaitReset 100us
+sys.Option DisMode THUMB
+SYStem.JTAGclock 10MHz
+SYStem.MemAccess AHB
+IF COMBIPROBE()||UTRACE()
+(
+    SYStem.MemAccess DAP
+    SYStem.Option MDMAP.DBGRSTSLOWPAD ON
+)
+SYStem.Option DUALPORT ON
+trace.DISABLE
+ETM.OFF
+ITM.OFF
+HTM.OFF
+GOSUB Config_Flash
+
+sys.up
+Break
+
+GOSUB InitSramViaDma
+
+LOCAL &core0 &core1
+&core0="undefined"
+&core1="undefined"
+
+IF "&multicore"!="ON"
+(
+  IF ((STRing.CHAR("&core_no",0)-30)>=0)&&((STRing.CHAR("&core_no",0)-30)<9)
+  (
+    &core0=(STRing.CHAR("&core_no",0)-30)
+  )
+)
+ELSE
+(
+  ;&multicore=="ON", multiple T32 windows attached to EU_CORE_LIST
+  ; map the logical cores to the cores in EU_CORE_LIST. Ex: (0,1)
+  IF ((STRing.CHAR("&core_list",1)-30)>=0)&&((STRing.CHAR("&core_list",1)-30)<9)
+  (
+    &core0=(STRing.CHAR("&core_list",1)-30)
+  )
+  IF ((STRing.CHAR("&core_list",3)-30)>=0)&&((STRing.CHAR("&core_list",3)-30)<9)
+  (
+    &core1=(STRing.CHAR("&core_list",3)-30)
+  )
+)
+
+;current core,master.
+IF ("&core0"!="undefined")
+(
+    IF "&core0"=="0x0"
+    (
+        SYStem.CPU S32K344-M7-0
+        SYStem.up
+        IF "&load_params"=="NEXUS_INIT"
+        (
+            ; Enable DMC
+            Data.Set SD:0xE000EF94 %Long 0yXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1
+
+            IF COMBIPROBE()||UTRACE()
+            (
+                ; initialize OFFCHIP uTrace (ETM, ITM)
+                ; external memory uTrace is around 128MB
+                ; uTrace connect to J10 of Mini-module XS32K3XXCVB-Q257
+                ;or uTrace connect to J29 of Mother board X-S32K3XXX-MB
+                GOSUB Trace_offchip_uTrace
+            )
+            ELSE
+            (
+                ; initialize ONCHIP trace (ETF, ETM)
+                ; Internal memory trace onchip is 2KB,
+                ;   so some functions could be missing in the trace log
+                GOSUB Trace_onchip_ETM
+            )
+        )
+    )
+    GOSUB LoadImage
+    IF "&core0"=="0x1"
+    (
+        IF ("&load_to"=="RAM")||("&load_to"=="ram")
+        (
+            ; Create a temporary vector table with a while(1)
+		    D.S 0x20427000 %Long 0x20428000
+            D.S 0x20427004 %Long 0x20428005
+            Data.Assemble 0x20428004 b 0x20428004
+            Data.Set SD:0x402DC160 %LE %Long 0x00000001        ; Partition 0 Core 0 Process Configuration Register (PRTN0_CORE1_PCONF)
+            Data.Set SD:0x402DC164 %LE %Long 0x00000001        ; Partition 0 Core 0 Process Update Register (PRTN0_CORE1_PUPD)
+            Data.Set SD:0x402DC16C %LE %Long 0x20427000        ; Partition 0 Core 0 Address Register (PRTN0_CORE1_ADDR)
+            Data.Set SD:0x402DC000 %LE %Long 0x00005AF0        ; MC_ME.CTL_KEY
+            Data.Set SD:0x402DC000 %LE %Long 0x0000A50F        ; MC_ME.CTL_KEY
+            While ((Data.Long(SD:0x402DC168)&0x00000001)==0x0) ; Partition 0 Core 0 Status Register (PRTN0_CORE1_STAT)
+            (
+              ; Wait for core clock to be enabled
+            )
+        )
+        SYStem.CPU S32K344-M7-1
+        SYStem.Attach
+        break
+        ;SWT_1 Clock is disabled by default so no need to disable it
+        ;SWT_1 Disable
+        ;D.S SD:0x4046C010 %LE %Long 0xC520
+        ;D.S SD:0x4046C010 %LE %Long 0xD928
+        ;D.S SD:0x4046C000 %LE %Long 0xFF000000
+    )
+)
+
+IF ("&core1"!="undefined")
+(
+  IF ("&core1"=="&core0")
+  (
+    STOP "Core 1 should be different than Core0"
+  )
+
+  InterCom.execute ALL SYnch.Connect OTHERS   ;workaround to avoid "Intercom resolve port name error"
+  IF (intercom.ping(localhost:10001))
+  (
+    PRINT "Ping reply"
+    intercom.wait localhost:10001
+
+    IF ("&core1"=="0x0")
+    (
+        IF ("&load_to"=="RAM")||("&load_to"=="ram")
+        (
+            GOSUB EnableCM7_0
+        )
+      intercom.execute localhost:10001 sys.cpu S32K344-M7-0
+    )
+    ELSE IF ("&core1"=="0x1")
+    (
+        IF ("&load_to"=="RAM")||("&load_to"=="ram")
+        (
+            GOSUB EnableCM7_1
+        )
+      intercom.execute localhost:10001 sys.cpu S32K344-M7-1
+    )
+    ELSE
+    (
+      STOP "Undefined core"
+    )
+
+    &core1="intercom.execute localhost:10001"
+
+    &core1 system.down
+    &core1 sys.Reset
+    &core1 System.Option ResBreak off
+    &core1 SYStem.Option DUALPORT ON
+    &core1 SYSTEM.JTAGclock 5mhz
+    &core1 trace.DISABLE
+    &core1 ETM.OFF
+    &core1 ITM.OFF
+    &core1 sys.Option DisMode THUMB
+    &core1 sys.attach
+    &core1 break
+	&core1 TrOnchip.Set MMERR OFF
+
+    &core1 data.load.elf &elf_file /GLOBTYPES /AnySym /NOCode
+  )
+  InterCom.execute ALL SYnch.Connect NONE
+)
+
+; Get chip version
+GOSUB LogChipVersion
+
+ENDDO
+
+InitSramViaDma:
+(
+    ;Enable Partition 1
+    D.S SD:0x402DC300 %LE %LONG 0x00000001  ;  MC_ME.PRTN1_PCONF
+    D.S SD:0x402DC304 %LE %LONG 0x00000001  ;  MC_ME.PRTN1_PUPD
+    D.S SD:0x402DC000 %LE %LONG 0x00005AF0  ;  MC_ME.MC_ME_CTL_KEY
+    D.S SD:0x402DC000 %LE %LONG 0x0000A50F  ;  MC_ME.MC_ME_CTL_KEY
+    WAIT (Data.Long(SD:0x402DC308)&0x00000001)==0x1  ; MC_ME.PRTN1_STAT[PCS]
+    (
+        ; wait for partition 1 clock to be active
+    )
+
+    PRIVATE &cofb_reg
+
+    ;Enable DMAMUX_0 Clock
+    &cofb_reg=Data.Long(SD:0x402DC334)
+    &cofb_reg=&cofb_reg|0x00000001
+    D.S SD:0x402DC334 %LE %LONG &cofb_reg   ;  MC_ME.MC_ME_PRTN1_COFB1_CLKEN
+    D.S SD:0x402DC304 %LE %LONG 0x00000001  ;  MC_ME.PRTN1_PUPD
+    D.S SD:0x402DC000 %LE %LONG 0x00005AF0  ;  MC_ME.MC_ME_CTL_KEY.R
+    D.S SD:0x402DC000 %LE %LONG 0x0000A50F  ;  MC_ME.MC_ME_CTL_KEY.R
+    WAIT (Data.Long(SD:0x402DC314)==&cofb_reg)  ; MC_ME.PRTN1_COFB1_STAT[REQ32]
+    (
+        ; wait for DMAMUX_0 clock to be active
+    )
+
+    ;Enable eDMA_TCD_0 Clock
+    &cofb_reg=Data.Long(SD:0x402DC330)
+    &cofb_reg=&cofb_reg|0x00000018
+    D.S SD:0x402DC330 %LE %LONG &cofb_reg   ;  MC_ME.MC_ME_PRTN1_COFB0_CLKEN
+    D.S SD:0x402DC304 %LE %LONG 0x00000001  ;  MC_ME.PRTN1_PUPD
+    D.S SD:0x402DC000 %LE %LONG 0x00005AF0  ;  MC_ME.MC_ME_CTL_KEY.R
+    D.S SD:0x402DC000 %LE %LONG 0x0000A50F  ;  MC_ME.MC_ME_CTL_KEY.R
+    WAIT (Data.Long(SD:0x402DC310)==&cofb_reg)  ; MC_ME.PRTN1_COFB0_STAT[REQ4]
+    (
+        ; wait for eDMA_TCD_0 clock to be active
+    )
+
+    ;DMA SRAM Init
+    D.S SD:0x40280003 %LE %BYTE 0x80	    ; Channel 0 Enable
+
+    D.S SD:0x40210020 %LE %LONG 0x00400000	; SADDR
+    D.S SD:0x40210024 %LE %LONG 0x03030000	; SSIZE 3, DSIZE 3, SOFF 0
+    D.S SD:0x40210028 %LE %LONG 0x00044000	; Nbytes
+    D.S SD:0x4021002C %LE %LONG 0x00000000	; SLAST
+    D.S SD:0x40210030 %LE %LONG 0x20400000	; DADDR
+    D.S SD:0x40210034 %LE %LONG 0x00010008	; CITER 1, DOFF 8
+    D.S SD:0x40210038 %LE %LONG 0xFFFB0000	; DLASTSGA = -NBYTES
+    D.S SD:0x4021003C %LE %LONG 0x00000001	; Start
+    WAIT ((data.long(SD:0x40210000)&0x40000000)==0x40000000)
+    (
+        ; wait for DMA DONE bit to be set
+    )
+
+    ; Initialize internal SRAM
+    IF CPUIS(S32K312*)
+    (
+        Data.Set A:0X20400000--0X20417FFF  %Quad 0
+    )
+    ELSE IF CPUIS(S32K314*)
+    (
+        Data.Set A:0x20400000--0x20427FFF  %Quad 0
+        Data.Set A:0x20428000--0x20442CFF  %Quad 0
+    )
+    ELSE IF CPUIS(S32K324*)
+    (
+        Data.Set A:0x20400000--0x20427FFF  %Quad 0
+        Data.Set A:0x20428000--0x20442CFF  %Quad 0
+    )
+    ELSE IF CPUIS(S32K344*)
+    (
+        Data.Set A:0x20400000--0x20427FFF  %Quad 0
+        Data.Set A:0x20428000--0x20442CFF  %Quad 0
+    )
+     ELSE
+    (
+        PRINT %ERROR "RAM size of CPU type is not supported by the script"
+        ENDDO
+    )
+
+    RETURN
+)
+
+LoadImage:
+(
+    IF ("&load_to"=="FLASH")||("&load_to"=="flash")
+    (
+
+        ;ON.ERROR.continue       ;Disable error handler temporarily
+        ;FLASH.ERASE 1.
+        ; Check if sector is erased, and there was no error. (due to flash trimming inconsistencies on this blind assembled chips)
+        ;IF ((Data.Long(SD:0x00400000))!=0xFFFFFFFF)
+        ;(
+          ; Erase failed, try again one more time
+        ;  FLASH.ERASE 1.
+        ;)
+        ;on.ERROR.DEFault    ;Enable the error handler
+
+        FLASH.ReProgram ALL /Erase
+        Data.Load.Elf &elf_file /GLOBTYPES
+        FLASH.ReProgram OFF
+        wait 10ms
+        sys.up
+        ; Load only debug symbols
+        Data.Load.Elf &elf_file /GLOBTYPES /NoCODE /AnySym
+    )
+    ELSE
+    (
+        ON.ERROR.continue
+        IF ((Data.Long(SD:0x00400000))==0x5AA55AA5)
+        (
+            PRINT "Boot header is stored at 0x00400000 address"
+        )
+        ELSE IF ((Data.Long(SD:0x00500000))==0x5AA55AA5)
+        (
+            PRINT "Boot header is stored at 0x00500000 address"
+        )
+        ELSE IF ((Data.Long(SD:0x00600000))==0x5AA55AA5)
+        (
+            PRINT "Boot header is stored at 0x00600000 address"
+        )
+        ELSE IF ((Data.Long(SD:0x00700000))==0x5AA55AA5)
+        (
+            PRINT "Boot header is stored at 0x00700000 address"
+        )
+        ELSE IF ((Data.Long(SD:0x10000000))==0x5AA55AA5)
+        (
+            PRINT "Boot header is stored at 0x10000000 address"
+        )
+        ELSE
+        (
+            PRINT %WARNING "Cortex M7 core start address is invalid in testing environment, please initialize the value of the boot header area"
+        )
+        on.ERROR.DEFault
+        Data.Load.Elf &elf_file /GLOBTYPES
+    )
+    RETURN
+)
+
+EnableCM7_0:
+(
+    ; Partition 0 - enable peripherals. Optional, none used by MCAL.
+    ;Data.Set eaxi:0x402DC100 %Long 0x00000001    ; MC_ME.PRTN0_PCONF.R = 1, PCE=1, Enable the clock to IPs
+    ;Data.Set eaxi:0x402DC104 %Long 0x00000001    ; MC_ME.PRTN0_PUPD.R = 1, PCUD=1, Trigger the hardware process for enabling/disabling the clock to IPs (other than core(s))
+    ;Data.Set eaxi:0x402DC130 %Long 0x00000003    ; MC_ME.PRTN0_COFB0_CLKEN.R = 0x3
+    ;Data.Set eaxi:0x402DC000 %Long 0x00005AF0    ; MC_ME.MC_ME_CTL_KEY.R
+    ;Data.Set eaxi:0x402DC000 %Long 0x0000A50F    ; MC_ME.MC_ME_CTL_KEY.R
+    ;; wait for clock to be active
+    ;WAIT (Data.Long(eaxi:0x402DC108)&0x00000001)==0x00000001      ; MC_ME.PRTN0_STAT.R
+    ;WAIT (Data.Long(eaxi:0x402DC110)&0x00000003)==0x00000003      ; MC_ME.PRTN0_COFB0_STAT.R
+
+    ; Partition 0 - enable core.
+    ;Data.Set eaxi:0x402DC004 %Long 0x00000001    ; MC_ME.MODE_CONF.R = 1, DEST_RST=1
+    D.S SD:0x402DC14C %Long __ENTRY_VTABLE        ; MC_ME.PRTN0_CORE0_ADDR.R = x
+    D.S SD:0x402DC140 %Long 0x00000001    ; MC_ME.PRTN0_CORE0_PCONF.R = 1, CCE=1, Enable the core clock
+    D.S SD:0x402DC144 %Long 0x00000001    ; MC_ME.PRTN0_CORE0_PUPD.R = 1, CCUPD=1, Trigger the hardware process for enabling core clock to Core 0
+    D.S SD:0x402DC000 %Long 0x00005AF0    ; MC_ME.MC_ME_CTL_KEY.R
+    D.S SD:0x402DC000 %Long 0x0000A50F    ; MC_ME.MC_ME_CTL_KEY.R
+    ; wait for clock to be active
+    WAIT (Data.Long(SD:0x402DC148)&0x00000001)==0x00000001      ; MC_ME.PRTN0_CORE0_STAT.R, CCS=1, Core 0 clock is active
+    RETURN
+)
+
+
+EnableCM7_1:
+(
+    ; Partition 0 - enable peripherals. Optional, none used by MCAL.
+    ;Data.Set eaxi:0x402DC100 %Long 0x00000001    ; MC_ME.PRTN0_PCONF.R = 1, PCE=1, Enable the clock to IPs
+    ;Data.Set eaxi:0x402DC104 %Long 0x00000001    ; MC_ME.PRTN0_PUPD.R = 1, PCUD=1, Trigger the hardware process for enabling/disabling the clock to IPs (other than core(s))
+    ;Data.Set eaxi:0x402DC130 %Long 0x00000003    ; MC_ME.PRTN0_COFB0_CLKEN.R = 0x3
+    ;Data.Set eaxi:0x402DC000 %Long 0x00005AF0    ; MC_ME.MC_ME_CTL_KEY.R
+    ;Data.Set eaxi:0x402DC000 %Long 0x0000A50F    ; MC_ME.MC_ME_CTL_KEY.R
+    ;; wait for clock to be active
+    ;WAIT (Data.Long(eaxi:0x402DC108)&0x00000001)==0x00000001      ; MC_ME.PRTN0_STAT.R
+    ;WAIT (Data.Long(eaxi:0x402DC110)&0x00000003)==0x00000003      ; MC_ME.PRTN0_COFB0_STAT.R
+
+    ; Partition 0 - enable core.
+    ;Data.Set eaxi:0x402DC004 %Long 0x00000001    ; MC_ME.MODE_CONF.R = 1, DEST_RST=1
+    D.S SD:0x402DC16C %Long __ENTRY_VTABLE        ; MC_ME.PRTN0_CORE1_ADDR.R = x
+    D.S SD:0x402DC160 %Long 0x00000001    ; MC_ME.PRTN0_CORE1_PCONF.R = 1, CCE=1, Enable the core clock
+    D.S SD:0x402DC164 %Long 0x00000001    ; MC_ME.PRTN0_CORE1_PUPD.R = 1, CCUPD=1, Trigger the hardware process for enabling core clock to Core 0
+    D.S SD:0x402DC000 %Long 0x00005AF0    ; MC_ME.MC_ME_CTL_KEY.R
+    D.S SD:0x402DC000 %Long 0x0000A50F    ; MC_ME.MC_ME_CTL_KEY.R
+    ; wait for clock to be active
+    WAIT (Data.Long(SD:0x402DC168)&0x00000001)==0x00000001      ; MC_ME.PRTN0_CORE0_STAT.R, CCS=1, Core 0 clock is active
+    RETURN
+)
+
+Config_Flash:
+(
+        PRIVATE &CodeFlashSize &DataFlashSize
+
+        IF CPUIS(S32K3?1*)
+        (
+          &CodeFlashSize=0x100000
+          &DataFlashSize=0x10000
+        )
+        ELSE IF CPUIS(S32K3?2*)
+        (
+          &CodeFlashSize=0x200000
+          &DataFlashSize=0x20000
+        )
+        ELSE IF CPUIS(S32K3?4*)
+        (
+          &CodeFlashSize=0x400000
+          &DataFlashSize=0x20000
+        )
+        ELSE IF CPUIS(S32K3?8*)
+        (
+          &CodeFlashSize=0x800000
+          &DataFlashSize=0x20000
+        )
+        ELSE
+        (
+          PRINT %ERROR "CFLASH size of CPU type is not supported by the script"
+          ENDDO
+        )
+
+        ; Code Flash Size used by HSE FW is 128 KB + 48 KB = 176 KB
+        &HseCodeFlashSize=0x2C000
+
+        ; Data Flash Size used by HSE FW is 40 KB
+        &HseDataFlashSize=0xA000
+
+        FLASH.RESet
+        FLASH.Create 1. 0x00400000++(&CodeFlashSize-&HseCodeFlashSize-1) 0x2000 TARGET long
+        FLASH.Create 2. 0x10000000++(&DataFlashSize-&HseDataFlashSize-1) 0x2000 TARGET long
+        FLASH.Create 3. 0x1B000000++0x1FFF                     0x2000 TARGET long /OTP /INFO "UTEST sector"
+        FLASH.TARGET E:0x20400000 E:0x20401000 0x1000 ~~/demo/arm/flash/long/s32k3x4.bin /DualPort
+        RETURN
+)
+
+Trace_offchip_uTrace:
+(
+    ; initialize OFFCHIP trace (ETM, ITM)
+    ; external memory uTrace is around 128MB
+
+    ; set PinMux and enable Clocks
+    Data.Set SD:0x40290558 %Long 0x00200107    ; TRACE_CLK (PTG6),  SIUL2.MSCR198
+    Data.Set SD:0x4029055C %Long 0x00200107    ; TRACE_D0  (PTG7),  SIUL2.MSCR199
+    Data.Set SD:0x4029057C %Long 0x00200107    ; TRACE_D1  (PTG15), SIUL2.MSCR207
+    Data.Set SD:0x40290580 %Long 0x00200107    ; TRACE_D2  (PTG16), SIUL2.MSCR208
+    Data.Set SD:0x4029053C %Long 0x00200107    ; TRACE_D3  (PTF31), SIUL2.MSCR191
+
+    ; Set SWO override needed for TPIU trace
+    Data.Set EDBG:0x40000604 %Long 0yXXXXxxxxX1X0xxxxXXXXxxxxXXXXxxxx
+
+    TPIU.PortSize 4
+    TPIU.PortMode Continuous
+    ITM.DataTrace CorrelatedData
+
+    ITM.ON
+    ETM.Trace ON
+    ETM.COND ALL
+    ETM.ON
+    Trace.METHOD CAnalyzer
+    Trace.AutoInit ON
+    CAnalyzer.AutoFocus
+
+    RETURN
+)
+
+Trace_onchip_ETM:
+(
+    ; initialize ONCHIP trace (ETF, ETM)
+    ; Internal memory trace onchip is 2KB
+
+    Trace.METHOD Onchip
+    Trace.TraceCONNECT ETF4
+    Trace.OFF
+    TPIU.PortMode Wrapped
+
+    ETM.Trace ON
+    ETM.DataTrace ON
+    ETM.COND ALL
+    ETM.ON
+    ETM.TimeStampsTrace ON
+    ETM.TImeMode AsyncTimeStamps
+    ETM.TimeStampCLOCK 160MHz
+    ;Timestamp value is 3. The value is encoded as a natural binary number (TSVALUEB)
+    Data.Set UD:0x4024C000 %LE %Long 0x00000003
+    Trace.AutoInit ON
+
+    RETURN
+)
+
+LogChipVersion:
+(
+    &path_to_siliconversion_logfile=""
+    &path_to_siliconversion_logdir=""
+    &siliconversion=""
+
+    ; Returns the name of the directory where the current PRACTICE program came from as a string.
+    &path_to_siliconversion_logdir=OS.PPD()
+    &path_to_siliconversion_logfile="&path_to_siliconversion_logdir"+"\"+"siliconversion.log"
+
+    ; Read SIUL2 MIDR1 register
+    &SIUL2_MIDR1_REG=Data.Long(SD:0x40290004)
+
+    &SIUL2_MIDR1_Major_Value=FORMAT.Decimal(1,((&SIUL2_MIDR1_REG&0x000000F0)>>4)+1)
+    &SIUL2_MIDR1_Minor_Value=FORMAT.Decimal(1,(&SIUL2_MIDR1_REG&0x0000000F))
+    &siliconversion="&SIUL2_MIDR1_Major_Value"+"."+"&SIUL2_MIDR1_Minor_Value"
+
+    ; Open Trace Param Log to append the system params
+    OPEN  #5  &path_to_siliconversion_logfile /Create
+    WRITE #5  "&siliconversion"
+    CLOSE #5
+
+    RETURN
+)
