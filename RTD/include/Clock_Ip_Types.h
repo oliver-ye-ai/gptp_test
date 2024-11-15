@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -26,7 +26,7 @@
 
 /**
 *   @file    Clock_Ip_Types.h
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK IP type header file.
 *   @details CLOCK IP type header file.
@@ -44,9 +44,9 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "Std_Types.h"
+#include "StandardTypes.h"
 #include "Clock_Ip_Cfg_Defines.h"
-
+#include "Mcal.h"
 /*==================================================================================================
                                SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -54,7 +54,7 @@ extern "C"{
 #define CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_TYPES_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_TYPES_SW_MAJOR_VERSION                5
+#define CLOCK_IP_TYPES_SW_MAJOR_VERSION                4
 #define CLOCK_IP_TYPES_SW_MINOR_VERSION                0
 #define CLOCK_IP_TYPES_SW_PATCH_VERSION                0
 
@@ -62,13 +62,12 @@ extern "C"{
                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-/* Check if source file and Std_Types.h file are of the same Autosar version */
-#if ((CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-     (CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
-    )
-    #error "AutoSar Version Numbers of Clock_Ip_Types.h  and Std_Types.h are different"
+/* Check if Clock_Ip_Types.h file and StandardTypes.h file are of the same Autosar version */
+#if ((CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION    != STD_AR_RELEASE_MAJOR_VERSION) || \
+     (CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION    != STD_AR_RELEASE_MINOR_VERSION))
+    #error "AutoSar Version Numbers of Clock_Ip_Types.h and StandardTypes.h are different"
 #endif
-#endif    /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
+#endif
 
 /* Check if Clock_Ip_Types.h file and Clock_Ip_Cfg_Defines.h file have same versions */
 #if (CLOCK_IP_TYPES_VENDOR_ID  != CLOCK_IP_CFG_DEFINES_VENDOR_ID)
@@ -89,6 +88,13 @@ extern "C"{
     #error "Software Version Numbers of Clock_Ip_Types.h and Clock_Ip_Cfg_Defines.h are different"
 #endif
 
+#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
+/* Check if Clock_Ip_Types.h file and Mcal.h file are of the same Autosar version */
+#if ((CLOCK_IP_TYPES_AR_RELEASE_MAJOR_VERSION    != MCAL_AR_RELEASE_MAJOR_VERSION) || \
+     (CLOCK_IP_TYPES_AR_RELEASE_MINOR_VERSION    != MCAL_AR_RELEASE_MINOR_VERSION))
+    #error "AutoSar Version Numbers of Clock_Ip_Types.h and Mcal.h are different"
+#endif
+#endif
 /*==================================================================================================
 *                                            CONSTANTS
 ==================================================================================================*/
@@ -1041,10 +1047,7 @@ THE_LAST_PRODUCER_CLK         = CLOCK_IP_FEATURE_PRODUCERS_NO,     /* Number of 
     ADC6_CLK                  = CLOCK_IP_HAS_ADC6_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_ADCBIST_CLK)
-    ADCBIST_CLK               = CLOCK_IP_HAS_ADCBIST_CLK,
-#endif
-#if defined(CLOCK_IP_HAS_AURORAPLL_DIFF_CLK)
-    AURORAPLL_DIFF_CLK        = CLOCK_IP_HAS_AURORAPLL_DIFF_CLK,
+    ADCBIST_CLK                  = CLOCK_IP_HAS_ADCBIST_CLK,
 #endif
 #if defined(CLOCK_IP_HAS_BCTU0_CLK)
     BCTU0_CLK                 = CLOCK_IP_HAS_BCTU0_CLK,
@@ -2913,7 +2916,6 @@ typedef enum
     CLOCK_IP_ACTIVE                             = 8U,   /**< @brief Report Clock Active. */
     CLOCK_IP_INACTIVE                           = 9U,   /**< @brief Report Clock Inactive. */
     CLOCK_IP_REPORT_WRITE_PROTECTION_ERROR      = 10U,  /**< @brief Report Write Protection Error. */
-    CLOCK_IP_SET_RAM_WAIT_STATES_ERROR          = 11U,  /**< @brief Set Ram Wait States Error. */
 } Clock_Ip_NotificationType;
 
 /** @brief Clock ip trigger divider type. */
@@ -2993,8 +2995,6 @@ typedef struct
     uint8                   Gain;                   /**< Gain value */
     uint8                   Monitor;                /**< Monitor type */
     uint8                   AutoLevelController;    /**< Automatic level controller */
-    uint8                   LevelShifterCurrent;    /**< Level Shifter Current */
-    uint8                   ComparatorCurrent;      /**< Comparator Current */
 
 } Clock_Ip_XoscConfigType;
 
@@ -3033,7 +3033,6 @@ typedef struct
 
     uint16                   Dividers[3U];                   /**< Dividers values */
 
-    uint8                    SoftwareDisable;                /**< Software Disable */
 } Clock_Ip_PllConfigType;
 
 /*!
@@ -3091,7 +3090,7 @@ typedef struct
 typedef struct
 {
     Clock_Ip_NameType         Name;                           /**< Clock name of the external clock. */
-    uint64                    Value;                          /**< Enable value - if value is zero then clock is gated, otherwise is enabled in different modes. */
+    uint32                    Value;                          /**< Enable value - if value is zero then clock is gated, otherwise is enabled in different modes. */
 
 } Clock_Ip_ExtClkConfigType;
 
@@ -3178,7 +3177,7 @@ typedef struct
     const Clock_Ip_PcfsConfigType            (*Pcfs)[];                                 /**< Progressive clock switching */
     const Clock_Ip_CmuConfigType             (*Cmus)[];                                 /**< Clock cmus */
     const Clock_Ip_ConfiguredFrequencyType   (*ConfiguredFrequencies)[];                /**< Configured frequency values */
-
+    
 } Clock_Ip_ClockConfigType;
 
 /*==================================================================================================

@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Clock_Ip.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -53,7 +53,7 @@ extern "C"{
 #define CLOCK_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_SW_PATCH_VERSION_C               0
 
@@ -216,10 +216,14 @@ static void Clock_Ip_CheckCmuClocks(Clock_Ip_ClockConfigType const * Config);
 #endif
 
 /* Clock Report Error Callback */
-static Clock_Ip_NotificationsCallbackType Clock_Ip_pfkNotificationsCallback = &Clock_Ip_NotificatonsEmptyCallback;
+static Clock_Ip_NotificationsCallbackType Clock_Ip_pfkNotificationsCallback = Clock_Ip_NotificatonsEmptyCallback;
 
 #define MCU_STOP_SEC_CODE
 #include "Mcu_MemMap.h"
+
+/*==================================================================================================
+*                                         LOCAL VARIABLES
+==================================================================================================*/
 
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
@@ -580,7 +584,7 @@ static void Clock_Ip_CallEmptyCallbacks(void)
         (void)Clock_Ip_axFracDivCallbacks[CLOCK_IP_NO_CALLBACK].Complete(CLOCK_IS_OFF);
 
         Clock_Ip_axGateCallbacks[CLOCK_IP_NO_CALLBACK].Set(NULL_PTR);
-        Clock_Ip_axGateCallbacks[CLOCK_IP_NO_CALLBACK].Update(CLOCK_IS_OFF,FALSE);
+        Clock_Ip_axGateCallbacks[CLOCK_IP_NO_CALLBACK].Update(RESERVED_CLK,FALSE);
 
         Clock_Ip_axIntOscCallbacks[CLOCK_IP_NO_CALLBACK].Set(NULL_PTR);
 
@@ -771,14 +775,14 @@ void Clock_Ip_InitClock(Clock_Ip_ClockConfigType const * Config)
         Clock_Ip_axIntOscCallbacks[CallbackIndex].Set(&(*Config->Ircoscs)[Index]);
     }
 
-    /* Initialize clock objects, internal driver data */
-    Clock_Ip_UpdateDriverContext(Config);
-
     for (Index = 0U; Index < Config->XoscsCount; Index++)     /* Configure all xoscs from configuration */
     {
         CallbackIndex = Clock_Ip_au8XoscCallbackIndex[Clock_Ip_au8ClockFeatures[(*(Config->Xoscs))[Index].Name][CLOCK_IP_CALLBACK]];
         Clock_Ip_axExtOscCallbacks[CallbackIndex].Set(&(*Config->Xoscs)[Index]);
     }
+
+    /* Initialize clock objects, internal driver data */
+    Clock_Ip_UpdateDriverContext(Config);
 
     /* Configure the PCFS  */
     for (Index = 0U; Index < Config->PcfsCount; Index++)       /* Configure all progressive frequency switching clocks from configuration */
@@ -1105,7 +1109,7 @@ void Clock_Ip_SetUserAccessAllowed(void)
  *
  * @implements Clock_Ip_GetClockFrequency_Activity
  * END**************************************************************************/
-uint64 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName)
+uint32 Clock_Ip_GetClockFrequency(Clock_Ip_NameType ClockName)
 {
 #if (defined(CLOCK_IP_DEV_ERROR_DETECT))
   #if (CLOCK_IP_DEV_ERROR_DETECT == STD_ON)
@@ -1296,7 +1300,7 @@ void Clock_Ip_WriteRegisterValues(const Clock_Ip_RegisterIndexType *Indexes)
     uint32 *RegAddr;
     uint32 RegData;
     uint32 Index;
-
+    
     CLOCK_IP_DEV_ASSERT(NULL_PTR != Clock_Ip_pxConfig);
     /* 'Clock_Ip_pxConfig' is set by Clock_Ip_InitClock().
      *  It doesn't make sense to call this function without clock initialization. */
@@ -1304,10 +1308,10 @@ void Clock_Ip_WriteRegisterValues(const Clock_Ip_RegisterIndexType *Indexes)
     {
         /* Register values array must be valid */
         CLOCK_IP_DEV_ASSERT(NULL_PTR != Clock_Ip_pxConfig->RegValues);
-
+        
         /* Valus of indexes must be valid */
         CLOCK_IP_DEV_ASSERT(Indexes->StartIndex < Indexes->EndIndex);
-
+        
         for (Index = Indexes->StartIndex; Index < Indexes->EndIndex; Index++)
         {
             RegAddr = (*Clock_Ip_pxConfig->RegValues)[Index].RegisterAddr;
@@ -1315,9 +1319,9 @@ void Clock_Ip_WriteRegisterValues(const Clock_Ip_RegisterIndexType *Indexes)
             *RegAddr = RegData;
         }
     }
-}
+}    
 #endif
-
+        
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 

@@ -7,8 +7,8 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
@@ -22,7 +22,7 @@
 ==================================================================================================*/
 /**
 *   @file       Os_Cfg.h
-*   @version 5.0.0
+*   @version 4.0.0
 *
 *
 *   @addtogroup OS_DRIVER
@@ -52,7 +52,7 @@ extern "C" {
 #define OS_CFG_AR_RELEASE_MAJOR_VERSION_H      4
 #define OS_CFG_AR_RELEASE_MINOR_VERSION_H      7
 #define OS_CFG_AR_RELEASE_REVISION_VERSION_H   0
-#define OS_CFG_SW_MAJOR_VERSION_H              5
+#define OS_CFG_SW_MAJOR_VERSION_H              4
 #define OS_CFG_SW_MINOR_VERSION_H              0
 #define OS_CFG_SW_PATCH_VERSION_H              0
 

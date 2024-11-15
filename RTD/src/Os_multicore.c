@@ -7,8 +7,8 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
@@ -42,6 +42,7 @@ extern "C"
 ==================================================================================================*/
 #include "Os.h"
 #include "Os_multicore.h"
+#include "Mcal.h"
 
 /*==================================================================================================
 *                                        LOCAL MACROS
@@ -59,11 +60,6 @@ extern "C"
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
-
-CoreIdType GetCoreID(void)
-{
-    return 0;
-}
 
 
 #ifdef __cplusplus

@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -47,6 +47,7 @@ extern "C" {
 =================================================================================================*/
 #include "Std_Types.h"
 #include "Port_Cfg.h"
+#include "Port_Ipw.h"
 #include "Mcal.h"
 
 /*=================================================================================================
@@ -61,7 +62,7 @@ extern "C" {
 #define PORT_AR_RELEASE_MAJOR_VERSION     4
 #define PORT_AR_RELEASE_MINOR_VERSION     7
 #define PORT_AR_RELEASE_REVISION_VERSION  0
-#define PORT_SW_MAJOR_VERSION             5
+#define PORT_SW_MAJOR_VERSION             4
 #define PORT_SW_MINOR_VERSION             0
 #define PORT_SW_PATCH_VERSION             0
 
@@ -87,12 +88,31 @@ extern "C" {
   #error "Software Version Numbers of Port.h and Port_Cfg.h are different"
 #endif
 
+/* Check if the files Port.h and Port_Ipw.h are of the same vendor */
+#if (PORT_VENDOR_ID != PORT_VENDOR_ID_IPW_H)
+    #error "Port.h and Port_Ipw.h have different vendor ids"
+#endif
+/* Check if the files Port.h and Port_Ipw.h are of the same Autosar version */
+#if ((PORT_AR_RELEASE_MAJOR_VERSION    != PORT_AR_RELEASE_MAJOR_VERSION_IPW_H) || \
+     (PORT_AR_RELEASE_MINOR_VERSION    != PORT_AR_RELEASE_MINOR_VERSION_IPW_H) || \
+     (PORT_AR_RELEASE_REVISION_VERSION != PORT_AR_RELEASE_REVISION_VERSION_IPW_H) \
+    )
+    #error "AutoSar Version Numbers of Port.h and Port_Ipw.h are different"
+#endif
+/* Check if the files Port.h and Port_Ipw.h are of the same Software version */
+#if ((PORT_SW_MAJOR_VERSION != PORT_SW_MAJOR_VERSION_IPW_H) || \
+     (PORT_SW_MINOR_VERSION != PORT_SW_MINOR_VERSION_IPW_H) || \
+     (PORT_SW_PATCH_VERSION != PORT_SW_PATCH_VERSION_IPW_H)    \
+    )
+    #error "Software Version Numbers of Port.h and Port_Ipw.h are different"
+#endif
+
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if the files Port.h and Std_Types.h are of the same version */
+    /* Check if the files Port.h and StandardTypes.h are of the same version */
    #if ((PORT_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
         (PORT_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION)    \
        )
-       #error "AutoSar Version Numbers of Port.h and Std_Types.h are different"
+       #error "AutoSar Version Numbers of Port.h and StandardTypes.h are different"
    #endif
     /* Check if the files Port.h and Mcal.h are of the same version */
    #if ((PORT_AR_RELEASE_MAJOR_VERSION != MCAL_AR_RELEASE_MAJOR_VERSION) || \
@@ -188,6 +208,18 @@ extern "C" {
 */
 #define PORT_RESETPINMODE_ID                ((uint8)0x07U)
 
+#ifdef PORT_SET_2_PINS_DIRECTION_API
+#if (STD_ON == PORT_SET_2_PINS_DIRECTION_API)
+/**
+* @brief   API service ID for PORT set 2 pins direction function.
+* @details Parameters used when raising an error/exception.
+*
+* @api
+*
+*/
+#define PORT_SET2PINSDIRECTION_ID       ((uint8)0x08U)
+#endif /* (STD_ON == PORT_SET_2_PINS_DIRECTION_API) */
+#endif
 
 /* Errors IDs */
 /**
@@ -261,18 +293,14 @@ extern "C" {
 */
 #define PORT_E_PARAM_POINTER            ((uint8)0x10U)
 
-/**
-* @brief   API Port_SetPinDirection() service called when direction is invalid.
-* @details Det Error value, returned by Port_SetPinDirection function
-*          if the passed Direction is invalid.
-*
-*/
-#define PORT_E_PARAM_INVALID_DIRECTION  ((uint8)0x1AU)
-
 /*=================================================================================================
 *                                      DEFINES AND MACROS
 =================================================================================================*/
-
+#if (STD_ON == PORT_MULTICORE_ENABLED)
+    #define Port_GetCoreID()            OsIf_GetCoreID()
+#else
+    #define Port_GetCoreID()            ((uint32)0UL)
+#endif
 /*=================================================================================================
 *                                              ENUMS
 =================================================================================================*/
@@ -324,8 +352,8 @@ void Port_Init(const Port_ConfigType * ConfigPtr);
  * @details Function used for changing the pin direction at runtime
  *
  *
- * @param[in] Pin pin id of the pin that needs to change the direction
- * @param[in] Direction new desired direction IN OUT IN_OUT
+ * @param[in]Pin pin id of the pin that needs to change the direction
+ * @param[in]Direction new desired direction IN OUT IN_OUT
  *
  * @return void
  * @implements Port_SetPinDirection_Activity
@@ -335,6 +363,30 @@ void Port_SetPinDirection(Port_PinType Pin,
                          );
 #endif /* (STD_ON == PORT_SET_PIN_DIRECTION_API) */
 
+#ifdef PORT_SET_2_PINS_DIRECTION_API
+#if (STD_ON == PORT_SET_2_PINS_DIRECTION_API)
+/**
+* @brief   Sets the direction of 2 pins.
+* @details The function @p Port_Set2PinsDirection() will set the port pins direction
+*          during runtime.
+* @pre     @p Port_Init() must have been called first. In order to change the
+*          pin direction the PortPinDirectionChangeable flag must have been set
+*          to @p TRUE for both pins.
+*
+* @param[in] Pin1          Pin 1 ID number.
+* @param[in] Pin2          Pin 2 ID number.
+* @param[in] Direction     Port Pin direction.
+*
+* Port_Set2PinsDirection_Activity
+* @api
+*/
+void Port_Set2PinsDirection(Port_PinType Pin1,
+                            Port_PinType Pin2,
+                            Port_PinDirectionType Direction
+                           );
+
+#endif /*(STD_ON == PORT_SET_2_PINS_DIRECTION_API) */
+#endif
 
 #ifdef PORT_CODE_SIZE_OPTIMIZATION
 #if (STD_ON == PORT_SET_PIN_MODE_API) && (STD_OFF == PORT_CODE_SIZE_OPTIMIZATION)
@@ -343,8 +395,8 @@ void Port_SetPinDirection(Port_PinType Pin,
  *
  * @details Function used to change the pin mode at runtime.
  *
- * @param[in] Pin pin id of the pin that needs to change the direction
- * @param[in] Mode new mode
+ * @param[in]Pin pin id of the pin that needs to change the direction
+ * @param[in]Mode new mode
  *
  * @return void
  *

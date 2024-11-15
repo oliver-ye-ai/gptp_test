@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -58,7 +58,7 @@ extern "C"{
 #define MEM_43_INFLS_IPW_AR_RELEASE_MAJOR_VERSION_C            4
 #define MEM_43_INFLS_IPW_AR_RELEASE_MINOR_VERSION_C            7
 #define MEM_43_INFLS_IPW_AR_RELEASE_REVISION_VERSION_C         0
-#define MEM_43_INFLS_IPW_SW_MAJOR_VERSION_C                    5
+#define MEM_43_INFLS_IPW_SW_MAJOR_VERSION_C                    4
 #define MEM_43_INFLS_IPW_SW_MINOR_VERSION_C                    0
 #define MEM_43_INFLS_IPW_SW_PATCH_VERSION_C                    0
 
@@ -139,7 +139,7 @@ extern "C"{
 #endif
 
 /* Get the current DomainID. */
-#if (STD_ON == MEM_43_INFLS_USE_XRDC_CONFIG)
+#if (TRUE == MEM_43_INFLS_USE_XRDC_CONFIG)
 
 #define Mem_43_INFLS_u8DomainID          (Rm_XrdcGetDomainID(0U))
 
@@ -204,7 +204,7 @@ static Mem_43_INFLS_BlockType xMemBlockAcWrite;
 #include "Mem_43_INFLS_MemMap.h"
 
 /* @brief verify that AC loaded or not */
-static boolean Mem_43_INFLS_AcLoaded;                      /* implicit zero initialization: FALSE */
+boolean Mem_43_INFLS_AcLoaded;                      /* implicit zero initialization: FALSE */
 
 #define MEM_43_INFLS_STOP_SEC_VAR_CLEARED_BOOLEAN
 #include "Mem_43_INFLS_MemMap.h"
@@ -215,10 +215,10 @@ static boolean Mem_43_INFLS_AcLoaded;                      /* implicit zero init
                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
+#if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
+
 #define MEM_43_INFLS_START_SEC_CODE
 #include "Mem_43_INFLS_MemMap.h"
-
-#if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
 
 static void Mem_43_INFLS_IPW_LoadAc(const Mem_43_INFLS_JobType JobType);
 static void Mem_43_INFLS_IPW_UnloadAc(const Mem_43_INFLS_JobType JobType);
@@ -227,6 +227,9 @@ static inline void Mem_43_INFLS_IPW_CheckLoadAc(Mem_43_INFLS_BlockType BlockAc,
                                                );
 static inline void Mem_43_INFLS_IPW_CheckUnLoadAc(const Mem_43_INFLS_JobType JobType);
 
+#define MEM_43_INFLS_STOP_SEC_CODE
+#include "Mem_43_INFLS_MemMap.h"
+
 #endif /* STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START */
 
 
@@ -234,75 +237,8 @@ static inline void Mem_43_INFLS_IPW_CheckUnLoadAc(const Mem_43_INFLS_JobType Job
                                        LOCAL FUNCTIONS
 ==================================================================================================*/
 
-/**
- * @brief    Returns the result of the last job of Hw Service.
- */
-static C40_Ip_StatusType Mem_43_INFLS_IPW_HwServiceGetJobResult(uint32 InstanceIndex,
-                                                                Mem_43_INFLS_JobRuntimeInfoType *JobInfo)
-{
-    C40_Ip_StatusType IpStatus;
-
-#if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
-    C40_Ip_UtestStateType       UtestResult = C40_IP_OK;
-    Mem_43_INFLS_UtestStateType TmpOpStatus = MEM_43_INFLS_UTEST_JOB_OK;
-#endif
-
-    switch (JobInfo->HwServiceIdJob)
-    {
-    case MEM_43_INFLS_HWSERVICEID_CANCEL:
-        /* Abort a program or erase operation */
-        IpStatus = C40_Ip_Abort();
-        break;
-
-#if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
-    case MEM_43_INFLS_HWSERVICEID_ARRAY_INTEGRITY_CHECK:
-    case MEM_43_INFLS_HWSERVICEID_USER_MARGIN_READ_CHECK:
-        /* Process ongoing utest asynchronous hardware job. */
-        IpStatus = C40_Ip_CheckUserTestStatus((const Mem_43_INFLS_MisrType *)JobInfo->UtestRuntime[InstanceIndex].MisrExpectedValues, &UtestResult);
-        if (C40_IP_STATUS_BUSY != IpStatus)
-        {
-            switch (UtestResult)
-            {
-            case C40_IP_USER_TEST_SUS:
-                /* The UTest check operation is in suspend state */
-                TmpOpStatus = MEM_43_INFLS_UTEST_JOB_USER_TEST_SUS;
-                break;
-            case C40_IP_USER_TEST_BREAK_SBC:
-                /* The UTest check operation is broken by Single bit correction */
-                TmpOpStatus = MEM_43_INFLS_UTEST_JOB_USER_TEST_BREAK_SBC;
-                break;
-
-            case C40_IP_USER_TEST_BREAK_DBD:
-                /* The UTest check operation is broken by Double bit detection */
-                TmpOpStatus = MEM_43_INFLS_UTEST_JOB_USER_TEST_BREAK_DBD;
-                break;
-
-            default:
-                /* Successful operation */
-                TmpOpStatus = MEM_43_INFLS_UTEST_JOB_OK;
-                break;
-            }
-        }
-
-        if (MEM_43_INFLS_UTEST_JOB_USER_TEST_SUS == TmpOpStatus)
-        {
-            /* Make job status to busy when it suspended */
-            IpStatus = C40_IP_STATUS_BUSY;
-        }
-        JobInfo->UtestRuntime->UtestStateType = TmpOpStatus;
-        break;
-
-#endif /* MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON */
-    default:
-        /* fix compiler warning */
-        IpStatus = C40_IP_STATUS_SUCCESS;
-        break;
-    }
-
-    (void)InstanceIndex; /* fix compiler warning */
-    return IpStatus;
-}
-
+#define MEM_43_INFLS_START_SEC_CODE
+#include "Mem_43_INFLS_MemMap.h"
 
 /*
  * Description:    Get the memory unit index of the memory instance
@@ -347,6 +283,16 @@ static Mem_43_INFLS_LengthType Mem_43_INFLS_IPW_ComputeReadLength(const Mem_43_I
 static Mem_43_INFLS_LengthType Mem_43_INFLS_IPW_ComputeEraseLength(const Mem_43_INFLS_JobRuntimeInfoType *JobInfo)
 {
     Mem_43_INFLS_LengthType EraseLength = JobInfo->SectorBatch->SectorSize;  /* default is normal size */
+    const uint32 BurstSize           = JobInfo->SectorBatch->EraseBurstSize;
+
+    /* Check for burst mode */
+    if ((0U == (JobInfo->Address % BurstSize)) &&
+        (0U == (JobInfo->Length  % BurstSize))
+       )
+    {
+        /* Both start address and length are aligned with the burst setting */
+        EraseLength = BurstSize;
+    }
 
     return EraseLength;
 }
@@ -361,16 +307,16 @@ static Mem_43_INFLS_LengthType Mem_43_INFLS_IPW_ComputeWriteLength(const Mem_43_
     uint32 Offset;
     uint32 WriteLength;
     Mem_43_INFLS_AddressType TargetAddress = JobInfo->Address;
-    uint32 Length = JobInfo->Length;  /* The remaining length of the job */
+    uint32 Length = JobInfo->Length;  /* the remaining length of the job */
 
     /* Byte offset of a quad-page */
     Offset = TargetAddress & (C40_IP_WRITE_MAX_SIZE - 1U);
-
+    
     /* Computes WriteLength */
     /* TargetAddress is not aligned a quad-page */
-    if (0U != Offset)
+    if(0U != Offset)
     {
-        if ((Length + Offset) > C40_IP_WRITE_MAX_SIZE)
+        if ((Length + Offset) > C40_IP_WRITE_MAX_SIZE) 
         {
             /* Length + Offset must fall within a quad-page */
             WriteLength = C40_IP_WRITE_MAX_SIZE - Offset;
@@ -380,7 +326,7 @@ static Mem_43_INFLS_LengthType Mem_43_INFLS_IPW_ComputeWriteLength(const Mem_43_
             WriteLength  = Length;
         }
     }
-    else /* TargetAddress is aligned a quad-page */
+    else /* TargetAddress is not aligned a quad-page */
     {
 
         if (Length > C40_IP_WRITE_MAX_SIZE)
@@ -392,7 +338,7 @@ static Mem_43_INFLS_LengthType Mem_43_INFLS_IPW_ComputeWriteLength(const Mem_43_
         {
             WriteLength = Length;
         }
-
+            
     }
 
     return WriteLength;
@@ -419,11 +365,11 @@ static Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_TranslateReturnCode(C40_Ip_St
             break;
         case C40_IP_STATUS_ECC_UNCORRECTED:
             /* The job has completed */
-            JobResult = MEM_43_INFLS_ECC_UNCORRECTED;
+            JobResult = MEM_43_INFLS_JOB_ECC_UNCORRECTED;
             break;
         case C40_IP_STATUS_ECC_CORRECTED:
             /* The job has completed */
-            JobResult = MEM_43_INFLS_ECC_CORRECTED;
+            JobResult = MEM_43_INFLS_JOB_ECC_CORRECTED;
             break;
         default:
             /* Timeout or hardware errors */
@@ -434,7 +380,7 @@ static Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_TranslateReturnCode(C40_Ip_St
     return JobResult;
 }
 
-#if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
+#if ( STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START )
 /**
  * @brief        Load access code to RAM
  *
@@ -521,13 +467,18 @@ static inline void Mem_43_INFLS_IPW_CheckLoadAc(Mem_43_INFLS_BlockType BlockAc,
                                                 Mem_43_INFLS_JobRuntimeInfoType *JobInfo
                                                )
 {
+    Mem_43_INFLS_AddressType JobAddrStart;
     Mem_43_INFLS_BlockType   JobBlockSector;
 
+    /* Get the base address of the sector. */
+    JobAddrStart = JobInfo->Address;
+    /* Add the offset of the sector inside sector group */
+    JobAddrStart += JobInfo->Length;
     /* Get block number of the sector to be erased or written */
-    JobBlockSector = (Mem_43_INFLS_BlockType)C40_Ip_GetBlockNumberFromAddress((uint32)JobInfo->Address);
+    JobBlockSector = (Mem_43_INFLS_BlockType)C40_Ip_GetBlockNumberFromAddress((uint32)JobAddrStart);
 
     /* Only load if erase/write to the same block */
-    if (((Mem_43_INFLS_BlockType)C40_IP_BLOCK_INVALID != JobBlockSector) && ((Mem_43_INFLS_BlockType)C40_IP_BLOCK_INVALID != BlockAc) && (JobBlockSector == BlockAc))
+    if (JobBlockSector == BlockAc)
     {
         /* Load position independent access code to RAM */
         Mem_43_INFLS_IPW_LoadAc(JobInfo->JobType);
@@ -569,45 +520,49 @@ static uint32 Mem_43_INFLS_IPW_GetAddrFormBlockNumber(C40_Ip_FlashBlocksNumberTy
 {
     uint32 BaseAddressofBlock;
 
-    switch (BlockNumber)
+    if (BlockNumber == C40_IP_CODE_BLOCK_0)
     {
-    case C40_IP_CODE_BLOCK_0:
         /* The address is in the code block 0 */
         BaseAddressofBlock = C40_IP_CODE_BLOCK_0_BASE_ADDR;
-        break;
+    }
 #ifdef C40_IP_CODE_BLOCK_1_BASE_ADDR
-    case C40_IP_CODE_BLOCK_1:
+    else if (BlockNumber == C40_IP_CODE_BLOCK_1)
+    {
         /* The address is in the code block 1 */
         BaseAddressofBlock = C40_IP_CODE_BLOCK_1_BASE_ADDR;
-        break;
+    }
 #endif
 #ifdef C40_IP_CODE_BLOCK_2_BASE_ADDR
-    case C40_IP_CODE_BLOCK_2:
+    else if (BlockNumber == C40_IP_CODE_BLOCK_2)
+    {
         /* The address is in the code block 2 */
         BaseAddressofBlock = C40_IP_CODE_BLOCK_2_BASE_ADDR;
-        break;
+    }
 #endif
 #ifdef C40_IP_CODE_BLOCK_3_BASE_ADDR
-    case C40_IP_CODE_BLOCK_3:
+    else if (BlockNumber == C40_IP_CODE_BLOCK_3)
+    {
         /* The address is in the code block 3 */
         BaseAddressofBlock = C40_IP_CODE_BLOCK_3_BASE_ADDR;
-        break;
+    }
 #endif
 #ifdef C40_IP_DATA_BLOCK_BASE_ADDR
-    case C40_IP_DATA_BLOCK:
-        /* The address is in the data block */
+    else if (BlockNumber == C40_IP_DATA_BLOCK)
+    {
+        /* The address is in the code block 3 */
         BaseAddressofBlock = C40_IP_DATA_BLOCK_BASE_ADDR;
-        break;
+    }
 #endif
 #ifdef C40_IP_UTEST_BLOCK_BASE_ADDR
-    case C40_IP_BLOCK_UTEST:
-        /* The address is in the UTEST block */
+    else if (BlockNumber == C40_IP_BLOCK_UTEST)
+    {
+        /* The address is in the code block 3 */
         BaseAddressofBlock = C40_IP_UTEST_BLOCK_BASE_ADDR;
-        break;
+    }
 #endif
-    default:
+    else
+    {
         BaseAddressofBlock = C40_IP_INVALID_ADDR;
-        break;
     }
 
     return BaseAddressofBlock;
@@ -666,46 +621,36 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_Erase(uint32 InstanceIndex,
     Mem_43_INFLS_LengthType    TransferLength;
     C40_Ip_StatusType          Status;
     C40_Ip_VirtualSectorsType  VirtualSector;
-    boolean                    AsyncMode = TRUE;
 
-    /* Calculate length of data transfer */
-    TransferLength = Mem_43_INFLS_IPW_ComputeEraseLength(JobInfo);
-
-    /*If Sync mode is enabled                         ->  AsyncMode is FALSE */
-    /*If Load Code to Ram is enabled and AC is loaded ->  AsyncMode is FALSE */
-    /*Remaining cases                                 ->  AsyncMode is TRUE */
-#if (STD_ON == MEM_43_INFLS_SYNC_MODE_ENABLE)
-    /* Set Synch Mode for IP layer */
-    AsyncMode = FALSE;
-#endif
+    if (0U == JobInfo->Length)
+    {
+        /* No more sector to erase */
+        JobResult = MEM_43_INFLS_JOB_OK;
+    }
+    else
+    {
+        /* Calculate length of data transfer */
+        TransferLength = Mem_43_INFLS_IPW_ComputeEraseLength(JobInfo);
 
 #if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
-    Mem_43_INFLS_IPW_CheckLoadAc(xMemBlockAcErase, JobInfo);
-    if (TRUE == Mem_43_INFLS_AcLoaded)
-    {
-        /* Set Synch Mode for IP layer */
-        AsyncMode = FALSE;
-    }
+        Mem_43_INFLS_IPW_CheckLoadAc(xMemBlockAcErase, JobInfo);
 #endif
 
-    /* Get the physical sector number */
-    VirtualSector = C40_Ip_GetSectorNumberFromAddress(JobInfo->Address);
-    /* Unlocks the Virtual sector */
-    Status = C40_Ip_ClearLock(VirtualSector, (uint8)Mem_43_INFLS_u8DomainID);
-    if (C40_IP_STATUS_SUCCESS == Status)
-    {
-        C40_Ip_SetAsyncMode(AsyncMode);
-        /* Call IP routine to erase internal flash memory sector */
-        Status = C40_Ip_MainInterfaceSectorErase(VirtualSector, (uint8)Mem_43_INFLS_u8DomainID);
-    }
+        /* Get the physical sector number */
+        VirtualSector = C40_Ip_GetSectorNumberFromAddress(JobInfo->Address);
 
-    if (C40_IP_STATUS_SUCCESS == Status)
-    {
-        /*If Load Code to Ram is enabled, AC is loaded (don't care Sync/Async mode)     ->  run access code on RAM   */
-        /*If Load Code to Ram is enabled, AC is not loaded and Sync mode is enabled     ->  run access code on Flash */
-        /*If Load Code to Ram is enabled, AC is not loaded and Sync mode is disabled    ->  no run access code, C40 job is set on IP layer*/
-        /*If Load Code to Ram is disabled, Sync mode is enabled                         ->  run access code on Flash */
-        /*If Load Code to Ram is disabled, Sync mode is disabled                        ->  no run access code, C40 job is set on IP layer*/
+        /* Unlocks the Virtual sector */
+        Status = C40_Ip_ClearLock(VirtualSector, (uint8)Mem_43_INFLS_u8DomainID);
+
+        if (C40_IP_STATUS_SUCCESS == Status)
+        {
+            /* Set Synch Mode for IP layer */
+            C40_Ip_SetAsyncMode(FALSE);
+
+            /* Call IP routine to erase internal flash memory sector */
+            Status = C40_Ip_MainInterfaceSectorErase(VirtualSector, (uint8)Mem_43_INFLS_u8DomainID);
+        }
+
 #if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
         if (TRUE == Mem_43_INFLS_AcLoaded)
         {
@@ -715,42 +660,31 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_Erase(uint32 InstanceIndex,
         else
 #endif /* STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START */
         {
-            if (FALSE == AsyncMode)
-            {
-                C40_Ip_AccessCode(Mem_43_INFLS_pConfigPtr->MemAcCallBackPtr);
-            }
+            C40_Ip_AccessCode(Mem_43_INFLS_pConfigPtr->MemAcCallBackPtr);
         }
 
-        /* Update job state */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-
-        if (FALSE == AsyncMode)
-        {
-            if ( JobInfo->Length == 0U )
-            {
-                JobResult =  Mem_43_INFLS_IPW_GetJobResult(InstanceIndex, JobInfo);
-            }
-            else
-            {
-                JobResult = MEM_43_INFLS_JOB_PENDING;
-            }
-        }
-        else
+        if ((C40_IP_STATUS_SUCCESS == Status) || (C40_IP_STATUS_ECC_CORRECTED == Status))
         {
             /* Command is sent, the actual job is being processed in the memory device */
             JobResult = MEM_43_INFLS_JOB_PENDING;
+            /* Update job state */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
+        }
+        else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
+        {
+            /* the job result is ecc uncorrected */
+            JobResult = MEM_43_INFLS_JOB_ECC_UNCORRECTED;
+        }
+        else
+        {
+            /* Operation failed. Command is sent */
+            JobResult = MEM_43_INFLS_JOB_FAILED;
         }
 
-    }
-    else
-    {
-        /*Operation failed. Command have not sent yet*/
-        JobResult = MEM_43_INFLS_JOB_FAILED;
-    }
-
 #if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
-    Mem_43_INFLS_IPW_CheckUnLoadAc(JobInfo->JobType);
+        Mem_43_INFLS_IPW_CheckUnLoadAc(JobInfo->JobType);
 #endif
+    }
 
     (void)InstanceIndex;
 
@@ -769,45 +703,36 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_Write(uint32 InstanceIndex,
     Mem_43_INFLS_LengthType        TransferLength;
     C40_Ip_StatusType              Status;
     C40_Ip_VirtualSectorsType      VirtualSector;
-    boolean                        AsyncMode = TRUE;
 
-    /* Calculate length of data transfer */
-    TransferLength = Mem_43_INFLS_IPW_ComputeWriteLength(JobInfo);
-
-    /*If Sync mode is enabled                         ->  AsyncMode is FALSE */
-    /*If Load Code to Ram is enabled and AC is loaded ->  AsyncMode is FALSE */
-    /*Remaining cases                                 ->  AsyncMode is TRUE */
-#if (STD_ON == MEM_43_INFLS_SYNC_MODE_ENABLE)
-    /* Set Synch Mode for IP layer */
-    AsyncMode = FALSE;
-#endif
+    if (0U == JobInfo->Length)
+    {
+        /* No more data to write */
+        JobResult = MEM_43_INFLS_JOB_OK;
+    }
+    else
+    {
+        /* Calculate length of data transfer */
+        TransferLength = Mem_43_INFLS_IPW_ComputeWriteLength(JobInfo);
 
 #if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
-    Mem_43_INFLS_IPW_CheckLoadAc(xMemBlockAcWrite, JobInfo);
-    if (TRUE == Mem_43_INFLS_AcLoaded)
-    {
-        /* Set Synch Mode for IP layer */
-        AsyncMode = FALSE;
-    }
+        Mem_43_INFLS_IPW_CheckLoadAc(xMemBlockAcWrite, JobInfo);
 #endif
 
-    /* Get the physical sector number */
-    VirtualSector = C40_Ip_GetSectorNumberFromAddress(JobInfo->Address);
-    /* Unlocks the Virtual sector */
-    Status = C40_Ip_ClearLock(VirtualSector, (uint8)Mem_43_INFLS_u8DomainID);
-    if (C40_IP_STATUS_SUCCESS == Status)
-    {
-        C40_Ip_SetAsyncMode(AsyncMode);
-        /* Call IP routine to write data to internal flash memory */
-        Status = C40_Ip_MainInterfaceWrite(JobInfo->Address, TransferLength, JobInfo->DataPtr, (uint8)Mem_43_INFLS_u8DomainID);
-    }
-    if ((C40_IP_STATUS_SUCCESS == Status) || (C40_IP_STATUS_ECC_CORRECTED == Status))
-    {
-        /* If Load Code to Ram is enabled, AC is loaded (don't care Sync/Async mode)     ->  run access code on RAM   */
-        /* If Load Code to Ram is enabled, AC is not loaded and Sync mode is enabled     ->  run access code on Flash */
-        /* If Load Code to Ram is enabled, AC is not loaded and Sync mode is disabled    ->  no run access code, C40 job is set on IP layer*/
-        /* If Load Code to Ram is disabled, Sync mode is enabled                         ->  run access code on Flash */
-        /* If Load Code to Ram is disabled, Sync mode is disabled                        ->  no run access code, C40 job is set on IP layer*/
+        /* Get the physical sector number */
+        VirtualSector = C40_Ip_GetSectorNumberFromAddress(JobInfo->Address);
+
+        /* Unlocks the Virtual sector */
+        Status = C40_Ip_ClearLock(VirtualSector, (uint8)Mem_43_INFLS_u8DomainID);
+
+        if (C40_IP_STATUS_SUCCESS == Status)
+        {
+            /* Set Synch Mode IP layer */
+            C40_Ip_SetAsyncMode(FALSE);
+
+            /* Call IP routine to write data to internal flash memory */
+            Status = C40_Ip_MainInterfaceWrite(JobInfo->Address, TransferLength, JobInfo->DataPtr, (uint8)Mem_43_INFLS_u8DomainID);
+        }
+
 #if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
         if (TRUE == Mem_43_INFLS_AcLoaded)
         {
@@ -817,46 +742,31 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_Write(uint32 InstanceIndex,
         else
 #endif /* STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START */
         {
-            if (FALSE == AsyncMode)
-            {
-                C40_Ip_AccessCode(Mem_43_INFLS_pConfigPtr->MemAcCallBackPtr);
-            }
+            C40_Ip_AccessCode(Mem_43_INFLS_pConfigPtr->MemAcCallBackPtr);
         }
 
-        /* Update job state */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-
-        if (FALSE == AsyncMode)
-        {
-            if ( JobInfo->Length == 0U )
-            {
-                JobResult =  Mem_43_INFLS_IPW_GetJobResult(InstanceIndex, JobInfo);
-            }
-            else
-            {
-                JobResult = MEM_43_INFLS_JOB_PENDING;
-            }
-        }
-        else
+        if ((C40_IP_STATUS_SUCCESS == Status) || (C40_IP_STATUS_ECC_CORRECTED == Status))
         {
             /* Command is sent, the actual job is being processed in the memory device */
             JobResult = MEM_43_INFLS_JOB_PENDING;
+            /* Update job state */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
         }
-    }
-    else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
-    {
-        /* The job result is ecc uncorrected. Command have not sent yet */
-        JobResult = MEM_43_INFLS_ECC_UNCORRECTED;
-    }
-    else
-    {
-        /* Operation failed. Command have not sent yet */
-        JobResult = MEM_43_INFLS_JOB_FAILED;
-    }
+        else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
+        {
+            /* the job result is ecc uncorrected */
+            JobResult = MEM_43_INFLS_JOB_ECC_UNCORRECTED;
+        }
+        else
+        {
+            /* Operation failed. Command is sent */
+            JobResult = MEM_43_INFLS_JOB_FAILED;
+        }
 
 #if (STD_ON == MEM_43_INFLS_AC_LOAD_ON_JOB_START)
-    Mem_43_INFLS_IPW_CheckUnLoadAc(JobInfo->JobType);
+        Mem_43_INFLS_IPW_CheckUnLoadAc(JobInfo->JobType);
 #endif
+    }
 
     (void)InstanceIndex;
 
@@ -876,33 +786,47 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_Read(uint32 InstanceIndex,
     Mem_43_INFLS_LengthType TransferLength;
     C40_Ip_StatusType Status;
 
-
-    /* Calculate length of data transfer */
-    TransferLength = Mem_43_INFLS_IPW_ComputeReadLength(JobInfo);
-    /* Read data from flash memory device */
-    Status = C40_Ip_Read(JobInfo->Address, TransferLength, JobInfo->DataPtr);
-    if (C40_IP_STATUS_SUCCESS == Status)
+    if (0U == JobInfo->Length)
     {
-        /* Update length */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-        /* Update state */
+        /* No more data to read */
         JobResult = MEM_43_INFLS_JOB_OK;
-    }
-    else if (C40_IP_STATUS_ECC_CORRECTED == Status)
-    {
-        /* Update length */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-        /* Update state */
-        JobResult = MEM_43_INFLS_ECC_CORRECTED;
-    }
-    else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
-    {
-        /* The job result is ecc uncorrected */
-        JobResult = MEM_43_INFLS_ECC_UNCORRECTED;
     }
     else
     {
-        /* Do nothing */
+        /* Calculate length of data transfer */
+        TransferLength = Mem_43_INFLS_IPW_ComputeReadLength(JobInfo);
+
+        /* Read data from flash memory device */
+        Status = C40_Ip_Read(JobInfo->Address, TransferLength, JobInfo->DataPtr);
+
+        if (C40_IP_STATUS_SUCCESS == Status)
+        {
+            /* Update length */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
+            JobResult = MEM_43_INFLS_JOB_PENDING;
+        }
+        else if (C40_IP_STATUS_ECC_CORRECTED == Status)
+        {
+            /* Update length */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
+            if (0U == JobInfo->Length)
+            {
+                JobResult = MEM_43_INFLS_JOB_ECC_CORRECTED;
+            }
+            else
+            {
+                JobResult = MEM_43_INFLS_JOB_PENDING;
+            }
+        }
+        else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
+        {
+            /* the job result is ecc uncorrected */
+            JobResult = MEM_43_INFLS_JOB_ECC_UNCORRECTED;
+        }
+        else
+        {
+            /* Do nothing */
+        }
     }
 
     (void)InstanceIndex;
@@ -923,33 +847,48 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_Compare(uint32 InstanceIndex,
     Mem_43_INFLS_LengthType TransferLength;
     C40_Ip_StatusType Status;
 
-    /* Calculate length of data transfer */
-    TransferLength = Mem_43_INFLS_IPW_ComputeReadLength(JobInfo);
-    /* Check comparison */
-    Status = C40_Ip_Compare(JobInfo->Address, TransferLength, JobInfo->DataPtr);
-    if (C40_IP_STATUS_SUCCESS == Status)
+    if (0U == JobInfo->Length)
     {
-        /* Update length */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-        /* Update state */
+        /* No more data to check comparison */
         JobResult = MEM_43_INFLS_JOB_OK;
-    }
-    else if (C40_IP_STATUS_ECC_CORRECTED == Status)
-    {
-        /* Update length */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-        /* Update state */
-        JobResult = MEM_43_INFLS_ECC_CORRECTED;
-    }
-    else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
-    {
-        /* The job result is ecc uncorrected */
-        JobResult = MEM_43_INFLS_ECC_UNCORRECTED;
     }
     else
     {
-        /* The job result is inconsistent */
-        JobResult = MEM_43_INFLS_INCONSISTENT;
+        /* Calculate length of data transfer */
+        TransferLength = Mem_43_INFLS_IPW_ComputeReadLength(JobInfo);
+
+        /* check comparison */
+        Status = C40_Ip_Compare(JobInfo->Address, TransferLength, JobInfo->DataPtr);
+        if (C40_IP_STATUS_SUCCESS == Status)
+        {
+            JobResult = MEM_43_INFLS_JOB_PENDING;
+
+            /* Update job state */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
+        }
+        else if (C40_IP_STATUS_ECC_CORRECTED == Status)
+        {
+            /* Update length */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
+            if (0U == JobInfo->Length)
+            {
+                JobResult = MEM_43_INFLS_JOB_ECC_CORRECTED;
+            }
+            else
+            {
+                JobResult = MEM_43_INFLS_JOB_PENDING;
+            }
+        }
+        else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
+        {
+            /* the job result is ecc uncorrected */
+            JobResult = MEM_43_INFLS_JOB_ECC_UNCORRECTED;
+        }
+        else
+        {
+            /* the job result is inconsistent */
+            JobResult = MEM_43_INFLS_JOB_INCONSISTENT;
+        }
     }
 
     (void)InstanceIndex;
@@ -971,33 +910,48 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_BlankCheck(uint32 InstanceIndex,
     Mem_43_INFLS_LengthType TransferLength;
     C40_Ip_StatusType Status;
 
-    /* Calculate length of data transfer */
-    TransferLength = Mem_43_INFLS_IPW_ComputeReadLength(JobInfo);
-    /* Read data from flash memory device and verify that it is in erased state */
-    Status = C40_Ip_Compare(JobInfo->Address, TransferLength, NULL_PTR);
-    if (C40_IP_STATUS_SUCCESS == Status)
+    if (0U == JobInfo->Length)
     {
-        /* Update length */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-        /* Update state */
+        /* No more data to check blank */
         JobResult = MEM_43_INFLS_JOB_OK;
-    }
-    else if (C40_IP_STATUS_ECC_CORRECTED == Status)
-    {
-        /* Update length */
-        Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
-        /* Update state */
-        JobResult = MEM_43_INFLS_ECC_CORRECTED;
-    }
-    else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
-    {
-        /* The job result is ecc uncorrected */
-        JobResult = MEM_43_INFLS_ECC_UNCORRECTED;
     }
     else
     {
-        /* The job result is inconsistent */
-        JobResult = MEM_43_INFLS_INCONSISTENT;
+        /* Calculate length of data transfer */
+        TransferLength = Mem_43_INFLS_IPW_ComputeReadLength(JobInfo);
+
+        /* Read data from flash memory device and verify that it is in erased state */
+        Status = C40_Ip_Compare(JobInfo->Address, TransferLength, NULL_PTR);
+        if (C40_IP_STATUS_SUCCESS == Status)
+        {
+            JobResult = MEM_43_INFLS_JOB_PENDING;
+
+            /* Update job state */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
+        }
+        else if (C40_IP_STATUS_ECC_CORRECTED == Status)
+        {
+            /* Update length */
+            Mem_43_INFLS_IPW_UpdateJobProcessedLength(JobInfo, TransferLength);
+            if (0U == JobInfo->Length)
+            {
+                JobResult = MEM_43_INFLS_JOB_ECC_CORRECTED;
+            }
+            else
+            {
+                JobResult = MEM_43_INFLS_JOB_PENDING;
+            }
+        }
+        else if (C40_IP_STATUS_ECC_UNCORRECTED == Status)
+        {
+            /* the job result is ecc uncorrected */
+            JobResult = MEM_43_INFLS_JOB_ECC_UNCORRECTED;
+        }
+        else
+        {
+            /* the job result is inconsistent */
+            JobResult = MEM_43_INFLS_JOB_INCONSISTENT;
+        }
     }
 
     (void)InstanceIndex;
@@ -1017,6 +971,11 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_GetJobResult(uint32 InstanceIndex,
     Mem_43_INFLS_JobResultType JobResult;
     Mem_43_INFLS_JobType       JobType = JobInfo->JobType;
 
+#if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
+    C40_Ip_UtestStateType UtestResult = C40_IP_OK;
+    Mem_43_INFLS_UtestStateType TmpOpStatus = MEM_43_INFLS_UTEST_JOB_OK;
+#endif
+
     switch (JobType)
     {
         case MEM_43_INFLS_JOB_ERASE:
@@ -1029,15 +988,60 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_GetJobResult(uint32 InstanceIndex,
             Status = C40_Ip_MainInterfaceWriteStatus();
             break;
 
+#if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
         case MEM_43_INFLS_JOB_HWSPECIFICSERVICE:
-            /* Process ongoing hardware service job. */
-            Status = Mem_43_INFLS_IPW_HwServiceGetJobResult(InstanceIndex, JobInfo);
-            break;
+            if ((JobInfo->HwServiceIdJob == MEM_43_INFLS_HWSERVICEID_ARRAY_INTEGRITY_CHECK) || (JobInfo->HwServiceIdJob == MEM_43_INFLS_HWSERVICEID_USER_MARGIN_READ_CHECK))
+            {
+                /* Process ongoing utest asynchronous hardware job. */
+                Status = C40_Ip_CheckUserTestStatus((const Mem_43_INFLS_MisrType *)JobInfo->UtestRuntime[InstanceIndex].MisrExpectedValues, &UtestResult);
+                if (C40_IP_STATUS_BUSY != Status)
+                {
+                    switch (UtestResult)
+                    {
+                    case C40_IP_USER_TEST_SUS:
+                        /* The UTest check operation is in suspend state */
+                        TmpOpStatus = MEM_43_INFLS_UTEST_JOB_USER_TEST_SUS;
+                        break;
+                    case C40_IP_USER_TEST_BREAK_SBC:
+                        /* The UTest check operation is broken by Single bit correction */
+                        TmpOpStatus = MEM_43_INFLS_UTEST_JOB_USER_TEST_BREAK_SBC;
+                        break;
 
+                    case C40_IP_USER_TEST_BREAK_DBD:
+                        /* The UTest check operation is broken by Double bit detection */
+                        TmpOpStatus = MEM_43_INFLS_UTEST_JOB_USER_TEST_BREAK_DBD;
+                        break;
+
+                    default:
+                        /* Successful operation */
+                        TmpOpStatus = MEM_43_INFLS_UTEST_JOB_OK;
+                        break;
+                    }
+                }
+            }
+            else
+            {
+                /* fix compiler warning */
+                Status = C40_IP_STATUS_SUCCESS;
+            }
+            break;
+#endif
         default:
             Status = C40_IP_STATUS_SUCCESS;
             break;
     };
+
+#if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
+    if ((JobInfo->HwServiceIdJob == MEM_43_INFLS_HWSERVICEID_ARRAY_INTEGRITY_CHECK) || (JobInfo->HwServiceIdJob == MEM_43_INFLS_HWSERVICEID_USER_MARGIN_READ_CHECK))
+    {
+        if (MEM_43_INFLS_UTEST_JOB_USER_TEST_SUS == TmpOpStatus)
+        {
+            /* make job status to busy when it suspended */
+            Status = C40_IP_STATUS_BUSY;
+        }
+        JobInfo->UtestRuntime->UtestStateType = TmpOpStatus;
+    }
+#endif
 
 #if (STD_ON == C40_IP_SECTOR_SET_LOCK_API)
     /* The job has finished. Time to lock the sector */
@@ -1149,8 +1153,7 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_ArrayIntegrityCheck(uint32 InstanceI
     return JobResult;
 }
 
-Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_UserMarginReadCheck
-(
+Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_UserMarginReadCheck(
     uint32                           InstanceIndex,
     Mem_43_INFLS_JobRuntimeInfoType *JobInfo
 )
@@ -1178,80 +1181,6 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_UserMarginReadCheck
     }
 
     (void)InstanceIndex;
-
-    return JobResult;
-}
-Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_EccLogicCheck
-(
-    const Mem_43_INFLS_EccLogicCheckDataType *EccCheckData
-)
-{
-    C40_Ip_StatusType Status;
-    Mem_43_INFLS_JobResultType JobResult;
-
-    Status = C40_Ip_EccLogicCheck( EccCheckData->AddressCheck,
-                                   EccCheckData->DataValue,
-                                   EccCheckData->EccDataCheckBitValue
-                                 );
-    if ( Status != C40_IP_STATUS_ERROR)
-    {
-        JobResult = Mem_43_INFLS_IPW_TranslateReturnCode(Status);
-    }
-    else
-    {
-        /* Operation failed. Command is sent */
-        JobResult = MEM_43_INFLS_JOB_FAILED;
-    }
-    return JobResult;
-}
-
-Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_EdcAfterEccLogicCheck
-(
-   const Mem_43_INFLS_EccLogicCheckDataType *EccCheckData
-)
-{
-    C40_Ip_StatusType Status;
-    Mem_43_INFLS_JobResultType JobResult;
-
-    Status = C40_Ip_EdcAfterEccLogicCheck(  EccCheckData->AddressCheck,
-                                            EccCheckData->DataValue,
-                                            EccCheckData->EccDataCheckBitValue
-                                         );
-    if ( Status != C40_IP_STATUS_ERROR)
-    {
-        JobResult = Mem_43_INFLS_IPW_TranslateReturnCode(Status);
-    }
-    else
-    {
-        /* Operation failed. Command is sent */
-        JobResult = MEM_43_INFLS_JOB_FAILED;
-    }
-
-    return JobResult;
-}
-
-Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_AddressEncodeLogicCheck
-(
-    const Mem_43_INFLS_AddressEncodeDataType *AddressEncodeData
-)
-{
-    C40_Ip_StatusType Status;
-    Mem_43_INFLS_JobResultType JobResult;
-
-    Status = C40_Ip_AddressEncodeLogicCheck(
-                                            AddressEncodeData->AddressCheck,
-                                            AddressEncodeData->InvertBits
-                                           );
-
-    if ( Status != C40_IP_STATUS_ERROR)
-    {
-        JobResult = Mem_43_INFLS_IPW_TranslateReturnCode(Status);
-    }
-    else
-    {
-        /* Operation failed. Command is sent */
-        JobResult = MEM_43_INFLS_JOB_FAILED;
-    }
 
     return JobResult;
 }

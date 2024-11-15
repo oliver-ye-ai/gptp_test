@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -27,7 +27,7 @@
 /**
 *   @file       Mcu_Cfg.h
 *   @implements Mcu_Cfg.h_Artifact
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief      AUTOSAR Mcu - Configuration file for the driver.
 *   @details    Precompile parameters and extern configuration.
@@ -62,7 +62,7 @@ extern "C"{
 #define MCU_CFG_AR_RELEASE_MAJOR_VERSION         4
 #define MCU_CFG_AR_RELEASE_MINOR_VERSION         7
 #define MCU_CFG_AR_RELEASE_REVISION_VERSION      0
-#define MCU_CFG_SW_MAJOR_VERSION                 5
+#define MCU_CFG_SW_MAJOR_VERSION                 4
 #define MCU_CFG_SW_MINOR_VERSION                 0
 #define MCU_CFG_SW_PATCH_VERSION                 0
 
@@ -160,9 +160,6 @@ extern "C"{
 #endif
 
 
-/*==================================================================================================
-*                                              CONSTANTS
-==================================================================================================*/
 
 /*==================================================================================================
 *                                           DEFINES AND MACROS
@@ -376,6 +373,11 @@ extern "C"{
 */
 
 #define MCU_DISABLE_DEM_REPORT_ERROR_STATUS     (STD_ON)
+/**
+* @brief            Max number of MC_ME partitions.
+*/
+#define MCU_MAX_NUMBER_OF_PARTITIONS         ((uint8)3U)
+
 
 /**
 * @brief           Enable/Disable the Ram Notification.
@@ -426,12 +428,23 @@ extern "C"{
 #endif
 
 
+/**
+* @brief            Number of Clock Muxes per CGM module
+*/
+#define MCU_CGM_0_NUMBER_OF_CLK_MUX        ((uint8)12U)
+
+/**
+* @brief            Index of CGMs module
+*/
+
+#define MCU_CGM_0_INDEX_U8        ((uint8)0U)
+
 #ifdef MCU_ERROR_ISR_NOTIFICATION
 /* This is used to clear CMU flags from the RGM interrupt */
 #define MCU_CMU_CLEAR_CLOCK_IRQ_FLAG            (MCU_CMU_ERROR_ISR_USED)
 #endif
 
-#ifndef CLOCK_IP_DERIVATIVE_NOT_SUPPORT_USER_MODE
+#if !(defined (CLOCK_IP_S32K1) || defined (CLOCK_IP_SJA11))
 /**
 * @brief        Support for User mode.
 *               If this parameter has been configured to 'TRUE' the Mcu driver can be executed from both supervisor and user mode.
@@ -445,7 +458,7 @@ extern "C"{
   #endif /* (MCU_ENABLE_USER_MODE_SUPPORT == STD_ON) */
 #endif /* ifndef MCAL_ENABLE_USER_MODE_SUPPORT */
 
-#endif /* CLOCK_IP_DERIVATIVE_NOT_SUPPORT_USER_MODE */
+#endif /* !(defined (CLOCK_IP_S32K1) || defined (CLOCK_IP_SJA11)) */
 
 /**
 * @brief           This define controls the availability of function Mcu_SleepOnExit
@@ -457,12 +470,9 @@ extern "C"{
 */
 #define MCU_LASTMILE_SUPPORT        (STD_ON)
 
-/**
-* @brief            This macro is used to define the position of the first reset reason.
-*
-*/
-#define MCU_FIRST_RESET_REASON_POS_U32      ((uint32)MCU_POWER_ON_RESET)
-
+/*==================================================================================================
+*                                           DEFINES AND MACROS
+==================================================================================================*/
 #if (MCU_DEV_ERROR_DETECT == STD_ON)
 /**
 @{
@@ -548,130 +558,6 @@ extern "C"{
 #endif
 
 
-
-
-#if (MCU_INIT_CLOCK == STD_ON)
-/**
-* @brief            Create defines with the IDs assigned to Mcu Clock configurations.
-*                   These IDs will be transmitted as input parameters for Mcu_InitClock() API.
-*/
-
-
-#define McuClockSettingConfig_0      ((Mcu_ClockType)0U)
-
-#define McuConf_McuClockSettingConfig_McuClockSettingConfig_0      ((Mcu_ClockType)0U)
-
-#endif
-
-/**
-* @brief            Create defines with the IDs assigned to Mcu Mode configurations.
-*                   These IDs will be transmitted as input parameters for Mcu_SetMode() API.
-*/
-
-#define McuModeSettingConf_0      ((Mcu_ModeType)0U)
-
-#define McuConf_McuModeSettingConf_McuModeSettingConf_0      ((Mcu_ModeType)0U)
-
-
-/**
-* @brief            Create defines with the IDs assigned to Mcu RAM Section configurations.
-*                   These IDs will be transmitted as input parameters for Mcu_InitRamSection() API.
-*/
-
-/*==================================================================================================
-*                                             ENUMS
-==================================================================================================*/
-
-/**
-* @brief            Type of the return value of the function Mcu_GetPllStatus.
-* @details          The type of Mcu_PllStatusType is an enumeration with the following values:
-*                       MCU_PLL_LOCKED, MCU_PLL_UNLOCKED, MCU_PLL_STATUS_UNDEFINED.
-*
-* @implements     Mcu_PllStatusType_Enumeration
-*
-*/
-typedef enum
-{
-    MCU_PLL_LOCKED = 0x00U,            /**< @brief PLL is locked.         */
-    MCU_PLL_UNLOCKED = 0x01U,          /**< @brief PLL is unlocked.       */
-    MCU_PLL_STATUS_UNDEFINED = 0x02U   /**< @brief PLL Status is unknown. */
-
-} Mcu_PllStatusType;
-
-
-/**
-* @brief            The type Mcu_ResetType, represents the different reset that a specified MCU can have.
-* @details          The MCU module shall provide at least the values MCU_POWER_ON_RESET and MCU_RESET_UNDEFINED for the enumeration Mcu_ResetType.
-*
-* @implements Mcu_ResetType_Enumeration
-*/
-typedef Power_Ip_ResetType Mcu_ResetType;
-
-
-
-#if (MCU_GET_RAM_STATE_API == STD_ON)
-/**
-* @brief            Ram State of the microcontroller.
-* @details          This is the Ram State data type returned by the function Mcu_GetRamState() of the Mcu module.
-* @implements Mcu_RamStateType_Enumeration
-*/
-typedef enum
-{
-    MCU_RAMSTATE_INVALID = 0x00U,   /**< @brief RAM content is not valid or unknown (default). */
-    MCU_RAMSTATE_VALID   = 0x01U    /**< @brief RAM content is valid. */
-
-} Mcu_RamStateType;
-#endif /* (MCU_GET_RAM_STATE_API == STD_ON) */
-
-#ifdef MCU_PREPARE_MEMORY_CONFIG
-/**
-* @brief            The stage of the flash and ram controllers configuration.
-* @details          This is used to specify the entry and exit point of the flash and ram controllers configuration.
-*/
-typedef enum
-{
-    MCU_RAM_MEMORY_CONFIG_ENTRY_POINT      = 0x77U,
-    MCU_RAM_MEMORY_CONFIG_EXIT_POINT       = 0x88U,
-    MCU_FLASH_MEMORY_CONFIG_ENTRY_POINT    = 0x89U,
-    MCU_FLASH_MEMORY_CONFIG_EXIT_POINT     = 0x90U
-
-} Mcu_MemoryConfigStageType;
-#endif
-
-#if (defined(MCU_PMC_NOTIFICATION) && (MCU_ENTER_LOW_POWER_MODE == STD_ON))
-/**
-* @brief            Power management controller events.
-* @details          The various events triggered by the power management controller.
-*/
-typedef enum
-{
-    MCU_LAST_MILE_REGULATOR_DISABLED = 0x55U
-
-} Mcu_PowerManagementEventType;
-#endif
-
-#ifdef MCU_SLEEPONEXIT_SUPPORT
-  #if (MCU_SLEEPONEXIT_SUPPORT == STD_ON)
-typedef enum
-{
-    MCU_SLEEP_ON_EXIT_DISABLED = 0U,   /**< @brief Disable SLEEPONEXIT bit (default). */
-    MCU_SLEEP_ON_EXIT_ENABLED   /**< @brief Enable SLEEPONEXIT bit. */
-
-} Mcu_SleepOnExitType;
-  #endif
-#endif
-
-#ifdef MCU_SRAM_RETEN_CONFIG_API
-#if (MCU_SRAM_RETEN_CONFIG_API == STD_ON)
-/**
-* @brief            Type of parameter value of the function Mcu_SRAMRetentionConfig.
-* @details          The type of Mcu_SRAMRetenConfigType is an enumeration with the following values:
-*                       MCU_SRAML_RETEN, MCU_SRAMU_RETEN, MCU_SRAMLU_RETEN, MCU_NO_SRAMLU_RETEN.
-*/
-typedef Power_Ip_SRAMRetenConfigType Mcu_SRAMRetenConfigType;
-#endif
-#endif
-
 /*==================================================================================================
 *                                 STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
@@ -752,7 +638,137 @@ typedef struct
 */
 typedef uint32 Mcu_PowerModeStateType;
 #endif /* (MCU_POWERMODE_STATE_API == STD_ON) */
+/*==================================================================================================
+*                                       CONSTANTS
+==================================================================================================*/
+#if (MCU_INIT_CLOCK == STD_ON)
+/**
+* @brief            Create defines with the IDs assigned to Mcu Clock configurations.
+*                   These IDs will be transmitted as input parameters for Mcu_InitClock() API.
+*/
 
+
+#define McuClockSettingConfig_0      ((Mcu_ClockType)0U)
+
+#define McuConf_McuClockSettingConfig_McuClockSettingConfig_0      ((Mcu_ClockType)0U)
+
+#endif
+
+/**
+* @brief            Create defines with the IDs assigned to Mcu Mode configurations.
+*                   These IDs will be transmitted as input parameters for Mcu_SetMode() API.
+*/
+
+#define McuModeSettingConf_0      ((Mcu_ModeType)0U)
+
+#define McuConf_McuModeSettingConf_McuModeSettingConf_0      ((Mcu_ModeType)0U)
+
+
+/**
+* @brief            Create defines with the IDs assigned to Mcu RAM Section configurations.
+*                   These IDs will be transmitted as input parameters for Mcu_InitRamSection() API.
+*/
+
+
+/*==================================================================================================
+*                                             ENUMS
+==================================================================================================*/
+
+/**
+* @brief            Type of the return value of the function Mcu_GetPllStatus.
+* @details          The type of Mcu_PllStatusType is an enumeration with the following values:
+*                       MCU_PLL_LOCKED, MCU_PLL_UNLOCKED, MCU_PLL_STATUS_UNDEFINED.
+*
+* @implements     Mcu_PllStatusType_Enumeration
+*
+*/
+typedef enum
+{
+    MCU_PLL_LOCKED = 0x00U,            /**< @brief PLL is locked.         */
+    MCU_PLL_UNLOCKED = 0x01U,          /**< @brief PLL is unlocked.       */
+    MCU_PLL_STATUS_UNDEFINED = 0x02U   /**< @brief PLL Status is unknown. */
+
+} Mcu_PllStatusType;
+
+
+/**
+* @brief            The type Mcu_ResetType, represents the different reset that a specified MCU can have.
+* @details          The MCU module shall provide at least the values MCU_POWER_ON_RESET and MCU_RESET_UNDEFINED for the enumeration Mcu_ResetType.
+*
+* @implements Mcu_ResetType_Enumeration
+*/
+typedef Power_Ip_ResetType Mcu_ResetType;
+
+#if (MCU_GET_RAM_STATE_API == STD_ON)
+/**
+* @brief            Ram State of the microcontroller.
+* @details          This is the Ram State data type returned by the function Mcu_GetRamState() of the Mcu module.
+* @implements Mcu_RamStateType_Enumeration
+*/
+typedef enum
+{
+    MCU_RAMSTATE_INVALID = 0x00U,   /**< @brief RAM content is not valid or unknown (default). */
+    MCU_RAMSTATE_VALID   = 0x01U    /**< @brief RAM content is valid. */
+
+} Mcu_RamStateType;
+#endif /* (MCU_GET_RAM_STATE_API == STD_ON) */
+
+#ifdef MCU_PREPARE_MEMORY_CONFIG
+/**
+* @brief            The stage of the flash and ram controllers configuration.
+* @details          This is used to specify the entry and exit point of the flash and ram controllers configuration.
+*/
+typedef enum
+{
+    MCU_RAM_MEMORY_CONFIG_ENTRY_POINT      = 0x77U,
+    MCU_RAM_MEMORY_CONFIG_EXIT_POINT       = 0x88U,
+    MCU_FLASH_MEMORY_CONFIG_ENTRY_POINT    = 0x89U,
+    MCU_FLASH_MEMORY_CONFIG_EXIT_POINT     = 0x90U
+
+} Mcu_MemoryConfigStageType;
+#endif
+
+#if (defined(MCU_PMC_NOTIFICATION) && (MCU_ENTER_LOW_POWER_MODE == STD_ON))
+/**
+* @brief            Power management controller events.
+* @details          The various events triggered by the power management controller.
+*/
+typedef enum
+{
+    MCU_LAST_MILE_REGULATOR_DISABLED = 0x55U
+
+} Mcu_PowerManagementEventType;
+#endif
+
+#ifdef MCU_SLEEPONEXIT_SUPPORT
+  #if (MCU_SLEEPONEXIT_SUPPORT == STD_ON)
+typedef enum
+{
+    MCU_SLEEP_ON_EXIT_DISABLED = 0U,   /**< @brief Disable SLEEPONEXIT bit (default). */
+    MCU_SLEEP_ON_EXIT_ENABLED   /**< @brief Enable SLEEPONEXIT bit. */
+
+} Mcu_SleepOnExitType;
+  #endif
+#endif
+
+#ifdef MCU_SRAM_RETEN_CONFIG_API
+#if (MCU_SRAM_RETEN_CONFIG_API == STD_ON)
+/**
+* @brief            Type of parameter value of the function Mcu_SRAMRetentionConfig.
+* @details          The type of Mcu_SRAMRetenConfigType is an enumeration with the following values:
+*                       MCU_SRAML_RETEN, MCU_SRAMU_RETEN, MCU_SRAMLU_RETEN, MCU_NO_SRAMLU_RETEN.
+*/
+typedef Power_Ip_SRAMRetenConfigType Mcu_SRAMRetenConfigType;
+#endif
+#endif
+/*==================================================================================================
+                                           DEFINES AND MACROS
+==================================================================================================*/
+/**
+* @brief            This macro is used to define the position of the first reset reason.
+*
+*/
+#define MCU_FIRST_RESET_REASON_POS_U32      ((uint32)MCU_POWER_ON_RESET)
 
 /*==================================================================================================
 *                                 GLOBAL VARIABLE DECLARATIONS

@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Clock_Ip_Data.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -60,7 +60,7 @@ extern "C"{
 #define CLOCK_IP_DATA_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_DATA_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DATA_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_DATA_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_DATA_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_DATA_SW_PATCH_VERSION_C               0
 
@@ -128,7 +128,6 @@ extern "C"{
 #define CLOCK_IP_DIV_TRIGGER_CMU               6U
 #define CLOCK_IP_DIV_TRIGGER                   7U
 #define CLOCK_IP_HWMUX_DIV_GATE                8U
-#define CLOCK_IP_DIV_TRIGGER_CMU_HSE           9U
 
 #define CLOCK_IP_SCS_EXTENSION                                      0U
 #define CLOCK_IP_CLKOUT_RUN_EXTENSION                               1U
@@ -512,258 +511,264 @@ extern "C"{
 #if defined(CLOCK_IP_HAS_SWT1_CLK)
 #define CLOCK_IP_PRT2_COL0_REQ27_INDEX  129U
 #endif
-#define CLOCK_IP_PRT1_COL2_REQ95_INDEX  130U
-#define CLOCK_IP_PRT0_COL1_REQ32_INDEX  131U
-#define CLOCK_IP_PRT1_COL1_REQ49_INDEX  132U
-#define CLOCK_IP_PRT1_COL1_REQ45_INDEX  133U
+#if defined(CLOCK_IP_HAS_TCM_CM7_0_CLK)
+#define CLOCK_IP_PRT2_COL1_REQ62_INDEX  130U
+#endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_1_CLK)
+#define CLOCK_IP_PRT2_COL1_REQ63_INDEX  131U
+#endif
+#define CLOCK_IP_PRT1_COL2_REQ95_INDEX  132U
+#define CLOCK_IP_PRT0_COL1_REQ32_INDEX  133U
+#define CLOCK_IP_PRT1_COL1_REQ49_INDEX  134U
+#define CLOCK_IP_PRT1_COL1_REQ45_INDEX  135U
 #if defined(CLOCK_IP_HAS_XRDC_CLK)
-#define CLOCK_IP_PRT1_COL0_REQ30_INDEX  134U
+#define CLOCK_IP_PRT1_COL0_REQ30_INDEX  136U
 #endif
 #if defined(CLOCK_IP_HAS_USDHC_PER_CLK)
-#define CLOCK_IP_PRT2_COL1_REQ57_INDEX  135U
+#define CLOCK_IP_PRT2_COL1_REQ57_INDEX  137U
 #endif
 #if defined(CLOCK_IP_HAS_FLEXCAN6_CLK)
-#define CLOCK_IP_PRT1_COL2_REQ71_INDEX  136U
+#define CLOCK_IP_PRT1_COL2_REQ71_INDEX  138U
 #endif
 #if defined(CLOCK_IP_HAS_FLEXCAN7_CLK)
-#define CLOCK_IP_PRT1_COL2_REQ72_INDEX  137U
+#define CLOCK_IP_PRT1_COL2_REQ72_INDEX  139U
 #endif
 #if defined(CLOCK_IP_HAS_SWT2_CLK)
-#define CLOCK_IP_PRT2_COL0_REQ28_INDEX  138U
+#define CLOCK_IP_PRT2_COL0_REQ28_INDEX  140U
 #endif
 #if defined(CLOCK_IP_HAS_SIPI0_CLK)
-#define CLOCK_IP_PRT2_COL1_REQ60_INDEX  139U
+#define CLOCK_IP_PRT2_COL1_REQ60_INDEX  141U
 #endif
 #if defined(CLOCK_IP_HAS_GMAC0_CLK) || defined(CLOCK_IP_HAS_GMAC0_RX_CLK) || defined(CLOCK_IP_HAS_GMAC0_TX_CLK) || defined(CLOCK_IP_HAS_GMAC_TS_CLK)
-#define CLOCK_IP_PRT2_COL1_REQ33_INDEX  140U
+#define CLOCK_IP_PRT2_COL1_REQ33_INDEX  142U
 #endif
 #if defined(CLOCK_IP_HAS_EIM3_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ70_INDEX  141U
+#define CLOCK_IP_PRT2_COL2_REQ70_INDEX  143U
 #endif
 #if defined(CLOCK_IP_HAS_STM3_CLK)
-#define CLOCK_IP_PRT2_COL0_REQ31_INDEX  142U
+#define CLOCK_IP_PRT2_COL0_REQ31_INDEX  144U
 #endif
 #if defined(CLOCK_IP_HAS_SWT3_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ28_INDEX  143U
+#define CLOCK_IP_PRT0_COL0_REQ28_INDEX  145U
 #endif
 #if defined(CLOCK_IP_HAS_GMAC1_CLK) || defined(CLOCK_IP_HAS_GMAC1_RX_CLK) || defined(CLOCK_IP_HAS_GMAC1_TX_CLK) || defined(CLOCK_IP_HAS_GMAC1_RMII_CLK)
-#define CLOCK_IP_PRT2_COL1_REQ34_INDEX  144U
+#define CLOCK_IP_PRT2_COL1_REQ34_INDEX  146U
 #endif
 #if defined(CLOCK_IP_HAS_ADCBIST_CLK)
-#define CLOCK_IP_PRT3_COL2_REQ65_INDEX  145U
+#define CLOCK_IP_PRT3_COL2_REQ65_INDEX  147U
 #endif
 #if defined(CLOCK_IP_HAS_BCTU1_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ49_INDEX  146U
+#define CLOCK_IP_PRT3_COL1_REQ49_INDEX  148U
 #endif
 #if defined(CLOCK_IP_HAS_COOLFLUX_D_RAM0_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ58_INDEX  147U
+#define CLOCK_IP_PRT3_COL1_REQ58_INDEX  149U
 #endif
 #if defined(CLOCK_IP_HAS_COOLFLUX_D_RAM1_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ59_INDEX  148U
+#define CLOCK_IP_PRT3_COL1_REQ59_INDEX  150U
 #endif
 #if defined(CLOCK_IP_HAS_COOLFLUX_DSP16L_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ55_INDEX  149U
+#define CLOCK_IP_PRT3_COL1_REQ55_INDEX  151U
 #endif
 #if defined(CLOCK_IP_HAS_COOLFLUX_I_RAM0_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ56_INDEX  150U
+#define CLOCK_IP_PRT3_COL1_REQ56_INDEX  152U
 #endif
 #if defined(CLOCK_IP_HAS_COOLFLUX_I_RAM1_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ57_INDEX  151U
+#define CLOCK_IP_PRT3_COL1_REQ57_INDEX  153U
 #endif
 #if defined(CLOCK_IP_HAS_DMAMUX2_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ40_INDEX  152U
+#define CLOCK_IP_PRT3_COL1_REQ40_INDEX  154U
 #endif
 #if defined(CLOCK_IP_HAS_DMAMUX3_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ41_INDEX  153U
+#define CLOCK_IP_PRT3_COL1_REQ41_INDEX  155U
 #endif
 #if defined(CLOCK_IP_HAS_DSPI_MSC_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ66_INDEX  154U
+#define CLOCK_IP_PRT2_COL2_REQ66_INDEX  156U
 #endif
 #if defined(CLOCK_IP_HAS_SDA_AP_CLK)
-#define CLOCK_IP_PRT1_COL0_REQ21_INDEX  155U
+#define CLOCK_IP_PRT1_COL0_REQ21_INDEX  157U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ4_INDEX  156U
+#define CLOCK_IP_PRT0_COL0_REQ4_INDEX   158U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD0_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ5_INDEX  157U
+#define CLOCK_IP_PRT0_COL0_REQ5_INDEX   159U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD1_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ6_INDEX   158U
+#define CLOCK_IP_PRT0_COL0_REQ6_INDEX   160U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD2_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ7_INDEX   159U
+#define CLOCK_IP_PRT0_COL0_REQ7_INDEX   161U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD3_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ8_INDEX   160U
+#define CLOCK_IP_PRT0_COL0_REQ8_INDEX   162U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD4_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ9_INDEX   161U
+#define CLOCK_IP_PRT0_COL0_REQ9_INDEX   163U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD5_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ10_INDEX   162U
+#define CLOCK_IP_PRT0_COL0_REQ10_INDEX  164U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD6_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ11_INDEX   163U
+#define CLOCK_IP_PRT0_COL0_REQ11_INDEX  165U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD7_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ12_INDEX  164U
+#define CLOCK_IP_PRT0_COL0_REQ12_INDEX  166U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD8_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ13_INDEX  165U
+#define CLOCK_IP_PRT0_COL0_REQ13_INDEX  167U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD9_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ14_INDEX  166U
+#define CLOCK_IP_PRT0_COL0_REQ14_INDEX  168U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD10_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ15_INDEX  167U
+#define CLOCK_IP_PRT0_COL0_REQ15_INDEX  169U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD11_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ16_INDEX  168U
+#define CLOCK_IP_PRT0_COL0_REQ16_INDEX  170U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD12_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ17_INDEX  169U
+#define CLOCK_IP_PRT0_COL0_REQ17_INDEX  171U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD13_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ18_INDEX  170U
+#define CLOCK_IP_PRT0_COL0_REQ18_INDEX  172U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD14_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ19_INDEX  171U
+#define CLOCK_IP_PRT0_COL0_REQ19_INDEX  173U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD15_CLK)
-#define CLOCK_IP_PRT0_COL0_REQ20_INDEX  172U
+#define CLOCK_IP_PRT0_COL0_REQ20_INDEX  174U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD16_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ0_INDEX  173U
+#define CLOCK_IP_PRT3_COL0_REQ0_INDEX   175U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD17_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ1_INDEX  174U
+#define CLOCK_IP_PRT3_COL0_REQ1_INDEX   176U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD18_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ2_INDEX   175U
+#define CLOCK_IP_PRT3_COL0_REQ2_INDEX   177U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD19_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ3_INDEX   176U
+#define CLOCK_IP_PRT3_COL0_REQ3_INDEX   178U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD20_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ4_INDEX   177U
+#define CLOCK_IP_PRT3_COL0_REQ4_INDEX   179U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD21_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ5_INDEX   178U
+#define CLOCK_IP_PRT3_COL0_REQ5_INDEX   180U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD22_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ6_INDEX   179U
+#define CLOCK_IP_PRT3_COL0_REQ6_INDEX   181U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD23_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ7_INDEX   180U
+#define CLOCK_IP_PRT3_COL0_REQ7_INDEX   182U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD24_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ8_INDEX   181U
+#define CLOCK_IP_PRT3_COL0_REQ8_INDEX   183U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD25_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ9_INDEX   182U
+#define CLOCK_IP_PRT3_COL0_REQ9_INDEX   184U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD26_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ10_INDEX   183U
+#define CLOCK_IP_PRT3_COL0_REQ10_INDEX  185U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD27_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ11_INDEX   184U
+#define CLOCK_IP_PRT3_COL0_REQ11_INDEX  186U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD28_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ12_INDEX  185U
+#define CLOCK_IP_PRT3_COL0_REQ12_INDEX  187U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD29_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ13_INDEX  186U
+#define CLOCK_IP_PRT3_COL0_REQ13_INDEX  188U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD30_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ14_INDEX  187U
+#define CLOCK_IP_PRT3_COL0_REQ14_INDEX  189U
 #endif
 #if defined(CLOCK_IP_HAS_EDMA1_TCD31_CLK)
-#define CLOCK_IP_PRT3_COL0_REQ15_INDEX  188U
+#define CLOCK_IP_PRT3_COL0_REQ15_INDEX  190U
 #endif
 #if defined(CLOCK_IP_HAS_EFLEX_PWM0_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ46_INDEX  189U
+#define CLOCK_IP_PRT3_COL1_REQ46_INDEX  191U
 #endif
 #if defined(CLOCK_IP_HAS_EFLEX_PWM1_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ47_INDEX  190U
+#define CLOCK_IP_PRT3_COL1_REQ47_INDEX  192U
 #endif
 #if defined(CLOCK_IP_HAS_ETPU_AB_REGISTERS_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ32_INDEX  191U
+#define CLOCK_IP_PRT3_COL1_REQ32_INDEX  193U
 #endif
 #if defined(CLOCK_IP_HAS_ETPU_CODE_RAM1_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ36_INDEX  192U
+#define CLOCK_IP_PRT3_COL1_REQ36_INDEX  194U
 #endif
 #if defined(CLOCK_IP_HAS_ETPU_CODE_RAM2_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ37_INDEX  193U
+#define CLOCK_IP_PRT3_COL1_REQ37_INDEX  195U
 #endif
 #if defined(CLOCK_IP_HAS_ETPU_RAM_MIRROR_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ35_INDEX  194U
+#define CLOCK_IP_PRT3_COL1_REQ35_INDEX  196U
 #endif
 #if defined(CLOCK_IP_HAS_ETPU_RAM_SDM_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ34_INDEX  195U
+#define CLOCK_IP_PRT3_COL1_REQ34_INDEX  197U
 #endif
 #if defined(CLOCK_IP_HAS_IGF0_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ44_INDEX  196U
+#define CLOCK_IP_PRT3_COL1_REQ44_INDEX  198U
 #endif
 #if defined(CLOCK_IP_HAS_LPUART_MSC_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ65_INDEX  197U
+#define CLOCK_IP_PRT2_COL2_REQ65_INDEX  199U
 #endif
 #if defined(CLOCK_IP_HAS_SDADC0_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ61_INDEX  198U
+#define CLOCK_IP_PRT3_COL1_REQ61_INDEX  200U
 #endif
 #if defined(CLOCK_IP_HAS_SDADC1_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ62_INDEX  199U
+#define CLOCK_IP_PRT3_COL1_REQ62_INDEX  201U
 #endif
 #if defined(CLOCK_IP_HAS_SDADC2_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ63_INDEX  200U
+#define CLOCK_IP_PRT3_COL1_REQ63_INDEX  202U
 #endif
 #if defined(CLOCK_IP_HAS_SDADC3_CLK)
-#define CLOCK_IP_PRT3_COL2_REQ64_INDEX  201U
+#define CLOCK_IP_PRT3_COL2_REQ64_INDEX  203U
 #endif
 #if defined(CLOCK_IP_HAS_TRGMUX1_CLK)
-#define CLOCK_IP_PRT3_COL1_REQ48_INDEX  202U
+#define CLOCK_IP_PRT3_COL1_REQ48_INDEX  204U
 #endif
 #if defined(CLOCK_IP_HAS_PIT3_CLK)
-#define CLOCK_IP_PRT1_COL2_REQ64_INDEX  203U
+#define CLOCK_IP_PRT1_COL2_REQ64_INDEX  205U
 #endif
 #if defined(CLOCK_IP_HAS_AES_ACCEL_CLK)
-#define CLOCK_IP_PRT1_COL3_REQ112_INDEX  204U
+#define CLOCK_IP_PRT1_COL3_REQ112_INDEX  206U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP0_CLK)
-#define CLOCK_IP_PRT1_COL3_REQ116_INDEX  205U
+#define CLOCK_IP_PRT1_COL3_REQ116_INDEX  207U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP1_CLK)
-#define CLOCK_IP_PRT1_COL3_REQ120_INDEX  206U
+#define CLOCK_IP_PRT1_COL3_REQ120_INDEX  208U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP2_CLK)
-#define CLOCK_IP_PRT1_COL3_REQ124_INDEX  207U
+#define CLOCK_IP_PRT1_COL3_REQ124_INDEX  209U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP3_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ72_INDEX  208U
+#define CLOCK_IP_PRT2_COL2_REQ72_INDEX  210U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP4_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ76_INDEX  209U
+#define CLOCK_IP_PRT2_COL2_REQ76_INDEX  211U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP5_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ80_INDEX  210U
+#define CLOCK_IP_PRT2_COL2_REQ80_INDEX  212U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP6_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ84_INDEX  211U
+#define CLOCK_IP_PRT2_COL2_REQ84_INDEX  213U
 #endif
 #if defined(CLOCK_IP_HAS_AES_APP7_CLK)
-#define CLOCK_IP_PRT2_COL2_REQ88_INDEX  212U
+#define CLOCK_IP_PRT2_COL2_REQ88_INDEX  214U
 #endif
 #if defined(CLOCK_IP_HAS_MU3A_CLK)
-#define CLOCK_IP_PRT0_COL1_REQ49_INDEX  213U
+#define CLOCK_IP_PRT0_COL1_REQ49_INDEX  215U
 #endif
 #if defined(CLOCK_IP_HAS_MU3B_CLK)
-#define CLOCK_IP_PRT0_COL1_REQ50_INDEX  214U
+#define CLOCK_IP_PRT0_COL1_REQ50_INDEX  216U
 #endif
 #if defined(CLOCK_IP_HAS_MU4A_CLK)
-#define CLOCK_IP_PRT0_COL1_REQ51_INDEX  215U
+#define CLOCK_IP_PRT0_COL1_REQ51_INDEX  217U
 #endif
 #if defined(CLOCK_IP_HAS_MU4B_CLK)
-#define CLOCK_IP_PRT0_COL1_REQ52_INDEX  216U
+#define CLOCK_IP_PRT0_COL1_REQ52_INDEX  218U
 #endif
 
 
@@ -904,11 +909,6 @@ const uint8 Clock_Ip_au8DividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_DIV_TRIGGER_CMU */
     CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_DIV_TRIGGER */
     CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE,                   /* CLOCK_IP_HWMUX_DIV_GATE */
-#if defined(CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WAIT_FOR_HSE_CORE)
-    CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WAIT_FOR_HSE_CORE, /* CLOCK_IP_DIV_TRIGGER_CMU_HSE */
-#else
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-#endif
 };
 const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -920,23 +920,15 @@ const uint8 Clock_Ip_au8DividerTriggerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT
     CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT,            /* CLOCK_IP_DIV_TRIGGER_CMU */
     CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT,            /* CLOCK_IP_DIV_TRIGGER */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-#if defined(CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT)
-    CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT,            /* CLOCK_IP_DIV_TRIGGER_CMU_HSE */
-#else
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-#endif
 };
 const uint8 Clock_Ip_au8XoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_FXOSC_OSCON_BYP_EOCV_GM_SEL,                       /* CLOCK_IP_FAST_XOSC_CMU */
 #if defined(CLOCK_IP_SXOSC_OSCON_EOCV)
     CLOCK_IP_SXOSC_OSCON_EOCV,                                  /* CLOCK_IP_SLOW_XOSC */
-#elif defined(CLOCK_IP_SXOSC_OSCON_EOCV_CURR_PRG_SF_CURR_PRG_COMP_GM_SEL)
-    CLOCK_IP_SXOSC_OSCON_EOCV_CURR_PRG_SF_CURR_PRG_COMP_GM_SEL, /* CLOCK_IP_SXOSC_OSCON_EOCV_CURR_PRG_SF_CURR_PRG_COMP_GM_SEL */
 #else
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 #endif
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -958,7 +950,6 @@ const uint8 Clock_Ip_au8IrcoscCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8GateCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -970,10 +961,8 @@ const uint8 Clock_Ip_au8GateCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_MC_ME_PARTITION_COFB_ENABLE_REQUEST,               /* CLOCK_IP_HWMUX_DIV_GATE */
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8FractionalDividerCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -998,7 +987,6 @@ const uint8 Clock_Ip_au8PllCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8SelectorCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -1010,7 +998,6 @@ const uint8 Clock_Ip_au8SelectorCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP,                         /* CLOCK_IP_HWMUX_DIV_GATE */
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
 };
 const uint8 Clock_Ip_au8PcfsCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -1018,7 +1005,6 @@ const uint8 Clock_Ip_au8PcfsCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS,                    /* CLOCK_IP_PCFS_PLL_OUT */
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
@@ -1034,11 +1020,6 @@ const uint8 Clock_Ip_au8CmuCallbackIndex[CLOCK_IP_ALL_CALLBACKS_COUNT] = {
     CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_DIV_TRIGGER_CMU */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
     CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-#if defined(CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF)
-    CLOCK_IP_CMU_FC_FCE_REF_CNT_LFREF_HFREF,                    /* CLOCK_IP_DIV_TRIGGER_CMU_HSE */
-#else
-    CLOCK_IP_NO_CALLBACK,                                       /* No callback */
-#endif
 };
 
 
@@ -1122,11 +1103,7 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 /*   CORE_CLK clock             */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_DIV_TRIGGER_CMU,     CLOCK_IP_CORE_EXTENSION,          0U,    CLOCK_IP_SEL_0_INDEX,   CLOCK_IP_DIV_0_INDEX,   0U,                           0U,                     CLOCK_IP_CMU_3_INSTANCE},    /*   CORE_CLK clock             */
 /*   AIPS_PLAT_CLK clock        */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_DIV_TRIGGER_CMU,     CLOCK_IP_AIPS_PLAT_EXTENSION,     0U,    CLOCK_IP_SEL_0_INDEX,   CLOCK_IP_DIV_1_INDEX,   0U,                           0U,                     CLOCK_IP_CMU_4_INSTANCE},    /*   AIPS_PLAT_CLK clock        */
 /*   AIPS_SLOW_CLK clock        */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_DIV_TRIGGER,         CLOCK_IP_AIPS_SLOW_EXTENSION,     0U,    CLOCK_IP_SEL_0_INDEX,   CLOCK_IP_DIV_2_INDEX,   0U,                           0U,                     0U},                         /*   AIPS_SLOW_CLK clock        */
-#if defined(CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WAIT_FOR_HSE_CORE)
-/*   HSE_CLK clock              */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_DIV_TRIGGER_CMU_HSE,     CLOCK_IP_HSE_EXTENSION,           0U,    CLOCK_IP_SEL_0_INDEX,   CLOCK_IP_DIV_3_INDEX,   0U,                           0U,                     CLOCK_IP_CMU_5_INSTANCE},    /*   HSE_CLK clock              */
-#else
 /*   HSE_CLK clock              */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_DIV_TRIGGER_CMU,     CLOCK_IP_HSE_EXTENSION,           0U,    CLOCK_IP_SEL_0_INDEX,   CLOCK_IP_DIV_3_INDEX,   0U,                           0U,                     CLOCK_IP_CMU_5_INSTANCE},    /*   HSE_CLK clock              */
-#endif
 /*   DCM_CLK clock              */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_DIV_TRIGGER,         CLOCK_IP_DCM_EXTENSION,           0U,    CLOCK_IP_SEL_0_INDEX,   CLOCK_IP_DIV_4_INDEX,   0U,                           0U,                     0U},                         /*   DCM_CLK clock              */
 #if defined(CLOCK_IP_HAS_LBIST_CLK)
 /*   LBIST_CLK clock            */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_DIV_TRIGGER,         CLOCK_IP_LBIST_EXTENSION,         0U,    CLOCK_IP_SEL_0_INDEX,   CLOCK_IP_DIV_5_INDEX,   0U,                           0U,                     0U},                         /*   LBIST_CLK clock            */
@@ -1765,6 +1742,12 @@ const uint8 Clock_Ip_au8ClockFeatures[CLOCK_IP_NAMES_NO][CLOCK_IP_FEATURES_NO] =
 #endif
 #if defined(CLOCK_IP_HAS_SWT3_CLK)
 /*   SWT3_CLK clock             */ {0U,                          CLOCK_IP_GATE,                0U,                               0U,    0U,                     0U,                     CLOCK_IP_PRT0_COL0_REQ28_INDEX,0U,                    0U},                         /*   SWT3_CLK clock             */
+#endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_0_CLK)
+/*   TCM_CM7_0_CLK clock        */ {0U,                          CLOCK_IP_GATE,                0U,                               0U,    0U,                     0U,                     CLOCK_IP_PRT2_COL1_REQ62_INDEX,0U,                    0U},                         /*   TCM_CM7_0_CLK clock        */
+#endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_1_CLK)
+/*   TCM_CM7_1_CLK clock        */ {0U,                          CLOCK_IP_GATE,                0U,                               0U,    0U,                     0U,                     CLOCK_IP_PRT2_COL1_REQ63_INDEX,0U,                    0U},                         /*   TCM_CM7_1_CLK clock        */
 #endif
 /*   TEMPSENSE_CLK clock        */ {0U,                          CLOCK_IP_GATE,                0U,                               0U,    0U,                     0U,                     CLOCK_IP_PRT1_COL2_REQ95_INDEX,0U,                    0U},                         /*   TEMPSENSE_CLK clock        */
 /*   TRACE_CLK clock            */ {CLOCK_IP_CGM_0_INSTANCE,     CLOCK_IP_SWMUX_DIV,           CLOCK_IP_TRACE_EXTENSION,         0U,    CLOCK_IP_SEL_11_INDEX,  CLOCK_IP_DIV_0_INDEX,   0U,                            0U,                    0U},                         /*   TRACE_CLK clock            */
@@ -2488,6 +2471,12 @@ const uint8 Clock_Ip_au8SoftwareMuxResetValue[CLOCK_IP_NAMES_NO] = {
 #if defined(CLOCK_IP_HAS_SWT3_CLK)
 0U,   /*   SWT3_CLK clock             */
 #endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_0_CLK)
+0U,   /*   TCM_CM7_0_CLK clock        */
+#endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_1_CLK)
+0U,   /*   TCM_CM7_1_CLK clock        */
+#endif
 0U,   /*   TEMPSENSE_CLK clock        */
 0U,   /*   TRACE_CLK clock           */
 0U,   /*   TRGMUX0_CLK clock          */
@@ -2585,7 +2574,7 @@ const uint16 Clock_Ip_au16SelectorEntryHardwareValue[CLOCK_IP_PRODUCERS_NO] = {
     0U,                                       /*!< QSPI_MEM_CLK                            */
 #endif
 #if defined(CLOCK_IP_HAS_CM7_CORE_CLK)
-    21U,                                       /*!< CM7_CORE_CLK                            */
+    0U,                                       /*!< CM7_CORE_CLK                            */
 #endif
     50U,                                      /*!< CLKOUT_RUN_CLK                          */
 };
@@ -3378,6 +3367,12 @@ const uint32 Clock_Ip_au8ClockNameTypes[CLOCK_IP_NAMES_NO] =
 #if defined(CLOCK_IP_HAS_SWT3_CLK)
 /*   SWT3_CLK clock             */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   SWT3_CLK clock             */
 #endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_0_CLK)
+/*   TCM_CM7_0_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TCM_CM7_0_CLK clock        */
+#endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_1_CLK)
+/*   TCM_CM7_1_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TCM_CM7_1_CLK clock        */
+#endif
 /*   TEMPSENSE_CLK clock        */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TEMPSENSE_CLK clock        */
 /*   TRACE_CLK clock            */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TRACE_CLK clock            */
 /*   TRGMUX0_CLK clock          */ (CLOCK_IP_IRCOSC_OBJECT | CLOCK_IP_XOSC_OBJECT | CLOCK_IP_PLL_OBJECT | CLOCK_IP_SELECTOR_OBJECT | CLOCK_IP_DIVIDER_OBJECT | CLOCK_IP_DIVIDER_TRIGGER_OBJECT | CLOCK_IP_FRAC_DIV_OBJECT | CLOCK_IP_EXT_SIG_OBJECT | CLOCK_IP_GATE_OBJECT | CLOCK_IP_PCFS_OBJECT | CLOCK_IP_CMU_OBJECT) ,/*   TRGMUX0_CLK clock          */
@@ -3596,6 +3591,15 @@ Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
     (Clock_Ip_ClockMonitorType*)IP_CMU_5,              /* Cmu instance */
 },
 #if defined(CLOCK_IP_HAS_CM7_CORE_CLK)
+#if (defined(CLOCK_IP_DERIVATIVE_008))
+/* CLOCK_IP_CMU_6_INSTANCE */
+{
+    CM7_CORE_CLK,                                      /* Name of the clock that supports cmu (clock monitor) */
+    FIRC_CLK,                                          /* Name of the reference clock */
+    AIPS_SLOW_CLK,                                     /* Name of the bus clock */
+    (Clock_Ip_ClockMonitorType*)IP_CMU_6,              /* Cmu instance */
+},
+#else
 /* CLOCK_IP_CMU_6_INSTANCE */
 {
     CM7_CORE_CLK,                                      /* Name of the clock that supports cmu (clock monitor) */
@@ -3603,6 +3607,7 @@ Clock_Ip_CmuInfoType const Clock_Ip_axCmuInfo[CLOCK_IP_CMU_INFO_SIZE] =  {
     AIPS_SLOW_CLK,                                     /* Name of the bus clock */
     (Clock_Ip_ClockMonitorType*)IP_CMU_6,              /* Cmu instance */
 },
+#endif
 #else
 /* Reserved cmu instance */
 {
@@ -4362,6 +4367,16 @@ Clock_Ip_GateInfoType const Clock_Ip_axGateInfo[CLOCK_IP_GATE_INFO_SIZE] =  {
     {CLOCK_IP_PARTITION_2_INDEX,       CLOCK_IP_COLLECTION_0_INDEX,      MC_ME_PRTN2_COFB0_CLKEN_REQ27_SHIFT,        MC_ME_PRTN2_COFB0_CLKEN_REQ27_MASK},        /*   SWT1_CLK clock             */
 #else
     {0U,                               0U,                               0U,                                         0U},                                        /*   SWT1_CLK clock             */
+#endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_0_CLK)
+    {CLOCK_IP_PARTITION_2_INDEX,       CLOCK_IP_COLLECTION_1_INDEX,      MC_ME_PRTN2_COFB1_CLKEN_REQ62_SHIFT,        MC_ME_PRTN2_COFB1_CLKEN_REQ62_MASK},        /*   TCM_CM7_0_CLK clock        */
+#else
+    {0U,                               0U,                               0U,                                         0U},                                        /*   TCM_CM7_0_CLK clock        */
+#endif
+#if defined(CLOCK_IP_HAS_TCM_CM7_1_CLK)
+    {CLOCK_IP_PARTITION_2_INDEX,       CLOCK_IP_COLLECTION_1_INDEX,      MC_ME_PRTN2_COFB1_CLKEN_REQ63_SHIFT,        MC_ME_PRTN2_COFB1_CLKEN_REQ63_MASK},        /*   TCM_CM7_1_CLK clock        */
+#else
+    {0U,                               0U,                               0U,                                         0U},                                        /*   TCM_CM7_1_CLK clock        */
 #endif
     {CLOCK_IP_PARTITION_1_INDEX,       CLOCK_IP_COLLECTION_2_INDEX,      MC_ME_PRTN1_COFB2_CLKEN_REQ95_SHIFT,        MC_ME_PRTN1_COFB2_CLKEN_REQ95_MASK},        /*   TEMPSENSE_CLK clock        */
     {CLOCK_IP_PARTITION_0_INDEX,       CLOCK_IP_COLLECTION_1_INDEX,      MC_ME_PRTN0_COFB1_CLKEN_REQ32_SHIFT,        MC_ME_PRTN0_COFB1_CLKEN_REQ32_MASK},        /*   TRGMUX0_CLK clock          */

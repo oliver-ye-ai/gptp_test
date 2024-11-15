@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -26,7 +26,7 @@
 
 /**
 *   @file       Ram_Ip_Types.h
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   RAM IP type header file.
 *   @details RAM IP type header file.
@@ -45,7 +45,7 @@ extern "C"{
  2) needed interfaces from external units
  3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "Std_Types.h"
+#include "StandardTypes.h"
 #include "Ram_Ip_Cfg_Defines.h"
 /*==================================================================================================
                                 SOURCE FILE VERSION INFORMATION
@@ -54,7 +54,7 @@ extern "C"{
 #define RAM_IP_TYPES_AR_RELEASE_MAJOR_VERSION      4
 #define RAM_IP_TYPES_AR_RELEASE_MINOR_VERSION      7
 #define RAM_IP_TYPES_AR_RELEASE_REVISION_VERSION   0
-#define RAM_IP_TYPES_SW_MAJOR_VERSION              5
+#define RAM_IP_TYPES_SW_MAJOR_VERSION              4
 #define RAM_IP_TYPES_SW_MINOR_VERSION              0
 #define RAM_IP_TYPES_SW_PATCH_VERSION              0
 
@@ -62,11 +62,10 @@ extern "C"{
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-/* Check if source file and Std_Types.h file are of the same Autosar version */
+/* Check if Ram_Ip_Types.h file and StandardTypes.h file are of the same Autosar version */
 #if ((RAM_IP_TYPES_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-     (RAM_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
-    )
-    #error "AutoSar Version Numbers of Ram_Ip_Types.h  and Std_Types.h are different"
+     (RAM_IP_TYPES_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
+    #error "AutoSar Version Numbers of Ram_Ip_Types.h and StandardTypes.h are different"
 #endif
 #endif
 
@@ -105,7 +104,7 @@ extern "C"{
 *                                             ENUMS
 ==================================================================================================*/
 
-#if ( (!(defined (RAM_IP_SPECIFC))) || (RAM_IP_GET_RAM_STATE_API == STD_ON) )
+#if ( ((!(defined (RAM_IP_S32K1)))  && (!(defined (RAM_IP_SJA11)))) || (RAM_IP_GET_RAM_STATE_API == STD_ON) )
 /** @brief Ram ip report error types. */
 typedef enum
 {
@@ -113,32 +112,6 @@ typedef enum
 } Ram_Ip_RamReportErrorType;
 #endif
 
-#if (RAM_IP_GET_RAM_STATE_API == STD_ON)
-/**
-* @brief            Ram State of the microcontroller.
-* @details          This is the Ram State data type returned by the function Mcu_GetRamState() of the Mcu module.
-* @implements Ram_Ip_RamStateType_Enumeration
-*/
-typedef enum
-{
-    RAM_IP_RAMSTATE_INVALID = 0x00U,   /**< @brief RAM content is not valid or unknown (default). */
-    RAM_IP_RAMSTATE_VALID   = 0x01U    /**< @brief RAM content is valid. */
-
-} Ram_Ip_RamStateType;
-#endif
-
-/**
-* @brief            Ram ip status return codes.
-* @details          This is the Ram State data type returned by the function Mcu_GetRamState() of the Mcu module.
-* @implements Ram_Ip_StatusType_Enumeration
-*/
-typedef enum
-{
-    RAM_IP_STATUS_OK                         = 0x00U,    /*!< RAM_IP Ok status */
-    RAM_IP_STATUS_NOT_OK                     = 0x01U,    /*!< RAM_IP Not ok status */
-    RAM_IP_STATUS_UNDEFINED                  = 0x02U,    /*!< RAM_IP Status is unknown */
-
-} Ram_Ip_StatusType;
 
 /*==================================================================================================
 *                                STRUCTURES AND OTHER TYPEDEFS
@@ -187,6 +160,32 @@ typedef Ram_Ip_uintPtrType Ram_Ip_RamSizeType;
 *
 */
 typedef uint32 Ram_Ip_RamWriteSizeType;
+#if (RAM_IP_GET_RAM_STATE_API == STD_ON)
+/**
+* @brief            Ram State of the microcontroller.
+* @details          This is the Ram State data type returned by the function Mcu_GetRamState() of the Mcu module.
+* @implements Ram_Ip_RamStateType_Enumeration
+*/
+typedef enum
+{
+    RAM_IP_RAMSTATE_INVALID = 0x00U,   /**< @brief RAM content is not valid or unknown (default). */
+    RAM_IP_RAMSTATE_VALID   = 0x01U    /**< @brief RAM content is valid. */
+
+} Ram_Ip_RamStateType;
+#endif
+
+/**
+* @brief            Ram ip status return codes.
+* @details          This is the Ram State data type returned by the function Mcu_GetRamState() of the Mcu module.
+* @implements Ram_Ip_StatusType_Enumeration
+*/
+typedef enum
+{
+    RAM_IP_STATUS_OK                         = 0x00U,    /*!< RAM_IP Ok status */
+    RAM_IP_STATUS_NOT_OK                     = 0x01U,    /*!< RAM_IP Not ok status */
+    RAM_IP_STATUS_UNDEFINED                  = 0x02U,    /*!< RAM_IP Status is unknown */
+
+} Ram_Ip_StatusType;
 
 /**
 * @brief            Definition of a RAM section within the configuration structure.
@@ -206,6 +205,11 @@ typedef struct
     Ram_Ip_RamWriteSizeType RamWriteSize;    /**< @brief RAM section write size.               */
 
 } Ram_Ip_RamConfigType;
+
+
+
+
+
 
 
 /*==================================================================================================

@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -23,7 +23,7 @@
 
 /**
 *   @file       Clock_Ip_PBcfg.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -44,7 +44,7 @@ extern "C"{
  3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Clock_Ip_PBcfg.h"
-#include "Std_Types.h"
+#include "StandardTypes.h"
 #include "Clock_Ip.h"
 #include "Clock_Ip_Private.h"
 
@@ -55,7 +55,7 @@ extern "C"{
 #define CLOCK_IP_PBCFG_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_PBCFG_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PBCFG_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_PBCFG_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_PBCFG_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_PBCFG_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_PBCFG_SW_PATCH_VERSION_C               0
 
@@ -84,11 +84,11 @@ extern "C"{
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-/* Check if source file and Std_Types.h file are of the same Autosar version */
+/* Check if source file and StandardTypes.h file are of the same Autosar version */
 #if ((CLOCK_IP_PBCFG_AR_RELEASE_MAJOR_VERSION_C != STD_AR_RELEASE_MAJOR_VERSION) || \
      (CLOCK_IP_PBCFG_AR_RELEASE_MINOR_VERSION_C != STD_AR_RELEASE_MINOR_VERSION) \
     )
-    #error "AutoSar Version Numbers of Clock_Ip_PBcfg.c and Std_Types.h are different"
+    #error "AutoSar Version Numbers of Clock_Ip_PBcfg.c and StandardTypes.h are different"
 #endif
 #endif    /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
@@ -214,8 +214,6 @@ static const Clock_Ip_XoscConfigType Clock_Ip_XoscConfigurations_0[CLOCK_IP_CONF
         0U,                     /* Gain value */
         0U,                     /* Monitor type */
         0U,                     /* Automatic level controller */
-        0U,                     /* Level Shifter Current */
-        0U,                     /* Comparator Current */
     },
     #endif
 
@@ -231,8 +229,6 @@ static const Clock_Ip_XoscConfigType Clock_Ip_XoscConfigurations_0[CLOCK_IP_CONF
         0U,                     /* Gain value */
         0U,                     /* Monitor type */
         0U,                     /* Automatic level controller */
-        0U,                     /* Level Shifter Current */
-        0U,                     /* Comparator Current */
     },
     #endif
 };
@@ -252,7 +248,7 @@ static const Clock_Ip_PllConfigType Clock_Ip_PllConfigurations_0[CLOCK_IP_CONFIG
         0U,                     /* numeratorFracLoopDiv */
         32U,                   /* mulFactorDiv */
         1U,                     /* ModulationBypass */
-        1U,                     /* Modulation type: Spread spectrum modulation bypassed */ 
+        0U,                     /* Modulation type: Spread spectrum modulation bypassed */ 
         0U,                     /* modulationPeriod */
         0U,                     /* incrementStep */
         0U,                     /* sigmaDelta */
@@ -264,7 +260,6 @@ static const Clock_Ip_PllConfigType Clock_Ip_PllConfigurations_0[CLOCK_IP_CONFIG
             0U,
             0U,
         },
-        0U,                     /* SoftwareDisable */
     },
     #endif
 };

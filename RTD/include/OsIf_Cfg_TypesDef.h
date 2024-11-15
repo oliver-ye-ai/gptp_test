@@ -7,25 +7,25 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
-*   bound by the applicable license terms, then you may not retain, install,
-*   activate or otherwise use the software.
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
 ==================================================================================================*/
 #ifndef OSIF_CFG_TYPESDEF_H
 #define OSIF_CFG_TYPESDEF_H
 
 /**
 *   @file       OsIf_Cfg_TypesDef.h
-*   @version 5.0.0
+*   @version 4.0.0
 *
 *
 *   @addtogroup osif_drv
@@ -43,13 +43,13 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "Std_Types.h"
+#include "StandardTypes.h"
 #include "OsIf_Cfg.h"
 
 #if STD_ON == OSIF_DEV_ERROR_DETECT
-#if (defined(USING_OS_AUTOSAROS) || defined(USING_OS_FREERTOS))
+#if defined(USING_OS_AUTOSAROS)
 #include "Det.h"
-#endif /* (defined(USING_OS_AUTOSAROS) || defined(USING_OS_FREERTOS)) */
+#endif /* defined(USING_OS_AUTOSAROS) */
 #include "Devassert.h"
 #define OSIF_DEV_ASSERT(x) DevAssert(x)
 #else
@@ -63,7 +63,7 @@ extern "C"{
 #define OSIF_CFG_TYPESDEF_AR_RELEASE_MAJOR_VERSION     4
 #define OSIF_CFG_TYPESDEF_AR_RELEASE_MINOR_VERSION     7
 #define OSIF_CFG_TYPESDEF_AR_RELEASE_REVISION_VERSION  0
-#define OSIF_CFG_TYPESDEF_SW_MAJOR_VERSION             5
+#define OSIF_CFG_TYPESDEF_SW_MAJOR_VERSION             4
 #define OSIF_CFG_TYPESDEF_SW_MINOR_VERSION             0
 #define OSIF_CFG_TYPESDEF_SW_PATCH_VERSION             0
 
@@ -88,16 +88,16 @@ extern "C"{
     #error "Software Version Numbers of OsIf_Cfg_TypesDef.h and OsIf_Cfg.h are different"
 #endif
 
-/* Check if OsIf_Cfg_TypesDef.h file and Std_Types.h file are of the same Autosar version */
+/* Check if OsIf_Cfg_TypesDef.h file and StandardTypes.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_CFG_TYPESDEF_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
          (OSIF_CFG_TYPESDEF_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of OsIf_Cfg_TypesDef.h and Std_Types.h are different"
+        #error "AutoSar Version Numbers of OsIf_Cfg_TypesDef.h and StandardTypes.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
 
 #if (STD_ON == OSIF_DEV_ERROR_DETECT)
-#if (defined(USING_OS_AUTOSAROS) || defined(USING_OS_FREERTOS))
+#if defined(USING_OS_AUTOSAROS)
 /* Check if OsIf_Cfg_TypesDef.h file and Det.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((OSIF_CFG_TYPESDEF_AR_RELEASE_MAJOR_VERSION != DET_AR_RELEASE_MAJOR_VERSION) || \
@@ -105,7 +105,7 @@ extern "C"{
         #error "AutoSar Version Numbers of OsIf_Cfg_TypesDef.h and Det.h are different"
     #endif
 #endif /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
-#endif /* (defined(USING_OS_AUTOSAROS) || defined(USING_OS_FREERTOS)) */
+#endif /* defined(USING_OS_AUTOSAROS) */
 
 /* Check if OsIf_Cfg_TypesDef.h file and Devassert.h file are of the same Autosar version */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
@@ -129,17 +129,12 @@ extern "C"{
 #define OSIF_SID_GETELAPSED              (0x03U)
 #define OSIF_SID_SETTIMERFREQ            (0x04U)
 #define OSIF_SID_US2TICKS                (0x05U)
-#define OSIF_SID_RESUMEALLINT            (0x06U)
 
 /* OSIF DET Error Codes */
 #define OSIF_E_UNINIT                    (0x01U)
 #define OSIF_E_INV_API                   (0x02U)
 #define OSIF_E_INV_CORE_IDX              (0x03U)
 #define OSIF_E_INIT_FAILED               (0x04U)
-#define OSIF_E_INV_CALL                  (0x05U)
-
-/* OSIF Os Application Invalid Or Missing Partition Reference */
-#define OSIF_INVALID_PART_ID             (255U)
 
 /*==================================================================================================
 *                                              ENUMS

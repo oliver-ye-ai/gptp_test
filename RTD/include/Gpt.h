@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -60,7 +60,7 @@ extern "C"{
 #define GPT_AR_RELEASE_MAJOR_VERSION        4
 #define GPT_AR_RELEASE_MINOR_VERSION        7
 #define GPT_AR_RELEASE_REVISION_VERSION     0
-#define GPT_SW_MAJOR_VERSION                5
+#define GPT_SW_MAJOR_VERSION                4
 #define GPT_SW_MINOR_VERSION                0
 #define GPT_SW_PATCH_VERSION                0
 
@@ -465,7 +465,7 @@ typedef uint8 Gpt_ChannelType;
 * @details  Gpt timeout value type
 * @implements Gpt_ValueType_typedef
 */
-typedef uint64 Gpt_ValueType;
+typedef uint32 Gpt_ValueType;
 
 /**
 * @internal
@@ -498,7 +498,7 @@ typedef struct
     /** @brief GPT channel mode */
     Gpt_ChannelModeType Gpt_eChannelMode;
     /** @brief Hardware dependent channel configuration */
-    const Gpt_Ipw_HwChannelConfigType *Gpt_Ipw_HwChannelConfig;
+    Gpt_Ipw_HwChannelConfigType *Gpt_Ipw_HwChannelConfig;
 } Gpt_ChannelConfigType;
 
 /**
@@ -518,7 +518,7 @@ typedef struct
     /** @brief Number of GPT instances (configured in tresos plugin builder) */
     uint8 instanceCount;
     /** @brief Pointer to the GPT instance configuration */
-    const Gpt_Ipw_HwInstanceConfigType (*Gpt_Ipw_HwInstanceConfig)[];
+    Gpt_Ipw_HwInstanceConfigType (*Gpt_Ipw_HwInstanceConfig)[];
 #if(GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON)
     /** @brief Pointer to the GPT channel predef timer configuration */
     const Gpt_HwPredefChannelConfigType * const (*Gpt_pChannelPredefConfigType);
@@ -573,7 +573,7 @@ GPT_CONFIG_EXT
 #endif
 /* Extern declarations of GPT Pre compile configuration from Gpt_PBCfg.c */
 #if (GPT_PRECOMPILE_SUPPORT == STD_ON)
-    #if(GPT_MULTIPARTITION_ENABLED == STD_ON)
+    #if(GPT_MULTICORE_ENABLED == STD_ON)
 extern const Gpt_ConfigType* const Gpt_Config[GPT_MAX_PARTITIONS];
     #else
 extern const Gpt_ConfigType Gpt_Config;

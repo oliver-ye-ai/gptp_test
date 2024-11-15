@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -26,7 +26,7 @@
 
 /**
 *   @file       Power_Ip_MC_RGM.h
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   POWER IP driver header file.
 *   @details POWER IP driver header file.
@@ -48,7 +48,7 @@ extern "C"{
  3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "Power_Ip_Types.h"
-#include "Std_Types.h"
+#include "StandardTypes.h"
 #include "Mcal.h"
 
 /*==================================================================================================
@@ -58,7 +58,7 @@ extern "C"{
 #define POWER_IP_MC_RGM_AR_RELEASE_MAJOR_VERSION        4
 #define POWER_IP_MC_RGM_AR_RELEASE_MINOR_VERSION        7
 #define POWER_IP_MC_RGM_AR_RELEASE_REVISION_VERSION     0
-#define POWER_IP_MC_RGM_SW_MAJOR_VERSION                5
+#define POWER_IP_MC_RGM_SW_MAJOR_VERSION                4
 #define POWER_IP_MC_RGM_SW_MINOR_VERSION                0
 #define POWER_IP_MC_RGM_SW_PATCH_VERSION                0
 
@@ -66,20 +66,18 @@ extern "C"{
                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-/* Check if source file and Std_Types.h file are of the same Autosar version */
-#if ((POWER_IP_MC_RGM_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-     (POWER_IP_MC_RGM_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
-    )
-    #error "AutoSar Version Numbers of Power_Ip_MC_RGM.h  and Std_Types.h are different"
+/* Check if Power_Ip_MC_RGM.h file and StandardTypes.h file are of the same Autosar version */
+#if ((POWER_IP_MC_RGM_AR_RELEASE_MAJOR_VERSION    != STD_AR_RELEASE_MAJOR_VERSION) || \
+     (POWER_IP_MC_RGM_AR_RELEASE_MINOR_VERSION    != STD_AR_RELEASE_MINOR_VERSION))
+    #error "AutoSar Version Numbers of Power_Ip_MC_RGM.h and StandardTypes.h are different"
 #endif
-
 
 /* Check if Power_Ip_MC_RGM.h file and Mcal.h file are of the same Autosar version */
 #if ((POWER_IP_MC_RGM_AR_RELEASE_MAJOR_VERSION    != MCAL_AR_RELEASE_MAJOR_VERSION) || \
      (POWER_IP_MC_RGM_AR_RELEASE_MINOR_VERSION    != MCAL_AR_RELEASE_MINOR_VERSION))
     #error "AutoSar Version Numbers of Power_Ip_MC_RGM.h and Mcal.h are different"
 #endif
-#endif    /* DISABLE_MCAL_INTERMODULE_ASR_CHECK */
+#endif
 
 /* Check if Power_Ip_MC_RGM.h file and Power_Ip_Types.h file have same versions */
 #if (POWER_IP_MC_RGM_VENDOR_ID  != POWER_IP_TYPES_VENDOR_ID)
@@ -138,6 +136,11 @@ extern "C"{
 void Power_Ip_MC_RGM_SetUserAccessAllowed(void);
       #endif /* (STD_ON == MCAL_MC_RGM_REG_PROT_AVAILABLE) */
     #endif
+    #if (defined(MCAL_RDC_REG_PROT_AVAILABLE))
+      #if (STD_ON == MCAL_RDC_REG_PROT_AVAILABLE)
+void Power_Ip_RDC_SetUserAccessAllowed(void);
+      #endif /* (STD_ON == MCAL_RDC_REG_PROT_AVAILABLE) */
+    #endif
   #endif
 #endif /* (STD_ON == POWER_IP_ENABLE_USER_MODE_SUPPORT) */
 
@@ -171,7 +174,7 @@ void Power_Ip_MC_RGM_SetUserAccessAllowed(void);
   #if (STD_ON == POWER_IP_ENABLE_USER_MODE_SUPPORT)
 
 #define  Call_Power_Ip_MC_RGM_GetResetReason() \
-    OsIf_Trusted_Call_Return(Power_Ip_MC_RGM_GetResetReason_Uint)
+    OsIf_Trusted_Call_Return((uint32)Power_Ip_MC_RGM_GetResetReason)
   #else
 
 #define  Call_Power_Ip_MC_RGM_GetResetReason() \
@@ -216,7 +219,6 @@ void Power_Ip_MC_RGM_SetUserAccessAllowed(void);
 void Power_Ip_MC_RGM_ResetInit(const Power_Ip_MC_RGM_ConfigType * ConfigPtr);
 
 Power_Ip_ResetType Power_Ip_MC_RGM_GetResetReason(void);
-uint32 Power_Ip_MC_RGM_GetResetReason_Uint(void);
 Power_Ip_RawResetType Power_Ip_MC_RGM_GetResetRawValue(void);
 
 
@@ -242,13 +244,6 @@ void Power_Ip_MC_RGM_ResetAltInt(void);
 #endif /* (POWER_IP_RESET_ALTERNATE_ISR_USED == STD_ON) */
 #endif
 
-#ifdef POWER_IP_RESET_ALTERNATE_ISR_USED
-#if (POWER_IP_RESET_ALTERNATE_ISR_USED == STD_ON)
-
-ISR(MC_RGM_ResetAlt_IRQHandler);
-
-#endif
-#endif /* POWER_IP_RESET_ALTERNATE_ISR_USED */
 
 #define MCU_STOP_SEC_CODE
 

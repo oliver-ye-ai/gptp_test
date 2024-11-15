@@ -7,23 +7,23 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 
 /**
 *   @file       Clock_Ip_DividerTrigger.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -54,7 +54,7 @@ extern "C"{
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_DIVIDERTRIGGER_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_DIVIDERTRIGGER_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_DIVIDERTRIGGER_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_DIVIDERTRIGGER_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_DIVIDERTRIGGER_SW_PATCH_VERSION_C               0
 
@@ -106,12 +106,6 @@ extern "C"{
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
-
-/*==================================================================================================
-*                                    GLOBAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
-
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -121,12 +115,10 @@ extern "C"{
 #include "Mcu_MemMap.h"
 
 static void Clock_Ip_Callback_DividerTriggerEmpty(Clock_Ip_DividerTriggerConfigType const* Config);
-
 #ifdef CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT
 static void Clock_Ip_ConfigureCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_DividerTriggerConfigType const* Config);
 static void Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_DividerTriggerConfigType const* Config);
 #endif
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -226,39 +218,34 @@ static void Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat(Clock_Ip_Divide
 }
 #endif
 
-
-
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
 #include "Mcu_MemMap.h"
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
 
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
-
 /* Clock start constant section data */
 #define MCU_START_SEC_CONST_UNSPECIFIED
+
 #include "Mcu_MemMap.h"
 
 const Clock_Ip_DividerTriggerCallbackType Clock_Ip_axDividerTriggerCallbacks[CLOCK_IP_DIVIDERTRIGGER_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_Callback_DividerTriggerEmpty,                  /* Configure */
-        &Clock_Ip_Callback_DividerTriggerEmpty,                  /* Trigger Update */
+        Clock_Ip_Callback_DividerTriggerEmpty,                  /* Configure */
+        Clock_Ip_Callback_DividerTriggerEmpty,                  /* Trigger Update */
     },
 #ifdef CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT
     {
-        &Clock_Ip_ConfigureCgmXDivTrigCtrlTctlHhenUpdStat,           /* Configure */
-        &Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat,       /* Trigger Update */
+        Clock_Ip_ConfigureCgmXDivTrigCtrlTctlHhenUpdStat,           /* Configure */
+        Clock_Ip_TriggerUpdateCgmXDivTrigCtrlTctlHhenUpdStat,       /* Trigger Update */
     },
 #endif
-
-
 };
 
 /* Clock stop constant section data */

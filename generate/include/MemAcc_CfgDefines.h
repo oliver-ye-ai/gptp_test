@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -50,7 +50,7 @@ extern "C"{
 #define MEMACC_AR_RELEASE_MAJOR_VERSION_CFG_DEFINES       4
 #define MEMACC_AR_RELEASE_MINOR_VERSION_CFG_DEFINES       7
 #define MEMACC_AR_RELEASE_REVISION_VERSION_CFG_DEFINES    0
-#define MEMACC_SW_MAJOR_VERSION_CFG_DEFINES               5
+#define MEMACC_SW_MAJOR_VERSION_CFG_DEFINES               4
 #define MEMACC_SW_MINOR_VERSION_CFG_DEFINES               0
 #define MEMACC_SW_PATCH_VERSION_CFG_DEFINES               0
 
@@ -82,21 +82,19 @@ extern "C"{
 /* Define support for 32 or 64Bit address type */
 #define MEMACC_ADDRESSTYPE                             uint32
 #define MEMACC_LENGTHTYPE                              uint32
-
 /*Mem drivers hardware ID list*/
-#define MEMACC_MEM_43_INFLS_DRIVER_ID                         (0U)
-
+#define MEMACC_MEM_43_INFLS_HW_ID                         (0U)
 /* Number of hardware resources which are provided by Mem drivers */
-#define MEMACC_MEM_HW_RESOURCE_COUNT                   (1U)
-
+#define MEMACC_MEM_HW_RESOURCE_COUNT                   (2U)
 /* The unique numeric identifiers for each hardware resource */
-#define  MEMACC_MEM_43_INFLS_MEMINSTANCE_0_ID                          (0U)
+#define MEMACC_MEM_HW_QSPI_0    (0U)
+#define MEMACC_MEM_HW_INTERNAL    (1U)
 
 /* Enable multicore core synchronization feature. */
-#define MEMACC_MULTICORE_TYPE_1_ENABLED                (STD_OFF)
+#define MEMACC_MULTICORE_TYPE_1_ENABLED                 (STD_OFF)
 
 /* Pre-processor switch to enable and disable multicore function from the driver */
-#define MEMACC_MULTICORE_TYPE_3_ENABLED                (STD_OFF)
+#define MEMACC_MULTICORE_TYPE_3_ENABLED                       (STD_OFF)
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/

@@ -7,12 +7,12 @@
 * Autosar Version :     4.7.0
 * Autosar Revision :    ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version :          5.0.0
-* Build Version :       S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version :          4.0.0
+* Build Version :       S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -60,7 +60,7 @@ extern "C"{
 #define EMIOS_GPT_IP_AR_RELEASE_MAJOR_VERSION        4
 #define EMIOS_GPT_IP_AR_RELEASE_MINOR_VERSION        7
 #define EMIOS_GPT_IP_AR_RELEASE_REVISION_VERSION     0
-#define EMIOS_GPT_IP_SW_MAJOR_VERSION                5
+#define EMIOS_GPT_IP_SW_MAJOR_VERSION                4
 #define EMIOS_GPT_IP_SW_MINOR_VERSION                0
 #define EMIOS_GPT_IP_SW_PATCH_VERSION                0
 
@@ -158,6 +158,12 @@ extern "C"{
 /*==================================================================================================
 *                                 STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
+#define GPT_START_SEC_CONST_UNSPECIFIED
+#include "Gpt_MemMap.h"
+/** @brief Table of base addresses for eMios instances. */
+extern eMIOS_Type * const eMiosGptBase[eMIOS_INSTANCE_COUNT];
+#define GPT_STOP_SEC_CONST_UNSPECIFIED
+#include "Gpt_MemMap.h"
 
 /*==================================================================================================
 *                                 GLOBAL VARIABLE DECLARATIONS
@@ -182,7 +188,10 @@ extern "C"{
  * @return  TRUE if an input capture or a match event in the comparators has occurred, FALSE otherwise
  * @pre     The driver needs to be initialized.
  */
-boolean Emios_Gpt_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel);
+static inline boolean Emios_Gpt_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel)
+{
+    return (0U != (eMiosGptBase[instance]->CH.UC[channel].S & eMIOS_S_FLAG_MASK)) ? TRUE : FALSE;
+}
 
 /*================================================================================================*/
 /**

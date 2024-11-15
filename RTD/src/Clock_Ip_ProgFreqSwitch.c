@@ -7,23 +7,23 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 
 /**
 *   @file       Clock_Ip_ProgFreqSwitch.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -54,7 +54,7 @@ extern "C"{
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PROGFREQSWITCH_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_PROGFREQSWITCH_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_PROGFREQSWITCH_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_PROGFREQSWITCH_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_PROGFREQSWITCH_SW_PATCH_VERSION_C               0
 
@@ -89,11 +89,6 @@ extern "C"{
 /*==================================================================================================
 *                                          LOCAL MACROS
 ==================================================================================================*/
-
-/*==================================================================================================
-*                                         LOCAL MACROS
-==================================================================================================*/
-
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
 /* Pcfs settings that are dependent on device */
 #define CLOCK_IP_A_MAX_SIZE 4U
@@ -105,8 +100,6 @@ extern "C"{
 #define CLOCK_IP_CONSTANT_2048000                               (1024U * 2000U)
 #endif
 
-
-
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
@@ -115,13 +108,10 @@ extern "C"{
 #define MCU_START_SEC_CONST_32
 #include "Mcu_MemMap.h"
 
-
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
 static const uint32 AMax[CLOCK_IP_A_MAX_SIZE] = {5U,10U,150U,200U};
 static const uint32 PcfsRate[CLOCK_IP_A_MAX_SIZE] = {12U,48U,112U,184U};
 #endif
-
-
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_32
@@ -135,12 +125,9 @@ static const uint32 PcfsRate[CLOCK_IP_A_MAX_SIZE] = {12U,48U,112U,184U};
 #define MCU_START_SEC_VAR_CLEARED_32
 #include "Mcu_MemMap.h"
 
-
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
 static uint32 HashPfs[CLOCK_IP_PCFS_COUNT];
 #endif
-
-
 
 /* Clock stop initialized section data */
 #define MCU_STOP_SEC_VAR_CLEARED_32
@@ -162,14 +149,11 @@ static uint32 HashPfs[CLOCK_IP_PCFS_COUNT];
 static void Clock_Ip_ProgressiveFrequencyClockSwitchEmpty(  Clock_Ip_PcfsConfigType const* Config,
                                                             uint32 Index
                                                           );
-
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
 static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *Config,
                                                 uint32 CfgIndex
                                               );
 #endif
-
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -193,7 +177,6 @@ static void Clock_Ip_ProgressiveFrequencyClockSwitchEmpty(  Clock_Ip_PcfsConfigT
     (void)Index;
     /* No implementation */
 }
-
 
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
 static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *Config,
@@ -310,27 +293,10 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
             DivEndValue = (Finput * 1000U / Fsafe) - 1U;
 
             /* Configure pcfs registers */
-        #if (defined(CLOCK_IP_HAS_P5_AE_CLK) && defined(CLOCK_IP_HAS_FIRC_AE_CLK))
-            if (P5_AE_CLK==Config->Name)
-            {
-                #if (defined(CLOCK_IP_DEV_ERROR_DETECT) && (CLOCK_IP_DEV_ERROR_DETECT == STD_ON))
-                CLOCK_IP_DEV_ASSERT(Sdur < 256U);
-                #endif
-                IP_MC_CGM_AE->PCS_SDUR = MC_CGM_PCS_SDUR_SDUR(Sdur);
-                IP_MC_CGM_AE->PCS_DIVC1 = MC_CGM_PCS_DIVC1_RATE(DivcRate) | MC_CGM_PCS_DIVC1_INIT(DivcInit);
-                IP_MC_CGM_AE->PCS_DIVE1 = MC_CGM_PCS_DIVE1_DIVE(DivEndValue);
-                IP_MC_CGM_AE->PCS_DIVS1 = MC_CGM_PCS_DIVS1_DIVS(DivStartValue);
-            }
-            else
-            {
-        #endif
-                CgmPcfsBase->PCFS_SDUR = MC_CGM_PCFS_SDUR_SDUR(Sdur);
-                CgmPcfsBase->PCFS[HwIndex].DIVC = MC_CGM_PCFS_DIVC_RATE(DivcRate) | MC_CGM_PCFS_DIVC_INIT(DivcInit);
-                CgmPcfsBase->PCFS[HwIndex].DIVE = MC_CGM_PCFS_DIVE_DIVE(DivEndValue);
-                CgmPcfsBase->PCFS[HwIndex].DIVS = MC_CGM_PCFS_DIVS_DIVS(DivStartValue);
-        #if (defined(CLOCK_IP_HAS_P5_AE_CLK) && defined(CLOCK_IP_HAS_FIRC_AE_CLK))
-            }
-        #endif
+            CgmPcfsBase->PCFS_SDUR = MC_CGM_PCFS_SDUR_SDUR(Sdur);
+            CgmPcfsBase->PCFS[HwIndex].DIVC = MC_CGM_PCFS_DIVC_RATE(DivcRate) | MC_CGM_PCFS_DIVC_INIT(DivcInit);
+            CgmPcfsBase->PCFS[HwIndex].DIVE = MC_CGM_PCFS_DIVE_DIVE(DivEndValue);
+            CgmPcfsBase->PCFS[HwIndex].DIVS = MC_CGM_PCFS_DIVS_DIVS(DivStartValue);
         }
     }
     else
@@ -356,7 +322,6 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
 }
 #endif
 
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -365,7 +330,6 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
-
 
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
@@ -379,17 +343,14 @@ static void Clock_Ip_CgmXPcfsSdurDivcDiveDivs(  Clock_Ip_PcfsConfigType const *C
 const Clock_Ip_PcfsCallbackType Clock_Ip_axPcfsCallbacks[CLOCK_IP_PCFS_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_ProgressiveFrequencyClockSwitchEmpty,     /* Set */
+        Clock_Ip_ProgressiveFrequencyClockSwitchEmpty,     /* Set */
 
     },
-
 #ifdef CLOCK_IP_CGM_X_PCFS_SDUR_DIVC_DIVE_DIVS
     {
-        &Clock_Ip_CgmXPcfsSdurDivcDiveDivs,              /* Set */
+        Clock_Ip_CgmXPcfsSdurDivcDiveDivs,              /* Set */
     },
 #endif
-
-
 };
 
 /* Clock stop constant section data */

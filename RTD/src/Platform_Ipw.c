@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -43,7 +43,7 @@
 #define CDD_PLATFORM_IPW_AR_RELEASE_MAJOR_VERSION_C          4
 #define CDD_PLATFORM_IPW_AR_RELEASE_MINOR_VERSION_C          7
 #define CDD_PLATFORM_IPW_AR_RELEASE_REVISION_VERSION_C       0
-#define CDD_PLATFORM_IPW_SW_MAJOR_VERSION_C                  5
+#define CDD_PLATFORM_IPW_SW_MAJOR_VERSION_C                  4
 #define CDD_PLATFORM_IPW_SW_MINOR_VERSION_C                  0
 #define CDD_PLATFORM_IPW_SW_PATCH_VERSION_C                  0
 
@@ -127,13 +127,11 @@ void Platform_Ipw_Init(const Platform_Ipw_ConfigType *pConfig)
     uint8 u8Idx = 0u;
 #endif
 
-#if  (PLATFORM_ENABLE_INT_CTRL == STD_ON)
     /* Initialize interrupts at interrupt controller level */
     if (NULL_PTR != pConfig->pIntCtrlConfig)
     {
         (void)IntCtrl_Ip_Init(pConfig->pIntCtrlConfig);
     }
-#endif
 
 #if (PLATFORM_SYS_CFG == STD_ON)
     /* Configure core-related interrupt requests */
@@ -166,7 +164,6 @@ void Platform_Ipw_Init(const Platform_Ipw_ConfigType *pConfig)
         }
     }
 #endif
-    (void)pConfig;
 }
 #if (PLATFORM_INT_MONITOR == STD_ON)
 /**
@@ -185,6 +182,7 @@ void Platform_Ipw_SetIrqMonitor(boolean bEnable)
     }
 }
 
+
 /**
  * @internal
  * @brief         Selects an interrupt to be monitored by calling the Interrupt Monitor IP layer.
@@ -199,7 +197,7 @@ void Platform_Ipw_SelectMonitoredIrq(const Platform_Ipw_ConfigType *pConfig,
     u8ChannelIdxInPartition = (*((pConfig->pIntMonitor)->Platform_IndexChannelMap))[u8Channel];
     eHwChannel = pConfig->pIntMonitor->aIntmChannelConfig[u8ChannelIdxInPartition].eMonitor;
     Intm_Ip_SelectMonitoredIrq(eHwChannel, eIrqNumber);
-}
+}                                                
 
 /**
  * @internal
@@ -218,6 +216,7 @@ void Platform_Ipw_SetMonitoredIrqLatency(const Platform_Ipw_ConfigType *pConfig,
     Intm_Ip_SetLatency(eHwChannel, u32Latency);
 }
 
+
 /**
  * @internal
  * @brief         Resets an interrupt monitor timer by calling the Interrupt Monitor IP layer.
@@ -232,6 +231,7 @@ void Platform_Ipw_ResetIrqMonitorTimer(const Platform_Ipw_ConfigType *pConfig,
     eHwChannel = pConfig->pIntMonitor->aIntmChannelConfig[u8ChannelIdxInPartition].eMonitor;
     Intm_Ip_ResetTimer(eHwChannel);
 }
+
 
 /**
  * @internal
@@ -291,46 +291,93 @@ Std_ReturnType Platform_Ipw_ValidateSetIrqMonitor(const Platform_Ipw_ConfigType 
 
 #if (PLATFORM_ENABLE_MPU_M7 == STD_ON)
 /**
- * @internal
- * @brief         Initializes the Memory Protection Unit general parameters and
- *                region configurations
- */
+* @brief        Platform_Ipw_Mpu_M7_Init
+* @details
+*
+* @param[in]
+*
+* @param[out]
+*
+* @return
+*
+* @api
+*
+*/
 void Platform_Ipw_Mpu_M7_Init(const Platform_Ipw_ConfigType * pIpwConfig)
 {
     Mpu_M7_Ip_Init(pIpwConfig->Platform_Ipw_pMpuConfig);
 }
 
+
 /**
- * @internal
- * @brief         Configures the region selected by u8RegionNum with the data from pUserConfigPtr
- */
+* @brief        Platform_Ipw_Mpu_M7_SetRegionConfig
+* @details
+*
+* @param[in]
+*
+* @param[out]
+*
+* @return
+*
+* @api
+*
+*/
 void Platform_Ipw_Mpu_M7_SetRegionConfig(uint8 u8RegionNum, const Platform_Mpu_M7_RegionConfigType * const pUserConfigPtr)
 {
     Mpu_M7_Ip_SetRegionConfig(u8RegionNum, pUserConfigPtr);
 }
 
+
+
 /**
- * @internal
- * @brief         Enables or disabled a specific MPU region
- */
+* @brief        Platform_Ipw_Mpu_M7_EnableRegion
+* @details
+*
+* @param[in]
+*
+* @param[out]
+*
+* @return
+*
+* @api
+*
+*/
 void Platform_Ipw_Mpu_M7_EnableRegion(uint8 u8RegionNum, boolean bEnable)
 {
     Mpu_M7_Ip_EnableRegion(u8RegionNum, bEnable);
 }
 
 /**
- * @internal
- * @brief         Modify the access rights for a specific MPU region
- */
+* @brief        Platform_Ipw_Mpu_M7_SetAccessRight
+* @details
+*
+* @param[in]
+*
+* @param[out]
+*
+* @return
+*
+* @api
+*
+*/
 void Platform_Ipw_Mpu_M7_SetAccessRight(uint8 u8RegionNum, Platform_Mpu_M7_AccessRightsType eRights)
 {
     Mpu_M7_Ip_SetAccessRight(u8RegionNum, eRights);
 }
 
 /**
- * @internal
- * @brief         Retrieve error details
- */
+* @brief        Platform_Ipw_Mpu_M7_GetErrorDetails
+* @details
+*
+* @param[in]
+*
+* @param[out]
+*
+* @return
+*
+* @api
+*
+*/
 boolean Platform_Ipw_Mpu_M7_GetErrorDetails(Platform_Mpu_M7_ErrorDetailsType * pErrorDetails)
 {
     return Mpu_M7_Ip_GetErrorDetails(pErrorDetails);

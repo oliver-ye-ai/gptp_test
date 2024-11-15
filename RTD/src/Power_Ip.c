@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Power_Ip.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief
 *   @brief   POWER driver implementations.
@@ -64,7 +64,7 @@ extern "C"{
 #define POWER_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define POWER_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define POWER_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define POWER_IP_SW_MAJOR_VERSION_C               5
+#define POWER_IP_SW_MAJOR_VERSION_C               4
 #define POWER_IP_SW_MINOR_VERSION_C               0
 #define POWER_IP_SW_PATCH_VERSION_C               0
 
@@ -239,7 +239,7 @@ extern "C"{
 #include "Mcu_MemMap.h"
 
 /* Power Report Error Callback */
-Power_Ip_ReportErrorsCallbackType Power_Ip_pfReportErrorsCallback = &Power_Ip_ReportPowerErrorsEmptyCallback;
+Power_Ip_ReportErrorsCallbackType Power_Ip_pfReportErrorsCallback = Power_Ip_ReportPowerErrorsEmptyCallback;
 
 #define MCU_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "Mcu_MemMap.h"
@@ -309,6 +309,12 @@ static void Power_Ip_SetUserAccessAllowed(void)
   #endif
 #endif
 
+#if (defined(MCAL_RDC_REG_PROT_AVAILABLE))
+  #if (STD_ON == MCAL_RDC_REG_PROT_AVAILABLE)
+    OsIf_Trusted_Call(Power_Ip_RDC_SetUserAccessAllowed);
+  #endif
+#endif
+
 #if (defined(MCAL_DCM_REG_PROT_AVAILABLE))
   #if (STD_ON == MCAL_DCM_REG_PROT_AVAILABLE)
     OsIf_Trusted_Call(Power_Ip_DCM_GPR_SetUserAccessAllowed);
@@ -324,13 +330,6 @@ static void Power_Ip_SetUserAccessAllowed(void)
 /* Prepare soc standby */
 static void Power_Ip_PrepareSocStandby(const Power_Ip_ModeConfigType * ModeConfigPtr)
 {
-    #if (defined(POWER_IP_PMIC_PGOOD_SUPPORT) && (STD_ON == POWER_IP_PMIC_PGOOD_SUPPORT))
-    if((boolean)TRUE == ModeConfigPtr->DcmGprConfigPtr->DcmGprUnderMcuControl)
-    {
-        Power_Ip_DCM_GPR_PMICBypasses(ModeConfigPtr->DcmGprConfigPtr->PGOODBypasses);
-    }
-    #endif
-    
     /* Init Device Configuration Module General-Purpose Registers */
     Power_Ip_DCM_GPR_Config(ModeConfigPtr->DcmGprConfigPtr);
 
@@ -626,6 +625,10 @@ void Power_Ip_Init(const Power_Ip_HwIPsConfigType * HwIPsConfigPtr)
     /* Disable the padkeeping for every Power Init */
     Power_Ip_DCM_GPR_GlobalPadkeepingConfig(POWER_IP_GLOBAL_PADKEEPING_DISABLED);
 
+#if (defined(POWER_IP_PMIC_PGOOD_SUPPORT) && (STD_ON == POWER_IP_PMIC_PGOOD_SUPPORT))  
+    Power_Ip_DCM_GPR_PMICBypasses(HwIPsConfigPtr->PGOODBypasses);
+#endif
+
     /* Avoid compiler warning */
     (void)HwIPsConfigPtr;
 }
@@ -732,7 +735,7 @@ void Power_Ip_DisableSleepOnExit(void)
 *
 * @return void
 *
-*
+* @implements Power_Ip_EnableLastMile_Activity
 */
 void Power_Ip_EnableLastMile(boolean BJTused)
 {
@@ -745,7 +748,7 @@ void Power_Ip_EnableLastMile(boolean BJTused)
 *
 * @return void
 *
-*
+* @implements Power_Ip_DisableLastMile_Activity
 */
 void Power_Ip_DisableLastMile(void)
 {

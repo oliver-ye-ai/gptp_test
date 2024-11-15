@@ -1,18 +1,18 @@
 /*==================================================================================================
-* Project : RTD AUTOSAR 4.7
-* Platform : CORTEXM
-* Peripheral : Stm_Pit_Rtc_Emios
-* Dependencies : none
+* Project :             RTD AUTOSAR 4.7
+* Platform :            CORTEXM
+* Peripheral :          Stm_Pit_Rtc_Emios
+* Dependencies :        none
 *
-* Autosar Version : 4.7.0
-* Autosar Revision : ASR_REL_4_7_REV_0000
+* Autosar Version :     4.7.0
+* Autosar Revision :    ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version :          4.0.0
+* Build Version :       S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -23,7 +23,6 @@
 
 #ifndef EMIOS_GPT_IP_CFG_H
 #define EMIOS_GPT_IP_CFG_H
-
 /**
 *   @file           Emios_Gpt_Ip_Cfg.h
 *
@@ -31,7 +30,6 @@
 *
 *   @{
 */
-
 #ifdef __cplusplus
 extern "C"{
 #endif
@@ -42,7 +40,6 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-/* Include all variants header files. */
 #include "Emios_Gpt_Ip_PBcfg.h"
 
 /*==================================================================================================
@@ -52,7 +49,7 @@ extern "C"{
 #define EMIOS_GPT_IP_AR_RELEASE_MAJOR_VERSION_CFG     4
 #define EMIOS_GPT_IP_AR_RELEASE_MINOR_VERSION_CFG     7
 #define EMIOS_GPT_IP_AR_RELEASE_REVISION_VERSION_CFG  0
-#define EMIOS_GPT_IP_SW_MAJOR_VERSION_CFG             5
+#define EMIOS_GPT_IP_SW_MAJOR_VERSION_CFG             4
 #define EMIOS_GPT_IP_SW_MINOR_VERSION_CFG             0
 #define EMIOS_GPT_IP_SW_PATCH_VERSION_CFG             0
 
@@ -62,17 +59,19 @@ extern "C"{
 #if (EMIOS_GPT_IP_VENDOR_ID_CFG != EMIOS_GPT_IP_VENDOR_ID_PBCFG_H)
     #error "Emios_Gpt_Ip_Cfg.h and Emios_Gpt_Ip_PBcfg.h have different vendor ids"
 #endif
-/* Check if header file and Emios_Gpt_Ip_PBcfg.h file are of the same Autosar version */
+
+/* Check if  header file and Emios_Gpt_Ip_PBcfg.h file are of the same Autosar version */
 #if ((EMIOS_GPT_IP_AR_RELEASE_MAJOR_VERSION_CFG != EMIOS_GPT_IP_AR_RELEASE_MAJOR_VERSION_PBCFG_H) || \
      (EMIOS_GPT_IP_AR_RELEASE_MINOR_VERSION_CFG != EMIOS_GPT_IP_AR_RELEASE_MINOR_VERSION_PBCFG_H) || \
      (EMIOS_GPT_IP_AR_RELEASE_REVISION_VERSION_CFG != EMIOS_GPT_IP_AR_RELEASE_REVISION_VERSION_PBCFG_H) \
     )
     #error "AutoSar Version Numbers of Emios_Gpt_Ip_Cfg.h and Emios_Gpt_Ip_PBcfg.h are different"
 #endif
+
 /* Check if header file and Emios_Gpt_Ip_PBcfg.h file are of the same Software version */
-#if ((EMIOS_GPT_IP_SW_MAJOR_VERSION_CFG != EMIOS_GPT_IP_SW_MAJOR_VERSION_PBCFG_H) || \
-     (EMIOS_GPT_IP_SW_MINOR_VERSION_CFG != EMIOS_GPT_IP_SW_MINOR_VERSION_PBCFG_H) || \
-     (EMIOS_GPT_IP_SW_PATCH_VERSION_CFG != EMIOS_GPT_IP_SW_PATCH_VERSION_PBCFG_H) \
+#if ((EMIOS_GPT_IP_SW_MAJOR_VERSION_CFG!= EMIOS_GPT_IP_SW_MAJOR_VERSION_PBCFG_H) || \
+     (EMIOS_GPT_IP_SW_MINOR_VERSION_CFG!= EMIOS_GPT_IP_SW_MINOR_VERSION_PBCFG_H) || \
+     (EMIOS_GPT_IP_SW_PATCH_VERSION_CFG!= EMIOS_GPT_IP_SW_PATCH_VERSION_PBCFG_H) \
     )
     #error "Software Version Numbers of Emios_Gpt_Ip_Cfg.h and Emios_Gpt_Ip_PBcfg.h are different"
 #endif
@@ -84,34 +83,29 @@ extern "C"{
 *                                      DEFINES AND MACROS
 ==================================================================================================*/
 /**
-* @brief   Dev error detect switch EMIOS_GPT_IP_DEV_ERROR_DETECT
-* @details On/Off EMIOS_GPT_IP_DEV_ERROR_DETECT
+* @brief Dev error detect switch
 */
-#define EMIOS_GPT_IP_DEV_ERROR_DETECT (STD_OFF)
-/*================================================================================================*/
+#define EMIOS_GPT_IP_DEV_ERROR_DETECT     (STD_OFF)
 /**
 * @brief    EMIOS_GPT_IP_CHANGE_NEXT_TIMEOUT_VALUE switch
 * @details  Enable/disable support for changing timeout value during timer running
 */
 #define EMIOS_GPT_IP_CHANGE_NEXT_TIMEOUT_VALUE     (STD_OFF)
-/*================================================================================================*/
 /**
 * @brief    EMIOS_GPT_IP_PREDEFTIMER_FUNCTIONALITY_API switch
 * @details  Enable/disable GPT_PREDEFTIMER_FUNCTIONALITY_API.
 */
 #define EMIOS_GPT_IP_PREDEFTIMER_FUNCTIONALITY_API     (STD_OFF)
-/*================================================================================================*/
 /**
 * @brief    EMIOS_GPT_IP_ENABLE_USER_MODE_SUPPORT switch
 * @details  Enable/disable support usermode.If this parameter has been configured to TRUE the GPT driver code can be executed from both supervisor and user mode.
 */
-#define EMIOS_GPT_IP_ENABLE_USER_MODE_SUPPORT    (STD_OFF)
-/*================================================================================================*/
+#define EMIOS_GPT_IP_ENABLE_USER_MODE_SUPPORT     (STD_OFF)
 /**
 * @brief        EMIOS_GPT_MAX_COUNTER.
 * @details      max value of counter register.
 */
-#define EMIOS_GPT_MAX_COUNTER         (65535U)
+#define EMIOS_GPT_MAX_COUNTER     (65535U)
 /*==================================================================================================
 *                                             ENUMS
 ==================================================================================================*/
@@ -134,3 +128,4 @@ extern "C"{
 /** @} */
 
 #endif  /* EMIOS_GPT_IP_CFG_H */
+

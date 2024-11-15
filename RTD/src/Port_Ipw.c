@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -47,6 +47,7 @@ extern "C"{
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
     #include "Det.h"
 #endif
+#include "Siul2_Port_Ip_TrustedFunctions.h"
 
 /*=================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -61,7 +62,7 @@ extern "C"{
 #define PORT_AR_RELEASE_MAJOR_VERSION_IPW_C     4
 #define PORT_AR_RELEASE_MINOR_VERSION_IPW_C     7
 #define PORT_AR_RELEASE_REVISION_VERSION_IPW_C  0
-#define PORT_SW_MAJOR_VERSION_IPW_C             5
+#define PORT_SW_MAJOR_VERSION_IPW_C             4
 #define PORT_SW_MINOR_VERSION_IPW_C             0
 #define PORT_SW_PATCH_VERSION_IPW_C             0
 
@@ -104,6 +105,25 @@ extern "C"{
      (PORT_SW_PATCH_VERSION_IPW_C != PORT_SW_PATCH_VERSION)    \
     )
     #error "Software Version Numbers of Port_Ipw.c and Port.h are different"
+#endif
+
+/* Check if the files Port_Ipw.c and Siul2_Port_Ip_TrustedFunctions.h are of the same vendor */
+#if (PORT_VENDOR_ID_IPW_C != SIUL2_PORT_IP_TRUSTEDFUNCTIONS_VENDOR_ID_H)
+    #error "Port_Ipw.c and Siul2_Port_Ip_TrustedFunctions.h have different vendor ids"
+#endif
+/* Check if the files Port_Ipw.c and Siul2_Port_Ip_TrustedFunctions.h are of the same Autosar version */
+#if ((PORT_AR_RELEASE_MAJOR_VERSION_IPW_C    != SIUL2_PORT_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION_H)  || \
+     (PORT_AR_RELEASE_MINOR_VERSION_IPW_C    != SIUL2_PORT_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION_H)  || \
+     (PORT_AR_RELEASE_REVISION_VERSION_IPW_C != SIUL2_PORT_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION_H)  \
+    )
+    #error "AutoSar Version Numbers of Port_Ipw.c and Siul2_Port_Ip_TrustedFunctions.h are different"
+#endif
+/* Check if the files Port_Ipw.c and Siul2_Port_Ip_TrustedFunctions.h are of the same software version */
+#if ((PORT_SW_MAJOR_VERSION_IPW_C != SIUL2_PORT_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION_H) || \
+     (PORT_SW_MINOR_VERSION_IPW_C != SIUL2_PORT_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION_H) || \
+     (PORT_SW_PATCH_VERSION_IPW_C != SIUL2_PORT_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION_H)    \
+    )
+    #error "Software Version Numbers of Port_Ipw.c and Siul2_Port_Ip_TrustedFunctions.h are different"
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
@@ -187,7 +207,10 @@ static uint16 Port_Ipw_au16GPIODirChangeability[PORT_NUM_SIUL2_INSTANCES_U8][POR
  *
  *
  **/
-static inline void Port_Ipw_Init_UnusedPins(const Port_ConfigType * pConfigPtr);
+static inline void Port_Ipw_Init_UnusedPins
+(
+    const Port_ConfigType * pConfigPtr
+);
 
 #ifdef PORT_CODE_SIZE_OPTIMIZATION
 #if (STD_ON == PORT_SET_PIN_MODE_API) && (STD_OFF == PORT_CODE_SIZE_OPTIMIZATION)
@@ -203,10 +226,12 @@ static inline void Port_Ipw_Init_UnusedPins(const Port_ConfigType * pConfigPtr);
  *
  *
  **/
-static uint16 Port_Ipw_GetIndexForInoutEntry(uint8 u8MscrSiulInstance,
-                                             uint16 u16MscrIdx,
-                                             Port_PinModeType PinMode
-                                            );
+static uint16 Port_Ipw_GetIndexForInoutEntry
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
+    Port_PinModeType PinMode
+);
 
 
 /**
@@ -222,14 +247,16 @@ static uint16 Port_Ipw_GetIndexForInoutEntry(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetInoutMode(uint8 u8MscrSiulInstance,
-                                         uint16 u16MscrIdx,
+static inline void Port_Ipw_SetInoutMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                         Port_PinType PinIndex,
-                                         const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                         Port_PinModeType PinMode
-                                        );
+    Port_PinModeType PinMode
+);
 
 /**
 * @brief   Port_Ipw_SetInputMode
@@ -244,14 +271,16 @@ static inline void Port_Ipw_SetInoutMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetInputMode(uint8 u8MscrSiulInstance,
-                                         uint16 u16MscrIdx,
+static inline void Port_Ipw_SetInputMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                         Port_PinType PinIndex,
-                                         const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                         Port_PinModeType PinMode
-                                        );
+    Port_PinModeType PinMode
+);
 
 /**
 * @brief   Port_Ipw_SetGpioMode
@@ -265,11 +294,13 @@ static inline void Port_Ipw_SetInputMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetGpioMode(uint8 u8MscrSiulInstance,
-                                        uint16 u16MscrIdx,
-                                        Port_PinType PinIndex,
-                                        const Port_ConfigType * pConfigPtr
-                                       );
+static inline void Port_Ipw_SetGpioMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr
+);
 
 /**
 * @brief   Port_Ipw_SetOnlyInputMode
@@ -283,13 +314,15 @@ static inline void Port_Ipw_SetGpioMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetOnlyInputMode(uint8 u8MscrSiulInstance,
+static inline void Port_Ipw_SetOnlyInputMode
+(
+    uint8 u8MscrSiulInstance,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                             Port_PinType PinIndex,
-                                             const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                             uint16 u16MscrIdx
-                                            );
+    uint16 u16MscrIdx
+);
 
 /*!
  * @brief Port_Ipw_SetOnlyOutputMode
@@ -302,13 +335,15 @@ static inline void Port_Ipw_SetOnlyInputMode(uint8 u8MscrSiulInstance,
  *
  * @return void
  **/
-static inline void Port_Ipw_SetOnlyOutputMode(uint8 u8MscrSiulInstance,
+static inline void Port_Ipw_SetOnlyOutputMode
+(
+    uint8 u8MscrSiulInstance,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                              Port_PinType PinIndex,
-                                              const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                              uint16 u16MscrIdx
-                                             );
+    uint16 u16MscrIdx
+);
 
 /**
 * @brief   Port_Ipw_SetAltMode
@@ -323,14 +358,16 @@ static inline void Port_Ipw_SetOnlyOutputMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetAltMode(uint8 u8MscrSiulInstance,
-                                       uint16 u16MscrIdx,
+static inline void Port_Ipw_SetAltMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                       Port_PinType PinIndex,
-                                       const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                       Port_PinModeType PinMode
-                                      );
+    Port_PinModeType PinMode
+);
 
 #endif /* (STD_ON == PORT_SET_PIN_MODE_API) && (STD_OFF == PORT_CODE_SIZE_OPTIMIZATION) */
 #endif /* PORT_CODE_SIZE_OPTIMIZATION */
@@ -350,10 +387,12 @@ static inline void Port_Ipw_SetAltMode(uint8 u8MscrSiulInstance,
  *
  *
  **/
-static inline void Port_Ipw_SetGpioDirChangeability(uint8 u8ImcrSiulInstance,
-                                                    uint16 u16MscrIdx,
-                                                    boolean bStatus
-                                                   );
+static inline void Port_Ipw_SetGpioDirChangeability
+(
+    uint8 u8ImcrSiulInstance,
+    uint16 u16MscrIdx,
+    boolean bStatus
+);
 #endif /* (STD_ON == PORT_DEV_ERROR_DETECT) */
 #endif /* (STD_ON == PORT_SET_PIN_MODE_API) && (STD_OFF == PORT_CODE_SIZE_OPTIMIZATION) */
 #endif /* PORT_CODE_SIZE_OPTIMIZATION */
@@ -373,9 +412,11 @@ static inline void Port_Ipw_SetGpioDirChangeability(uint8 u8ImcrSiulInstance,
  *
  *
  **/
-static inline void Port_Ipw_SetGpioPadOutput(Port_PinType PinIndex,
-                                             const Port_ConfigType * pConfigPtr
-                                            );
+static inline void Port_Ipw_SetGpioPadOutput
+(
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr
+);
 #endif /* (STD_OFF == PORT_SETPINMODE_DOES_NOT_TOUCH_GPIO_LEVEL) */
 #endif /* (STD_ON == PORT_SET_PIN_MODE_API) && (STD_OFF == PORT_CODE_SIZE_OPTIMIZATION) */
 #endif /* PORT_CODE_SIZE_OPTIMIZATION */
@@ -398,7 +439,10 @@ static inline void Port_Ipw_SetGpioPadOutput(Port_PinType PinIndex,
 *
 *
 */
-static inline void Port_Ipw_Init_UnusedPins(const Port_ConfigType *pConfigPtr)
+static inline void Port_Ipw_Init_UnusedPins
+(
+    const Port_ConfigType * pConfigPtr
+)
 {
     uint16 u16PinIndex;
     uint16 u16NumUnusedPins     = (uint16)(pConfigPtr->u16NumUnusedPins);
@@ -460,7 +504,10 @@ static inline void Port_Ipw_Init_UnusedPins(const Port_ConfigType *pConfigPtr)
 *
 *
 */
-void Port_Ipw_Init(const Port_ConfigType * pConfigPtr)
+void Port_Ipw_Init
+(
+    const Port_ConfigType * pConfigPtr
+)
 {
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
 #ifdef PORT_CODE_SIZE_OPTIMIZATION
@@ -594,10 +641,12 @@ void Port_Ipw_Init(const Port_ConfigType * pConfigPtr)
 *
 *
 */
-Std_ReturnType Port_Ipw_SetPinDirection(Port_PinType PinIndex,
-                                        Port_PinDirectionType eDirection,
-                                        const Port_ConfigType * pConfigPtr
-                                       )
+Std_ReturnType Port_Ipw_SetPinDirection
+(
+    Port_PinType PinIndex,
+    Port_PinDirectionType eDirection,
+    const Port_ConfigType * pConfigPtr
+)
 {
     /* Point to the Port Pin MSCR register address */
     uint16 u16MscrIdx         = pConfigPtr->pUsedPadConfig[PinIndex].u16MscrIdx;
@@ -610,21 +659,17 @@ Std_ReturnType Port_Ipw_SetPinDirection(Port_PinType PinIndex,
 #endif
 
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-    uint8 PartitionId;
-    PartitionId = (uint8)Port_GetUserId();
+    uint8 CoreId;
+    CoreId = (uint8)Port_GetCoreID();
 
     if ((PinIndex >= (Port_PinType)pConfigPtr->u16NumPins))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETPINDIRECTION_ID, (uint8)PORT_E_PARAM_PIN);
     }
     /* Check port pin validity */
-    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << PartitionId)) >> PartitionId))
+    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << CoreId)) >> CoreId))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETPINDIRECTION_ID, (uint8)PORT_E_PARAM_CONFIG);
-    }
-    else if ((PORT_PIN_IN != eDirection) && (PORT_PIN_OUT != eDirection) && (PORT_PIN_INOUT != eDirection) && (PORT_PIN_HIGH_Z != eDirection))
-    {
-        (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETPINDIRECTION_ID, (uint8)PORT_E_PARAM_INVALID_DIRECTION);
     }
     else
     {
@@ -711,10 +756,12 @@ Std_ReturnType Port_Ipw_SetPinDirection(Port_PinType PinIndex,
 *
 * @api
 */
-static uint16 Port_Ipw_GetIndexForInoutEntry(uint8 u8MscrSiulInstance,
-                                             uint16 u16MscrIdx,
-                                             Port_PinModeType PinMode
-                                            )
+static uint16 Port_Ipw_GetIndexForInoutEntry
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
+    Port_PinModeType PinMode
+)
 {
     uint16 u16ReturnIndex = (uint16)0;
     uint16 u16Counter;
@@ -744,13 +791,15 @@ static uint16 Port_Ipw_GetIndexForInoutEntry(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetInoutMode(uint8 u8MscrSiulInstance,
-                                         uint16 u16MscrIdx,
+static inline void Port_Ipw_SetInoutMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                         Port_PinType PinIndex,
-                                         const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                         Port_PinModeType PinMode
+    Port_PinModeType PinMode
 )
 {
     Port_InoutSettingType PadInoutData;
@@ -817,14 +866,16 @@ static inline void Port_Ipw_SetInoutMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetInputMode(uint8 u8MscrSiulInstance,
-                                         uint16 u16MscrIdx,
+static inline void Port_Ipw_SetInputMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                         Port_PinType PinIndex,
-                                         const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                         Port_PinModeType PinMode
-                                        )
+    Port_PinModeType PinMode
+)
 {
     uint16 u16Index;
     uint32 MscrValue;
@@ -888,11 +939,13 @@ static inline void Port_Ipw_SetInputMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetGpioMode(uint8 u8MscrSiulInstance,
-                                        uint16 u16MscrIdx,
-                                        Port_PinType PinIndex,
-                                        const Port_ConfigType * pConfigPtr
-                                       )
+static inline void Port_Ipw_SetGpioMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr
+)
 {
 
     Port_PinDirectionType ePadDirection;
@@ -963,13 +1016,15 @@ static inline void Port_Ipw_SetGpioMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetOnlyInputMode(uint8 u8MscrSiulInstance,
+static inline void Port_Ipw_SetOnlyInputMode
+(
+    uint8 u8MscrSiulInstance,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                             Port_PinType PinIndex,
-                                             const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                             uint16 u16MscrIdx
-                                            )
+    uint16 u16MscrIdx
+)
 {
     uint32 MscrValue;
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
@@ -1009,13 +1064,15 @@ static inline void Port_Ipw_SetOnlyInputMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetOnlyOutputMode(uint8 u8MscrSiulInstance,
+static inline void Port_Ipw_SetOnlyOutputMode
+(
+    uint8 u8MscrSiulInstance,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                              Port_PinType PinIndex,
-                                              const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                              uint16 u16MscrIdx
-                                             )
+    uint16 u16MscrIdx
+)
 {
     uint32 MscrValue;
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
@@ -1057,14 +1114,16 @@ static inline void Port_Ipw_SetOnlyOutputMode(uint8 u8MscrSiulInstance,
 *
 * @api
 */
-static inline void Port_Ipw_SetAltMode(uint8 u8MscrSiulInstance,
-                                       uint16 u16MscrIdx,
+static inline void Port_Ipw_SetAltMode
+(
+    uint8 u8MscrSiulInstance,
+    uint16 u16MscrIdx,
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
-                                       Port_PinType PinIndex,
-                                       const Port_ConfigType * pConfigPtr,
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr,
 #endif
-                                       Port_PinModeType PinMode
-                                      )
+    Port_PinModeType PinMode
+)
 {
     uint32 MscrValue;
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
@@ -1112,10 +1171,12 @@ static inline void Port_Ipw_SetAltMode(uint8 u8MscrSiulInstance,
 * @implements PORT_IPW_SetPinMode_Activity
 * @api
 */
-Std_ReturnType Port_Ipw_SetPinMode(Port_PinType PinIndex,
-                                   Port_PinModeType PinMode,
-                                   const Port_ConfigType * pConfigPtr
-                                  )
+Std_ReturnType Port_Ipw_SetPinMode
+(
+    Port_PinType PinIndex,
+    Port_PinModeType PinMode,
+    const Port_ConfigType * pConfigPtr
+)
 {
     Std_ReturnType PinModeError = (Std_ReturnType)0UL;
     uint16 u16MscrIdx           = pConfigPtr->pUsedPadConfig[PinIndex].u16MscrIdx;
@@ -1124,15 +1185,15 @@ Std_ReturnType Port_Ipw_SetPinMode(Port_PinType PinIndex,
     uint8 u8PinDescBitOffset;
 
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-    uint8 PartitionId;
-    PartitionId = (uint8)Port_GetUserId();
+    uint8 CoreId;
+    CoreId = (uint8)Port_GetCoreID();
 
     if ((PinIndex >= (Port_PinType)pConfigPtr->u16NumPins))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETPINMODE_ID, (uint8)PORT_E_PARAM_PIN);
     }
     /* Check if this function was called with wrong core */
-    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << PartitionId)) >> PartitionId))
+    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << CoreId)) >> CoreId))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETPINMODE_ID, (uint8)PORT_E_PARAM_CONFIG);
     }
@@ -1288,10 +1349,12 @@ Std_ReturnType Port_Ipw_SetPinMode(Port_PinType PinIndex,
 *
 *
 */
-static inline void Port_Ipw_SetGpioDirChangeability(uint8 u8ImcrSiulInstance,
-                                                    uint16 u16MscrIdx,
-                                                    boolean bStatus
-                                                   )
+static inline void Port_Ipw_SetGpioDirChangeability
+(
+    uint8 u8ImcrSiulInstance,
+    uint16 u16MscrIdx,
+    boolean bStatus
+)
 {
     /* Pin description variables */
     uint16 u16PinDirFlagWord;
@@ -1337,9 +1400,11 @@ static inline void Port_Ipw_SetGpioDirChangeability(uint8 u8ImcrSiulInstance,
 *
 *
 */
-static inline void Port_Ipw_SetGpioPadOutput(Port_PinType PinIndex,
-                                             const Port_ConfigType * pConfigPtr
-                                            )
+static inline void Port_Ipw_SetGpioPadOutput
+(
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr
+)
 {
 
     uint16 u16MscrIdx         = pConfigPtr->pUsedPadConfig[PinIndex].u16MscrIdx;
@@ -1381,7 +1446,10 @@ static inline void Port_Ipw_SetGpioPadOutput(Port_PinType PinIndex,
 * @post none
 *
 */
-void Port_Ipw_RefreshPortDirection(const Port_ConfigType * pConfigPtr)
+void Port_Ipw_RefreshPortDirection
+(
+    const Port_ConfigType * pConfigPtr
+)
 {
 
     uint16 u16NumPins = pConfigPtr->u16NumPins;
@@ -1461,7 +1529,11 @@ void Port_Ipw_RefreshPortDirection(const Port_ConfigType * pConfigPtr)
 * @pre Port_Init must have been called
 * @post none
 */
-void Port_Ipw_SetAsUnusedPin(Port_PinType PinIndex, const Port_ConfigType * pConfigPtr)
+void Port_Ipw_SetAsUnusedPin
+(
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr
+)
 {
     uint16 u16MscrIdx           = pConfigPtr->pUsedPadConfig[PinIndex].u16MscrIdx;
     uint8 u8LocalPDO           = pConfigPtr->pUnusedPadConfig->u8PDO;
@@ -1469,15 +1541,15 @@ void Port_Ipw_SetAsUnusedPin(Port_PinType PinIndex, const Port_ConfigType * pCon
     uint8 u8MscrSiulInstance    = pConfigPtr->pUsedPadConfig[PinIndex].u8MscrSiulInstance;
 
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-    uint8 PartitionId;
-    PartitionId = (uint8)Port_GetUserId();
+    uint8 CoreId;
+    CoreId = (uint8)Port_GetCoreID();
 
     if ((PinIndex >= (Port_PinType)pConfigPtr->u16NumPins))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETASUNUSEDPIN_ID, (uint8)PORT_E_PARAM_PIN);
     }
     /* Check if this function was called with wrong core */
-    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << PartitionId)) >> PartitionId))
+    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << CoreId)) >> CoreId))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETASUNUSEDPIN_ID, (uint8)PORT_E_PARAM_CONFIG);
     }
@@ -1531,7 +1603,11 @@ void Port_Ipw_SetAsUnusedPin(Port_PinType PinIndex, const Port_ConfigType * pCon
 * @pre Port_Init must have been called
 * @post none
 */
-void Port_Ipw_SetAsUsedPin(Port_PinType PinIndex, const Port_ConfigType * pConfigPtr)
+void Port_Ipw_SetAsUsedPin
+(
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr
+)
 {
     uint16 u16MscrIdx           = pConfigPtr->pUsedPadConfig[PinIndex].u16MscrIdx;
     uint8 u8LocalPDO           = pConfigPtr->pUsedPadConfig[PinIndex].u8PDO;
@@ -1540,15 +1616,15 @@ void Port_Ipw_SetAsUsedPin(Port_PinType PinIndex, const Port_ConfigType * pConfi
     u8MscrSiulInstance = pConfigPtr->pUsedPadConfig[PinIndex].u8MscrSiulInstance;
 
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-    uint8 PartitionId;
-    PartitionId = (uint8)Port_GetUserId();
+    uint8 CoreId;
+    CoreId = (uint8)Port_GetCoreID();
 
     if ((PinIndex >= (Port_PinType)pConfigPtr->u16NumPins))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETASUSEDPIN_ID, (uint8)PORT_E_PARAM_PIN);
     }
     /* Check if this function was called with wrong core */
-    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << PartitionId)) >> PartitionId))
+    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << CoreId)) >> CoreId))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SETASUSEDPIN_ID, (uint8)PORT_E_PARAM_CONFIG);
     }
@@ -1615,7 +1691,11 @@ void Port_Ipw_SetAsUsedPin(Port_PinType PinIndex, const Port_ConfigType * pConfi
 * @pre Port_Init must have been called
 * @post none
 */
-void Port_Ipw_ResetPinMode(Port_PinType PinIndex, const Port_ConfigType * pConfigPtr)
+void Port_Ipw_ResetPinMode
+(
+    Port_PinType PinIndex,
+    const Port_ConfigType * pConfigPtr
+)
 {
     uint16 u16MscrIdx           = pConfigPtr->pUsedPadConfig[PinIndex].u16MscrIdx;
     uint16 u16ImcrIdx           = pConfigPtr->pUsedPadConfig[PinIndex].u16ImcrIdx;
@@ -1628,15 +1708,15 @@ void Port_Ipw_ResetPinMode(Port_PinType PinIndex, const Port_ConfigType * pConfi
     uint8 u8ImcrSiulInstance;
 
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-    uint8 PartitionId;
-    PartitionId = (uint8)Port_GetUserId();
+    uint8 CoreId;
+    CoreId = (uint8)Port_GetCoreID();
 
     if ((PinIndex >= (Port_PinType)pConfigPtr->u16NumPins))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_RESETPINMODE_ID, (uint8)PORT_E_PARAM_PIN);
     }
     /* Check if this function was called with wrong core */
-    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << PartitionId)) >> PartitionId))
+    else if ((uint32)1 != (((pConfigPtr->pau32Port_PinToPartitionMap[PinIndex]) & ((uint32)1 << CoreId)) >> CoreId))
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_RESETPINMODE_ID, (uint8)PORT_E_PARAM_CONFIG);
     }

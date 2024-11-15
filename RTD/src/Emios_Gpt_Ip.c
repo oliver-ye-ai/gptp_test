@@ -7,12 +7,12 @@
 * Autosar Version :     4.7.0
 * Autosar Revision :    ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version :          5.0.0
-* Build Version :       S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version :          4.0.0
+* Build Version :       S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +52,7 @@ extern "C"{
 #define EMIOS_GPT_IP_AR_RELEASE_MAJOR_VERSION_C     4
 #define EMIOS_GPT_IP_AR_RELEASE_MINOR_VERSION_C     7
 #define EMIOS_GPT_IP_AR_RELEASE_REVISION_VERSION_C  0
-#define EMIOS_GPT_IP_SW_MAJOR_VERSION_C             5
+#define EMIOS_GPT_IP_SW_MAJOR_VERSION_C             4
 #define EMIOS_GPT_IP_SW_MINOR_VERSION_C             0
 #define EMIOS_GPT_IP_SW_PATCH_VERSION_C             0
 
@@ -105,7 +105,7 @@ extern "C"{
 *                                       LOCAL VARIABLES
 ==================================================================================================*/
 #if (EMIOS_GPT_IP_USED == STD_ON)
-#define GPT_START_SEC_VAR_INIT_BOOLEAN_NO_CACHEABLE
+#define GPT_START_SEC_VAR_INIT_BOOLEAN
 #include "Gpt_MemMap.h"
 /**
 * @brief          array variable used to store the hw channels used in Emios_Gpt_Ip driver.
@@ -116,7 +116,7 @@ static boolean Emios_Gpt_Ip_bHwChannelsUsed[eMIOS_INSTANCE_COUNT][eMIOS_CH_UC_UC
                                                                                                 }
                                                                                             };
 
-#define GPT_STOP_SEC_VAR_INIT_BOOLEAN_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_INIT_BOOLEAN
 #include "Gpt_MemMap.h"
 /*==================================================================================================
 *                                       GLOBAL CONSTANTS
@@ -128,11 +128,11 @@ static boolean Emios_Gpt_Ip_bHwChannelsUsed[eMIOS_INSTANCE_COUNT][eMIOS_CH_UC_UC
 #define GPT_START_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 /** @brief Table of base addresses for eMios instances. */
-static eMIOS_Type * const eMiosGptBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
+eMIOS_Type * const eMiosGptBase[eMIOS_INSTANCE_COUNT] = IP_eMIOS_BASE_PTRS;
 #define GPT_STOP_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
-#define GPT_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#define GPT_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 static Emios_Gpt_Ip_State Emios_Gpt_Ip_u32ChState[eMIOS_INSTANCE_COUNT][eMIOS_CH_UC_UC_COUNT] = {
                                                                                                     {
@@ -147,7 +147,7 @@ static Emios_Gpt_Ip_State Emios_Gpt_Ip_u32ChState[eMIOS_INSTANCE_COUNT][eMIOS_CH
                                                                                                     }
                                                                                                 };
 
-#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 /*==================================================================================================
 *                                   LOCAL FUNCTION PROTOTYPES
@@ -331,22 +331,6 @@ uint32 Emios_Gpt_Ip_GetPeriodValue(uint8 instance, uint8 channel)
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
-/**
- * @brief
- * Function Name : Emios_Gpt_Ip_GetInterruptStatusFlag
- * Description   : Get the state of FLAG bit    (UC Status Reg)
- *
- * @param[in]   instance    eMios hw instance number
- * @param[in]   channel     eMios hw channel number
- *
- * @return  TRUE if an input capture or a match event in the comparators has occurred, FALSE otherwise
- * @pre     The driver needs to be initialized.
- */
-boolean Emios_Gpt_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel)
-{
-    return (0U != (eMiosGptBase[instance]->CH.UC[channel].S & eMIOS_S_FLAG_MASK)) ? TRUE : FALSE;
-}
-
 
 /*================================================================================================*/
 /**

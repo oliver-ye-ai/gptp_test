@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -46,7 +46,7 @@ extern "C"{
 #include "Mem_43_INFLS_Types.h"
 #include "OsIf.h"
 
-#if (STD_ON == MEM_43_INFLS_USE_XRDC_CONFIG)
+#if (TRUE == MEM_43_INFLS_USE_XRDC_CONFIG)
 #include "CDD_Rm.h"
 #endif
 
@@ -57,7 +57,7 @@ extern "C"{
 #define MEM_43_INFLS_IPW_AR_RELEASE_MAJOR_VERSION        4
 #define MEM_43_INFLS_IPW_AR_RELEASE_MINOR_VERSION        7
 #define MEM_43_INFLS_IPW_AR_RELEASE_REVISION_VERSION     0
-#define MEM_43_INFLS_IPW_SW_MAJOR_VERSION                5
+#define MEM_43_INFLS_IPW_SW_MAJOR_VERSION                4
 #define MEM_43_INFLS_IPW_SW_MINOR_VERSION                0
 #define MEM_43_INFLS_IPW_SW_PATCH_VERSION                0
 
@@ -236,20 +236,6 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_ArrayIntegrityCheck(uint32 InstanceI
 Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_UserMarginReadCheck(uint32 InstanceIndex,
                                                                 Mem_43_INFLS_JobRuntimeInfoType *JobInfo
                                                                );
-Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_EccLogicCheck
-(
-    const Mem_43_INFLS_EccLogicCheckDataType *EccCheckData
-);
-
-Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_EdcAfterEccLogicCheck
-(
-    const Mem_43_INFLS_EccLogicCheckDataType *EccCheckData
-);
-
-Mem_43_INFLS_JobResultType Mem_43_INFLS_IPW_AddressEncodeLogicCheck
-(
-    const Mem_43_INFLS_AddressEncodeDataType *AddressEncodeData
-);
 #endif
 
 #define MEM_43_INFLS_STOP_SEC_CODE

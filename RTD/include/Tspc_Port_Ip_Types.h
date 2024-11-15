@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -54,7 +54,7 @@ extern "C" {
 #define TSPC_PORT_IP_TYPES_AR_RELEASE_MAJOR_VERSION_H      4
 #define TSPC_PORT_IP_TYPES_AR_RELEASE_MINOR_VERSION_H      7
 #define TSPC_PORT_IP_TYPES_AR_RELEASE_REVISION_VERSION_H   0
-#define TSPC_PORT_IP_TYPES_SW_MAJOR_VERSION_H              5
+#define TSPC_PORT_IP_TYPES_SW_MAJOR_VERSION_H              4
 #define TSPC_PORT_IP_TYPES_SW_MINOR_VERSION_H              0
 #define TSPC_PORT_IP_TYPES_SW_PATCH_VERSION_H              0
 
@@ -62,11 +62,11 @@ extern "C" {
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if the files Tspc_Port_Ip_Types.h and Std_Types.h are of the same version */
+    /* Check if the files Tspc_Port_Ip_Types.h and StandardTypes.h are of the same version */
     #if ((TSPC_PORT_IP_TYPES_AR_RELEASE_MAJOR_VERSION_H != STD_AR_RELEASE_MAJOR_VERSION) || \
          (TSPC_PORT_IP_TYPES_AR_RELEASE_MINOR_VERSION_H != STD_AR_RELEASE_MINOR_VERSION)    \
         )
-        #error "AutoSar Version Numbers of Tspc_Port_Ip_Types.h and Std_Types.h are different"
+        #error "AutoSar Version Numbers of Tspc_Port_Ip_Types.h and StandardTypes.h are different"
     #endif
 #endif
 /*==================================================================================================
@@ -81,7 +81,7 @@ extern "C" {
 /******************************************************************************
 * TSPC pads participating in the grouping
 *
-* Tspc_grp1
+*//*! @addtogroup tspc_grp1
 * @{
 *******************************************************************************/
 #define PTD1_OBE   (uint64_t)(1ULL << 0)  /* TSPC_ADC0/TSPC_GPIO0 */
@@ -135,7 +135,7 @@ extern "C" {
 /******************************************************************************
 * TSPC pads participating in the grouping
 *
-* Tspc_grp2
+*//*! @addtogroup tspc_grp2
 * @{
 *******************************************************************************/
 #define PTA3_OBE   (uint64_t)(1ULL << 0)  /* TSPC_ADC1 */

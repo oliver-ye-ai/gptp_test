@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Clock_Ip_IntOsc.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -53,7 +53,7 @@ extern "C"{
 #define CLOCK_IP_INTOSC_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_INTOSC_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_INTOSC_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_INTOSC_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_INTOSC_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_INTOSC_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_INTOSC_SW_PATCH_VERSION_C               0
 
@@ -112,14 +112,6 @@ extern "C"{
 #define MCU_START_SEC_CODE
 
 #include "Mcu_MemMap.h"
-
-
-
-
-
-
-
-
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -131,25 +123,14 @@ static void Clock_Ip_SetFircStdby(Clock_Ip_IrcoscConfigType const* Config);
 static void Clock_Ip_EnableFircStdby(Clock_Ip_IrcoscConfigType const* Config);
 static void Clock_Ip_DisableFircStdby(Clock_Ip_NameType Name);
 #endif
-
-
 #ifdef CLOCK_IP_SIRC_STDBY_ENABLE
 static void Clock_Ip_SetSircStdby(Clock_Ip_IrcoscConfigType const* Config);
 static void Clock_Ip_EnableSircStdby(Clock_Ip_IrcoscConfigType const* Config);
 static void Clock_Ip_DisableSircStdby(Clock_Ip_NameType Name);
 #endif
-
-
 #ifdef CLOCK_IP_FIRC_DIV_SEL_HSEb_CONFIG_REG_GPR
 static void Clock_Ip_SetFircDivSelHSEb(Clock_Ip_IrcoscConfigType const* Config);
 #endif
-
-
-
-
-
-
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -204,7 +185,6 @@ static void Clock_Ip_DisableFircStdby(Clock_Ip_NameType Name)
 }
 #endif
 
-
 #ifdef CLOCK_IP_SIRC_STDBY_ENABLE
 /* Set Sirc in Standby mode  */
 static void Clock_Ip_SetSircStdby(Clock_Ip_IrcoscConfigType const* Config)
@@ -237,6 +217,7 @@ static void Clock_Ip_DisableSircStdby(Clock_Ip_NameType Name)
 
 
 #ifdef CLOCK_IP_FIRC_DIV_SEL_HSEb_CONFIG_REG_GPR
+#define CLOCK_IP_WFI_EXECUTED MC_ME_PRTN0_CORE2_STAT_WFI_MASK
 #define CLOCK_IP_APP_CAN_WRITE 5U
 /* Set Firc Div Sel */
 static void Clock_Ip_SetFircDivSelHSEb(Clock_Ip_IrcoscConfigType const* Config)
@@ -319,23 +300,9 @@ static void Clock_Ip_SetFircDivSelHSEb(Clock_Ip_IrcoscConfigType const* Config)
 
 
 
-
-
-
-
-
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
-
-
-
-
-
-
-
-
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -352,43 +319,35 @@ static void Clock_Ip_SetFircDivSelHSEb(Clock_Ip_IrcoscConfigType const* Config)
 const Clock_Ip_IntOscCallbackType Clock_Ip_axIntOscCallbacks[CLOCK_IP_IRCOSC_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_InternalOscillatorEmpty,          /* Set */
-        &Clock_Ip_InternalOscillatorEmpty,          /* Enable */
-        &Clock_Ip_InternalOscillatorEmpty_Disable,  /* Disable */
+        Clock_Ip_InternalOscillatorEmpty,          /* Set */
+        Clock_Ip_InternalOscillatorEmpty,          /* Enable */
+        Clock_Ip_InternalOscillatorEmpty_Disable,  /* Disable */
     },
 #ifdef CLOCK_IP_FIRC_STDBY_ENABLE
     {
-        &Clock_Ip_SetFircStdby,                     /* Set */
-        &Clock_Ip_EnableFircStdby,                  /* Enable */
-        &Clock_Ip_DisableFircStdby,                 /* Disable */
+        Clock_Ip_SetFircStdby,                     /* Set */
+        Clock_Ip_EnableFircStdby,                  /* Enable */
+        Clock_Ip_DisableFircStdby,                 /* Disable */
     },
 #endif
-
-
 #ifdef CLOCK_IP_SIRC_STDBY_ENABLE
     {
-        &Clock_Ip_SetSircStdby,                     /* Set */
-        &Clock_Ip_EnableSircStdby,                  /* Enable */
-        &Clock_Ip_DisableSircStdby,                 /* Disable */
+        Clock_Ip_SetSircStdby,                     /* Set */
+        Clock_Ip_EnableSircStdby,                  /* Enable */
+        Clock_Ip_DisableSircStdby,                 /* Disable */
     },
 #endif
-
-
 #ifdef CLOCK_IP_FIRC_DIV_SEL_HSEb_CONFIG_REG_GPR
     {
-        &Clock_Ip_SetFircDivSelHSEb,                     /* Set */
-        &Clock_Ip_InternalOscillatorEmpty,               /* Enable */
-        &Clock_Ip_InternalOscillatorEmpty_Disable,       /* Disable */
+        Clock_Ip_SetFircDivSelHSEb,                     /* Set */
+        Clock_Ip_InternalOscillatorEmpty,               /* Enable */
+        Clock_Ip_InternalOscillatorEmpty_Disable,       /* Disable */
     },
 #endif
-
-
-
-
-
-
-
 };
+
+
+
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_UNSPECIFIED

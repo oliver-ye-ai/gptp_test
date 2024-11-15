@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -26,7 +26,7 @@
 
 /**
 *   @file    Power_Ip_TrustedFunctions.h
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   POWER IP type header file.
 *   @details POWER IP type header file.
@@ -44,7 +44,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "Std_Types.h"
+#include "StandardTypes.h"
 #include "Power_Ip_Cfg.h"
 #include "Power_Ip_Specific.h"
 #include "Power_Ip_Types.h"
@@ -57,7 +57,7 @@ extern "C"{
 #define POWER_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION        4
 #define POWER_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION        7
 #define POWER_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION     0
-#define POWER_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                5
+#define POWER_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION                4
 #define POWER_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION                0
 #define POWER_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION                0
 
@@ -65,11 +65,10 @@ extern "C"{
                                       FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-/* Check if source file and Std_Types.h file are of the same Autosar version */
-#if ((POWER_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-     (POWER_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION) \
-    )
-    #error "AutoSar Version Numbers of Power_Ip_TrustedFunctions.h  and Std_Types.h are different"
+/* Check if Power_Ip_TrustedFunctions.h file and StandardTypes.h file are of the same Autosar version */
+#if ((POWER_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION    != STD_AR_RELEASE_MAJOR_VERSION) || \
+     (POWER_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION    != STD_AR_RELEASE_MINOR_VERSION))
+    #error "AutoSar Version Numbers of Power_Ip_TrustedFunctions.h and StandardTypes.h are different"
 #endif
 #endif
 
@@ -236,7 +235,7 @@ extern void Power_Ip_MC_RGM_PerformReset(const Power_Ip_MC_RGM_ConfigType * Conf
  * @return       Reason of the Reset event.
  *
  */
-extern uint32 Power_Ip_MC_RGM_GetResetReason_Uint(void);
+extern Power_Ip_ResetType Power_Ip_MC_RGM_GetResetReason(void);
 
 /**
  * @brief        This function returns the Raw Reset value.
@@ -334,6 +333,20 @@ extern void Power_Ip_FLASH_C40ASF_SetUserAccessAllowed(void);
  */
 extern void Power_Ip_MC_RGM_SetUserAccessAllowed(void);
   #endif /* (STD_ON == MCAL_MC_RGM_REG_PROT_AVAILABLE) */
+#endif
+
+#if (defined(MCAL_RDC_REG_PROT_AVAILABLE))
+ #if (STD_ON == MCAL_RDC_REG_PROT_AVAILABLE)
+
+/**
+ * @brief        This function will enable writing in User mode by configuring REG_PROT
+ *
+ * @param        None
+ * @return       None
+ *
+ */
+extern void Power_Ip_RDC_SetUserAccessAllowed(void);
+ #endif /* (STD_ON == MCAL_RDC_REG_PROT_AVAILABLE) */
 #endif
 
 #if (defined(MCAL_DCM_REG_PROT_AVAILABLE))

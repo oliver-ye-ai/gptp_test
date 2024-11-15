@@ -7,8 +7,8 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
@@ -65,14 +65,7 @@ typedef OSWORD OSObjectType;            /* bits [15] - Core Id, bits [14..11] - 
 typedef OSObjectType TaskType;          /* used in task, events api ... */
 
 typedef OSDWORD TickType;               /* Type for timers ticks - use by counter, alarm, schedule table alarm */
-
 typedef TickType  *TickRefType;         /* OSEK: Reference to counter value - use by counter and alarm */
-
-typedef OSDWORD EventMaskType;          /* Used in event and alarm  */
-
-typedef EventMaskType *EventMaskRefType;      /* Used in event and alarm  */
-
-typedef OSObjectType ISRType;                 /* used both in memory and ISR */
 
 #ifdef __cplusplus
 }

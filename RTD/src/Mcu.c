@@ -7,23 +7,23 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Mcu.c
 *   @implements Mcu.c_Artifact
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief      AUTOSAR Mcu - Implements the AUTOSAR MCU driver functionality.
 *   @details    Implements the AUTOSAR MCU driver. All the API functions are described by AUTOSAR
@@ -52,6 +52,7 @@ extern "C"{
 
 /* Get the prototypes of IPW functions. */
 #include "Mcu_Ipw.h"
+#include "SchM_Mcu.h"
 
 #if (MCU_DEV_ERROR_DETECT == STD_ON)
     #include "Det.h"
@@ -65,7 +66,7 @@ extern "C"{
 #define MCU_AR_RELEASE_MAJOR_VERSION_C       4
 #define MCU_AR_RELEASE_MINOR_VERSION_C       7
 #define MCU_AR_RELEASE_REVISION_VERSION_C    0
-#define MCU_SW_MAJOR_VERSION_C               5
+#define MCU_SW_MAJOR_VERSION_C               4
 #define MCU_SW_MINOR_VERSION_C               0
 #define MCU_SW_PATCH_VERSION_C               0
 
@@ -87,6 +88,12 @@ extern "C"{
 #if ((MCU_AR_RELEASE_MAJOR_VERSION_C != MCAL_AR_RELEASE_MAJOR_VERSION) || \
      (MCU_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION))
     #error "AutoSar Version Numbers of Mcu.c and Mcal.h are different"
+#endif
+
+/* Check if Mcu.c file and SchM_Mcu.h file are of the same Autosar version */
+#if ((MCU_AR_RELEASE_MAJOR_VERSION_C != SCHM_MCU_AR_RELEASE_MAJOR_VERSION) || \
+     (MCU_AR_RELEASE_MINOR_VERSION_C != SCHM_MCU_AR_RELEASE_MINOR_VERSION))
+    #error "AutoSar Version Numbers of Mcu.c and SchM_Mcu.h are different"
 #endif
 #endif
 
@@ -134,6 +141,7 @@ extern "C"{
 /*==================================================================================================
 *                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
 ==================================================================================================*/
+#if (MCU_VALIDATE_GLOBAL_CALL == STD_ON)
 /**
 * @brief  This enumerated type contains the Mcu driver's possible states.
 */
@@ -144,6 +152,7 @@ typedef enum
     MCU_BUSY   = 0xAU   /**< @brief = 0xD2 The Mcu driver is currently busy. */
 
 } Mcu_StatusType;
+#endif /* (MCU_VALIDATE_GLOBAL_CALL == STD_ON) */
 
 
 /*==================================================================================================
@@ -193,10 +202,12 @@ static uint8 Mcu_au8RamConfigIds[MCU_MAX_RAMCONFIGS];
 #include "Mcu_MemMap.h"
 
 
+#if (MCU_VALIDATE_GLOBAL_CALL == STD_ON)
 /**
 *  @brief Variable that indicates the state of the driver.
 */
 static Mcu_StatusType Mcu_eStatus = MCU_UNINIT;
+#endif /* (MCU_VALIDATE_GLOBAL_CALL == STD_ON) */
 
 
 #define MCU_STOP_SEC_VAR_INIT_UNSPECIFIED
@@ -685,8 +696,6 @@ void Mcu_Init(const Mcu_ConfigType * ConfigPtr)
 
     if ( (Std_ReturnType)E_OK == CheckStatus )
     {
-#else
-    Mcu_eStatus = MCU_IDLE;
 #endif /* (MCU_VALIDATE_GLOBAL_CALL == STD_ON) */
         /* Get a local copy of the driver initalization structure. */
 
@@ -1038,13 +1047,14 @@ Mcu_PllStatusType Mcu_GetPllStatus(void)
 Mcu_ResetType Mcu_GetResetReason(void)
 {
     /* Return value of the function. */
+#if (MCU_VALIDATE_GLOBAL_CALL == STD_ON)
     Mcu_ResetType ResetReason = MCU_RESET_UNDEFINED;
+#else
+    Mcu_ResetType ResetReason;
+#endif
 
 #if (MCU_VALIDATE_GLOBAL_CALL == STD_ON)
     if ( (Std_ReturnType)E_OK == (Std_ReturnType) Mcu_HLDChecksEntry(MCU_GETRESETREASON_ID) )
-    {
-#else
-    if (MCU_UNINIT != Mcu_eStatus)
     {
 #endif /* (MCU_VALIDATE_GLOBAL_CALL == STD_ON) */
         /* Get the reset reason. */
@@ -1052,8 +1062,6 @@ Mcu_ResetType Mcu_GetResetReason(void)
 
 #if (MCU_VALIDATE_GLOBAL_CALL == STD_ON)
         Mcu_HLDChecksExit( (Std_ReturnType)E_OK, MCU_GETRESETREASON_ID);
-    }
-#else
     }
 #endif /* (MCU_VALIDATE_GLOBAL_CALL == STD_ON) */
 
@@ -1351,9 +1359,9 @@ void Mcu_DisableCmu(Clock_Ip_NameType ClockName)
  * @api
  *
  */
-uint64 Mcu_GetClockFrequency(Clock_Ip_NameType ClockName)
+uint32 Mcu_GetClockFrequency(Clock_Ip_NameType ClockName)
 {
-    uint64 Frequency = 0U;
+    uint32 Frequency = 0U;
 
 #if (MCU_VALIDATE_GLOBAL_CALL == STD_ON)
     if ( (Std_ReturnType)E_OK == (Std_ReturnType) Mcu_HLDChecksEntry(MCU_GETCLOCKFREQUENCY_ID) )

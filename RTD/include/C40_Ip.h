@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -53,7 +53,7 @@ extern "C"{
 #define C40_IP_AR_RELEASE_MAJOR_VERSION_H        4
 #define C40_IP_AR_RELEASE_MINOR_VERSION_H        7
 #define C40_IP_AR_RELEASE_REVISION_VERSION_H     0
-#define C40_IP_SW_MAJOR_VERSION_H                5
+#define C40_IP_SW_MAJOR_VERSION_H                4
 #define C40_IP_SW_MINOR_VERSION_H                0
 #define C40_IP_SW_PATCH_VERSION_H                0
 
@@ -96,7 +96,7 @@ extern "C"{
 #if (STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT)
 /** @brief The protection size of the IP with main interface */
 #if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
-    #define C40_IP_MAIN_INTERFACE_REG_PROT_SIZE             4U
+    #define C40_MAIN_INTERFACE_REG_PROT_SIZE             4U
 #endif
 #endif /* STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT */
 
@@ -132,7 +132,6 @@ extern uint32 C40_Ip_u32CurrentTicks;
 #define MEM_43_INFLS_START_SEC_CODE
 #include "Mem_43_INFLS_MemMap.h"
 
-#if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
 /**
  * @brief    Set synch/Asynch at IP layer base on the bAsynch of HLD
  *
@@ -143,7 +142,6 @@ extern uint32 C40_Ip_u32CurrentTicks;
  *
  */
 void C40_Ip_SetAsyncMode(const boolean Async);
-#endif
 
 #if (STD_ON == C40_IP_SECTOR_SET_LOCK_API)
 /**
@@ -505,7 +503,6 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheckSuspend(void);
 C40_Ip_StatusType C40_Ip_ArrayIntegrityCheckResume(void);
 
 /**
- *
  * @brief     Check the user margin read of the flash memory
  *
  * @details   This function will check the user margin reads of the flash
@@ -540,59 +537,10 @@ C40_Ip_StatusType C40_Ip_UserMarginReadCheck(uint32 SelectBlock,
                                              const C40_Ip_MisrType *MisrSeedValues,
                                              uint8 DomainIdValue
                                             );
-
-
-/**
- * @brief     ECC Logic Check of the Flash.
- *
- * @details   The API will simulate single bit errors (auto correct) or double bit errors
- *
- * @param[in] AddressCheck              An address to simulate ECC Logic Check
- * @param[in] DataValue                 The 64 bits granularity of ECC Data
- * @param[in] EccValue                  ECC Check Bits. The corresponding ECC value of DataValue
- *
- * @return    C40_Ip_StatusType
- */
-C40_Ip_StatusType C40_Ip_EccLogicCheck(const uint32  AddressCheck,
-                                       const uint32 *DataValue,
-                                       const uint8   EccValue
-                                      );
-
-/**
- * @brief     EDC after ECC Logic Check of the Flash.
- *
- * @details   The API will simulate double bit fault
- *
- * @param[in] AddressCheck              An address to simulate EDC after ECC Logic Check
- * @param[in] DataValue                 The 64 bits granularity of ECC Data
- * @param[in] EccValue                  ECC Check Bits. The corresponding ECC value of DataValue
- *
- *
- * @return    C40_Ip_StatusType
- */
-C40_Ip_StatusType C40_Ip_EdcAfterEccLogicCheck(const uint32  AddressCheck,
-                                               const uint32 *DataValue,
-                                               const uint8   EccValue
-                                               );
-
-/**
- * @brief     Address Encode Logic Check of the Flash.
- *
- * @details   This API will test the 'Address Encode Logic Check' of the Flash in the UTest mode
- *
- * @param[in] AddressCheck              An address to simulate Address Encode Logic Check
- * @param[in] InvertBits                address bits to be inverted into the address encode compare logic (52 bits)
- *
- * @return    C40_Ip_StatusType
- */
-C40_Ip_StatusType C40_Ip_AddressEncodeLogicCheck(const uint32  AddressCheck,
-                                                 const uint32 *InvertBits
-                                                );
-
 #endif /* (STD_ON == C40_IP_UTEST_MODE_API) */
 
 
-#if ((C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON))
+#if ( (C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON) )
 /**
  * @brief Report Ecc UnCorrected Error for IP layer
  *

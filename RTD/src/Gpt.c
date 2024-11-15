@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -51,7 +51,7 @@ extern "C"{
 #define GPT_AR_RELEASE_MINOR_VERSION_C       7
 
 #define GPT_AR_RELEASE_REVISION_VERSION_C    0
-#define GPT_SW_MAJOR_VERSION_C               5
+#define GPT_SW_MAJOR_VERSION_C               4
 #define GPT_SW_MINOR_VERSION_C               0
 #define GPT_SW_PATCH_VERSION_C               0
 
@@ -169,10 +169,10 @@ typedef struct
 /*==================================================================================================
 *                                       LOCAL MACROS
 ==================================================================================================*/
-#if (GPT_MULTIPARTITION_ENABLED == STD_ON)
-    #define Gpt_GetUserId()            (uint32)OsIf_GetUserId()
+#if (GPT_MULTICORE_ENABLED == STD_ON)
+    #define Gpt_GetCoreID()            (uint32)OsIf_GetCoreID()
 #else
-    #define Gpt_GetUserId()            ((uint32)0UL)
+    #define Gpt_GetCoreID()            ((uint32)0UL)
 #endif
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
@@ -181,7 +181,7 @@ typedef struct
 /*==================================================================================================
 *                                      LOCAL VARIABLES
 ==================================================================================================*/
-#define GPT_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#define GPT_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
 /**
@@ -190,28 +190,28 @@ typedef struct
 #if (((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON)) || \
      (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON) || \
      (GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON))
-#if (GPT_MULTIPARTITION_ENABLED == STD_ON)
+#if (GPT_MULTICORE_ENABLED == STD_ON)
 static Gpt_ModeType Gpt_eMode[GPT_MAX_PARTITIONS] = {GPT_MODE_NORMAL};
 #else
 static Gpt_ModeType Gpt_eMode[1U] = {GPT_MODE_NORMAL};
 #endif
 #endif
 
-#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
-#define GPT_START_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
+#define GPT_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Gpt_MemMap.h"
 /**
 * @brief          Global variable (pointer) used for storing the GPT driver configuration data.
 */
-#if (GPT_MULTIPARTITION_ENABLED == STD_ON)
-static const Gpt_ConfigType *Gpt_pConfig[GPT_MAX_PARTITIONS];
+#if (GPT_MULTICORE_ENABLED == STD_ON)
+const Gpt_ConfigType *Gpt_pConfig[GPT_MAX_PARTITIONS];
 #else
-static const Gpt_ConfigType *Gpt_pConfig[1U];
+const Gpt_ConfigType *Gpt_pConfig[1U];
 #endif
 
-#if (GPT_MULTIPARTITION_ENABLED == STD_ON)
+#if (GPT_MULTICORE_ENABLED == STD_ON)
 
 /**
 * @brief         Global array variable used to store runtime internal context of each logic channel.
@@ -228,7 +228,7 @@ static Gpt_ChannelInfoType Gpt_aChannelInfo[1U][GPT_HW_CHANNEL_NUM];
 #endif
 
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
-#if (GPT_MULTIPARTITION_ENABLED == STD_ON)
+#if (GPT_MULTICORE_ENABLED == STD_ON)
 /**
 * @brief         Global array variable used to store for each channel the time value when it is
 *                stopped
@@ -243,7 +243,7 @@ static Gpt_ValueType Gpt_aStopTime[1U][GPT_HW_CHANNEL_NUM];
 #endif
 #endif
 
-#define GPT_STOP_SEC_VAR_CLEARED_UNSPECIFIED_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Gpt_MemMap.h"
 /*==================================================================================================
 *                                      GLOBAL CONSTANTS
@@ -264,7 +264,7 @@ static inline Std_ReturnType Gpt_ValidateChannelCall
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 );
 #endif
 
@@ -272,7 +272,7 @@ static inline Std_ReturnType Gpt_ValidateChannelCall
 static inline Std_ReturnType Gpt_ValidateGlobalCall
 (
 uint8 u8ServiceId,
-uint32 userId
+uint32 coreID
 );
 #endif
 
@@ -281,7 +281,7 @@ static inline Std_ReturnType Gpt_ValidateChannelNotification
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 );
 #endif
 
@@ -290,7 +290,7 @@ static inline Std_ReturnType Gpt_ValidateChannelWakeup
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 );
 #endif
 
@@ -299,7 +299,7 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 );
 #endif
 
@@ -313,7 +313,7 @@ static inline Std_ReturnType Gpt_ValidateParamValue
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
     Gpt_ValueType value,
-    uint32 userId
+    uint32 coreID
 );
 #endif
 
@@ -336,7 +336,7 @@ static inline Std_ReturnType Gpt_ValidateParamSetClockMode
 static inline Std_ReturnType Gpt_ValidateParamTypePredefTimer
 (
     Gpt_PredefTimerType u32PredefTimer,
-    uint32 userId
+    uint32 coreID
 );
 
 static inline Std_ReturnType Gpt_ValidatePointerGetPredefTimer
@@ -348,20 +348,20 @@ static inline Std_ReturnType Gpt_ValidatePointerGetPredefTimer
 static inline Std_ReturnType Gpt_ValidateMode
 (
     uint8 u8ServiceId,
-    uint32 userId
+    uint32 coreID
 );
 #endif
 #endif
 
 #if((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
 /* Check channel has wakeup enabled at runtime*/
-static inline void Gpt_CheckStatusWakeupEnabled(uint32 userId);
+static inline void Gpt_CheckStatusWakeupEnabled(uint32 coreID);
 /* Check channel has notification enabled at runtime*/
-static inline void Gpt_CheckStatusNotificationEnabled(uint32 userId);
+static inline void Gpt_CheckStatusNotificationEnabled(uint32 coreID);
 #endif
 
 static inline Gpt_ChannelType Gpt_ConvertChannelIndexToChannel(Gpt_ChannelType ChannelIndex,
-                                                                              uint32 userId
+                                                                              uint32 coreID
                                                                               );
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
@@ -387,13 +387,13 @@ static inline Std_ReturnType Gpt_ValidateChannelCall
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 )
 {
     Std_ReturnType returnValue = (Std_ReturnType)E_NOT_OK;
 
     /* If driver is not initialized report error */
-    if (NULL_PTR == Gpt_pConfig[userId])
+    if (NULL_PTR == Gpt_pConfig[coreID])
     {
         (void)Det_ReportError\
         (\
@@ -418,8 +418,8 @@ static inline Std_ReturnType Gpt_ValidateChannelCall
         }
         else
         {
-            /* Check if the channel is used on the current partition */
-            if (255U != (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel])
+            /* Check if the channel is used on the current core */
+            if (255U != (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel])
             {
                 returnValue = (Std_ReturnType)E_OK;
             }
@@ -457,14 +457,14 @@ static inline Std_ReturnType Gpt_ValidateChannelCall
 static inline Std_ReturnType Gpt_ValidateGlobalCall
 (
 uint8 u8ServiceId,
-uint32 userId
+uint32 coreID
 )
 {
     Std_ReturnType returnValue = (Std_ReturnType)E_NOT_OK;
 
 
     /* If caller is the initialization function, error */
-    if (NULL_PTR == Gpt_pConfig[userId])
+    if (NULL_PTR == Gpt_pConfig[coreID])
     {
         /* If caller is the initialization function, OK */
         if (GPT_INIT_ID == u8ServiceId)
@@ -527,13 +527,13 @@ static inline Std_ReturnType Gpt_ValidateChannelNotification
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 )
 {
     Std_ReturnType returnValue = (Std_ReturnType)E_NOT_OK;
-    uint8 ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+    uint8 ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
 
-    if (NULL_PTR == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_pfNotification)
+    if (NULL_PTR == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_pfNotification)
     {
         (void)Det_ReportError\
         (\
@@ -574,13 +574,13 @@ static inline Std_ReturnType Gpt_ValidateChannelWakeup
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 )
 {
     Std_ReturnType returnValue = (Std_ReturnType)E_NOT_OK;
-    uint8 ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+    uint8 ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
 
-    if (FALSE == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_bEnableWakeup)
+    if (FALSE == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_bEnableWakeup)
     {
         (void)Det_ReportError\
         (\
@@ -623,7 +623,7 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
 (
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
-    uint32 userId
+    uint32 coreID
 )
 {
     Std_ReturnType returnValue = (Std_ReturnType)E_NOT_OK;
@@ -632,7 +632,7 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
 #endif
 
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(u8ServiceId, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(u8ServiceId, channel, coreID))
     {
 #endif
         if(channel < GPT_HW_CHANNEL_NUM)
@@ -640,7 +640,7 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
     #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_VALIDATE_STATE == STD_ON))
         #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
             /* Do not start a not enabled wakeup channel in sleep mode */
-            if ((GPT_MODE_SLEEP == Gpt_eMode[userId]) && (FALSE == Gpt_aChannelInfo[userId][channel].bWakeupEnabled) && (GPT_STARTTIMER_ID == u8ServiceId))
+            if ((GPT_MODE_SLEEP == Gpt_eMode[coreID]) && (FALSE == Gpt_aChannelInfo[coreID][channel].bWakeupEnabled) && (GPT_STARTTIMER_ID == u8ServiceId))
             {
                 (void)Det_ReportError\
                 (\
@@ -655,13 +655,13 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
         #endif
     #endif /* (GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_VALIDATE_STATE == STD_ON) */
     #if (GPT_VALIDATE_STATE == STD_OFF)
-            (void) userId;
+            (void) coreID;
     #endif
     #if (GPT_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON)
         #if (GPT_VALIDATE_STATE == STD_ON)
-                ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+                ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
                 if ((GPT_CHANGE_NEXT_TIMEOUT_VALUE_ID == u8ServiceId) && \
-                    (GPT_STATUS_RUNNING != Gpt_aChannelInfo[userId][channel].eChannelStatus)
+                    (GPT_STATUS_RUNNING != Gpt_aChannelInfo[coreID][channel].eChannelStatus)
                    )
                 {
                     (void)Det_ReportError\
@@ -673,7 +673,7 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
                     );
                 }
                 else if ((GPT_CHANGE_NEXT_TIMEOUT_VALUE_ID == u8ServiceId) && \
-                         (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+                         (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
                         )
                 {
                     (void)Det_ReportError\
@@ -687,7 +687,7 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
                 else
         #endif /* (GPT_VALIDATE_STATE == STD_ON) */
                     if ((GPT_CHANGE_NEXT_TIMEOUT_VALUE_ID != u8ServiceId) && \
-                         (GPT_STATUS_RUNNING == Gpt_aChannelInfo[userId][channel].eChannelStatus)
+                         (GPT_STATUS_RUNNING == Gpt_aChannelInfo[coreID][channel].eChannelStatus)
                         )
                 {
                     (void)Det_ReportRuntimeError\
@@ -701,7 +701,7 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
                 else
                 {
     #else
-                    if (GPT_STATUS_RUNNING == Gpt_aChannelInfo[userId][channel].eChannelStatus)
+                    if (GPT_STATUS_RUNNING == Gpt_aChannelInfo[coreID][channel].eChannelStatus)
                     {
                         (void)Det_ReportRuntimeError\
                         (\
@@ -727,8 +727,8 @@ static inline Std_ReturnType Gpt_ValidateChannelStatus
     #endif
     #endif
     #if ((GPT_VALIDATE_STATE == STD_OFF)||(GPT_CHANGE_NEXT_TIMEOUT_VALUE == STD_OFF))
-            /*variable userId is not used in this case - this should be commented*/
-            (void) userId;
+            /*variable coreID is not used in this case - this should be commented*/
+            (void) coreID;
     #endif
         }
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
@@ -799,13 +799,13 @@ static inline Std_ReturnType Gpt_ValidateParamValue
     uint8 u8ServiceId,
     Gpt_ChannelType channel,
     Gpt_ValueType value,
-    uint32 userId
+    uint32 coreID
 )
 {
     Std_ReturnType returnValue = (Std_ReturnType)E_NOT_OK;
-    uint8 ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+    uint8 ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
 
-    if ((value > (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_uChannelTickValueMax) || \
+    if ((value > (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_uChannelTickValueMax) || \
         ((Gpt_ValueType)0 == value )
        )
     {
@@ -953,7 +953,7 @@ static inline Std_ReturnType Gpt_ValidateParamSetClockMode
 static inline Std_ReturnType Gpt_ValidateParamTypePredefTimer
 (
     Gpt_PredefTimerType u32PredefTimer,
-    uint32 userId
+    uint32 coreID
 )
 {
     Std_ReturnType      returnValue = (Std_ReturnType)E_NOT_OK;
@@ -975,7 +975,7 @@ static inline Std_ReturnType Gpt_ValidateParamTypePredefTimer
     else
     {
        channel = (Gpt_ChannelType)u32PredefTimer;
-       if(NULL_PTR == ((Gpt_pConfig[userId]->Gpt_pChannelPredefConfigType)[channel]))
+       if(NULL_PTR == ((Gpt_pConfig[coreID]->Gpt_pChannelPredefConfigType)[channel]))
        {
            (void)Det_ReportError\
            (\
@@ -1049,11 +1049,11 @@ static inline Std_ReturnType Gpt_ValidatePointerGetPredefTimer
 static inline Std_ReturnType Gpt_ValidateMode
 (
     uint8 u8ServiceId,
-    uint32 userId
+    uint32 coreID
 )
 {
     Std_ReturnType returnValue;
-    if (GPT_MODE_SLEEP == Gpt_eMode[userId])
+    if (GPT_MODE_SLEEP == Gpt_eMode[coreID])
     {
         (void)Det_ReportRuntimeError\
         (\
@@ -1076,22 +1076,22 @@ static inline Std_ReturnType Gpt_ValidateMode
  * @brief       This function get the channel number corresponding to the index of channel
  *
  * @param[in]   ChannelIndex          Channel Index of the Gpt channel
- * @param[in]   userId                The number of current user ID
+ * @param[in]   coreID                The number of current core ID
  *
- * @return      The channel number corresponds to the channel in the partition
+ * @return      The channel number corresponds to the channel in the core
  * @pre         Gpt_Init must be called before.
  *
  *
  * */
 static inline Gpt_ChannelType Gpt_ConvertChannelIndexToChannel(Gpt_ChannelType ChannelIndex,
-                                                                              uint32 userId
+                                                                              uint32 coreID
                                                                               )
 {
     Gpt_ChannelType Channel;
 
     for (Channel = 0U; Channel < GPT_HW_CHANNEL_NUM; ++Channel)
     {
-        if(ChannelIndex == (*Gpt_pConfig[userId]->u8GptChannelIdToIndexMap)[Channel])
+        if(ChannelIndex == (*Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap)[Channel])
         {
             break;
         }
@@ -1102,31 +1102,31 @@ static inline Gpt_ChannelType Gpt_ConvertChannelIndexToChannel(Gpt_ChannelType C
 /**
  * @brief       This function check channel has notification enabled at runtime in case GPT_MODE_NORMAL == eMode
  *
- * @param[in]   userId   The number of current user ID
+ * @param[in]   coreID   The number of current core ID
  *
  * @return      void
  * @pre         Gpt_Init,  must be called before.
  *
  *
  * */
-static inline void Gpt_CheckStatusNotificationEnabled(uint32 userId)
+static inline void Gpt_CheckStatusNotificationEnabled(uint32 coreID)
 {
     Gpt_ChannelType channel;
     Gpt_ChannelType ChannelIndex;
 
     /*Implements the behaviour for normal mode*/
-    for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->channelCount; ChannelIndex++)
+    for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->channelCount; ChannelIndex++)
     {
-        channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, userId);
+        channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, coreID);
         if(channel < GPT_HW_CHANNEL_NUM)
         {
 #if (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON)
-            if (TRUE == Gpt_aChannelInfo[userId][channel].bNotificationEnabled)
+            if (TRUE == Gpt_aChannelInfo[coreID][channel].bNotificationEnabled)
             {
                 /* Enable hardware interrupts */
                 Gpt_Ipw_EnableInterrupt
                 (
-                    ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                    ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                 );
             }
             else
@@ -1134,14 +1134,14 @@ static inline void Gpt_CheckStatusNotificationEnabled(uint32 userId)
 #endif
                 /* Disable hardware interrupts if the channel is not running in the ONE-SHOT mode.
                 This is needed because the channel state is updated by ISR for ONE-SHOT mode */
-                if((GPT_STATUS_RUNNING != Gpt_aChannelInfo[userId][channel].eChannelStatus) || \
-                    (GPT_CH_MODE_CONTINUOUS == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+                if((GPT_STATUS_RUNNING != Gpt_aChannelInfo[coreID][channel].eChannelStatus) || \
+                    (GPT_CH_MODE_CONTINUOUS == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
                     )
                 {
                     /*Disable hardware interrupts*/
                     Gpt_Ipw_DisableInterrupt
                     (
-                        ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                        ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                     );
                 }
 #if (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON)
@@ -1154,14 +1154,14 @@ static inline void Gpt_CheckStatusNotificationEnabled(uint32 userId)
 /**
  * @brief       This function check channel has wakeup enabled at runtime in case GPT_MODE_SLEEP
  *
- * @param[in]   userId       The number of current user ID
+ * @param[in]   coreID       The number of current core ID
  *
  * @return      void
  * @pre         Gpt_Init, Gpt_SetMode must be called before.
  *
  *
  * */
-static inline void Gpt_CheckStatusWakeupEnabled(uint32 userId)
+static inline void Gpt_CheckStatusWakeupEnabled(uint32 coreID)
 {
     Gpt_HwChannelInfoType returnHwChannelInfo = {FALSE, 0U};
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
@@ -1171,54 +1171,54 @@ static inline void Gpt_CheckStatusWakeupEnabled(uint32 userId)
     Gpt_ChannelType ChannelIndex;
     Gpt_ChannelType channel;
 
-    for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->channelCount; ChannelIndex++)
+    for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->channelCount; ChannelIndex++)
     {
-        channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, userId);
+        channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, coreID);
         if(channel < GPT_HW_CHANNEL_NUM)
         {
-            if (TRUE == Gpt_aChannelInfo[userId][channel].bWakeupEnabled)
+            if (TRUE == Gpt_aChannelInfo[coreID][channel].bWakeupEnabled)
             {
                 /*Enable hardware interrupts*/
-                Gpt_Ipw_EnableInterrupt(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+                Gpt_Ipw_EnableInterrupt(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
             }
             else
             {
                 /*Disable hardware interrupts*/
-                Gpt_Ipw_DisableInterrupt(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+                Gpt_Ipw_DisableInterrupt(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
 
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
                 /*Gpt_Ipw_GetTimeElapsed() shall be called first, because the occurred ISRs
                 can change the logical channel state between the checking of logical channel
                 state and timestamp retrieval*/
                 /* Get the elapsed  time  for later use by other API calls*/
-                uElapsedTime = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
+                uElapsedTime = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
 #endif
 
                 /*Stop  the running timer*/
-                if (GPT_STATUS_RUNNING == Gpt_aChannelInfo[userId][channel].eChannelStatus)
+                if (GPT_STATUS_RUNNING == Gpt_aChannelInfo[coreID][channel].eChannelStatus)
                 {
                     if ((TRUE == returnHwChannelInfo.bChannelRollover) && \
-                        (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+                        (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
                         )
                     {
                         /*This action could be executed only when the function is called
                         during a critical section implemented by disabling all interrupts*/
                         /*Set the channel status to EXPIRED*/
-                        Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_EXPIRED;
+                        Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_EXPIRED;
                     }
                     else
                     {
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
                         /* Store the stopping time for later use by other API calls*/
-                        Gpt_aStopTime[userId][channel] = uElapsedTime;
+                        Gpt_aStopTime[coreID][channel] = uElapsedTime;
 #endif
                         /* Set the channel status to STOPPED*/
-                        Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_STOPPED;
+                        Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_STOPPED;
                     }
                     /* Call low level stop timer */
                     Gpt_Ipw_StopTimer
                     (
-                        ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                        ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                     );
                 }
             }
@@ -1310,11 +1310,11 @@ void Gpt_Init(const Gpt_ConfigType * configPtr)
 {
     Gpt_ChannelType ChannelIndex;
     Gpt_ChannelType channel;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_GLOBAL_CALL == STD_ON)
     /*Validate the calling context*/
-    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_INIT_ID, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_INIT_ID, coreID))
     {
 #endif
 #if (GPT_VALIDATE_PARAM  == STD_ON)
@@ -1324,54 +1324,54 @@ void Gpt_Init(const Gpt_ConfigType * configPtr)
 #endif
 
     #if (GPT_PRECOMPILE_SUPPORT == STD_ON)
-        #if(GPT_MULTIPARTITION_ENABLED == STD_ON)
-            Gpt_pConfig[userId] = Gpt_Config[userId];
+        #if(GPT_MULTICORE_ENABLED == STD_ON)
+            Gpt_pConfig[coreID] = Gpt_Config[coreID];
         #else
-            Gpt_pConfig[userId] = &Gpt_Config;
+            Gpt_pConfig[coreID] = &Gpt_Config;
         #endif
             (void)configPtr;
     #else
-            Gpt_pConfig[userId] = configPtr;
+            Gpt_pConfig[coreID] = configPtr;
     #endif
 
 #if(GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON)
             /*Initialize and Start Predef Timers.*/
-            Gpt_Ipw_StartPredefTimer(Gpt_pConfig[userId]);
+            Gpt_Ipw_StartPredefTimer(Gpt_pConfig[coreID]);
 #endif
-            Gpt_Ipw_InitInstances(Gpt_pConfig[userId]);
+            Gpt_Ipw_InitInstances(Gpt_pConfig[coreID]);
 
             /*Initialize for each channel the runtime status informations.*/
-            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->channelCount; ChannelIndex++)
+            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->channelCount; ChannelIndex++)
             {
-                channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, userId);
+                channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, coreID);
                 if(channel < GPT_HW_CHANNEL_NUM)
                 {
 #if (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON)
                     /*Disable notification*/
-                    Gpt_aChannelInfo[userId][channel].bNotificationEnabled = FALSE;
+                    Gpt_aChannelInfo[coreID][channel].bNotificationEnabled = FALSE;
 #endif
 
 #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
                     /*Disable wakeup*/
-                    Gpt_aChannelInfo[userId][channel].bWakeupEnabled = FALSE;
+                    Gpt_aChannelInfo[coreID][channel].bWakeupEnabled = FALSE;
                     /*Clear wakeup generation status*/
-                    Gpt_aChannelInfo[userId][channel].bWakeupGenerated = FALSE;
+                    Gpt_aChannelInfo[coreID][channel].bWakeupGenerated = FALSE;
 #endif
                     /* Initialize the running information of the channel*/
-                    Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_INITIALIZED;
+                    Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_INITIALIZED;
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
-                    Gpt_aStopTime[userId][channel] = 0U;
+                    Gpt_aStopTime[coreID][channel] = 0U;
 #endif
                 }
 
                 /*Initialize hardware timer channel.*/
-                Gpt_Ipw_Init(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+                Gpt_Ipw_Init(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
             }
 #if (((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON)) || \
      (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON) || \
      (GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON))
             /*Set the driver to normal mode*/
-            Gpt_eMode[userId] = GPT_MODE_NORMAL;
+            Gpt_eMode[coreID] = GPT_MODE_NORMAL;
 #endif
 #if (GPT_VALIDATE_PARAM  == STD_ON)
         }
@@ -1406,19 +1406,19 @@ void Gpt_DeInit(void)
     Gpt_ChannelType ChannelIndex;
 
     Std_ReturnType allChannelStatus = (Std_ReturnType)E_OK;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_GLOBAL_CALL == STD_ON)
     /*Validate if the calling context is valid*/
-    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_DEINIT_ID, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_DEINIT_ID, coreID))
     {
 #endif
         /* Initialize for each channel the runtime status informations.*/
-        for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->channelCount; ChannelIndex++)
+        for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->channelCount; ChannelIndex++)
         {
-            channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, userId);
+            channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, coreID);
             /*Check if the channel is not running.*/
-            if((Std_ReturnType)E_NOT_OK == Gpt_ValidateChannelStatus(GPT_DEINIT_ID, channel, userId))
+            if((Std_ReturnType)E_NOT_OK == Gpt_ValidateChannelStatus(GPT_DEINIT_ID, channel, coreID))
             {
                 allChannelStatus = (Std_ReturnType)E_NOT_OK;
                 break;
@@ -1427,31 +1427,31 @@ void Gpt_DeInit(void)
 
         if((Std_ReturnType)E_OK == allChannelStatus)
         {
-            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->channelCount; ChannelIndex++)
+            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->channelCount; ChannelIndex++)
             {
-                channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, userId);
+                channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, coreID);
                 if(channel < GPT_HW_CHANNEL_NUM)
                 {
 #if (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON)
                     /*Disable notification*/
-                    Gpt_aChannelInfo[userId][channel].bNotificationEnabled = FALSE;
+                    Gpt_aChannelInfo[coreID][channel].bNotificationEnabled = FALSE;
 #endif
 
 #if ((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON))
                     /*Disable wakeup*/
-                    Gpt_aChannelInfo[userId][channel].bWakeupEnabled = FALSE;
+                    Gpt_aChannelInfo[coreID][channel].bWakeupEnabled = FALSE;
                     /*Clear wakeup generation status*/
-                    Gpt_aChannelInfo[userId][channel].bWakeupGenerated = FALSE;
+                    Gpt_aChannelInfo[coreID][channel].bWakeupGenerated = FALSE;
 #endif
                     /* De initialize the running information of the channel*/
-                    Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_UNINITIALIZED;
+                    Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_UNINITIALIZED;
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
-                    Gpt_aStopTime[userId][channel] = 0U;
+                    Gpt_aStopTime[coreID][channel] = 0U;
 #endif
                     /*Initialize hardware timer channel.*/
                     Gpt_Ipw_DeInit
                     (
-                        ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                        ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                     );
 
                 }
@@ -1459,11 +1459,11 @@ void Gpt_DeInit(void)
 
 #if(GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON)
             /* Deinitialize and stop Predef timers.*/
-            Gpt_Ipw_StopPredefTimer(Gpt_pConfig[userId]);
+            Gpt_Ipw_StopPredefTimer(Gpt_pConfig[coreID]);
 #endif
             /* Writing NULL to configuration pointer is mandatory because that variable
             is used to test the initialization of the driver */
-            Gpt_pConfig[userId] = NULL_PTR;
+            Gpt_pConfig[coreID] = NULL_PTR;
         }
 
 #if (GPT_VALIDATE_GLOBAL_CALL == STD_ON)
@@ -1509,27 +1509,27 @@ Gpt_ValueType Gpt_GetTimeElapsed(Gpt_ChannelType channel)
     Gpt_ChannelType ChannelIndex;
 
     Gpt_ValueType returnValue = 0U;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_TIMEELAPSED_ID, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_TIMEELAPSED_ID, channel, coreID))
     {
 #endif
-        ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
-        /* Gpt_Ipw_GetTimeElapsed() shall be called first, because the occurred ISRs can change
-            the logical channel state between the checking of logical channel state and timestamp
-            retrieval */
-        returnValue = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
+        ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
+        /*Gpt_Ipw_GetTimeElapsed() shall be called first, because the occurred ISRs can change
+        the logical channel state between the checking of logical channel state and timestamp
+        retrieval*/
+        returnValue = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
 
         /*Check the channel status*/
-        switch(Gpt_aChannelInfo[userId][channel].eChannelStatus)
+        switch(Gpt_aChannelInfo[coreID][channel].eChannelStatus)
         {
             case GPT_STATUS_RUNNING:
             {
                 /*Check if channel counter has already rollover*/
                 if ((TRUE == returnHwChannelInfo.bChannelRollover) && \
-                    (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+                    (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
                    )
                 {
                     /*The timer has already expired.The hardware timer status is not yet
@@ -1546,7 +1546,7 @@ Gpt_ValueType Gpt_GetTimeElapsed(Gpt_ChannelType channel)
             case GPT_STATUS_STOPPED:
             {
                 /*Return elapsed time at the when the channel was stopped*/
-                returnValue = Gpt_aStopTime[userId][channel];
+                returnValue = Gpt_aStopTime[coreID][channel];
             }
             break;
             case GPT_STATUS_EXPIRED:
@@ -1555,10 +1555,8 @@ Gpt_ValueType Gpt_GetTimeElapsed(Gpt_ChannelType channel)
             }
             break;
             default:
-            {
-                /* Only the above four channel states are allowed when this function is called */
-            }
-            break;
+                /*Only the above four channel states are allowed when this function is called*/
+                break;
         }
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
     }
@@ -1602,27 +1600,27 @@ Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType channel)
     Gpt_ChannelType ChannelIndex;
 
     Gpt_ValueType returnValue = 0U;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_TIMEREMAINING_ID, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_TIMEREMAINING_ID, channel, coreID))
     {
 #endif
-        ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
-        /* Calculate the remaining time from the elapsed time */
+        ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
+        /* Calculate the remaining time from the elapsed time*/
         /* Gpt_Ipw_GetTimeElapsed() shall be called first, because the occurred ISRs can
-            change the logical channel state between the checking of logical channel state
-            and timestamps retrieval */
-        returnValue = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
+        change the logical channel state between the checking of logical channel state
+        and timestamps retrieval*/
+        returnValue = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
 
         /*Check the channel status*/
-        switch(Gpt_aChannelInfo[userId][channel].eChannelStatus)
+        switch(Gpt_aChannelInfo[coreID][channel].eChannelStatus)
         {
             case GPT_STATUS_RUNNING:
             {
                 /*Check if channel counter has already roll-over*/
                 if((TRUE == returnHwChannelInfo.bChannelRollover) && \
-                   (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+                   (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
                   )
                 {
                     /*The timer has already expired.The hardware timer status is not yet
@@ -1643,7 +1641,7 @@ Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType channel)
             break;
             case GPT_STATUS_STOPPED:
             {
-                returnValue = returnHwChannelInfo.uTargetTime-Gpt_aStopTime[userId][channel];
+                returnValue = returnHwChannelInfo.uTargetTime-Gpt_aStopTime[coreID][channel];
             }
             break;
             case GPT_STATUS_EXPIRED:
@@ -1652,10 +1650,8 @@ Gpt_ValueType Gpt_GetTimeRemaining(Gpt_ChannelType channel)
             }
             break;
             default:
-            {
-                /* Only the above four channel states are allowed when this function is called */
-            }
-            break;
+                /*Only the above four channel states are allowed when this function is called*/
+                break;
         }
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
     }
@@ -1704,30 +1700,30 @@ void Gpt_StartTimer
 {
     uint8 ChannelIndex;
     Std_ReturnType returnValue;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
-    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_STARTTIMER_ID, channel, userId))
+    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_STARTTIMER_ID, channel, coreID))
     {
 #if (GPT_VALIDATE_PARAM  == STD_ON)
-        if ((Std_ReturnType)E_OK == Gpt_ValidateParamValue(GPT_STARTTIMER_ID, channel, value, userId))
+        if ((Std_ReturnType)E_OK == Gpt_ValidateParamValue(GPT_STARTTIMER_ID, channel, value, coreID))
         {
 #endif
-            ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+            ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
             /*Enable hardware interrupts for the one-shot mode to set the status of  channel*/
-            if (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+            if (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
             {
                 Gpt_Ipw_EnableInterrupt
                 (
-                    ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                    ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                 );
             }
 
             /* Change GPT channel status.Channel status change shall be made before to start
             the hardware in order to not change the channel status from EXPIRED to RUNNING*/
-            Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_RUNNING;
+            Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_RUNNING;
 
             /* Call low level API */
-            returnValue = Gpt_Ipw_StartTimer(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig),value);
+            returnValue = Gpt_Ipw_StartTimer(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig),value);
 
             if((Std_ReturnType)E_OK != returnValue)
             {
@@ -1774,45 +1770,45 @@ void Gpt_StopTimer(Gpt_ChannelType channel)
 #endif
     Gpt_ChannelType ChannelIndex;
 
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_STOPTIMER_ID, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_STOPTIMER_ID, channel, coreID))
     {
 #endif
-        ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+        ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
         /*Gpt_Ipw_GetTimeElapsed() shall be called first, because the occurred ISRs can change
         the logical channel state between the checking of logical channel state and timestamps
         retrieval*/
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
         /* Get the elapsed  time  for later use by other API calls*/
-        uElapsedTime = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
+        uElapsedTime = Gpt_Ipw_GetTimeElapsed((((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)), pRetHwChannelInfo);
 #endif
 
         /*Check the logical channel status*/
-        if (GPT_STATUS_RUNNING == Gpt_aChannelInfo[userId][channel].eChannelStatus)
+        if (GPT_STATUS_RUNNING == Gpt_aChannelInfo[coreID][channel].eChannelStatus)
         {
             /* Call low level stop timer */
-            Gpt_Ipw_StopTimer(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+            Gpt_Ipw_StopTimer(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
 
             if ((TRUE == returnHwChannelInfo.bChannelRollover) && \
-                (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+                (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
             )
             {
                 /*This action could be executed only when the function is called during a critical
                 section implemented by disabling all interrupts*/
                 /*Set channel status to EXPIRED*/
-                Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_EXPIRED;
+                Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_EXPIRED;
             }
             else
             {
 #if ((GPT_TIME_REMAINING_API == STD_ON) || (GPT_TIME_ELAPSED_API == STD_ON))
                 /* Store the stopping time for later use by other API calls*/
-                Gpt_aStopTime[userId][channel] = uElapsedTime;
+                Gpt_aStopTime[coreID][channel] = uElapsedTime;
 #endif
 
                 /* Set GPT channel status to stopped*/
-                Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_STOPPED;
+                Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_STOPPED;
             }
         }
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
@@ -1842,26 +1838,26 @@ void Gpt_StopTimer(Gpt_ChannelType channel)
 void Gpt_EnableNotification(Gpt_ChannelType channel)
 {
     uint8 ChannelIndex;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_ENABLENOTIFICATION_ID, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_ENABLENOTIFICATION_ID, channel, coreID))
     {
 #endif
 #if (GPT_VALIDATE_PARAM == STD_ON)
-        if ((Std_ReturnType)E_OK == Gpt_ValidateChannelNotification(GPT_ENABLENOTIFICATION_ID, channel, userId))
+        if ((Std_ReturnType)E_OK == Gpt_ValidateChannelNotification(GPT_ENABLENOTIFICATION_ID, channel, coreID))
         {
 #endif
-            ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+            ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
             /* Set the enable notification attribute */
-            Gpt_aChannelInfo[userId][channel].bNotificationEnabled = TRUE;
+            Gpt_aChannelInfo[coreID][channel].bNotificationEnabled = TRUE;
 
-            if (GPT_MODE_NORMAL == Gpt_eMode[userId])
+            if (GPT_MODE_NORMAL == Gpt_eMode[coreID])
             {
                 /*Enable hardware interrupts*/
                 Gpt_Ipw_EnableInterrupt
                 (
-                    ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                    ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                 );
             }
 #if (GPT_VALIDATE_PARAM == STD_ON)
@@ -1897,32 +1893,32 @@ void Gpt_EnableNotification(Gpt_ChannelType channel)
 void Gpt_DisableNotification(Gpt_ChannelType channel)
 {
     uint8 ChannelIndex;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_DISABLENOTIFICATION_ID, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_DISABLENOTIFICATION_ID, channel, coreID))
     {
 #endif
 #if (GPT_VALIDATE_PARAM == STD_ON)
-        if ((Std_ReturnType)E_OK == Gpt_ValidateChannelNotification(GPT_DISABLENOTIFICATION_ID, channel, userId))
+        if ((Std_ReturnType)E_OK == Gpt_ValidateChannelNotification(GPT_DISABLENOTIFICATION_ID, channel, coreID))
         {
 #endif
-            ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+            ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
             /* Set the enable notification attribute */
-            Gpt_aChannelInfo[userId][channel].bNotificationEnabled = FALSE;
+            Gpt_aChannelInfo[coreID][channel].bNotificationEnabled = FALSE;
 
             /* Disable hardware interrupts if the channel is not running in the ONE-SHOT mode.
             This is needed because the channel state is updated by ISR for ONE-SHOT mode */
-            if ((GPT_MODE_NORMAL == Gpt_eMode[userId]) && \
-                ((GPT_CH_MODE_CONTINUOUS == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode) \
-                 || (GPT_STATUS_RUNNING != Gpt_aChannelInfo[userId][channel].eChannelStatus)
+            if ((GPT_MODE_NORMAL == Gpt_eMode[coreID]) && \
+                ((GPT_CH_MODE_CONTINUOUS == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode) \
+                 || (GPT_STATUS_RUNNING != Gpt_aChannelInfo[coreID][channel].eChannelStatus)
                 )
                )
             {
                 /*Disable hardware interrupts*/
                 Gpt_Ipw_DisableInterrupt
                 (
-                    ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                    ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                 );
             }
 #if (GPT_VALIDATE_PARAM == STD_ON)
@@ -1963,11 +1959,11 @@ void Gpt_SetMode(Gpt_ModeType Mode)
 #endif
 
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_GLOBAL_CALL == STD_ON)
     /*Validate the driver calling context*/
-    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_SETMODE_ID, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_SETMODE_ID, coreID))
     {
 #endif
 #if (GPT_VALIDATE_PARAM == STD_ON)
@@ -1979,36 +1975,36 @@ void Gpt_SetMode(Gpt_ModeType Mode)
             if(GPT_MODE_SLEEP == Mode)
             {
                 /* Check channel has wakeup enabled at runtime */
-                Gpt_CheckStatusWakeupEnabled(userId);
+                Gpt_CheckStatusWakeupEnabled(coreID);
 
 #if(GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON)
                 /* De-initialize and Stop Predef Timers. */
-                Gpt_Ipw_StopPredefTimer(Gpt_pConfig[userId]);
+                Gpt_Ipw_StopPredefTimer(Gpt_pConfig[coreID]);
 #endif
 #if (((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON)) || \
      (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON) || \
      (GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON))
                 /* Set the driver mode to sleep */
-                Gpt_eMode[userId] = GPT_MODE_SLEEP;
+                Gpt_eMode[coreID] = GPT_MODE_SLEEP;
 #endif
 
             }
             else if (GPT_MODE_NORMAL == Mode)
             {
 #if(GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON)
-                   if ((Gpt_ModeType)GPT_MODE_SLEEP == Gpt_eMode[userId])
+                   if ((Gpt_ModeType)GPT_MODE_SLEEP == Gpt_eMode[coreID])
                    {
                    /* Start for each predef timer status informations. */
-                   Gpt_Ipw_StartPredefTimer(Gpt_pConfig[userId]);
+                   Gpt_Ipw_StartPredefTimer(Gpt_pConfig[coreID]);
                    }
 #endif
                 /* Check channel has notification enabled at runtime */
-                Gpt_CheckStatusNotificationEnabled(userId);
+                Gpt_CheckStatusNotificationEnabled(coreID);
 #if (((GPT_WAKEUP_FUNCTIONALITY_API == STD_ON) && (GPT_REPORT_WAKEUP_SOURCE == STD_ON)) || \
      (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON) || \
      (GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON))
                 /* Set the driver mode to normal mode*/
-                Gpt_eMode[userId] = GPT_MODE_NORMAL;
+                Gpt_eMode[coreID] = GPT_MODE_NORMAL;
 #endif
 
             }
@@ -2051,7 +2047,7 @@ void Gpt_DisableWakeup(Gpt_ChannelType channel)
 {
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
     uint8 ChannelIndex;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 #endif
 
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_OFF)
@@ -2060,30 +2056,30 @@ void Gpt_DisableWakeup(Gpt_ChannelType channel)
 
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_DISABLEWAKEUP_ID, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_DISABLEWAKEUP_ID, channel, coreID))
     {
 #endif
 
 #if (GPT_VALIDATE_PARAM == STD_ON)
-        if((Std_ReturnType)E_OK == Gpt_ValidateChannelWakeup(GPT_DISABLEWAKEUP_ID, channel, userId))
+        if((Std_ReturnType)E_OK == Gpt_ValidateChannelWakeup(GPT_DISABLEWAKEUP_ID, channel, coreID))
         {
 #endif
-            ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+            ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
             /* Set the enable wakeup attribute */
-            Gpt_aChannelInfo[userId][channel].bWakeupEnabled = FALSE;
+            Gpt_aChannelInfo[coreID][channel].bWakeupEnabled = FALSE;
 
             /* Disable hardware interrupts if the channel is not running in the ONE-SHOT mode.
             This is needed because the channel state is updated by ISR for ONE-SHOT mode */
-            if ((GPT_MODE_SLEEP == Gpt_eMode[userId]) && \
-                ((GPT_CH_MODE_CONTINUOUS == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
-                 || (GPT_STATUS_RUNNING != Gpt_aChannelInfo[userId][channel].eChannelStatus)
+            if ((GPT_MODE_SLEEP == Gpt_eMode[coreID]) && \
+                ((GPT_CH_MODE_CONTINUOUS == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+                 || (GPT_STATUS_RUNNING != Gpt_aChannelInfo[coreID][channel].eChannelStatus)
                 )
                )
             {
                 /*Disable hardware interrupts*/
                 Gpt_Ipw_DisableInterrupt
                 (
-                    ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                    ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                 );
             }
 #if (GPT_VALIDATE_PARAM == STD_ON)
@@ -2119,7 +2115,7 @@ void Gpt_EnableWakeup(Gpt_ChannelType channel)
 {
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
     uint8 ChannelIndex;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 #endif
 
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_OFF)
@@ -2128,24 +2124,24 @@ void Gpt_EnableWakeup(Gpt_ChannelType channel)
 
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
 #if (GPT_VALIDATE_CHANNEL_CALL == STD_ON)
-    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_ENABLEWAKEUP_ID, channel, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateChannelCall(GPT_ENABLEWAKEUP_ID, channel, coreID))
     {
 #endif
 #if (GPT_VALIDATE_PARAM == STD_ON)
-        if((Std_ReturnType)E_OK == Gpt_ValidateChannelWakeup(GPT_ENABLEWAKEUP_ID, channel, userId))
+        if((Std_ReturnType)E_OK == Gpt_ValidateChannelWakeup(GPT_ENABLEWAKEUP_ID, channel, coreID))
         {
 #endif
-            ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+            ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
             /* Functionality implementation */
             /* Set the enable wakeup attribute */
-            Gpt_aChannelInfo[userId][channel].bWakeupEnabled = TRUE;
+            Gpt_aChannelInfo[coreID][channel].bWakeupEnabled = TRUE;
 
-            if (GPT_MODE_SLEEP == Gpt_eMode[userId])
+            if (GPT_MODE_SLEEP == Gpt_eMode[coreID])
             {
                 /*Enable hardware interrupts*/
                 Gpt_Ipw_EnableInterrupt
                 (
-                    ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
+                    ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig)
                 );
             }
 #if (GPT_VALIDATE_PARAM == STD_ON)
@@ -2180,7 +2176,7 @@ void Gpt_EnableWakeup(Gpt_ChannelType channel)
 void Gpt_CheckWakeup(EcuM_WakeupSourceType wakeupSource)
 {
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 #endif
 
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_OFF)
@@ -2194,20 +2190,20 @@ void Gpt_CheckWakeup(EcuM_WakeupSourceType wakeupSource)
 
 #if (GPT_VALIDATE_GLOBAL_CALL == STD_ON)
     /*Validate the driver calling context*/
-    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_CHECKWAKEUP_ID, userId))
+    if((Std_ReturnType)E_OK == Gpt_ValidateGlobalCall(GPT_CHECKWAKEUP_ID, coreID))
     {
 #endif
-        for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->channelCount; ChannelIndex++)
+        for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->channelCount; ChannelIndex++)
         {
-            channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, userId);
+            channel = Gpt_ConvertChannelIndexToChannel(ChannelIndex, coreID);
             if(channel < GPT_HW_CHANNEL_NUM)
             {
-                if ((((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_uWakeupSource) == wakeupSource) && \
-                    ((boolean)TRUE == Gpt_aChannelInfo[userId][channel].bWakeupGenerated)
+                if ((((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_uWakeupSource) == wakeupSource) && \
+                    ((boolean)TRUE == Gpt_aChannelInfo[coreID][channel].bWakeupGenerated)
                     )
                 {
                     /*Reset the wakeup flag */
-                    Gpt_aChannelInfo[userId][channel].bWakeupGenerated = FALSE;
+                    Gpt_aChannelInfo[coreID][channel].bWakeupGenerated = FALSE;
 
                     /* Calling EcuM_SetWakeupEvent and exit*/
                     EcuM_SetWakeupEvent(wakeupSource);
@@ -2238,32 +2234,32 @@ void Gpt_CheckWakeup(EcuM_WakeupSourceType wakeupSource)
 void Gpt_ProcessCommonInterrupt(uint8 channel)
 {
     uint8 ChannelIndex;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
-    if (Gpt_pConfig[userId] != NULL_PTR)
+    if (Gpt_pConfig[coreID] != NULL_PTR)
     {
         /* Extract the logical channel from the hardware to logic map table */
-        ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+        ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
 
         /* Change the channel status for one-shot mode */
-        if (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
+        if (GPT_CH_MODE_ONESHOT == (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_eChannelMode)
         {
             /* Change the channel status to expired */
-            Gpt_aChannelInfo[userId][channel].eChannelStatus = GPT_STATUS_EXPIRED;
+            Gpt_aChannelInfo[coreID][channel].eChannelStatus = GPT_STATUS_EXPIRED;
         }
 #if (GPT_ENABLE_DISABLE_NOTIFICATION_API == STD_ON)
-        if ((GPT_MODE_NORMAL == Gpt_eMode[userId]) && (TRUE == Gpt_aChannelInfo[userId][channel].bNotificationEnabled))
+        if ((GPT_MODE_NORMAL == Gpt_eMode[coreID]) && (TRUE == Gpt_aChannelInfo[coreID][channel].bNotificationEnabled))
         {
-            (*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_pfNotification();
+            (*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_pfNotification();
         }
 #endif
 
 #if (GPT_WAKEUP_FUNCTIONALITY_API == STD_ON)
 #if (GPT_REPORT_WAKEUP_SOURCE == STD_ON)
-        if ((GPT_MODE_SLEEP == Gpt_eMode[userId]) && (TRUE == Gpt_aChannelInfo[userId][channel].bWakeupEnabled))
+        if ((GPT_MODE_SLEEP == Gpt_eMode[coreID]) && (TRUE == Gpt_aChannelInfo[coreID][channel].bWakeupEnabled))
         {
-            Gpt_aChannelInfo[userId][channel].bWakeupGenerated =TRUE;
-            EcuM_CheckWakeup((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_uWakeupSource);
+            Gpt_aChannelInfo[coreID][channel].bWakeupGenerated =TRUE;
+            EcuM_CheckWakeup((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_uWakeupSource);
         }
 #endif
 #endif
@@ -2291,18 +2287,18 @@ void Gpt_ChangeNextTimeoutValue(Gpt_ChannelType channel, Gpt_ValueType value)
     Std_ReturnType returnValue;
 #endif
 
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
-    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_CHANGE_NEXT_TIMEOUT_VALUE_ID, channel, userId))
+    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_CHANGE_NEXT_TIMEOUT_VALUE_ID, channel, coreID))
     {
 #if (GPT_VALIDATE_PARAM  == STD_ON)
-        if ((Std_ReturnType)E_OK == Gpt_ValidateParamValue(GPT_CHANGE_NEXT_TIMEOUT_VALUE_ID, channel, value, userId))
+        if ((Std_ReturnType)E_OK == Gpt_ValidateParamValue(GPT_CHANGE_NEXT_TIMEOUT_VALUE_ID, channel, value, coreID))
         {
 #endif
-        ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+        ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
 #if (GPT_DEV_ERROR_DETECT == STD_ON)
             /* Call low level API */
-            returnValue = Gpt_Ipw_ChangeNextTimeoutValue(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig), value);
+            returnValue = Gpt_Ipw_ChangeNextTimeoutValue(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig), value);
 
             if((Std_ReturnType)E_OK != returnValue)
             {
@@ -2316,7 +2312,7 @@ void Gpt_ChangeNextTimeoutValue(Gpt_ChannelType channel, Gpt_ValueType value)
             }
 #else
             /* Call low level API */
-            (void)Gpt_Ipw_ChangeNextTimeoutValue(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig), value);
+            (void)Gpt_Ipw_ChangeNextTimeoutValue(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig), value);
 #endif
 
 #if (GPT_VALIDATE_PARAM  == STD_ON)
@@ -2348,13 +2344,13 @@ void Gpt_Channel_EnableChainMode(Gpt_ChannelType channel)
     Std_ReturnType returnValue;
 #endif
 
-    uint32 userId = (uint32)Gpt_GetUserId();
-    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_ENABLE_CHAIN_MODE_ID, channel, userId))
+    uint32 coreID = (uint32)Gpt_GetCoreID();
+    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_ENABLE_CHAIN_MODE_ID, channel, coreID))
     {
-        ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+        ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
 #if (GPT_DEV_ERROR_DETECT == STD_ON)
         /* Call low level API */
-        returnValue = Gpt_Ipw_EnableChainMode(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+        returnValue = Gpt_Ipw_EnableChainMode(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
 
         if((Std_ReturnType)E_OK != returnValue)
         {
@@ -2368,7 +2364,7 @@ void Gpt_Channel_EnableChainMode(Gpt_ChannelType channel)
         }
 #else
         /*Call low level API.*/
-        (void)Gpt_Ipw_EnableChainMode(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+        (void)Gpt_Ipw_EnableChainMode(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
 #endif
     }
 }
@@ -2394,14 +2390,14 @@ void Gpt_Channel_DisableChainMode(Gpt_ChannelType channel)
     Std_ReturnType returnValue;
 #endif
 
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
-    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_DISABLE_CHAIN_MODE_ID, channel, userId))
+    if ((Std_ReturnType)E_OK == Gpt_ValidateChannelStatus(GPT_DISABLE_CHAIN_MODE_ID, channel, coreID))
     {
-        ChannelIndex = (*(Gpt_pConfig[userId]->u8GptChannelIdToIndexMap))[channel];
+        ChannelIndex = (*(Gpt_pConfig[coreID]->u8GptChannelIdToIndexMap))[channel];
 #if (GPT_DEV_ERROR_DETECT == STD_ON)
         /* Call low level API */
-        returnValue = Gpt_Ipw_DisableChainMode(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+        returnValue = Gpt_Ipw_DisableChainMode(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
 
         if((Std_ReturnType)E_OK != returnValue)
         {
@@ -2415,7 +2411,7 @@ void Gpt_Channel_DisableChainMode(Gpt_ChannelType channel)
         }
 #else
         /*Call low level API.*/
-        (void)Gpt_Ipw_DisableChainMode(((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
+        (void)Gpt_Ipw_DisableChainMode(((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig));
 #endif
     }
 }
@@ -2434,13 +2430,13 @@ void Gpt_Channel_DisableChainMode(Gpt_ChannelType channel)
 */
 void Gpt_SetClockMode(Gpt_ClockModeType eClkMode)
 {
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
     Gpt_ChannelType ChannelIndex;
 
 #if (GPT_VALIDATE_GLOBAL_CALL == STD_ON)
     Std_ReturnType returnValue;
 
-    returnValue = Gpt_ValidateGlobalCall(GPT_SET_CLOCK_MODE_ID, userId);
+    returnValue = Gpt_ValidateGlobalCall(GPT_SET_CLOCK_MODE_ID, coreID);
     if((Std_ReturnType)E_OK == returnValue)
     {
 #endif
@@ -2448,20 +2444,20 @@ void Gpt_SetClockMode(Gpt_ClockModeType eClkMode)
         if ((Std_ReturnType)E_OK == Gpt_ValidateParamSetClockMode(eClkMode))
         {
 #endif
-            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->instanceCount; ChannelIndex++)
+            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->instanceCount; ChannelIndex++)
             {
                     Gpt_Ipw_SetClockModeInStance
                     (
-                        (&((*(Gpt_pConfig[userId]->Gpt_Ipw_HwInstanceConfig))[ChannelIndex])), eClkMode
+                        (&((*(Gpt_pConfig[coreID]->Gpt_Ipw_HwInstanceConfig))[ChannelIndex])), eClkMode
                     );
             }
 
 #if (GPT_HW_CHANNEL_USED == STD_ON)
-            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[userId]->channelCount; ChannelIndex++)
+            for (ChannelIndex = 0U; ChannelIndex < Gpt_pConfig[coreID]->channelCount; ChannelIndex++)
             {
                     Gpt_Ipw_SetClockModeChannel
                     (
-                        ((*(Gpt_pConfig[userId]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig),eClkMode
+                        ((*(Gpt_pConfig[coreID]->Gpt_pChannelConfig))[ChannelIndex].Gpt_Ipw_HwChannelConfig),eClkMode
                     );
             }
 #endif
@@ -2500,10 +2496,10 @@ Std_ReturnType Gpt_GetPredefTimerValue
 {
     Std_ReturnType returnValue;
     Gpt_ChannelType channel;
-    uint32 userId = (uint32)Gpt_GetUserId();
+    uint32 coreID = (uint32)Gpt_GetCoreID();
 
 #if (GPT_VALIDATE_GLOBAL_CALL == STD_ON)
-    returnValue = Gpt_ValidateGlobalCall(GPT_GET_PREDEF_TIMERVALUE_ID, userId);
+    returnValue = Gpt_ValidateGlobalCall(GPT_GET_PREDEF_TIMERVALUE_ID, coreID);
     if((Std_ReturnType)E_OK == returnValue)
     {
 #endif
@@ -2511,18 +2507,18 @@ Std_ReturnType Gpt_GetPredefTimerValue
         returnValue = Gpt_ValidatePointerGetPredefTimer(TimeValuePtr);
         if((Std_ReturnType)E_OK == returnValue)
         {
-            returnValue = Gpt_ValidateParamTypePredefTimer(PredefTimer, userId);
+            returnValue = Gpt_ValidateParamTypePredefTimer(PredefTimer, coreID);
             if((Std_ReturnType)E_OK == returnValue)
             {
 #endif
 
-               returnValue = Gpt_ValidateMode(GPT_GET_PREDEF_TIMERVALUE_ID, userId);
+               returnValue = Gpt_ValidateMode(GPT_GET_PREDEF_TIMERVALUE_ID, coreID);
                if((Std_ReturnType)E_OK ==returnValue)
                {
 
                         channel = (Gpt_ChannelType)PredefTimer;
 
-                        Gpt_Ipw_GetPredefTimerValue((Gpt_pConfig[userId]->Gpt_pChannelPredefConfigType)[channel], PredefTimer, TimeValuePtr);
+                        Gpt_Ipw_GetPredefTimerValue((Gpt_pConfig[coreID]->Gpt_pChannelPredefConfigType)[channel], PredefTimer, TimeValuePtr);
 
                }
                else

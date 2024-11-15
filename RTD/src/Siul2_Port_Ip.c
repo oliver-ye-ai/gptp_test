@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -45,9 +45,6 @@ extern "C"{
    #include "RegLockMacros.h"
    #include "OsIf_Internal.h"
 #endif
-#ifdef MCAL_ENABLE_FAULT_INJECTION
-#include "Mcal.h"
-#endif
 
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
@@ -60,7 +57,7 @@ extern "C"{
 #define SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_C      4
 #define SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_C      7
 #define SIUL2_PORT_IP_AR_RELEASE_REVISION_VERSION_C   0
-#define SIUL2_PORT_IP_SW_MAJOR_VERSION_C              5
+#define SIUL2_PORT_IP_SW_MAJOR_VERSION_C              4
 #define SIUL2_PORT_IP_SW_MINOR_VERSION_C              0
 #define SIUL2_PORT_IP_SW_PATCH_VERSION_C              0
 
@@ -87,8 +84,8 @@ extern "C"{
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if the files Siul2_Port_Ip.c and RegLockMacros.h are of the same version */
     #ifdef PORT_ENABLE_USER_MODE_SUPPORT
+        /* Check if the files Siul2_Port_Ip.c and RegLockMacros.h are of the same version */
         #if ((SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_C != REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION) || \
              (SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_C != REGLOCKMACROS_AR_RELEASE_MINOR_VERSION)    \
             )
@@ -106,13 +103,6 @@ extern "C"{
          (SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_C != SCHM_PORT_AR_RELEASE_MINOR_VERSION)    \
         )
         #error "AutoSar Version Numbers of Siul2_Port_Ip.c and SchM_Port.h are different"
-    #endif
-    #ifdef MCAL_ENABLE_FAULT_INJECTION
-        #if ((SIUL2_PORT_IP_AR_RELEASE_MAJOR_VERSION_C != MCAL_AR_RELEASE_MAJOR_VERSION) || \
-             (SIUL2_PORT_IP_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION)    \
-            )
-            #error "AutoSar Version Numbers of Siul2_Port_Ip.c and Mcal.h are different"
-        #endif
     #endif
 #endif
 
@@ -257,9 +247,19 @@ static inline void Siul2_Port_Ip_WriteDCMConfiguration(const Siul2_Port_Ip_PinSe
   */
 static inline void Siul2_Port_Ip_GetMSCRConfiguration(Siul2_Port_Ip_PinSettingsConfig * config,
                                                       const Siul2_Port_Ip_PortType * const base,
-                                                      uint16 pin
-                                                     );
+                                                      uint16 pin);
 
+#if (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT))
+#if (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE))
+#if (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE))
+/*!
+ * @brief Enables SIUL2 registers writing in User Mode by configuring REG_PROT
+ *
+  */
+void Siul2_Port_Ip_SetUserAccessAllowed(void);
+#endif /* (defined(PORT_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == PORT_SIUL2_REG_PROT_AVAILABLE)) */
+#endif /* (defined(MCAL_SIUL2_REG_PROT_AVAILABLE) && (STD_ON == MCAL_SIUL2_REG_PROT_AVAILABLE)) */
+#endif /* (defined(MCAL_ENABLE_USER_MODE_SUPPORT) && defined(PORT_ENABLE_USER_MODE_SUPPORT) && (STD_ON == PORT_ENABLE_USER_MODE_SUPPORT)) */
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
 ==================================================================================================*/
@@ -370,7 +370,6 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
     pinsValues |= SIUL2_MSCR_SSS(config->mux);
 
     /* Configure initial value for GPIO pin in GPIO mux */
-    /* SWS_Port_00055 : The function Port_Init shall set the port pin output latch to a default level (defined during configuration) before setting the port pin direction to output. */
     if ((PORT_MUX_AS_GPIO == config->mux) && (PORT_OUTPUT_BUFFER_ENABLED == config->outputBuffer))
     {
 #if (STD_ON == PORT_VIRTWRAPPER_SUPPORT)
@@ -387,19 +386,14 @@ static void Siul2_Port_Ip_PinInit(const Siul2_Port_Ip_PinSettingsConfig * config
             /* Write the value into GPDO register */
             PORT_WRITE8(SIUL2_GPDO_ADDR8(siulInstance, (uint16)config->pinPortIdx), config->initValue);
         }
-#endif /* STD_ON == PORT_VIRTWRAPPER_SUPPORT */
-    }
-    /* Write to Input Multiplexed Signal Configuration Register */
-    Siul2_Port_Ip_WriteIMCRConfiguration(config);
-
-    /* Fault injection label for testing purpose */
-#ifdef MCAL_ENABLE_FAULT_INJECTION
-    MCAL_FAULT_INJECTION_POINT(PORT_CHANGE_DIRECTION_VALUE);
 #endif
+    }
 
-    /* SWS_Port_00043 : The function Port_Init shall avoid glitches and spikes on the affected port pins. Hint: Perform output enable and/or input enable as a final step of the pad initialization. */
     /* Write to Multiplexed Signal Configuration Register */
     config->base->MSCR[config->pinPortIdx] = pinsValues;
+
+    /* Write to Input Multiplexed Signal Configuration Register */
+    Siul2_Port_Ip_WriteIMCRConfiguration(config);
 
 #ifdef SIUL2_PORT_IP_HAS_ADC_INTERLEAVE
     /* Write to DCM GPR Register to config adc interleave mux mode */
@@ -521,8 +515,7 @@ static inline void Siul2_Port_Ip_WriteIMCRConfiguration(const Siul2_Port_Ip_PinS
   */
 static inline void Siul2_Port_Ip_GetMSCRConfiguration(Siul2_Port_Ip_PinSettingsConfig * config,
                                                       const Siul2_Port_Ip_PortType * const base,
-                                                      uint16 pin
-                                                     )
+                                                      uint16 pin)
 {
     uint32 u32RegVal = 0UL;
     /* This var used to fix misra rule 10.8 to 10.5*/
@@ -632,8 +625,7 @@ void Siul2_Port_Ip_SetUserAccessAllowed(void)
  * @implements Siul2_Port_Ip_Init_Activity
  *END**************************************************************************/
 Siul2_Port_Ip_PortStatusType Siul2_Port_Ip_Init(uint32 pinCount,
-                                                const Siul2_Port_Ip_PinSettingsConfig config[]
-                                               )
+                                       const Siul2_Port_Ip_PinSettingsConfig config[])
 {
     uint32 i;
 
@@ -668,8 +660,7 @@ Siul2_Port_Ip_PortStatusType Siul2_Port_Ip_Init(uint32 pinCount,
  *END**************************************************************************/
 void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
                               uint16 pin,
-                              Siul2_Port_Ip_PortPullConfig pullConfig
-                             )
+                              Siul2_Port_Ip_PortPullConfig pullConfig)
 {
     uint32 regVal;
     uint32 pueVal;
@@ -744,8 +735,7 @@ void Siul2_Port_Ip_SetPullSel(Siul2_Port_Ip_PortType * const base,
 void Siul2_Port_Ip_SetOutputBuffer(Siul2_Port_Ip_PortType * const base,
                                    uint16 pin,
                                    boolean enable,
-                                   Siul2_Port_Ip_PortMux mux
-                                  )
+                                   Siul2_Port_Ip_PortMux mux)
 {
     SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
     SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
@@ -778,8 +768,7 @@ void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
                                   uint16 pin,
                                   boolean enable,
                                   uint32 inputMuxReg,
-                                  Siul2_Port_Ip_PortInputMux inputMux
-                                 )
+                                  Siul2_Port_Ip_PortInputMux inputMux)
 {
     /* Dummy address */
     SIUL2_Type * siul2Base = (SIUL2_Type *)0xFFFFFFFFU;
@@ -838,8 +827,7 @@ void Siul2_Port_Ip_SetInputBuffer(Siul2_Port_Ip_PortType * const base,
  *END**************************************************************************/
 void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
                                    uint16 pin,
-                                   Siul2_Port_Ip_PortDirectionType direction
-                                  )
+                                   Siul2_Port_Ip_PortDirectionType direction)
 {
     SIUL2_PORT_IP_DEV_ASSERT((boolean)(base != NULL_PTR));
     SIUL2_PORT_IP_DEV_ASSERT((boolean)(pin < SIUL2_NUM_OF_PIN_PORT));
@@ -883,7 +871,8 @@ void Siul2_Port_Ip_SetPinDirection(Siul2_Port_Ip_PortType * const base,
  *
  * @implements Siul2_Port_Ip_RevertPinConfiguration_Activity
  *END**************************************************************************/
-uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const base, uint16 pin)
+uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const base,
+                                           uint16 pin)
 {
     uint32 u32PinIdx;
     uint32 u32RegVal = 0xFFFFFFFFUL;
@@ -938,8 +927,7 @@ uint32 Siul2_Port_Ip_RevertPinConfiguration(const Siul2_Port_Ip_PortType * const
  *END**************************************************************************/
 void Siul2_Port_Ip_GetPinConfiguration(const Siul2_Port_Ip_PortType * const base,
                                        Siul2_Port_Ip_PinSettingsConfig * config,
-                                       uint16 pin
-                                      )
+                                       uint16 pin)
 {
     const Siul2_Port_Ip_PinSettingsConfig * ConfigPtr = pPort_Setting;
     uint32 MaxPinConfigured = u32MaxPinConfigured;

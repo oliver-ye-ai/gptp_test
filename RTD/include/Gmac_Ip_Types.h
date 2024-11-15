@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +52,7 @@ extern "C"{
 #define GMAC_IP_TYPES_AR_RELEASE_MAJOR_VERSION       4
 #define GMAC_IP_TYPES_AR_RELEASE_MINOR_VERSION       7
 #define GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION    0
-#define GMAC_IP_TYPES_SW_MAJOR_VERSION               5
+#define GMAC_IP_TYPES_SW_MAJOR_VERSION               4
 #define GMAC_IP_TYPES_SW_MINOR_VERSION               0
 #define GMAC_IP_TYPES_SW_PATCH_VERSION               0
 
@@ -65,14 +65,12 @@ extern "C"{
 #endif
 #if (( GMAC_IP_TYPES_AR_RELEASE_MAJOR_VERSION    != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_TYPES_AR_RELEASE_MINOR_VERSION    != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip_Types.h and Gmac_Ip_Device_Registers.h are different"
 #endif
 #if (( GMAC_IP_TYPES_SW_MAJOR_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_MAJOR_VERSION) || \
      ( GMAC_IP_TYPES_SW_MINOR_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_MINOR_VERSION) || \
-     ( GMAC_IP_TYPES_SW_PATCH_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_TYPES_SW_PATCH_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip_Types.h and Gmac_Ip_Device_Registers.h are different"
 #endif
 
@@ -82,14 +80,12 @@ extern "C"{
 #endif
 #if (( GMAC_IP_TYPES_AR_RELEASE_MAJOR_VERSION    != GMAC_IP_FEATURES_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_TYPES_AR_RELEASE_MINOR_VERSION    != GMAC_IP_FEATURES_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION != GMAC_IP_FEATURES_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION != GMAC_IP_FEATURES_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip_Types.h and Gmac_Ip_Features.h are different"
 #endif
 #if (( GMAC_IP_TYPES_SW_MAJOR_VERSION != GMAC_IP_FEATURES_SW_MAJOR_VERSION) || \
      ( GMAC_IP_TYPES_SW_MINOR_VERSION != GMAC_IP_FEATURES_SW_MINOR_VERSION) || \
-     ( GMAC_IP_TYPES_SW_PATCH_VERSION != GMAC_IP_FEATURES_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_TYPES_SW_PATCH_VERSION != GMAC_IP_FEATURES_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip_Types.h and Gmac_Ip_Features.h are different"
 #endif
 
@@ -104,27 +100,6 @@ extern "C"{
 #else
     #error "Unsupported CPU_TYPE"
 #endif
-
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-/*!
- * @brief Split Header Support
- * @details L3/L4 split is applicable for IP packets that are either untagged or VLAN stripped. If VLAN
- *          tag is retained in the packet forwarded to the DMA, L3-L4 split is not performed. When
- *          Gmac_Ip_SplitHeaderType field is set to GMAC_IP_L3_L4_OR_L2_SPLIT, L2 Split is performed for IP packets which are VLAN tagged.
- *
- */
-typedef enum
-{
-    GMAC_IP_L3_L4_SPLIT        = 0x00U, /*!< TCP or UDP Packet -> The DMA writes the Ethernet header + IP header + TCP or UDP header into the header buffer.
-                                             IP packet (not TCP/UDP) -> The DMA writes the Ethernet header + IP header into the header buffer.
-                                             Non-IP packet -> The DMA does not split the header and payload. */
-    GMAC_IP_L2_SPLIT           = 0x01U, /*!< Any packet -> The DMA writes the Ethernet header:
-                                                               1) For AV type packets using AV type Split Offset (SAVO) when split AV. Enable (SAVE) field is set to 1.
-                                                               2) For non-AV type packets using SPLOFST */
-    GMAC_IP_L3_L4_OR_L2_SPLIT  = 0x02U  /*!< IP packet -> L3/L4 split
-                                             Non-IP packet -> L2 split*/
-} Gmac_Ip_SplitHeaderType;
-#endif /* STD_ON == GMAC_IP_RX_HEADER_SPLIT */
 
 /*!
  * @brief Return values
@@ -242,7 +217,6 @@ typedef enum
 {
     GMAC_PKT_FILTER_RECV_ALL = (sint32)GMAC_MAC_PACKET_FILTER_RA_MASK,              /*!< Passes all received packets to the application, irrespective of whether
                                                                                          they pass the address filter or not. */
-    GMAC_PKT_FILTER_LAYER3_LAYER4 = GMAC_MAC_PACKET_FILTER_IPFE_MASK,               /*!< Passes all received packets to the application, irrespective of whether */
     GMAC_PKT_FILTER_HASH_OR_PERFECT_FILTER = GMAC_MAC_PACKET_FILTER_HPF_MASK,       /*!< The address filter passes a packet if it matches either the perfect filtering or
                                                                                          hash filtering. */
     GMAC_PKT_FILTER_BLOCK_CONTROL_PKTS = GMAC_MAC_PACKET_FILTER_PCF(0U),            /*!< Blocks all control packets from reaching the application. */
@@ -261,26 +235,6 @@ typedef enum
                                                                                          according to the hash table. */
     GMAC_PKT_FILTER_PROMISCUOUS_MODE = GMAC_MAC_PACKET_FILTER_PR_MASK,               /*!< Passes all incoming packets irrespective of the destination or source address. */
 } Gmac_Ip_PacketFilterConfigType;
-/** @endcond */
-
-/** @cond DRIVER_INTERNAL_USE_ONLY */
-/*!
- * @brief Configurations related to the Layer 3 and Layer 4 Control filters for received frames.
- */
-typedef enum
-{
-    DMA_CHANNEL_ENABLE = GMAC_MAC_L3_L4_CONTROL0_DMCHEN0_MASK,    /*!< The Layer 4 Destination Port number field is enabled for inverse matching. */
-    L4_DST_PORT_INVERSE_MATCH_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L4DPIM0_MASK,    /*!< The Layer 4 Destination Port number field is enabled for inverse matching. */
-    L4_DST_PORT_MATCH_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L4DPM0_MASK,             /*!< The Layer 4 Destination Port number field is enabled for matching. */
-    L4_SRC_PORT_INVERSE_MATCH_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L4SPIM0_MASK,    /*!< The Layer 4 Source Port number field is enabled for inverse matching. */
-    L4_SRC_PORT_MATCH_ENABLE   = GMAC_MAC_L3_L4_CONTROL0_L4SPM0_MASK,           /*!< The Layer 4 Source Port number field is enabled for matching. */
-    L4_PROTOCOL_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L4PEN0_MASK,                   /*!< Layer 4 Protocol Enable. */
-    L3_IP_DA_INVERSE_MATCH_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L3DAIM0_MASK,       /*!< The Layer 3 IP Destination Address field is enabled for inverse matching. */
-    L3_IP_DA_MATCH_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L3DAM0_MASK,                /*!< The Layer 3 IP Destination Address field is enabled for matching. */
-    L3_IP_SA_INVERSE_MATCH_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L3SAIM0_MASK,       /*!< The Layer 3 IP Source Address field is enabled for inverse matching. */
-    L3_IP_SA_MATCH_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L3SAM0_MASK,                /*!< The Layer 3 IP Source Address field is enabled for matching. */
-    L3_PROTOCOL_ENABLE = GMAC_MAC_L3_L4_CONTROL0_L3PEN0_MASK,                   /*!< Layer 3 Protocol Enable. */
-} Gmac_Ip_L3L4FilterConfigType;
 /** @endcond */
 
 /*!
@@ -450,14 +404,10 @@ typedef enum
  */
 typedef enum
 {
-    GMAC_IP_PAYLOAD_TYPE_UNKNOWN               = 0U,   /*!< Unknown type or IP payload not processed. */
-    GMAC_IP_PAYLOAD_TYPE_UDP                   = 1U,   /*!< UDP packet. */
-    GMAC_IP_PAYLOAD_TYPE_TCP                   = 2U,   /*!< TCP packet. */
-    GMAC_IP_PAYLOAD_TYPE_ICMP                  = 3U,   /*!< ICMP packet. */
-    GMAC_IP_PAYLOAD_TYPE_IGMP_OR_DCB           = 4U,   /*!< IGMP, if IPV4 header present, else DCB (LLDP) control packet. */
-    GMAC_IP_PAYLOAD_TYPE_AV_UNTAGGED_CTRL_PKT  = 5U,   /*!< AV untagged controL packet. */
-    GMAC_IP_PAYLOAD_TYPE_AV_TAGGED_DATA_PKT    = 6U,   /*!< AV tagged data packet. */
-    GMAC_IP_PAYLOAD_TYPE_AV_TAGGED_CTRL_PKT    = 7U,   /*!< AV tagged control packet. */
+    GMAC_IP_PAYLOAD_TYPE_UNKNOWN = 0U,   /*!< Unknown type or IP payload not processed. */
+    GMAC_IP_PAYLOAD_TYPE_UDP     = 1U,   /*!< UDP packet. */
+    GMAC_IP_PAYLOAD_TYPE_TCP     = 2U,   /*!< TCP packet. */
+    GMAC_IP_PAYLOAD_TYPE_ICMP    = 3U    /*!< ICMP packet. */
 } Gmac_Ip_PayloadType;
 
 /*!
@@ -547,33 +497,6 @@ typedef enum {
     GMAC_TRESHOLD_512_BYTES = 7U
 } Gmac_Ip_TxThresholdType;
 
-#if (STD_ON == GMAC_IP_PPS_OUTPUT_SUPPORT)
-/*!
- * @brief The Target Time registers modes for PPS0 output signal.
- * @implements
- */
-typedef enum {
-    GMAC_GENERATE_ONLY_INTERRUPT                     = 0U,
-    GMAC_ENABLE_MCGR_INTERRUPT                       = 1U,
-    GMAC_GENERATE_INTERRUPT_AND_PPS_START_STOP_TIME  = 2U,
-    GMAC_GENERATE_ONLY_PPS_START_STOP_TIME           = 3U,
-} Gmac_Ip_PPSModeSelect;
-
-/*!
- * @brief The PPS0 output commands.
- * @implements
- */
-typedef enum {
-    GMAC_NO_COMMAND                    = 0U,
-    GMAC_START_SINGLE_PULSE            = 1U,
-    GMAC_START_PULSE_TRAIN             = 2U,
-    GMAC_CANCEL_START                  = 3U,
-    GMAC_STOP_PULSE_TRAIN_AT_TIME      = 4U,
-    GMAC_STOP_PULSE_TRAIN_IMMEDIATELY  = 5U,
-    GMAC_CANCEL_STOP_PULSE_TRAIN       = 6U,
-} Gmac_Ip_PPSOutputCmd;
-#endif
-
 #if (FEATURE_GMAC_ASP_ALL || FEATURE_GMAC_ASP_ECC)
 /*!
  * @brief Automotive safety errors.
@@ -593,42 +516,6 @@ typedef enum {
 typedef void (*Gmac_Ip_SafetyCallbackType)(const uint8 Instance, const Gmac_Ip_SafetyErrorType Error);
 #endif
 
-#ifdef GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE
-    #if (GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE == STD_ON)
-/*!
- * @brief This controls the priority ratio in weighted round-robin arbitration between the Rx DMA and Tx DMA.
- */
-typedef enum {
-    R_1_1 = 0x00,               /*!< The priority ratio is 1:1*/
-    R_2_1,                      /*!< The priority ratio is 2:1*/
-    R_3_1,                      /*!< The priority ratio is 3:1*/
-    R_4_1,                      /*!< The priority ratio is 4:1*/
-    R_5_1,                      /*!< The priority ratio is 5:1*/
-    R_6_1,                      /*!< The priority ratio is 6:1*/
-    R_7_1,                      /*!< The priority ratio is 7:1*/
-    R_8_1                       /*!< The priority ratio is 8:1*/
-} Gmac_Ip_DMAPriorityRatio;
-
-/*!
- * @brief Defines the arbitration algorithm for the Transmit side when multiple Tx DMAs are selected.
- */
-typedef enum {
-    GMAC_DMA_TX_FIXED_PRIORITY = 0x00,                          /*!< Fixed priority*/
-    GMAC_DMA_TX_WEIGHTED_STRICT_PRIORITY,                       /*!< Weighted strict priority*/
-    GMAC_DMA_TX_WEIGHTED_ROUND_ROBIN_PRIORITY                   /*!< Weighted round robin priority*/
-} Gmac_Ip_DMATransmitArbitrationAlgorithm;
-
-/*!
- * @brief Defines the arbitration scheme between the Transmit and Receive paths of all channels."
-
- */
-typedef enum {
-    GMAC_DMA_FIXED_PRIORITY = 0x00,                              /*!< Fixed priority*/
-    GMAC_DMA_WEIGHTED_ROUND_ROBIN_PRIORITY                       /*!< Weighted strict priority*/
-} Gmac_Ip_DMAArbitrationScheme;
-
-    #endif
-#endif
 /*!
  * @brief Callback function invoked when a general event is encountered
  */
@@ -689,23 +576,6 @@ typedef struct sGmac_Ip_TxTimeAwareShaper
     Gmac_Ip_TxGateControl *GateControlList;
 }Gmac_Ip_TxTimeAwareShaper;
 
-#if (STD_ON == GMAC_IP_HAS_RX_L3_L4_FILTERS)
-typedef struct sGmac_Ip_RxL3L4FilterConfigType
-{
-    uint8 DMAChannel;
-    uint8 Layer3IPv4DestBitsMatch;
-    uint8 Layer3IPv4SourceBitsMatch;
-    uint8 Layer3IPv6BitsMatch;
-    uint8 Layer3IPv4SourceAddress[4U];
-    uint8 Layer3IPv4DestinationAddress[4U];
-    uint16 Layer3IPv6SourceAddress[8U];
-    uint16 Layer3IPv6DestinationAddress[8U];
-    uint16 Layer4SourcePortNumber;
-    uint16 Layer4DestinationPortNumber;
-    uint32 MacL3L4FilterEnable;
-} Gmac_Ip_RxL3L4FilterConfigType;
-#endif
-
 /*!
  * @brief Specialization of ring configuration for Tx Rings
  */
@@ -725,11 +595,6 @@ typedef struct sGmac_Ip_TxRingConfigType
     uint8 PriorityMask;                     /*!< A logical OR of "Gmac_Ip_VlanPriorityType". */
     uint8 DmaBurstLength;                   /*!< Maximum number of beats in one DMA block data transfer. */
     Gmac_Ip_OperationModeType QueueOpMode;  /*!< Queue operation mode */
-#ifdef GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE
-    #if (GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE == STD_ON)
-    uint8 TransmitChannelWeight;            /*!< Weight assigned to the corresponding Transmit channel. */
-    #endif
-#endif
 } Gmac_Ip_TxRingConfigType;
 
 
@@ -747,10 +612,6 @@ typedef struct sGmac_Ip_RxRingConfigType
     uint16 RingSize;                        /*!< Buffer descriptors number. */
     uint8 PriorityMask;                     /*!< A logical OR of "Gmac_Ip_VlanPriorityType". */
     uint8 DmaBurstLength;                   /*!< Maximum number of beats in one DMA block data transfer. */
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-    boolean SplitHeaderSupport;             /*!< Enable/Disable support for the split header functionality. */
-    uint16  HeaderSplitOffset;              /*!< Offset value in bytes where payload will be stored starting from where frame start(= header start). */
-#endif
 } Gmac_Ip_RxRingConfigType;
 
 
@@ -774,26 +635,6 @@ typedef struct
     uint32 seconds;      /*!< The 32 least significant bits of the 48 bits seconds part of the time. */
     uint16 secondsHi;    /*!< The 16 most significant bits of the 48 bit seconds part of the time. */
 } Gmac_Ip_TimestampType;
-
-/*!
- * @brief Defines Pulse-per-second target time
- * @implements
- */
-
-#if (STD_ON == GMAC_IP_PPS_OUTPUT_SUPPORT)
-typedef struct
-{
-    uint32 nanoseconds;  /*!< Nanoseconds part of the time. */
-    uint32 seconds;      /*!< Seconds part of the time. */
-} Gmac_Ip_PPSTargetTime;
-
-typedef struct sGmac_Ip_FlexiblePPSOutput
-{
-    uint8 PPSDutyCycle;
-    uint32 PPSFrequency;
-    Gmac_Ip_PPSModeSelect PPSModeSelect;
-} Gmac_Ip_FlexiblePPSOutput;
-#endif
 
 /*!
  * @brief Defines a structure to configure the system time
@@ -961,9 +802,6 @@ typedef struct sGmac_Ip_ConfigType
 {
     uint8 RxRingCount;                         /*!< The number of Receive rings to be used by the driver. */
     uint8 TxRingCount;                         /*!< The number of Transmit rings to be used by the driver. */
-#if (STD_ON == GMAC_IP_PPS_OUTPUT_SUPPORT)
-    uint8 PPSOutputsCount;                    /*!< The number of Pulse-per-second outputs to be used by the driver. */
-#endif
 #if (FEATURE_GMAC_ASP_ALL || FEATURE_GMAC_ASP_ECC)
     uint32 SafetyInterrupts;                   /*!< Safety interrupt sources. A logical OR of "Gmac_Ip_SafetyErrorType". */
     Gmac_Ip_SafetyCallbackType SafetyCallback; /*!< Safety callback function. */
@@ -977,9 +815,6 @@ typedef struct sGmac_Ip_ConfigType
     Gmac_Ip_DuplexType Duplex;                 /*!< Duplex. */
     uint32 MacConfig;                          /*!< Configures the operating mode of the MAC. A logical OR of "Gmac_Ip_MacConfigType". */
     uint32 ExtendedMacConfig;                  /*!< Configures the extending operating mode of the MAC. */
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-    uint32 ExtendedMacConfig1;                 /*!< Configures the extending 1 operating mode of the MAC. */
-#endif
     uint32 MacPktFilterConfig;                 /*!< Configures the MAC packet filter. A logical OR of "Gmac_Ip_PacketFilterConfigType". */
     boolean EnableCtrl;                        /*!< Configures whether the controller is enabled at initialization. */
 #if (GMAC_TX_SPORADIC_BIG_BUFFERS == STD_ON)
@@ -993,29 +828,6 @@ typedef struct sGmac_Ip_ConfigType
     uint16 RxBigBufferLength;                   /*!< Length  of large reception data buffer*/
     uint8 *RxBigBuffer;                          /*!< BigBuffer reception address. */
 #endif
-
-#ifdef GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE
-    #if (GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE == STD_ON)
-    boolean DMATransmitPriority;
-    Gmac_Ip_DMAArbitrationScheme DMAArbitrationScheme;
-    Gmac_Ip_DMATransmitArbitrationAlgorithm DMATransmitArbitrationAlgorithm;
-    Gmac_Ip_DMAPriorityRatio DMAPriorityRatio;
-    #endif
-#endif
-
-#ifdef GMAC_IP_LPI_ENABLE
-    #if (STD_ON == GMAC_IP_LPI_ENABLE)
-    uint16 LPILSTimer;
-    uint16 LPITWTimer;
-    uint32 LPIEntryTimer;
-    uint32 LPIConfig;
-    Gmac_Ip_CallbackType LPICallback;
-    #endif
-#endif
-
-#if (STD_ON == GMAC_IP_HAS_RX_L3_L4_FILTERS)
-    uint8 RxL3L4FilterCount;
-#endif
 } Gmac_Ip_ConfigType;
 /** @endcond */
 
@@ -1028,9 +840,6 @@ typedef struct sGmac_Ip_StateType
 {
 #if (FEATURE_GMAC_ASP_ALL || FEATURE_GMAC_ASP_ECC)
     Gmac_Ip_SafetyCallbackType SafetyCallback;                              /*!< Callback function for safety interrupts. */
-#endif
-#if (STD_ON == GMAC_IP_LPI_ENABLE)
-    Gmac_Ip_CallbackType LPICallback;                                       /*!< Callback function for LPI receive interrupts. */
 #endif
     Gmac_Ip_CallbackType Callback;                                          /*!< Callback function for general interrupts. */
     Gmac_Ip_ChCallbackType RxChCallback[FEATURE_GMAC_NUM_CHANNELS];         /*!< Callback function for receive channels. */
@@ -1054,8 +863,6 @@ typedef struct sGmac_Ip_StateType
 #endif
     uint32 PtpRunningCounterPeriodPs;    /*!< Actual running counter period for timestamp after correction with the percentage indicated by user. */
     uint32 PtpReferenceClockPeriodPs;    /*!< Period that must be used without fine correction. */
-    uint16  HeaderSplitOffset[FEATURE_GMAC_NUM_CHANNELS];           /*!< Offset where the payload will be put in the data frame. */
-    boolean SplitHeaderSupport[FEATURE_GMAC_NUM_CHANNELS];          /*!< Enable/Disable support for the split header functionality. */
 } Gmac_Ip_StateType;
 /** @endcond */
 

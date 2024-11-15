@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -43,6 +43,7 @@ extern "C"{
  2) needed interfaces from external units
  3) internal and external interfaces from this unit
 ==================================================================================================*/
+#include "MemAcc_GeneralTypes.h"
 #include "Mem_43_INFLS_Cfg.h"
 
 /*==================================================================================================
@@ -52,13 +53,20 @@ extern "C"{
 #define MEM_43_INFLS_AR_RELEASE_MAJOR_VERSION       4
 #define MEM_43_INFLS_AR_RELEASE_MINOR_VERSION       7
 #define MEM_43_INFLS_AR_RELEASE_REVISION_VERSION    0
-#define MEM_43_INFLS_SW_MAJOR_VERSION               5
+#define MEM_43_INFLS_SW_MAJOR_VERSION               4
 #define MEM_43_INFLS_SW_MINOR_VERSION               0
 #define MEM_43_INFLS_SW_PATCH_VERSION               0
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
+#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
+    #if ((MEM_43_INFLS_AR_RELEASE_MAJOR_VERSION != MEMACC_GENERALTYPES_AR_RELEASE_MAJOR_VERSION) || \
+         (MEM_43_INFLS_AR_RELEASE_MINOR_VERSION != MEMACC_GENERALTYPES_AR_RELEASE_MINOR_VERSION) \
+        )
+        #error "AutoSar Version Numbers of Mem_43_INFLS.h and MemAcc_GeneralTypes.h are different"
+    #endif
+#endif
 
 /* Check if current file and Mem_43_INFLS_Cfg.h header file are of the same vendor */
 #if (MEM_43_INFLS_VENDOR_ID != MEM_43_INFLS_VENDOR_ID_CFG)
@@ -93,7 +101,7 @@ extern "C"{
                                        GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
 /*When multicore type3 is enabled on MemAcc, global variables must be allocated to share memory section */
-#if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+#if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_INFLS_START_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_INFLS_START_SEC_VAR_CLEARED_UNSPECIFIED
@@ -104,7 +112,7 @@ extern "C"{
 extern const Mem_43_INFLS_ConfigType            *Mem_43_INFLS_pConfigPtr;
 
 
-#if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+#if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_INFLS_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_INFLS_STOP_SEC_VAR_CLEARED_UNSPECIFIED
@@ -138,15 +146,18 @@ void Mem_43_INFLS_GetVersionInfo(Std_VersionInfoType * VersionInfoPtr);
  */
 Mem_43_INFLS_JobResultType Mem_43_INFLS_GetJobResult(Mem_43_INFLS_InstanceIdType InstanceId);
 
+
 /**
  * @brief        Suspends active memory operation using hardware mechanism.
  */
 Std_ReturnType Mem_43_INFLS_Suspend(Mem_43_INFLS_InstanceIdType InstanceId);
 
+
 /**
  * @brief        Resumes suspended memory operation using hardware mechanism.
  */
 Std_ReturnType Mem_43_INFLS_Resume(Mem_43_INFLS_InstanceIdType InstanceId);
+
 
 /**
  * @brief        Propagates an ECC error to the memory upper layers

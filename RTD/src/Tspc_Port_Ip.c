@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +52,7 @@ extern "C"{
 #define TSPC_PORT_IP_AR_RELEASE_MAJOR_VERSION_C      4
 #define TSPC_PORT_IP_AR_RELEASE_MINOR_VERSION_C      7
 #define TSPC_PORT_IP_AR_RELEASE_REVISION_VERSION_C   0
-#define TSPC_PORT_IP_SW_MAJOR_VERSION_C              5
+#define TSPC_PORT_IP_SW_MAJOR_VERSION_C              4
 #define TSPC_PORT_IP_SW_MINOR_VERSION_C              0
 #define TSPC_PORT_IP_SW_PATCH_VERSION_C              0
 
@@ -220,7 +220,6 @@ void Tspc_Port_Ip_ConfigureObeGroup(uint32 cfgCount,
     TSPC_Type * tspcBase = (TSPC_Type *)IP_TSPC_BASE;
     uint32 i;
     uint8 groupConfig = 0U;
-    uint8 groupSelect = 0U;
 
     for (i = 0U; i < cfgCount; i++)
     {
@@ -237,20 +236,18 @@ void Tspc_Port_Ip_ConfigureObeGroup(uint32 cfgCount,
 
     for (i = 0U; i < cfgCount; i++)
     {
-        groupSelect = config[i].obeGroupSelect;
         /* Write touch sense configuration */
-        if (0U != groupSelect)
+        if (0U != config[i].obeGroupSelect)
         {
-            groupSelect--;
             if (TSPC_INVALID_GROUP_INDEX != config[i].obeGroupIndex)
             {
                 if (config[i].obeGroupIndex > 31U)
                 {
-                    tspcBase->GROUP[groupSelect].GRP_OBE2 |= (uint32)((uint32)1 << ((config[i].obeGroupIndex) - 32U));
+                    tspcBase->GROUP[(config[i].obeGroupSelect) - 1U].GRP_OBE2 |= (uint32)((uint32)1 << ((config[i].obeGroupIndex) - 32U));
                 }
                 else
                 {
-                    tspcBase->GROUP[groupSelect].GRP_OBE1 |= (uint32)((uint32)1 << (config[i].obeGroupIndex));
+                    tspcBase->GROUP[(config[i].obeGroupSelect) - 1U].GRP_OBE1 |= (uint32)((uint32)1 << (config[i].obeGroupIndex));
                 }
             }
         }

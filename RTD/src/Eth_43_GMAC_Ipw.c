@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -48,7 +48,7 @@ extern "C"{
 #define ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION_C       4
 #define ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION_C       7
 #define ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION_C    0
-#define ETH_43_GMAC_IPW_SW_MAJOR_VERSION_C               5
+#define ETH_43_GMAC_IPW_SW_MAJOR_VERSION_C               4
 #define ETH_43_GMAC_IPW_SW_MINOR_VERSION_C               0
 #define ETH_43_GMAC_IPW_SW_PATCH_VERSION_C               0
 
@@ -61,13 +61,12 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION_C    != ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION_C    != ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC_Ipw.c and Eth_43_GMAC_Ipw.h are different"
 #endif
 #if ((ETH_43_GMAC_IPW_SW_MAJOR_VERSION_C != ETH_43_GMAC_IPW_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_SW_MINOR_VERSION_C != ETH_43_GMAC_IPW_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_SW_PATCH_VERSION_C != ETH_43_GMAC_IPW_SW_PATCH_VERSION)    \
+     (ETH_43_GMAC_IPW_SW_PATCH_VERSION_C != ETH_43_GMAC_IPW_SW_PATCH_VERSION) \
     )
     #error "Software Version Numbers of Eth_43_GMAC_Ipw.c and Eth_43_GMAC_Ipw.h are different"
 #endif
@@ -78,13 +77,12 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION_C    != GMAC_IP_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION_C    != GMAC_IP_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC_Ipw.c and Gmac_Ip.h are different"
 #endif
 #if ((ETH_43_GMAC_IPW_SW_MAJOR_VERSION_C != GMAC_IP_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_SW_MINOR_VERSION_C != GMAC_IP_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_SW_PATCH_VERSION_C != GMAC_IP_SW_PATCH_VERSION)    \
+     (ETH_43_GMAC_IPW_SW_PATCH_VERSION_C != GMAC_IP_SW_PATCH_VERSION) \
     )
     #error "Software Version Numbers of Eth_43_GMAC_Ipw.c and Gmac_Ip.h are different"
 #endif
@@ -95,13 +93,12 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION_C    != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION_C    != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC_Ipw.c and Eth_43_GMAC_Ipw_TrustedFunctions.h are different"
 #endif
 #if ((ETH_43_GMAC_IPW_SW_MAJOR_VERSION_C != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_SW_MINOR_VERSION_C != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_SW_PATCH_VERSION_C != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_SW_PATCH_VERSION)    \
+     (ETH_43_GMAC_IPW_SW_PATCH_VERSION_C != ETH_43_GMAC_IPW_TRUSTEDFUNCTIONS_SW_PATCH_VERSION) \
     )
     #error "Software Version Numbers of Eth_43_GMAC_Ipw.c and Eth_43_GMAC_Ipw_TrustedFunctions.h are different"
 #endif
@@ -139,6 +136,8 @@ extern "C"{
 #endif
 
 static Eth_BufIdxType Eth_43_GMAC_Ipw_axFirstTxBufferIdxInFifo[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED][ETH_43_GMAC_MAX_TXFIFO_SUPPORTED];
+
+extern Eth_43_GMAC_axTxBufferIdxMapType Eth_43_GMAC_axTxBufferIdxMap[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED][ETH_43_GMAC_MAX_TXFIFO_SUPPORTED * ETH_43_GMAC_MAX_TXBUFF_SUPPORTED];
 
 #define ETH_43_GMAC_STOP_SEC_VAR_CLEARED_32
 #include "Eth_43_GMAC_MemMap.h"
@@ -200,6 +199,7 @@ static const boolean Eth_43_GMAC_Ipw_InstHasExternalBufferManagement[FEATURE_GMA
 
 /* Pointers to IPW configuration structures stored for later use */
 const Eth_43_GMAC_Ipw_CtrlConfigType *Eth_43_GMAC_Ipw_apxInternalCfg[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED];
+extern Eth_43_GMAC_QueueInfo Eth_43_GMAC_axTransmissionRequests[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED][ETH_43_GMAC_MAX_TXFIFO_SUPPORTED];
 
 #define ETH_43_GMAC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Eth_43_GMAC_MemMap.h"
@@ -215,14 +215,6 @@ const Eth_43_GMAC_Ipw_CtrlConfigType *Eth_43_GMAC_Ipw_apxInternalCfg[ETH_43_GMAC
 static Gmac_Ip_BufferType Eth_43_GMAC_Ipw_MultiBufferFrame[ETH_43_GMAC_MAX_BUFFS_IN_MULTI_BUFFER_FRAME];
 
 #define ETH_43_GMAC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
-#include "Eth_43_GMAC_MemMap.h"
-
-#define ETH_43_GMAC_START_SEC_VAR_INIT_BOOLEAN
-#include "Eth_43_GMAC_MemMap.h"
-
-static volatile boolean MultiBufferFrameSent = FALSE;
-
-#define ETH_43_GMAC_STOP_SEC_VAR_INIT_BOOLEAN
 #include "Eth_43_GMAC_MemMap.h"
 
 #endif
@@ -242,9 +234,9 @@ static inline boolean Eth_43_GMAC_Ipw_Local_IsMulticastAddress(const uint8 *PhyA
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
 #if (STD_ON == ETH_43_GMAC_ENABLE_USER_MODE_SUPPORT)
-    #define Eth_43_GMAC_Ipw_Local_Macro_SelectPhyInterface(CtrlIdx, ModeSelect)   OsIf_Trusted_Call2params(Eth_43_GMAC_Ipw_SelectPhyInterface, CtrlIdx, (ModeSelect))
+    #define Eth_43_GMAC_Ipw_Local_Macro_SelectPhyInterface(ModeSelect)   OsIf_Trusted_Call1param(Eth_43_GMAC_Ipw_SelectPhyInterface,(ModeSelect))
 #else
-    #define Eth_43_GMAC_Ipw_Local_Macro_SelectPhyInterface(CtrlIdx, ModeSelect)   Eth_43_GMAC_Ipw_SelectPhyInterface(CtrlIdx, ModeSelect)
+    #define Eth_43_GMAC_Ipw_Local_Macro_SelectPhyInterface(ModeSelect)   Eth_43_GMAC_Ipw_SelectPhyInterface((ModeSelect))
 #endif
 
 #if (STD_ON == ETH_43_GMAC_UPDATE_PHYS_ADDR_FILTER_API)
@@ -278,70 +270,44 @@ static inline boolean Eth_43_GMAC_Ipw_Local_IsMulticastAddress(const uint8 *PhyA
 *
 * @return        void
 */
-void Eth_43_GMAC_Ipw_SelectPhyInterface(uint8 CtrlIdx, Gmac_Ip_MiiModeType ModeSelect)
+void Eth_43_GMAC_Ipw_SelectPhyInterface(Gmac_Ip_MiiModeType ModeSelect)
 {
-#if (ETH_IPW_IP_EMAC == GMAC_IP_FEATURE_ORIGIN)
+   #if (ETH_IPW_IP_EMAC == GMAC_IP_FEATURE_ORIGIN)
     if (GMAC_MII_MODE == ModeSelect)
     {
         IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(0U);
     }
     else if  (GMAC_RMII_MODE == ModeSelect)
     {
-        #if defined(S32K396) || defined(S32K394) || defined(S32K376) || defined(S32K374)
-            IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(1U);
-        #else
-            IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(2U);
-        #endif
+    #if defined(S32K396) || defined(S32K394) || defined(S32K376) || defined(S32K374)
+        IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(1U);
+    #else
+        IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(2U);
+    #endif
     }
-    (void)CtrlIdx;
-#endif
-#if (ETH_IPW_IP_GMAC == GMAC_IP_FEATURE_ORIGIN)
-    if (CtrlIdx < 1U)
+   #endif
+   #if (ETH_IPW_IP_GMAC == GMAC_IP_FEATURE_ORIGIN)
+    if (GMAC_MII_MODE == ModeSelect)
     {
-        if (GMAC_MII_MODE == ModeSelect)
-        {
-            IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(0U);
-        }
-        else if  (GMAC_RMII_MODE == ModeSelect)
-        {
-            IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(2U);
-        }
-        #if FEATURE_GMAC_RGMII_EN
-        else
-        {
-            #if defined(S32K388)
-                /* Enables the MAC_TX_RMII_CLK loopback and select RGMII mode for GMAC0. */
-                IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(1U) | DCM_GPR_DCMRWF1_MAC_TX_RMII_CLK_LPBCK_EN(1U);
-            #else
-                /* TODO: replace setting bit 31 with macro when header file S32K358_DCM_GPR.h is updated following new version of RM. */
-                IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(1U) | ((uint32)1U << 31U);
-            #endif
-        }
-        #endif
+        IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(0U);
     }
+    else if  (GMAC_RMII_MODE == ModeSelect)
+    {
+        IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(2U);
+    }
+    #if FEATURE_GMAC_RGMII_EN
     else
     {
     #if defined(S32K388)
-        if (GMAC_MII_MODE == ModeSelect)
-        {
-            IP_DCM_GPR->DCMRWF4 = (IP_DCM_GPR->DCMRWF4 & ~DCM_GPR_DCMRWF4_MAC2_CONF_SEL_MASK) | DCM_GPR_DCMRWF4_MAC2_CONF_SEL(0U);
-        }
-        else if  (GMAC_RMII_MODE == ModeSelect)
-        {
-            IP_DCM_GPR->DCMRWF4 = (IP_DCM_GPR->DCMRWF4 & ~DCM_GPR_DCMRWF4_MAC2_CONF_SEL_MASK) | DCM_GPR_DCMRWF4_MAC2_CONF_SEL(2U);
-        }
-        #if FEATURE_GMAC_RGMII_EN
-        else
-        {
-            /* Enables the MAC_TX_RMII_CLK loopback and select RGMII mode for GMAC1. */
-            IP_DCM_GPR->DCMRWF4 = (IP_DCM_GPR->DCMRWF4 & ~DCM_GPR_DCMRWF4_MAC2_CONF_SEL_MASK) | DCM_GPR_DCMRWF4_MAC2_CONF_SEL(1U);
-            IP_DCM_GPR->DCMRWF2 |= DCM_GPR_DCMRWF2_MAC2_TX_RMII_CLK_LPBCK_EN(1U) | DCM_GPR_DCMRWF2_MAC2_LOOBPACK_CLK_SEL(1U);
-        }
-        #endif
+        /* Enables the MAC_TX_RMII_CLK loopback and select RGMII mode. */
+        IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(1U) | DCM_GPR_DCMRWF1_MAC_TX_RMII_CLK_LPBCK_EN(1U);
+    #else
+        /* TODO: replace setting bit 31 with macro when header file S32K358_DCM_GPR.h is updated following new version of RM. */
+        IP_DCM_GPR->DCMRWF1 = (IP_DCM_GPR->DCMRWF1 & ~DCM_GPR_DCMRWF1_MAC_CONF_SEL_MASK) | DCM_GPR_DCMRWF1_MAC_CONF_SEL(1U) | ((uint32)1U << 31U);
     #endif
     }
-#endif
-    (void)CtrlIdx;
+    #endif
+   #endif
 }
 
 /*================================================================================================*/
@@ -569,7 +535,7 @@ Std_ReturnType Eth_43_GMAC_Ipw_SetCorrectionTime ( \
     float64 AddendTime;
     float64 AddendTimeUpdate;
 
-    if (NULL_PTR != TimeOffsetPtr)
+    if(NULL_PTR != TimeOffsetPtr)
     {
         if ((TimeOffsetPtr->diff.seconds != 0U) || (TimeOffsetPtr->diff.nanoseconds != 0U))
         {
@@ -577,7 +543,7 @@ Std_ReturnType Eth_43_GMAC_Ipw_SetCorrectionTime ( \
         }
     }
 
-    if (NULL_PTR != RateRatioPtr)
+    if(NULL_PTR != RateRatioPtr)
     {
         /* TODO: Clarify if here is any assumption: the time computed in nanoseconds will not overflow the 64 bit register */
         /* Can be added an if to verify if the difference between timestamps is grater than an hour and return E_NOT_OK. */
@@ -650,12 +616,11 @@ void Eth_43_GMAC_Ipw_EnableEgressTimeStamp( \
 */
 void Eth_43_GMAC_Ipw_GetEgressTimeStamp  ( \
                                     const uint8 CtrlIdx, \
-                                    const Eth_BufIdxType BufIdx, \
+                                    const uint8 FifoIdx, \
                                     Eth_TimeStampQualType *TimeQual, \
                                     Eth_TimeStampType *TimeStamp \
                                  )
 {
-    const uint8 FifoIdx = Eth_43_GMAC_axTxBufferIdxMap[CtrlIdx][BufIdx].FifoIdx;
     if ((0U == Eth_43_GMAC_Ipw_axTxFrameInfo[CtrlIdx][FifoIdx].Timestamp.seconds) &&
         (0U == Eth_43_GMAC_Ipw_axTxFrameInfo[CtrlIdx][FifoIdx].Timestamp.nanoseconds))
     {
@@ -823,7 +788,7 @@ Std_ReturnType Eth_43_GMAC_Ipw_ConfigureController  ( \
     /* Select PHY interface (MII mode) */
     /* This PHY interface selection should be somehow generalized to N controllers */
     /* Should be done before the controller is reset, because the interface type is latched at (controller's) reset */
-    Eth_43_GMAC_Ipw_Local_Macro_SelectPhyInterface(CtrlIdx, IpwCtrlCfg->Eth_43_GMAC_Ipw_pGmacCtrlConfig->Gmac_pCtrlConfig->MiiMode);
+    Eth_43_GMAC_Ipw_Local_Macro_SelectPhyInterface(IpwCtrlCfg->Eth_43_GMAC_Ipw_pGmacCtrlConfig->Gmac_pCtrlConfig->MiiMode);
     FunctionSuccess = ((GMAC_STATUS_SUCCESS == Gmac_Ip_Init(CtrlIdx, IpwCtrlCfg->Eth_43_GMAC_Ipw_pGmacCtrlConfig))? ((Std_ReturnType)E_OK) : ((Std_ReturnType)E_NOT_OK));
 
     if ((Std_ReturnType)E_OK == FunctionSuccess)
@@ -1101,25 +1066,21 @@ BufReq_ReturnType Eth_43_GMAC_Ipw_SendMultiBufferFrame(uint8 CtrlIdx,
     {
         case GMAC_STATUS_SUCCESS:
         {
-            MultiBufferFrameSent = TRUE;
             bufReqStatus = BUFREQ_OK;
             break;
         }
         case GMAC_STATUS_TX_BUFF_BUSY:
         {
-            MultiBufferFrameSent = FALSE;
             bufReqStatus = BUFREQ_E_BUSY;
             break;
         }
         case GMAC_STATUS_TX_BUFF_OVERFLOW:
         {
-            MultiBufferFrameSent = FALSE;
             bufReqStatus = BUFREQ_E_OVFL;
             break;
         }
         default:
         {
-            MultiBufferFrameSent = FALSE;
             bufReqStatus = BUFREQ_E_NOT_OK;
             break;
         }
@@ -1196,7 +1157,6 @@ Std_ReturnType Eth_43_GMAC_Ipw_Transmit ( \
 #else
     Status = Gmac_Ip_SendFrame(CtrlIdx, FifoIdx, &TxFrameBuffer, &TxOptions);
 #endif
-    (void) Eth_43_GMAC_pLastTransmissionRequestQueueTail;
 
     return ((GMAC_STATUS_SUCCESS == Status)? ((Std_ReturnType)E_OK) : ((Std_ReturnType)E_NOT_OK));
 }
@@ -1427,9 +1387,6 @@ void Eth_43_GMAC_Ipw_ReportTransmission(
                                 const uint8 FifoIdx \
                            )
 {
-#if (STD_ON == ETH_43_GMAC_SEND_MULTI_BUFFER_FRAME_API)
-    const Eth_43_GMAC_axTxBufferIdxMapType *IterMultiBufferFrame;
-#endif
     Eth_43_GMAC_axTxBufferIdxMapType *Iter;
     Eth_BufIdxType BufIdx;
     Std_ReturnType TxResult;
@@ -1446,25 +1403,16 @@ void Eth_43_GMAC_Ipw_ReportTransmission(
     {
         /*Get the pointer to the first frame*/
         Iter = Eth_43_GMAC_axTransmissionRequests[CtrlIdx][FifoIdx].pQueueHead;
-#if (STD_ON == ETH_43_GMAC_SEND_MULTI_BUFFER_FRAME_API)
-        IterMultiBufferFrame = Eth_43_GMAC_axTransmissionRequests[CtrlIdx][FifoIdx].pQueueHead;
-#endif
 
         /* Check all buffers previously queued for transmission */
         while ((Iter != NULL_PTR))
         {
-#if (STD_ON == ETH_43_GMAC_SEND_MULTI_BUFFER_FRAME_API)
-            if (IterMultiBufferFrame == Eth_43_GMAC_axTransmissionRequests[CtrlIdx][FifoIdx].pQueueHead)
-            {
-#endif
-                /*Get the current frame data buffer to double check that the current data buffer in queue is the
-                  same as the hardware buffer descriptor indicates*/
-                TxFrameBuffer.Data   = Iter->pu8BufferData;
-                /* Checks if the transmission of a Buffer is completed and release resources in this case.*/
-                GmacStatus = Gmac_Ip_GetTransmitStatus(CtrlIdx, FifoIdx, &TxFrameBuffer, &Eth_43_GMAC_Ipw_axTxFrameInfo[CtrlIdx][FifoIdx]);
-#if (STD_ON == ETH_43_GMAC_SEND_MULTI_BUFFER_FRAME_API)
-            }
-#endif
+            /*Get the current frame data buffer to double check that the current data buffer in queue is the
+              same as the hardware buffer descriptor indicates*/
+            TxFrameBuffer.Data   = Iter->pu8BufferData;
+            /* Checks if the transmission of a Buffer is completed and release resources in this case.*/
+            GmacStatus = Gmac_Ip_GetTransmitStatus(CtrlIdx, FifoIdx, &TxFrameBuffer, &Eth_43_GMAC_Ipw_axTxFrameInfo[CtrlIdx][FifoIdx]);
+
             if (GMAC_STATUS_SUCCESS == GmacStatus)
             {
                 /*If the frame was successfully transmitted call the TxConfirmation in case this option is enabled for it*/
@@ -1481,12 +1429,6 @@ void Eth_43_GMAC_Ipw_ReportTransmission(
                 Iter->pu8BufferData = NULL_PTR;
                 Eth_43_GMAC_axTransmissionRequests[CtrlIdx][FifoIdx].pQueueHead = Iter->pNextBuffer;
                 Iter = Iter->pNextBuffer;
-#if (STD_ON == ETH_43_GMAC_SEND_MULTI_BUFFER_FRAME_API)
-                if (!MultiBufferFrameSent)
-                {
-                    IterMultiBufferFrame = Eth_43_GMAC_axTransmissionRequests[CtrlIdx][FifoIdx].pQueueHead;
-                }
-#endif
             }
             /*In case of returning GMAC_STATUS_BUSY, the hardware buffer descriptor is still in use, therefore the transmission is not completely done*/
             else
@@ -1494,9 +1436,6 @@ void Eth_43_GMAC_Ipw_ReportTransmission(
                 break;
             }
         }
-#if (STD_ON == ETH_43_GMAC_SEND_MULTI_BUFFER_FRAME_API)
-        MultiBufferFrameSent = FALSE;
-#endif
     }
 }
 
@@ -1521,7 +1460,7 @@ Std_ReturnType Eth_43_GMAC_Ipw_StartTas(uint8 CtrlIndex)
 
     Status = Gmac_Ip_EnableTimeGateScheduling(CtrlIndex, TRUE);
 
-    if (GMAC_STATUS_SUCCESS != Status)
+    if(GMAC_STATUS_SUCCESS != Status)
     {
         StdStatus = E_NOT_OK;
     }
@@ -1549,7 +1488,7 @@ Std_ReturnType Eth_43_GMAC_Ipw_StopTas(uint8 CtrlIndex)
 
     Status = Gmac_Ip_EnableTimeGateScheduling(CtrlIndex, FALSE);
 
-    if (GMAC_STATUS_SUCCESS != Status)
+    if(GMAC_STATUS_SUCCESS != Status)
     {
         StdStatus = E_NOT_OK;
     }

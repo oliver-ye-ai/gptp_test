@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -51,7 +51,7 @@ extern "C" {
 #define GMAC_IP_AR_RELEASE_MAJOR_VERSION       4
 #define GMAC_IP_AR_RELEASE_MINOR_VERSION       7
 #define GMAC_IP_AR_RELEASE_REVISION_VERSION    0
-#define GMAC_IP_SW_MAJOR_VERSION               5
+#define GMAC_IP_SW_MAJOR_VERSION               4
 #define GMAC_IP_SW_MINOR_VERSION               0
 #define GMAC_IP_SW_PATCH_VERSION               0
 
@@ -64,14 +64,12 @@ extern "C" {
 #endif
 #if (( GMAC_IP_AR_RELEASE_MAJOR_VERSION    != GMAC_IP_TYPES_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_AR_RELEASE_MINOR_VERSION    != GMAC_IP_TYPES_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_AR_RELEASE_REVISION_VERSION != GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_AR_RELEASE_REVISION_VERSION != GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip.h and Gmac_Ip_Types.h are different"
 #endif
 #if (( GMAC_IP_SW_MAJOR_VERSION != GMAC_IP_TYPES_SW_MAJOR_VERSION) || \
      ( GMAC_IP_SW_MINOR_VERSION != GMAC_IP_TYPES_SW_MINOR_VERSION) || \
-     ( GMAC_IP_SW_PATCH_VERSION != GMAC_IP_TYPES_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_SW_PATCH_VERSION != GMAC_IP_TYPES_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip.h and Gmac_Ip_Types.h are different"
 #endif
 
@@ -81,14 +79,12 @@ extern "C" {
 #endif
 #if (( GMAC_IP_AR_RELEASE_MAJOR_VERSION    != GMAC_IP_CFG_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_AR_RELEASE_MINOR_VERSION    != GMAC_IP_CFG_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_AR_RELEASE_REVISION_VERSION != GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_AR_RELEASE_REVISION_VERSION != GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip.h and Gmac_Ip_Cfg.h are different"
 #endif
 #if (( GMAC_IP_SW_MAJOR_VERSION != GMAC_IP_CFG_SW_MAJOR_VERSION) || \
      ( GMAC_IP_SW_MINOR_VERSION != GMAC_IP_CFG_SW_MINOR_VERSION) || \
-     ( GMAC_IP_SW_PATCH_VERSION != GMAC_IP_CFG_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_SW_PATCH_VERSION != GMAC_IP_CFG_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip.h and Gmac_Ip_Cfg.h are different"
 #endif
 
@@ -184,8 +180,8 @@ void Gmac_Ip_EnableController(uint8 Instance);
  *
  * @param[in] instance   Instance number
  *
- * @retval GMAC_STATUS_SUCCESS The controller was successfully disabled.
- * @retval GMAC_STATUS_TIMEOUT The underlying MTL queues could not be flushed.
+ * @retval GMAC_STATUS_SUCCESS Tthe controller was successfully disabled.
+ * @retval GMAC_STATUS_TIMEOUT Tthe underlying MTL queues could not be flushed.
  */
 Gmac_Ip_StatusType Gmac_Ip_DisableController(uint8 Instance);
 
@@ -906,56 +902,6 @@ void Gmac_Ip_EnableTxStoreAndForward(uint8 Instance, uint8 Ring);
 void Gmac_Ip_SetTxThreshold(uint8 Instance,
                             uint8 Ring,
                             Gmac_Ip_TxThresholdType ThresholdValue);
-
-#if (STD_ON == GMAC_IP_PPS_OUTPUT_SUPPORT)
-/*!
- * @brief Initialize PPS outputs signal.
- *
- * @param[in] Instance            Instance number
- * @param[in] ModuleClk           The clock drives the PPS signal generation
- * @param[in] PPSOutputsNum       The number of PPS outputs
- * @param[in] PPSOutputConfig     The configuration of PPS outputs
- */
-void Gmac_Ip_PPSOutputSignalInit(uint8 Instance, uint32 ModuleClk, uint8 PPSOutputsNum, const Gmac_Ip_FlexiblePPSOutput PPSOutputConfig[]);
-
-/*!
- * @brief Enable/disable PPS outputs generation
- *
- * @param[in] Instance       Instance number
- * @param[in] SignalMode     PPS Target Time
- */
-void Gmac_Ip_SetPpsSignalMode(uint8 Instance, boolean SignalMode);
-
-/*!
- * @brief Perform generating pulse(s) on Pulse Per Second.
- *
- * @param[in] Instance       Instance number
- * @param[in] PPSOutputIdx   PPS Output Index
- * @param[in] PPSTargetTime  PPS Target Time
- * @param[in] PPSOutputCmd   PPS Output Control Command
- */
-Gmac_Ip_StatusType Gmac_Ip_GeneratePulsePerSecondOutput(uint8 Instance,
-                                                        uint8 PPSOutputIdx,
-                                                        Gmac_Ip_PPSTargetTime * PPSTargetTime,
-                                                        Gmac_Ip_PPSOutputCmd PPSOutputCmd);
-#endif
-
-#if (STD_ON == GMAC_IP_LPI_ENABLE)
-/*!
- * @brief Entering LPI mode.
- *
- * @param[in] Instance       Instance number
- * @param[in] ModuleClk      The CSR clock
- */
-void Gmac_Ip_EnteringTxLpi(uint8 Instance, uint32 ModuleClk);
-
-/*!
- * @brief Exiting LPI mode.
- *
- * @param[in] Instance       Instance number
- */
-void Gmac_Ip_ExitingTxLpi(uint8 Instance);
-#endif /* (STD_ON == GMAC_IP_LPI_ENABLE) */
 
 #define ETH_43_GMAC_STOP_SEC_CODE
 #include "Eth_43_GMAC_MemMap.h"

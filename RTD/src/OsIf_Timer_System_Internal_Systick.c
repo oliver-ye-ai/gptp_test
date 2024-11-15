@@ -7,18 +7,18 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
-*   bound by the applicable license terms, then you may not retain, install,
-*   activate or otherwise use the software.
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
 ==================================================================================================*/
 
 /**
@@ -41,11 +41,7 @@ extern "C"{
 #include "OsIf_DeviceRegisters.h"
 #include "OsIf_Cfg.h"
 #include "OsIf_Timer_System_Internal_Systick.h"
-#ifdef OSIF_USE_SYSTICK
-#if ((OSIF_USE_SYSTICK == STD_ON) && defined(USING_OS_FREERTOS))
-#include "FreeRTOS.h"
-#endif /* #if ((OSIF_USE_SYSTICK == STD_ON) && defined(USING_OS_FREERTOS)) */
-#endif /* #ifdef OSIF_USE_SYSTICK */
+
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -53,7 +49,7 @@ extern "C"{
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MAJOR_VERSION_C     4
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_MINOR_VERSION_C     7
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_AR_RELEASE_REVISION_VERSION_C  0
-#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MAJOR_VERSION_C             5
+#define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MAJOR_VERSION_C             4
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_MINOR_VERSION_C             0
 #define OSIF_TIMER_SYSTEM_INTERNAL_SYSTICK_SW_PATCH_VERSION_C             0
 
@@ -126,11 +122,7 @@ extern "C"{
 #define SYSTICK_GET_COUNTER() ((S32_SysTick->CVR) & S32_SysTick_CVR_CURRENT_MASK)
 #define SYSTICK_DELTA_OUTER(high, low, max) ((max) - ((high) - (low)))
 #define SYSTICK_DELTA_INNER(high, low) ((high) - (low))
-#if defined(USING_OS_FREERTOS)
-#define SYSTICK_MAX ((configCPU_CLOCK_HZ / configTICK_RATE_HZ) - 1U)
-#else
 #define SYSTICK_MAX (0xFFFFFFU)
-#endif
 
 #define SYSTICK_OVERFLOWED(curr, ref) (curr > ref)
 /*==================================================================================================
@@ -202,24 +194,16 @@ uint32 OsIf_Timer_System_Internal_GetElapsed(uint32 * const CurrentRef)
 {
     uint32 CurrentVal = SYSTICK_GET_COUNTER();
     uint32 dif = 0U;
-    /* RVR value shall be always greater than the current counter */
-    if(S32_SysTick->RVR >= CurrentVal)
-    {        
-        if (SYSTICK_OVERFLOWED((CurrentVal), (*CurrentRef)))
-        {
-            /* Overflow occurred */
-            dif = SYSTICK_DELTA_OUTER(CurrentVal, *CurrentRef, S32_SysTick->RVR);            
-        }
-        else
-        {
-            /* Overflow did not occur */
-            dif = SYSTICK_DELTA_INNER(*CurrentRef, CurrentVal);
-        }
+
+    if (SYSTICK_OVERFLOWED((CurrentVal), (*CurrentRef)))
+    {
+        /* overflow occurred */
+        dif = SYSTICK_DELTA_OUTER(CurrentVal, *CurrentRef, SYSTICK_MAX);
     }
-    /* This case never happen but need to avoid misra when dif variable is not used */
     else
     {
-        (void)dif;
+        /* overflow did not occur */
+        dif = SYSTICK_DELTA_INNER(*CurrentRef, CurrentVal);
     }
     *CurrentRef = CurrentVal;
 

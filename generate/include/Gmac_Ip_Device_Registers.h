@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +52,7 @@ extern "C"{
 #define GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MAJOR_VERSION     4
 #define GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION     7
 #define GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION  0
-#define GMAC_IP_DEVICE_REGISTERS_SW_MAJOR_VERSION             5
+#define GMAC_IP_DEVICE_REGISTERS_SW_MAJOR_VERSION             4
 #define GMAC_IP_DEVICE_REGISTERS_SW_MINOR_VERSION             0
 #define GMAC_IP_DEVICE_REGISTERS_SW_PATCH_VERSION             0
 
@@ -64,23 +64,20 @@ extern "C"{
         #error "Gmac_Ip_Device_Registers.h and Emac_Ip_Wrapper.h have different vendor ids"
     #endif
     #if (( GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MAJOR_VERSION    != EMAC_IP_WRAPPER_AR_RELEASE_MAJOR_VERSION) || \
-         ( GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION    != EMAC_IP_WRAPPER_AR_RELEASE_MINOR_VERSION) || \
-         ( GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION != EMAC_IP_WRAPPER_AR_RELEASE_REVISION_VERSION) \
-        )
+        ( GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION    != EMAC_IP_WRAPPER_AR_RELEASE_MINOR_VERSION) || \
+        ( GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION != EMAC_IP_WRAPPER_AR_RELEASE_REVISION_VERSION))
         #error "AUTOSAR Version Numbers of Gmac_Ip_Device_Registers.h and Emac_Ip_Wrapper.h are different"
     #endif
     #if (( GMAC_IP_DEVICE_REGISTERS_SW_MAJOR_VERSION != EMAC_IP_WRAPPER_SW_MAJOR_VERSION) || \
-         ( GMAC_IP_DEVICE_REGISTERS_SW_MINOR_VERSION != EMAC_IP_WRAPPER_SW_MINOR_VERSION) || \
-         ( GMAC_IP_DEVICE_REGISTERS_SW_PATCH_VERSION != EMAC_IP_WRAPPER_SW_PATCH_VERSION)    \
-        )
+        ( GMAC_IP_DEVICE_REGISTERS_SW_MINOR_VERSION != EMAC_IP_WRAPPER_SW_MINOR_VERSION) || \
+        ( GMAC_IP_DEVICE_REGISTERS_SW_PATCH_VERSION != EMAC_IP_WRAPPER_SW_PATCH_VERSION))
         #error "Software Version Numbers of Gmac_Ip_Device_Registers.h and Emac_Ip_Wrapper.h are different"
     #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Checks against Mcal.h */
     #if ((GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MAJOR_VERSION != MCAL_AR_RELEASE_MAJOR_VERSION) || \
-         (GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION != MCAL_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION != MCAL_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Gmac_Ip_Device_Registers.h and Mcal.h are different"
     #endif
 #endif
@@ -160,7 +157,7 @@ typedef struct
   uint8 RESERVED_1[4];
   volatile uint32 MTL_TXQ_ETS_CONTROL;        /* Not available for Q0 */
   volatile const uint32 MTL_TXQ_ETS_STATUS;
-  volatile uint32 MTL_TXQ_QUANTUM_WEIGHT;
+  volatile uint32 MTL_TXQ_QUANTUM_WEIGHT;     
   volatile uint32 MTL_TXQ_SENDSLOPECREDIT;    /* Not available for Q0 */
   volatile uint32 MTL_TXQ_HICREDIT;           /* Not available for Q0 */
   volatile uint32 MTL_TXQ_LOCREDIT;           /* Not available for Q0 */

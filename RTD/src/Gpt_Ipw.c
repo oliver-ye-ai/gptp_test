@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -50,7 +50,7 @@ extern "C"{
 #define GPT_IPW_AR_RELEASE_MAJOR_VERSION_C     4
 #define GPT_IPW_AR_RELEASE_MINOR_VERSION_C     7
 #define GPT_IPW_AR_RELEASE_REVISION_VERSION_C  0
-#define GPT_IPW_SW_MAJOR_VERSION_C             5
+#define GPT_IPW_SW_MAJOR_VERSION_C             4
 #define GPT_IPW_SW_MINOR_VERSION_C             0
 #define GPT_IPW_SW_PATCH_VERSION_C             0
 
@@ -146,7 +146,7 @@ static Gpt_ValueType Gpt_Ipw_EmiosGetTimeElapsed(const Gpt_Ipw_HwChannelConfigTy
     /* Read the current target time before to read the elapsed time. */
     pReturnHwChannelInfo->uTargetTime = Emios_Gpt_Ip_GetPeriodValue(pHwChannelConfig->instance, pHwChannelConfig->channel);
 
-    Gpt_ValueType returnValue = Emios_Gpt_Ip_GetCounterValue(pHwChannelConfig->instance, pHwChannelConfig->channel);
+    uint32 returnValue = Emios_Gpt_Ip_GetCounterValue(pHwChannelConfig->instance, pHwChannelConfig->channel);
 
     /* Check for interrupt status flag */
     boolean interruptStatusFlag = Emios_Gpt_Ip_GetInterruptStatusFlag(pHwChannelConfig->instance, pHwChannelConfig->channel);
@@ -160,7 +160,7 @@ static Gpt_ValueType Gpt_Ipw_EmiosGetTimeElapsed(const Gpt_Ipw_HwChannelConfigTy
         /* Channel counter was not rollover */
         pReturnHwChannelInfo->bChannelRollover = FALSE;
     }
-    return returnValue;
+    return (Gpt_ValueType)returnValue;
 }
 #endif
 
@@ -189,12 +189,11 @@ static Gpt_ValueType Gpt_Ipw_RtcGetTimeElapsed(const Gpt_Ipw_HwChannelConfigType
 
     if (tempValue > pReturnHwChannelInfo->uTargetTime)
     {
-        returnValue = pReturnHwChannelInfo->uTargetTime;
+        returnValue = (Gpt_ValueType)pReturnHwChannelInfo->uTargetTime;
     }
     else
     {
-        returnValue = pReturnHwChannelInfo->uTargetTime;
-        returnValue -= tempValue;
+        returnValue = (Gpt_ValueType)pReturnHwChannelInfo->uTargetTime - tempValue;
     }
 
     /* Check interrupt status flag */
@@ -241,12 +240,11 @@ static Gpt_ValueType Gpt_Ipw_StmGetTimeElapsed(const Gpt_Ipw_HwChannelConfigType
 
     if (tempValue > pReturnHwChannelInfo->uTargetTime)
     {
-        returnValue = (pReturnHwChannelInfo->uTargetTime);
+        returnValue = (Gpt_ValueType)(pReturnHwChannelInfo->uTargetTime);
     }
     else
     {
-        returnValue = pReturnHwChannelInfo->uTargetTime;
-        returnValue -= tempValue;
+        returnValue = (Gpt_ValueType)(pReturnHwChannelInfo->uTargetTime - tempValue);
     }
 
     /* Check interrupt status flag */
@@ -271,10 +269,9 @@ static Gpt_ValueType Gpt_Ipw_PitGetTimeElapsed(const Gpt_Ipw_HwChannelConfigType
 #if(PIT_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON)
     pReturnHwChannelInfo->uTargetTime = Pit_Ip_u32OldTargetValue;
 #endif
-    pReturnHwChannelInfo->uTargetTime = Pit_Ip_GetLoadValue(pHwChannelConfig->instance, pHwChannelConfig->channel);
-    pReturnHwChannelInfo->uTargetTime += 1U;
+    pReturnHwChannelInfo->uTargetTime = Pit_Ip_GetLoadValue(pHwChannelConfig->instance, pHwChannelConfig->channel) + 1U;
 
-    Gpt_ValueType returnValue = ((pReturnHwChannelInfo->uTargetTime) - Pit_Ip_GetCurrentTimer(pHwChannelConfig->instance, pHwChannelConfig->channel));
+    Gpt_ValueType returnValue = (Gpt_ValueType)((pReturnHwChannelInfo->uTargetTime) - Pit_Ip_GetCurrentTimer(pHwChannelConfig->instance, pHwChannelConfig->channel));
 
     /* check if channel event has occurred */
     boolean HasChEvOccurred = Pit_Ip_GetInterruptStatusFlag(pHwChannelConfig->instance, pHwChannelConfig->channel);
@@ -427,7 +424,7 @@ Std_ReturnType Gpt_Ipw_StartTimer(const Gpt_Ipw_HwChannelConfigType * pHwChannel
         case(GPT_PIT_MODULE):
             {
                 returnValue = (Std_ReturnType)Pit_Ip_StartChannel(pHwChannelConfig->instance,
-                                                                  pHwChannelConfig->channel, (uint32)uValue);
+                                                                  pHwChannelConfig->channel, uValue);
             }
         break;
 #endif
@@ -436,7 +433,7 @@ Std_ReturnType Gpt_Ipw_StartTimer(const Gpt_Ipw_HwChannelConfigType * pHwChannel
             {
                 Stm_Ip_StartCounting(pHwChannelConfig->instance,
                                      pHwChannelConfig->channel,
-                                     (uint32)uValue);
+                                     uValue);
                 returnValue = (Std_ReturnType)E_OK;
             }
         break;
@@ -455,7 +452,7 @@ Std_ReturnType Gpt_Ipw_StartTimer(const Gpt_Ipw_HwChannelConfigType * pHwChannel
         case(GPT_RTC_MODULE):
             {
                 Rtc_Ip_StartTimer(pHwChannelConfig->instance,
-                                  (uint32)uValue);
+                                  uValue);
                 returnValue = (Std_ReturnType)E_OK;
             }
         break;
@@ -484,7 +481,7 @@ Std_ReturnType Gpt_Ipw_StartTimer(const Gpt_Ipw_HwChannelConfigType * pHwChannel
 Gpt_ValueType Gpt_Ipw_GetTimeElapsed(const Gpt_Ipw_HwChannelConfigType * pHwChannelConfig,
                                                       Gpt_HwChannelInfoType * pReturnHwChannelInfo)
 {
-    Gpt_ValueType returnValue = 0U;
+    uint32 returnValue = 0U;
 
 switch(pHwChannelConfig->instanceType)
 {
@@ -520,7 +517,7 @@ switch(pHwChannelConfig->instanceType)
          /*This switch branch is empty because it shall not be executed for normal behaviour*/
     break;
 }
-    return returnValue;
+    return((Gpt_ValueType)returnValue);
 }
 
 
@@ -757,7 +754,7 @@ Std_ReturnType Gpt_Ipw_ChangeNextTimeoutValue(const Gpt_Ipw_HwChannelConfigType 
 #if (PIT_IP_USED == STD_ON)
         case (GPT_PIT_MODULE):
         {
-            Pit_Ip_ChangeNextTimeoutValue(pHwChannelConfig->instance, pHwChannelConfig->channel, (uint32)value);
+            Pit_Ip_ChangeNextTimeoutValue(pHwChannelConfig->instance, pHwChannelConfig->channel, value);
             returnValue =(Std_ReturnType)E_OK;
         }
         break;
@@ -765,7 +762,7 @@ Std_ReturnType Gpt_Ipw_ChangeNextTimeoutValue(const Gpt_Ipw_HwChannelConfigType 
 #if (STM_IP_USED == STD_ON)
         case (GPT_STM_MODULE):
         {
-            Stm_Ip_ChangeNextTimeoutValue(pHwChannelConfig->instance, pHwChannelConfig->channel, (uint32)value);
+            Stm_Ip_ChangeNextTimeoutValue(pHwChannelConfig->instance, pHwChannelConfig->channel, value);
             returnValue =(Std_ReturnType)E_OK;
         }
         break;
@@ -773,7 +770,7 @@ Std_ReturnType Gpt_Ipw_ChangeNextTimeoutValue(const Gpt_Ipw_HwChannelConfigType 
 #if (EMIOS_GPT_IP_USED == STD_ON)
         case(GPT_EMIOS_MODULE):
         {
-           Emios_Gpt_Ip_ChangeNextTimeoutValue(pHwChannelConfig->instance, pHwChannelConfig->channel, (uint32)value);
+           Emios_Gpt_Ip_ChangeNextTimeoutValue(pHwChannelConfig->instance, pHwChannelConfig->channel, (uint16)value);
            returnValue =(Std_ReturnType)E_OK;
         }
         break;
@@ -871,7 +868,6 @@ void Gpt_Ipw_SetClockModeChannel(const Gpt_Ipw_HwChannelConfigType * pHwChannelC
 #endif
         default:
             /*This switch branch is empty because it shall not be executed for normal behaviour*/
-            (void)clkMode;
         break;
     }
 }

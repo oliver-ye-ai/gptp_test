@@ -7,8 +7,8 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   (c) Copyright 2020 - 2024 NXP
 *   All Rights Reserved.
@@ -42,7 +42,7 @@ extern "C"{
 #include "Mcal.h"
 #include "OsIf.h"
 #include "Det_stub.h"
-#include "Det_LinkedList.h"
+
 /*==================================================================================================
 *                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
 ==================================================================================================*/
@@ -51,68 +51,8 @@ extern "C"{
 /*==================================================================================================
 *                                       LOCAL MACROS
 ==================================================================================================*/
-#define DET_STUB_VENDOR_ID_C                     43
-#define DET_STUB_AR_RELEASE_MAJOR_VERSION_C      4
-#define DET_STUB_AR_RELEASE_MINOR_VERSION_C      7
-#define DET_STUB_AR_RELEASE_REVISION_VERSION_C   0
-#define DET_STUB_SW_MAJOR_VERSION_C              5
-#define DET_STUB_SW_MINOR_VERSION_C              0
-#define DET_STUB_SW_PATCH_VERSION_C              0
-/*==================================================================================================
-*                                      FILE VERSION CHECKS
-==================================================================================================*/
-/* Check if Det_stub.c and DET header file are of the same vendor */
-#if (DET_STUB_VENDOR_ID_C != DET_LINKEDLIST_VENDOR_ID)
-    #error "Det_stub.c and Det_LinkedList.h have different vendor ids"
-#endif
-
-/* Check if Det_stub.c and DET header file are of the same Autosar version */
-#if ((DET_STUB_AR_RELEASE_MAJOR_VERSION_C != DET_LINKEDLIST_AR_RELEASE_MAJOR_VERSION) || \
-     (DET_STUB_AR_RELEASE_MINOR_VERSION_C != DET_LINKEDLIST_AR_RELEASE_MINOR_VERSION) || \
-     (DET_STUB_AR_RELEASE_REVISION_VERSION_C != DET_LINKEDLIST_AR_RELEASE_REVISION_VERSION))
-  #error "AutoSar Version Numbers of Det_stub.c and Det_LinkedList.h are different"
-#endif
-
-/* Check if Det_stub.c and DET header file are of the same Software version */
-#if ((DET_STUB_SW_MAJOR_VERSION_C != DET_LINKEDLIST_SW_MAJOR_VERSION) || \
-     (DET_STUB_SW_MINOR_VERSION_C != DET_LINKEDLIST_SW_MINOR_VERSION) || \
-     (DET_STUB_SW_PATCH_VERSION_C != DET_LINKEDLIST_SW_PATCH_VERSION))
-    #error "Software Version Numbers of Det_stub.c and Det_LinkedList.h are different"
-#endif
-
-/* Check if Det_stub.c and Det_stub header file are of the same vendor */
-#if (DET_STUB_VENDOR_ID_C != DET_STUB_VENDOR_ID)
-    #error "Det_stub.c and Det_stub.h have different vendor ids"
-#endif
-
-/* Check if Det_stub.c and Det_stub header file are of the same Autosar version */
-#if ((DET_STUB_AR_RELEASE_MAJOR_VERSION_C != DET_STUB_AR_RELEASE_MAJOR_VERSION) || \
-     (DET_STUB_AR_RELEASE_MINOR_VERSION_C != DET_STUB_AR_RELEASE_MINOR_VERSION) || \
-     (DET_STUB_AR_RELEASE_REVISION_VERSION_C != DET_STUB_AR_RELEASE_REVISION_VERSION))
-  #error "AutoSar Version Numbers of Det_stub.c and Det_stub.h are different"
-#endif
-
-/* Check if Det_stub.c and Det_stub header file are of the same Software version */
-#if ((DET_STUB_SW_MAJOR_VERSION_C != DET_STUB_SW_MAJOR_VERSION) || \
-     (DET_STUB_SW_MINOR_VERSION_C != DET_STUB_SW_MINOR_VERSION) || \
-     (DET_STUB_SW_PATCH_VERSION_C != DET_STUB_SW_PATCH_VERSION))
-    #error "Software Version Numbers of Det_stub.c and Det_stub.h are different"
-#endif
 
 
-#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if the files Det_stub.c and Mcal.h are of the same version */
-    #if ((DET_STUB_AR_RELEASE_MAJOR_VERSION_C != MCAL_AR_RELEASE_MAJOR_VERSION) || \
-         (DET_STUB_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION)    \
-        )
-        #error "AutoSar Version Numbers of Det_stub.c and Mcal.h are different"
-    #endif
-    /* Checks against OsIf.h */
-    #if ((DET_STUB_AR_RELEASE_MAJOR_VERSION_C != OSIF_AR_RELEASE_MAJOR_VERSION) || \
-         (DET_STUB_AR_RELEASE_MINOR_VERSION_C != OSIF_AR_RELEASE_MINOR_VERSION))
-        #error "AUTOSAR Version Numbers of Det_stub.c and OsIf.h are different"
-    #endif
-#endif
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
 ==================================================================================================*/
@@ -135,6 +75,7 @@ extern "C"{
 /*==================================================================================================
 *                                   LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
+
 
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
@@ -164,28 +105,20 @@ boolean Det_TestLastReportError(uint16 ModuleId,
                                 uint8 ApiId,
                                 uint8 ErrorId)
 {
-    boolean RetVal;
+    boolean result = FALSE;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    OsIf_SuspendAllInterrupts();
-    if (DET_UNINIT == Det_ModuleState[u32CoreId])
-    {
-        /* Not found the node in linked list. because module is uninit state */
-        Det_Init();
-        RetVal = FALSE;
-    }
-    else
-    {
-        RetVal = Det_DelAllNodesSameId(ModuleId,
-                                       InstanceId,
-                                       ApiId,
-                                       ErrorId,
-                                       &Det_aErrorState[u32CoreId]);
-    }
-    OsIf_ResumeAllInterrupts();
+    result = (Det_ModuleId[u32CoreId] == ModuleId) && (Det_InstanceId[u32CoreId] == InstanceId) &&
+                     (Det_ApiId[u32CoreId] == ApiId) && (Det_ErrorId[u32CoreId] == ErrorId);
 
-    return RetVal;
+    Det_ModuleId[u32CoreId] = 0;
+    Det_InstanceId[u32CoreId] = 0;
+    Det_ApiId[u32CoreId] = 0;
+    Det_ErrorId[u32CoreId] = 0;
+
+    return result;
 }
+
 
 /*================================================================================================*/
 /**
@@ -205,35 +138,24 @@ boolean Det_TestLastReportRuntimeError(uint16 ModuleId,
                                        uint8 ApiId,
                                        uint8 ErrorId)
 {
-    boolean RetVal;
+    boolean result = FALSE;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    OsIf_SuspendAllInterrupts();
-    if (DET_UNINIT == Det_ModuleState[u32CoreId])
-    {
-        /* Not found the node in linked list. because module is uninit state */
-        Det_Init();
-        RetVal = FALSE;
-    }
-    else
-    {
-        RetVal = Det_DelAllNodesSameId(ModuleId,
-                                       InstanceId,
-                                       ApiId,
-                                       ErrorId,
-                                       &Det_aRuntimeErrorState[u32CoreId]);
-    }
-    OsIf_ResumeAllInterrupts();
+    result = (Det_RuntimeModuleId[u32CoreId] == ModuleId) && (Det_RuntimeInstanceId[u32CoreId] == InstanceId) &&
+                     (Det_RuntimeApiId[u32CoreId] == ApiId) && (Det_RuntimeErrorId[u32CoreId] == ErrorId);
 
-    return RetVal;
+    Det_RuntimeModuleId[u32CoreId] = 0;
+    Det_RuntimeInstanceId[u32CoreId] = 0;
+    Det_RuntimeApiId[u32CoreId] = 0;
+    Det_RuntimeErrorId[u32CoreId] = 0;
+
+    return result;
 }
 
 /*================================================================================================*/
 /**
 * @brief            Tests if an expected error has been reported to DET
-* @details          Tests if an expected error has been reported to DET,
-*                   then Initialzie Det Module
-*
+* @details          Tests if an expected error has been reported to DET
 *
 * @param[in]        ModuleId - ID of the module reporting the error
 * @param[in]        InstanceId - ID of the Instance reporting the error
@@ -248,125 +170,80 @@ boolean Det_TestLastReportTransientFault(uint16 ModuleId,
                                          uint8 ApiId,
                                          uint8 FaultId)
 {
-    boolean RetVal;
+    boolean result = FALSE;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    OsIf_SuspendAllInterrupts();
-    if (DET_UNINIT == Det_ModuleState[u32CoreId])
-    {
-        /* Not found the node in linked list. because module is uninit state */
-        Det_Init();
-        RetVal = FALSE;
-    }
-    else
-    {
-        RetVal = Det_DelAllNodesSameId(ModuleId,
-                                       InstanceId,
-                                       ApiId,
-                                       FaultId,
-                                       &Det_aTransientErrorState[u32CoreId]);
-    }
-    OsIf_ResumeAllInterrupts();
+    result = (Det_TransientModuleId[u32CoreId] == ModuleId) && (Det_TransientInstanceId[u32CoreId] == InstanceId) &&
+                     (Det_TransientApiId[u32CoreId] == ApiId) && (Det_TransientFaultId[u32CoreId] == FaultId);
 
-    return RetVal;
+    Det_TransientModuleId[u32CoreId] = 0;
+    Det_TransientInstanceId[u32CoreId] = 0;
+    Det_TransientApiId[u32CoreId] = 0;
+    Det_TransientFaultId[u32CoreId] = 0;
+
+    return result;
 }
-
 /*================================================================================================*/
 /**
 * @brief            Tests if an error has been reported to DET
-* @details          Tests if an error has been reported to DET, then Initialzie Det Module
+* @details          Tests if an error has been reported to DET
 *
 * @return           boolean - true in case of NO error has been reported to DET
 *
 */
-boolean Det_TestNoError(void)
-{
-    boolean result = TRUE;
+boolean Det_TestNoError(void) {
+    boolean result = FALSE;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    OsIf_SuspendAllInterrupts();
-    if (DET_UNINIT == Det_ModuleState[u32CoreId])
-    {
-        Det_Init();
-    }
-    else
-    {
-        if (Det_numEventErrors[u32CoreId] != 0)
-        {
-            result = FALSE;
-        }
-        Det_numEventErrors[u32CoreId] = 0U;
-        Det_FreeNodesInLinkedList(&Det_aErrorState[u32CoreId]);
-    }
-    OsIf_ResumeAllInterrupts();
+    result = Det_ModuleId[u32CoreId] || Det_InstanceId[u32CoreId] || Det_ApiId[u32CoreId] || Det_ErrorId[u32CoreId];
 
-    return result;
+    Det_ModuleId[u32CoreId] = 0;
+    Det_InstanceId[u32CoreId] = 0;
+    Det_ApiId[u32CoreId] = 0;
+    Det_ErrorId[u32CoreId] = 0;
+    return !result;
 }
 
 /*================================================================================================*/
 /**
 * @brief            Tests if an runtime error has been reported to DET
-* @details          Tests if an runtime error has been reported to DET,
-*                   then Initialzie Runtime Det Module
+* @details          Tests if an runtime error has been reported to DET
 *
 * @return           boolean - true in case of NO error has been reported to DET
 *
 */
-boolean Det_TestNoRuntimeError(void)
-{
-    boolean result = TRUE;
+boolean Det_TestNoRuntimeError(void) {
+    boolean result = FALSE;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    OsIf_SuspendAllInterrupts();
-    if (DET_UNINIT == Det_ModuleState[u32CoreId])
-    {
-        Det_Init();
-    }
-    else
-    {
-        if (Det_numRuntimeEventErrors[u32CoreId] != 0)
-        {
-            result = FALSE;
-        }
-        Det_numRuntimeEventErrors[u32CoreId] = 0U;
-        Det_FreeNodesInLinkedList(&Det_aRuntimeErrorState[u32CoreId]);
-    }
-    OsIf_ResumeAllInterrupts();
+    result = Det_RuntimeModuleId[u32CoreId] || Det_RuntimeInstanceId[u32CoreId] || Det_RuntimeApiId[u32CoreId] || Det_RuntimeErrorId[u32CoreId];
 
-    return result;
+    Det_RuntimeModuleId[u32CoreId] = 0;
+    Det_RuntimeInstanceId[u32CoreId] = 0;
+    Det_RuntimeApiId[u32CoreId] = 0;
+    Det_RuntimeErrorId[u32CoreId] = 0;
+    return !result;
 }
 
 /*================================================================================================*/
 /**
 * @brief            Tests if an transient error has been reported to DET
-* @details          Tests if an transient error has been reported to DET,
-*                   then Initialzie transient Det Module
+* @details          Tests if an transient error has been reported to DET
 *
 * @return           boolean - true in case of NO error has been reported to DET
 *
 */
-boolean Det_TestNoTransientFault(void)
-{
-    boolean result = TRUE;
+boolean Det_TestNoTransientFault(void) {
+    boolean result = FALSE;
     uint32 u32CoreId = (uint32)OsIf_GetCoreID();
 
-    OsIf_SuspendAllInterrupts();
-    if (DET_UNINIT == Det_ModuleState[u32CoreId])
-    {
-        Det_Init();
-    }
-    else
-    {
-        if (Det_numTransientEventErrors[u32CoreId] != 0)
-        {
-            result = FALSE;
-        }
-        Det_numTransientEventErrors[u32CoreId] = 0U;
-        Det_FreeNodesInLinkedList(&Det_aTransientErrorState[u32CoreId]);
-    }
-    OsIf_ResumeAllInterrupts();
+    result = Det_TransientModuleId[u32CoreId] || Det_TransientInstanceId[u32CoreId] || Det_TransientApiId[u32CoreId] || Det_TransientFaultId[u32CoreId];
 
-    return result;
+    Det_TransientModuleId[u32CoreId] = 0;
+    Det_TransientInstanceId[u32CoreId] = 0;
+    Det_TransientApiId[u32CoreId] = 0;
+    Det_TransientFaultId[u32CoreId] = 0;
+    return !result;
 }
 
 #define DET_STOP_SEC_CODE

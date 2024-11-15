@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -58,7 +58,7 @@ extern "C"{
 #define ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C       4
 #define ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C       7
 #define ETH_43_GMAC_AR_RELEASE_REVISION_VERSION_C    0
-#define ETH_43_GMAC_SW_MAJOR_VERSION_C               5
+#define ETH_43_GMAC_SW_MAJOR_VERSION_C               4
 #define ETH_43_GMAC_SW_MINOR_VERSION_C               0
 #define ETH_43_GMAC_SW_PATCH_VERSION_C               0
 
@@ -71,13 +71,12 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C    != ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C    != ETH_43_GMAC_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC.c and Eth_43_GMAC.h are different"
 #endif
 #if ((ETH_43_GMAC_SW_MAJOR_VERSION_C != ETH_43_GMAC_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_SW_MINOR_VERSION_C != ETH_43_GMAC_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_SW_PATCH_VERSION_C != ETH_43_GMAC_SW_PATCH_VERSION)    \
+     (ETH_43_GMAC_SW_PATCH_VERSION_C != ETH_43_GMAC_SW_PATCH_VERSION) \
     )
     #error "Software Version Numbers of Eth_43_GMAC.c and Eth_43_GMAC.h are different"
 #endif
@@ -88,13 +87,12 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C    != ETH_43_GMAC_INTERNAL_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C    != ETH_43_GMAC_INTERNAL_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_INTERNAL_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_INTERNAL_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC.c and Eth_43_GMAC_Internal.h are different"
 #endif
 #if ((ETH_43_GMAC_SW_MAJOR_VERSION_C != ETH_43_GMAC_INTERNAL_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_SW_MINOR_VERSION_C != ETH_43_GMAC_INTERNAL_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_SW_PATCH_VERSION_C != ETH_43_GMAC_INTERNAL_SW_PATCH_VERSION)    \
+     (ETH_43_GMAC_SW_PATCH_VERSION_C != ETH_43_GMAC_INTERNAL_SW_PATCH_VERSION) \
     )
     #error "Software Version Numbers of Eth_43_GMAC.c and Eth_43_GMAC_Internal.h are different"
 #endif
@@ -105,13 +103,12 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C    != ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C    != ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC.c and Eth_43_GMAC_Ipw.h are different"
 #endif
 #if ((ETH_43_GMAC_SW_MAJOR_VERSION_C != ETH_43_GMAC_IPW_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_SW_MINOR_VERSION_C != ETH_43_GMAC_IPW_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_SW_PATCH_VERSION_C != ETH_43_GMAC_IPW_SW_PATCH_VERSION)    \
+     (ETH_43_GMAC_SW_PATCH_VERSION_C != ETH_43_GMAC_IPW_SW_PATCH_VERSION) \
     )
     #error "Software Version Numbers of Eth_43_GMAC.c and Eth_43_GMAC_Ipw.h are different"
 #endif
@@ -119,30 +116,26 @@ extern "C"{
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Checks against EthIf.h */
     #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C != ETHIF_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != ETHIF_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != ETHIF_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC.c and EthIf.h are different"
     #endif
 
     /* Checks against Det.h */
     #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C != DET_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != DET_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != DET_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC.c and Det.h are different"
     #endif
 #if (STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
     /* Checks against Dem.h */
     #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C != DEM_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != DEM_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != DEM_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC.c and Dem.h are different"
     #endif
 #endif
 
     /* Checks against SchM_Eth.h */
     #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION_C != SCHM_ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != SCHM_ETH_43_GMAC_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION_C != SCHM_ETH_43_GMAC_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC.c and SchM_Eth_43_GMAC.h are different"
     #endif
 #endif
@@ -176,12 +169,11 @@ extern "C"{
 #endif
 
 
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    #define Eth_43_GMAC_GetUserID()        (OsIf_GetUserId())
+#if STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT
+    #define Eth_43_GMAC_GetCoreID()        (OsIf_GetCoreID())
 #else
-    #define Eth_43_GMAC_GetUserID()        (0U)
+    #define Eth_43_GMAC_GetCoreID()        (0U)
 #endif
-
 
 /*==================================================================================================
 *                                      LOCAL CONSTANTS
@@ -198,7 +190,7 @@ extern "C"{
 * @brief          Pointers to the configuration structures.
 * @details        Used to store the configuration pointers for later use.
 */
-static const Eth_43_GMAC_ConfigType *Eth_43_GMAC_apxInternalCfg[ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED];
+static const Eth_43_GMAC_ConfigType *Eth_43_GMAC_apxInternalCfg[ETH_43_GMAC_MAX_COREIDX_SUPPORTED];
 
 /**
 * @brief         Map between buffer indices and transmission-specific information.
@@ -218,7 +210,6 @@ Eth_43_GMAC_QueueInfo Eth_43_GMAC_axTransmissionRequests[ETH_43_GMAC_MAX_CTRLIDX
  *               in its state before the update.
 */
 Eth_43_GMAC_axTxBufferIdxMapType *Eth_43_GMAC_pLastTransmissionRequestQueueTail;
-
 /**
 * @brief         Mode of the ETH controllers
 * @details       Stores the last known mode of the ETH controller.
@@ -242,6 +233,23 @@ static Eth_StateType Eth_43_GMAC_axCtrlState[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED];
 /*==================================================================================================
                                        GLOBAL CONSTANTS
 ==================================================================================================*/
+#if (ETH_43_GMAC_PRECOMPILE_SUPPORT == STD_ON)
+
+#define ETH_43_GMAC_START_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Eth_43_GMAC_MemMap.h"
+
+
+#if STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT
+    extern const Eth_43_GMAC_ConfigType * const Eth_43_GMAC_apxPredefinedConfig[ETH_43_GMAC_MAX_COREIDX_SUPPORTED];
+#else
+    extern const Eth_43_GMAC_ConfigType Eth_43_GMAC_xPredefinedConfig;
+#endif
+
+
+#define ETH_43_GMAC_STOP_SEC_CONFIG_DATA_UNSPECIFIED
+#include "Eth_43_GMAC_MemMap.h"
+
+#endif /* #if (ETH_43_GMAC_PRECOMPILE_SUPPORT == STD_ON) */
 
 /*==================================================================================================
 *                                      GLOBAL VARIABLES
@@ -265,7 +273,7 @@ static void Eth_43_GMAC_Local_CheckDemStatus( \
 #endif
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
 static Std_ReturnType Eth_43_GMAC_Local_CheckEthHLDEntry( \
-                               uint32 PartitionId, \
+                               uint32 CoreId, \
                                const uint8 CtrlIdx, \
                                uint8 EthServiceID \
                                 );
@@ -317,24 +325,24 @@ static void Eth_43_GMAC_Local_CheckDemStatus( \
 #endif
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
 static Std_ReturnType Eth_43_GMAC_Local_CheckEthHLDEntry( \
-                                           uint32 PartitionId, \
+                                           uint32 CoreId, \
                                            const uint8 CtrlIdx, \
                                            uint8 EthServiceID \
                                             )
 {
     Std_ReturnType CheckStatus = (Std_ReturnType)E_OK;
 
-  #if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         CheckStatus = (Std_ReturnType)E_NOT_OK;
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, EthServiceID, ETH_43_GMAC_E_UNINIT);
 
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         CheckStatus = (Std_ReturnType)E_NOT_OK;
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, EthServiceID, ETH_43_GMAC_E_INV_CTRL_IDX);
@@ -374,8 +382,8 @@ static void Eth_43_GMAC_Local_InitController( \
                     Eth_43_GMAC_axCtrlState[CtrlIdx] = ETH_STATE_INIT;
                 #endif
 
-                #if (STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
-                    if ((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
+                #if(STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
+                    if((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
                     {
                         (void)Dem_SetEventStatus((Dem_EventIdType)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.id), DEM_EVENT_STATUS_PREPASSED);
                     }
@@ -385,8 +393,8 @@ static void Eth_43_GMAC_Local_InitController( \
         }
         else
         {
-        #if (STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
-            if ((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
+        #if(STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
+            if((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
             {
                 (void)Dem_SetEventStatus((Dem_EventIdType)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.id), DEM_EVENT_STATUS_PREFAILED);
             }
@@ -402,7 +410,7 @@ static void Eth_43_GMAC_Local_InitController( \
 void Eth_43_GMAC_Init(const Eth_43_GMAC_ConfigType *CfgPtr)
 {
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
     uint8 CtrlIdx;
 
 #if (STD_OFF == ETH_43_GMAC_PRECOMPILE_SUPPORT)
@@ -411,8 +419,8 @@ void Eth_43_GMAC_Init(const Eth_43_GMAC_ConfigType *CfgPtr)
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_INIT, ETH_43_GMAC_E_INIT_FAILED);
     }
-    #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    else if (PartitionId != CfgPtr->PartitionId)
+    #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    else if (CoreId != CfgPtr->PartitionCoreId)
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_INIT, ETH_43_GMAC_E_PARAM_CONFIG);
     }
@@ -420,15 +428,15 @@ void Eth_43_GMAC_Init(const Eth_43_GMAC_ConfigType *CfgPtr)
     else
     {
   #endif
-        Eth_43_GMAC_apxInternalCfg[PartitionId] = CfgPtr;
+        Eth_43_GMAC_apxInternalCfg[CoreId] = CfgPtr;
 #else /* ETH_43_GMAC_PRECOMPILE_SUPPORT == STD_ON */
   #if (STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT)
     if (NULL_PTR != CfgPtr)
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_INIT, ETH_43_GMAC_E_INIT_FAILED);
     }
-    #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    else if ((NULL_PTR == Eth_43_GMAC_apxPredefinedConfig[PartitionId]) || (PartitionId != Eth_43_GMAC_apxPredefinedConfig[PartitionId]->PartitionId))
+    #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    else if ((NULL_PTR == Eth_43_GMAC_apxPredefinedConfig[CoreId]) || (CoreId != Eth_43_GMAC_apxPredefinedConfig[CoreId]->PartitionCoreId))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_INIT, ETH_43_GMAC_E_PARAM_CONFIG);
     }
@@ -436,17 +444,17 @@ void Eth_43_GMAC_Init(const Eth_43_GMAC_ConfigType *CfgPtr)
     else
     {
   #endif
-      #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-        Eth_43_GMAC_apxInternalCfg[PartitionId] = Eth_43_GMAC_apxPredefinedConfig[PartitionId];
+      #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+        Eth_43_GMAC_apxInternalCfg[CoreId] = Eth_43_GMAC_apxPredefinedConfig[CoreId];
       #else
-        Eth_43_GMAC_apxInternalCfg[PartitionId] = &Eth_43_GMAC_xPredefinedConfig;
+        Eth_43_GMAC_apxInternalCfg[CoreId] = &Eth_43_GMAC_xPredefinedConfig;
       #endif
         (void)CfgPtr;
 #endif /* (STD_ON != ETH_43_GMAC_PRECOMPILE_SUPPORT) */
 
         for (CtrlIdx = 0U; CtrlIdx < ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED; ++CtrlIdx)
         {
-            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
             Eth_43_GMAC_Local_InitController(CtrlIdx, Eth_43_GMAC_Controller);
 
@@ -460,101 +468,28 @@ void Eth_43_GMAC_Init(const Eth_43_GMAC_ConfigType *CfgPtr)
 }
 
 /*================================================================================================*/
-#if defined(ETH_43_GMAC_START_TSN_SUPPORT)
-    #if (STD_ON == ETH_43_GMAC_START_TSN_SUPPORT)
-/**
-* @brief         The function enables the statically configured TSN settings.
-* @api
-*
-*/
-Std_ReturnType Eth_43_GMAC_StartTSN(const uint8 CtrlIdx)
-{
-    Std_ReturnType checkStatus = (Std_ReturnType)E_OK;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-
-#if (STD_ON == ETH_43_GMAC_PRECOMPILE_SUPPORT)
-    if (NULL_PTR != Eth_43_GMAC_apxInternalCfg[PartitionId])
-    {
-        if (CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED)
-        {
-            checkStatus = (Std_ReturnType)E_NOT_OK;
-#if (STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT)
-            (void) Det_ReportError(ETH_43_GMAC_MODULE_ID, \
-            ETH_43_GMAC_DRIVER_INSTANCE, \
-            ETH_43_GMAC_SID_START_TSN, \
-            ETH_43_GMAC_E_INV_CTRL_IDX);
-#endif
-        }
-    }
-    else
-    {
-        checkStatus = (Std_ReturnType)E_NOT_OK;
-#if (STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT)
-        (void) Det_ReportError(ETH_43_GMAC_MODULE_ID, \
-                               ETH_43_GMAC_DRIVER_INSTANCE, \
-                               ETH_43_GMAC_SID_START_TSN, \
-                               ETH_43_GMAC_E_UNINIT);
-#endif
-    }
-#endif /* STD_ON == ETH_43_GMAC_PRECOMPILE_SUPPORT */
-
-#if (STD_OFF == ETH_43_GMAC_PRECOMPILE_SUPPORT)
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-    {
-        checkStatus = (Std_ReturnType)E_NOT_OK;
-#if (STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT)
-        (void) Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_START_TSN, ETH_43_GMAC_E_UNINIT);
-#endif
-    }
-    else
-    {
-        if (CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED)
-        {
-            checkStatus = (Std_ReturnType)E_NOT_OK;
-#if (STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT)
-            (void) Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_START_TSN, ETH_43_GMAC_E_INV_CTRL_IDX);
-#endif
-        }
-    }
-#endif /* STD_OFF == ETH_43_GMAC_PRECOMPILE_SUPPORT */
-
-    if ((Std_ReturnType)E_OK == checkStatus)
-    {
-        /* Populate the tables used for 802.1qci */
-        checkStatus = Eth_43_GMAC_Ipw_StartTSN(CtrlIdx);
-    }
-    else
-    {
-        /* Start TSN failed - do nothing */
-    }
-
-    return checkStatus;
-}
-    #endif /* (STD_ON == ETH_43_GMAC_START_TSN_SUPPORT) */
-#endif  /* defined(ETH_43_GMAC_START_TSN_SUPPORT) */
-/*================================================================================================*/
 Std_ReturnType Eth_43_GMAC_SetControllerMode(uint8 CtrlIdx, Eth_ModeType CtrlMode)
 {
     Eth_43_GMAC_axTxBufferIdxMapType *Iter;
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
     uint8 FifoIdx;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_SETCONTROLLERMODE))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_SETCONTROLLERMODE))
     {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
         /*  Check whether the controller is available */
-        if (TRUE == Eth_43_GMAC_Ipw_CheckAccessToController(CtrlIdx))
+        if(TRUE == Eth_43_GMAC_Ipw_CheckAccessToController(CtrlIdx))
         {
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-            if ((ETH_MODE_ACTIVE == CtrlMode) || (ETH_MODE_DOWN == CtrlMode))
+            if( (ETH_MODE_ACTIVE == CtrlMode) || (ETH_MODE_DOWN == CtrlMode)  )
             {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-                if (ETH_MODE_ACTIVE == CtrlMode)
+                if(ETH_MODE_ACTIVE == CtrlMode)
                 {
                     FunctionSuccess = Eth_43_GMAC_Ipw_EnableController(CtrlIdx);
                 }
@@ -577,8 +512,8 @@ Std_ReturnType Eth_43_GMAC_SetControllerMode(uint8 CtrlIdx, Eth_ModeType CtrlMod
                 }
 
                 /* Yes, the controller is available, report as passed */
-                #if (STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
-                if ((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
+                #if(STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
+                if((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
                 {
 
                     (void)Dem_SetEventStatus((Dem_EventIdType)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.id), DEM_EVENT_STATUS_PREPASSED);
@@ -595,8 +530,8 @@ Std_ReturnType Eth_43_GMAC_SetControllerMode(uint8 CtrlIdx, Eth_ModeType CtrlMod
         else
         {
             /* No, the controller is not available, report an error */
-            #if (STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
-            if ((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
+            #if(STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
+            if((uint32)STD_ON == (uint32)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.state))
             {
                 (void)Dem_SetEventStatus((Dem_EventIdType)(Eth_43_GMAC_Controller->Eth_43_GMAC_DemEventsList.ETH_E_ACCESS_Cfg.id), DEM_EVENT_STATUS_PREFAILED);
             }
@@ -618,17 +553,17 @@ Std_ReturnType Eth_43_GMAC_GetControllerMode( \
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+#if STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
 #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
 #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCONTROLLERMODE, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCONTROLLERMODE, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -656,17 +591,17 @@ Std_ReturnType Eth_43_GMAC_GetControllerMode( \
 void Eth_43_GMAC_GetPhysAddr(uint8 CtrlIdx, uint8 *PhysAddrPtr)
 {
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETPHYSADDR, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETPHYSADDR, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -692,17 +627,17 @@ void Eth_43_GMAC_GetPhysAddr(uint8 CtrlIdx, uint8 *PhysAddrPtr)
 void Eth_43_GMAC_SetPhysAddr(uint8 CtrlIdx, const uint8 *PhysAddrPtr)
 {
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETPHYSADDR, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETPHYSADDR, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -736,17 +671,17 @@ Std_ReturnType Eth_43_GMAC_UpdatePhysAddrFilter ( \
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_UPDATEADDRFILTER, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_UPDATEADDRFILTER, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -786,18 +721,18 @@ Std_ReturnType Eth_43_GMAC_WriteMii ( \
 {
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_WRITEMII, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_WRITEMII, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -811,7 +746,7 @@ Std_ReturnType Eth_43_GMAC_WriteMii ( \
 
         if ((boolean)TRUE == Eth_43_GMAC_Ipw_WriteMii(CtrlIdx, TrcvIdx, RegIdx, RegVal))
         {
-            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
             Eth_43_GMAC_Controller->Eth_43_GMAC_EthTrcvDriverFunctionList.writeMiiIndicationFunction(CtrlIdx, TrcvIdx, RegIdx);
             ReturnStatus = (Std_ReturnType)E_OK;
         }
@@ -836,10 +771,10 @@ Std_ReturnType Eth_43_GMAC_ReadMii  ( \
 {
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_READMII))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_READMII))
     {
         if (NULL_PTR == RegValPtr)
         {
@@ -850,7 +785,7 @@ Std_ReturnType Eth_43_GMAC_ReadMii  ( \
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
             if ((boolean)TRUE == Eth_43_GMAC_Ipw_ReadMii(CtrlIdx, TrcvIdx, RegIdx, RegValPtr))
             {
-                Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+                Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
                 Eth_43_GMAC_Controller->Eth_43_GMAC_EthTrcvDriverFunctionList.readMiiIndicationFunction(CtrlIdx, TrcvIdx, RegIdx, *RegValPtr);
                 ReturnStatus = (Std_ReturnType)E_OK;
             }
@@ -880,17 +815,17 @@ Std_ReturnType Eth_43_GMAC_ReadMmd ( \
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_READMMD, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_READMMD, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -932,17 +867,17 @@ Std_ReturnType Eth_43_GMAC_WriteMmd ( \
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_WRITEMMD, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_WRITEMMD, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -979,17 +914,17 @@ Std_ReturnType Eth_43_GMAC_GetCounterValues ( \
     Std_ReturnType ReturnStatus = (Std_ReturnType) E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCOUNTERVALUE, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCOUNTERVALUE, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1023,17 +958,17 @@ Std_ReturnType Eth_43_GMAC_GetRxStats ( \
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETRXSTATS, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETRXSTATS, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1041,7 +976,7 @@ Std_ReturnType Eth_43_GMAC_GetRxStats ( \
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETRXSTATS, ETH_43_GMAC_E_UNINIT);
     }
-    else if (NULL_PTR == RxStats)
+    else if(NULL_PTR == RxStats)
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETRXSTATS, ETH_43_GMAC_E_PARAM_POINTER);
     }
@@ -1067,17 +1002,17 @@ Std_ReturnType Eth_43_GMAC_GetTxStats ( \
     Std_ReturnType ReturnStatus = (Std_ReturnType) E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETTXSTATS, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETTXSTATS, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1085,7 +1020,7 @@ Std_ReturnType Eth_43_GMAC_GetTxStats ( \
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETTXSTATS, ETH_43_GMAC_E_UNINIT);
     }
-    else if (NULL_PTR == TxStats)
+    else if(NULL_PTR == TxStats)
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETTXSTATS, ETH_43_GMAC_E_PARAM_POINTER);
     }
@@ -1111,17 +1046,17 @@ Std_ReturnType Eth_43_GMAC_GetTxErrorCounterValues ( \
     Std_ReturnType ReturnStatus = (Std_ReturnType) E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETTXERRORCOUNTERVALUE, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETTXERRORCOUNTERVALUE, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1154,18 +1089,18 @@ Std_ReturnType Eth_43_GMAC_SetGlobalTime ( \
 {
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETGLOBALTIME, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETGLOBALTIME, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1180,7 +1115,7 @@ Std_ReturnType Eth_43_GMAC_SetGlobalTime ( \
     else
     {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
         ReturnStatus = Eth_43_GMAC_Ipw_SetGlobalTime(CtrlIdx, Eth_43_GMAC_Controller->Eth_43_GMAC_pClockConfig, TimeStampPtr);
 
@@ -1197,18 +1132,18 @@ Std_ReturnType Eth_43_GMAC_SetCorrectionTime(uint8 CtrlIdx, \
 {
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETCORRECTIONTIME, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETCORRECTIONTIME, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1223,7 +1158,7 @@ Std_ReturnType Eth_43_GMAC_SetCorrectionTime(uint8 CtrlIdx, \
     else
     {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
         ReturnStatus = Eth_43_GMAC_Ipw_SetCorrectionTime(CtrlIdx, Eth_43_GMAC_Controller->Eth_43_GMAC_pClockConfig, TimeOffsetPtr, RateRatioPtr);
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
@@ -1236,24 +1171,24 @@ Std_ReturnType Eth_43_GMAC_SetCorrectionTime(uint8 CtrlIdx, \
 /*================================================================================================*/
 Std_ReturnType Eth_43_GMAC_GetCurrentTime  ( \
                                 uint8 CtrlIdx, \
-                                Eth_TimeStampQualType *timeQualPtr, \
-                                Eth_TimeStampType *timeStampPtr \
+                                Eth_TimeStampQualType *TimeQualPtr, \
+                                Eth_TimeStampType *TimeStampPtr \
                                    )
 {
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCURRENTTIME, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCURRENTTIME, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1261,7 +1196,7 @@ Std_ReturnType Eth_43_GMAC_GetCurrentTime  ( \
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCURRENTTIME, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((NULL_PTR == timeQualPtr) || (NULL_PTR == timeStampPtr))
+    else if ((NULL_PTR == TimeQualPtr) || (NULL_PTR == TimeStampPtr))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GETCURRENTTIME, ETH_43_GMAC_E_PARAM_POINTER);
     }
@@ -1269,8 +1204,8 @@ Std_ReturnType Eth_43_GMAC_GetCurrentTime  ( \
     {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
 
-        *timeQualPtr = ETH_UNCERTAIN;
-        ReturnStatus = Eth_43_GMAC_Ipw_GetCurrentTime(CtrlIdx, timeQualPtr, timeStampPtr);
+        *TimeQualPtr = ETH_UNCERTAIN;
+        ReturnStatus = Eth_43_GMAC_Ipw_GetCurrentTime(CtrlIdx, TimeQualPtr, TimeStampPtr);
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
     }
@@ -1286,17 +1221,17 @@ void Eth_43_GMAC_EnableEgressTimeStamp  ( \
                                 )
 {
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_ENABLEEGRESSTIMESTAMP, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_ENABLEEGRESSTIMESTAMP, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1322,11 +1257,12 @@ Std_ReturnType Eth_43_GMAC_GetEgressTimeStamp ( \
                                       )
 {
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
+    uint8 FifoIdx;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_GETEGRESSTIMESTAMP))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_GETEGRESSTIMESTAMP))
     {
         if ((NULL_PTR == TimeQualPtr) || (NULL_PTR == TimeStampPtr))
         {
@@ -1336,7 +1272,8 @@ Std_ReturnType Eth_43_GMAC_GetEgressTimeStamp ( \
         {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
             *TimeQualPtr = ETH_UNCERTAIN;
-            Eth_43_GMAC_Ipw_GetEgressTimeStamp(CtrlIdx, BufIdx, TimeQualPtr, TimeStampPtr);
+            FifoIdx    = Eth_43_GMAC_axTxBufferIdxMap[CtrlIdx][BufIdx].FifoIdx;
+            Eth_43_GMAC_Ipw_GetEgressTimeStamp(CtrlIdx, FifoIdx, TimeQualPtr, TimeStampPtr);
 
             if (ETH_VALID == *TimeQualPtr)
             {
@@ -1364,10 +1301,10 @@ Std_ReturnType Eth_43_GMAC_GetIngressTimeStamp ( \
     const uint8 *FrameData;
     uint8 FifoIdx;
     Std_ReturnType ReturnStatus = (Std_ReturnType)E_NOT_OK;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_GETINGRESSTIMESTAMP))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_GETINGRESSTIMESTAMP))
     {
         if ((NULL_PTR == DataPtr) || (NULL_PTR == TimeQualPtr) || (NULL_PTR == TimeStampPtr))
         {
@@ -1381,7 +1318,7 @@ Std_ReturnType Eth_43_GMAC_GetIngressTimeStamp ( \
             /* Move the pointer back to the position of the frame header (note the index sign) */
             FrameData = (const uint8 *)(FrameData - (const uint8 *)ETH_43_GMAC_FRAME_PAYLOAD_OFFSET);
 
-            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
             *TimeQualPtr = ETH_UNCERTAIN;
 
@@ -1418,7 +1355,7 @@ BufReq_ReturnType Eth_43_GMAC_ProvideTxBuffer( \
 {
     BufReq_ReturnType FunctionSuccess = BUFREQ_E_NOT_OK;
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller = NULL_PTR;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
     uint8 FifoIdx;
 
     uint8 *FrameBuffer;
@@ -1431,7 +1368,7 @@ BufReq_ReturnType Eth_43_GMAC_ProvideTxBuffer( \
 #endif
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_PROVIDETXBUFFER))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_PROVIDETXBUFFER))
     {
         if ((NULL_PTR == BufIdxPtr) || (NULL_PTR == BufPtr) || (NULL_PTR == LenBytePtr))
         {
@@ -1447,7 +1384,7 @@ BufReq_ReturnType Eth_43_GMAC_ProvideTxBuffer( \
     }
     else
     {
-            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
             /* Convert VLAN PCP to Tx FIFO index */
             FifoIdx = Eth_43_GMAC_Controller->Eth_43_GMAC_pEgressConfig->VlanPcpToFifoIdx[Priority];
@@ -1494,8 +1431,8 @@ BufReq_ReturnType Eth_43_GMAC_ProvideTxBuffer( \
 void Eth_43_GMAC_ProvideRxBuffer(uint8 CtrlIdx, uint8 FifoIdx, uint8* BufferDataAddress)
 {
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_PROVIDERXBUFFER))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_PROVIDERXBUFFER))
     {
         if (NULL_PTR == BufferDataAddress)
         {
@@ -1510,31 +1447,7 @@ void Eth_43_GMAC_ProvideRxBuffer(uint8 CtrlIdx, uint8 FifoIdx, uint8* BufferData
     }
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
 }
-
-#if defined(ETH_43_GMAC_PROVIDE_RX_BUFFERINFO)
-void Eth_43_GMAC_ProvideRxBufferInfo(uint8 CtrlIdx, uint8 FifoIdx, Eth_43_GMAC_RxBufferInfo * RxBufferInfo)
-{
-    uint8* BufferInfo[2U] = {RxBufferInfo->HeaderBuffDataAddress, RxBufferInfo->PayloadBuffDataAddress};
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_PROVIDERXBUFFERINFO))
-    {
-        if ((NULL_PTR == RxBufferInfo->HeaderBuffDataAddress) && (NULL_PTR == RxBufferInfo->PayloadBuffDataAddress))
-        {
-            (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_PROVIDERXBUFFERINFO, ETH_43_GMAC_E_PARAM_POINTER);
-        }
-        else
-        {
-#endif /* ETH_DEV_ERROR_DETECT  */
-            Eth_43_GMAC_Ipw_ProvideRxBufferInfo(CtrlIdx, FifoIdx, &BufferInfo[0U]);
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-        }
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-}
-#endif /* ETH_43_GMAC_PROVIDE_RX_BUFFERINFO */
-#endif /* ETH_43_GMAC_HAS_EXTERNAL_RX_BUFFERS  */
+#endif
 
 #if (STD_ON == ETH_43_GMAC_HAS_EXTERNAL_TX_BUFFERS)
 
@@ -1552,11 +1465,11 @@ BufReq_ReturnType Eth_43_GMAC_SendFrame (\
     const Eth_43_GMAC_CtrlCfgType *Eth_Controller = NULL_PTR;
     BufReq_ReturnType FunctionStatus = BUFREQ_E_NOT_OK;
     Std_ReturnType ReturnValue = E_NOT_OK;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    Eth_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    Eth_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_SENDFRAME))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_SENDFRAME))
     {
         if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
@@ -1623,13 +1536,13 @@ BufReq_ReturnType Eth_43_GMAC_SendMultiBufferFrame( uint8 CtrlIdx, \
     BufReq_ReturnType FunctionStatus = BUFREQ_E_NOT_OK;
     const Eth_43_GMAC_CtrlCfgType *Eth_Controller = NULL_PTR;
     uint8 FifoIdx = 0U;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    Eth_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    Eth_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
     Eth_BufIdxType BuffIdx = 0U;
     uint16 FrameIndex = 0U;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_SENDMULTIBUFFERFRAME))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_SENDMULTIBUFFERFRAME))
     {
         if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
@@ -1679,7 +1592,7 @@ BufReq_ReturnType Eth_43_GMAC_SendMultiBufferFrame( uint8 CtrlIdx, \
                         Eth_43_GMAC_axTransmissionRequests[CtrlIdx][FifoIdx].pQueueTail->pNextBuffer = NULL_PTR;
 
                         /* need to wrap around */
-                        BuffIdx = (Eth_BufIdxType)Eth_43_GMAC_Ipw_GetNextBuffer(CtrlIdx, FifoIdx, (uint16)BuffIdx);
+                        BuffIdx = Eth_43_GMAC_Ipw_GetNextBuffer(CtrlIdx, FifoIdx, BuffIdx);
                         FrameIndex++;
                     }
 
@@ -1701,19 +1614,19 @@ BufReq_ReturnType Eth_43_GMAC_SendMultiBufferFrame( uint8 CtrlIdx, \
 Std_ReturnType Eth_43_GMAC_TxTimeAwareShaperInit(uint8 CtrlIdx)
 {
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_TXTIMEAWARESHAPER, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
+    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_TXTIMEAWARESHAPER, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
@@ -1724,7 +1637,7 @@ Std_ReturnType Eth_43_GMAC_TxTimeAwareShaperInit(uint8 CtrlIdx)
     else
     {
 #endif
-        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+        Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
         FunctionSuccess = Eth_43_GMAC_Ipw_TxTimeAwareShaperInit(CtrlIdx, Eth_43_GMAC_Controller->Eth_43_GMAC_pIpwCtrlConfig);
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
     }
@@ -1756,11 +1669,11 @@ Std_ReturnType Eth_43_GMAC_Transmit(
 #endif
 
 #if (STD_ON == ETH_43_GMAC_SWT_MANAGEMENT_SUPPORT_API) || (STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT)
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 #endif
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_TRANSMIT))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_TRANSMIT))
     {
         if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
@@ -1774,7 +1687,7 @@ Std_ReturnType Eth_43_GMAC_Transmit(
         }
         else if
             (
-                (BufIdx >= Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->Eth_43_GMAC_pEgressConfig->BufferCount) ||
+                (BufIdx >= Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->Eth_43_GMAC_pEgressConfig->BufferCount) ||
                 (NULL_PTR == Eth_43_GMAC_axTxBufferIdxMap[CtrlIdx][BufIdx].pu8BufferData)
             )
         {
@@ -1823,7 +1736,7 @@ Std_ReturnType Eth_43_GMAC_Transmit(
 
 #if (STD_ON == ETH_43_GMAC_SWT_MANAGEMENT_SUPPORT_API)
             DataMgmt = &FrameBuffer[ETH_43_GMAC_FRAME_ETHTYPE_OFFSET];
-            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
             if ((Std_ReturnType)E_OK == Eth_43_GMAC_Controller->Eth_43_GMAC_EthSwtDriverFunctionList.TxProcessFrameFunction(CtrlIdx, BufIdx, &DataMgmt, &LenByte))
             {
                 if ((Std_ReturnType)E_OK == Eth_43_GMAC_Controller->Eth_43_GMAC_EthSwtDriverFunctionList.TxFinishedIndicationFunction(CtrlIdx, BufIdx))
@@ -1852,9 +1765,9 @@ void Eth_43_GMAC_ReportTransmission(
                            )
 {
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller = NULL_PTR;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-    Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+    Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
     Eth_43_GMAC_Ipw_ReportTransmission(Eth_43_GMAC_Controller, FifoIdx);
 
@@ -1877,17 +1790,17 @@ void Eth_43_GMAC_Receive(uint8 CtrlIdx, \
     uint16 PayloadLength;
 
 #if (STD_ON == ETH_43_GMAC_SWT_MANAGEMENT_SUPPORT_API)
-    boolean IsMgmtFrameOnly = (boolean)FALSE;
+    boolean IsMgmtFrameOnly;
     uint8 *DataMgmt;
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller;
 #endif
 
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_RECEIVE))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_RECEIVE))
     {
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_RECEIVE, ETH_43_GMAC_E_INV_MODE);
         }
@@ -1900,7 +1813,7 @@ void Eth_43_GMAC_Receive(uint8 CtrlIdx, \
             {
             #if (STD_ON == ETH_43_GMAC_SWT_MANAGEMENT_SUPPORT_API)
                 DataMgmt = &FrameData[ETH_43_GMAC_FRAME_ETHTYPE_OFFSET];
-                Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+                Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
                 /* There shouldn't be a buffer index concept for RX side */
                 (void)Eth_43_GMAC_Controller->Eth_43_GMAC_EthSwtDriverFunctionList.RxProcessFrameFunction(CtrlIdx, ETH_43_GMAC_BUFFER_INDEX_UNUSED, &DataMgmt, &FrameLength, &IsMgmtFrameOnly);
                 if ((boolean)FALSE == IsMgmtFrameOnly)
@@ -1923,7 +1836,7 @@ void Eth_43_GMAC_Receive(uint8 CtrlIdx, \
                     /* We assume CRC and padding have been stripped so that FrameLength = DST + SRC + (VLAN_TAG) + ETHTYPE + PAYLOAD */
                     PayloadLength = FrameLength - ETH_43_GMAC_FRAME_HEADER_LENGTH;
 
-                    EthIf_RxIndication(Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->EthCtrlEthIfIdx, FrameType, IsBroadcast, MacSrcAddr, Payload, PayloadLength);
+                    EthIf_RxIndication(Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->EthCtrlEthIfIdx, FrameType, IsBroadcast, MacSrcAddr, Payload, PayloadLength);
             #if (STD_ON == ETH_43_GMAC_SWT_MANAGEMENT_SUPPORT_API)
                 }
 
@@ -1945,11 +1858,11 @@ void Eth_43_GMAC_Receive(uint8 CtrlIdx, \
 void Eth_43_GMAC_TxConfirmation(uint8 CtrlIdx)
 {
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller = NULL_PTR;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
     uint8 FifoIdx;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_TXCONFIRMATION))
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_TXCONFIRMATION))
     {
         if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
@@ -1958,7 +1871,7 @@ void Eth_43_GMAC_TxConfirmation(uint8 CtrlIdx)
         else
         {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
+            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
 
             for (FifoIdx = 0U; FifoIdx < Eth_43_GMAC_Controller->Eth_43_GMAC_pEgressConfig->FifoCount; ++FifoIdx)
             {
@@ -2003,30 +1916,30 @@ void Eth_43_GMAC_MainFunction(void)
 {
     Eth_ModeType CurrentMode;
     uint8 CtrlIdx;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 #if (STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
     const Eth_43_GMAC_DemEventsType *Eth_43_GMAC_CtrlDemEvents;
 #endif
 
-#if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId < ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) && (NULL_PTR != Eth_43_GMAC_apxInternalCfg[PartitionId]))
+#if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId < ETH_43_GMAC_MAX_COREIDX_SUPPORTED) && (NULL_PTR != Eth_43_GMAC_apxInternalCfg[CoreId]))
 #else
-    if (NULL_PTR != Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR != Eth_43_GMAC_apxInternalCfg[CoreId])
 #endif
     {
-        for (CtrlIdx = 0U; CtrlIdx < ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED; ++CtrlIdx)
+        for (CtrlIdx = 0U; CtrlIdx < ETH_43_GMAC_MAX_COREIDX_SUPPORTED; ++CtrlIdx)
         {
-            if (NULL_PTR != Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx])
+            if (NULL_PTR != Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx])
             {
                 CurrentMode = Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx);
                 if (CurrentMode != Eth_43_GMAC_axCtrlMode[CtrlIdx])
                 {
                     Eth_43_GMAC_axCtrlMode[CtrlIdx] = CurrentMode;
-                    EthIf_CtrlModeIndication(Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->EthCtrlEthIfIdx, CurrentMode);
+                    EthIf_CtrlModeIndication(Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->EthCtrlEthIfIdx, CurrentMode);
                 }
 
 #if (STD_ON == ETH_43_GMAC_DEM_EVENT_DETECT)
-                Eth_43_GMAC_CtrlDemEvents = &(Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->Eth_43_GMAC_DemEventsList);
+                Eth_43_GMAC_CtrlDemEvents = &(Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->Eth_43_GMAC_DemEventsList);
 
                 if ((boolean)FALSE == Eth_43_GMAC_Ipw_CheckAccessToController(CtrlIdx))
                 {
@@ -2070,11 +1983,11 @@ Std_ReturnType Eth_43_GMAC_ConfigureTxIntCoalescing(uint8 CtrlIdx, uint8 FifoIdx
 {
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_CONFIGURETXCOALESCING))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_CONFIGURETXCOALESCING))
     {
         /* The controller must have been enabled previosly */
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_CONFIGURETXCOALESCING, ETH_43_GMAC_E_INV_MODE);
         }
@@ -2101,11 +2014,11 @@ Std_ReturnType Eth_43_GMAC_ConfigureRxIntCoalescing(uint8 CtrlIdx, uint8 FifoIdx
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_CONFIGURERXCOALESCING))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_CONFIGURERXCOALESCING))
     {
         /* The controller must have been enabled previosly */
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_CONFIGURERXCOALESCING, ETH_43_GMAC_E_INV_MODE);
         }
@@ -2136,14 +2049,17 @@ Std_ReturnType Eth_43_GMAC_ConfigureRxIntCoalescing(uint8 CtrlIdx, uint8 FifoIdx
  * @retval          E_OK        successful.
  * @retval          E_NOT_OK    failed.
  *
+ * @api
+ *
+ * @implements Eth_StartTas_Activity
  */
-Std_ReturnType Eth_43_GMAC_StartTas(uint8 CtrlIdx)
+Std_ReturnType Eth_43_GMAC_StartTas( uint8 CtrlIdx)
 {
     Std_ReturnType checkStatus = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_START_TAS))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_START_TAS))
     {
 #endif
 
@@ -2166,14 +2082,17 @@ Std_ReturnType Eth_43_GMAC_StartTas(uint8 CtrlIdx)
  * @retval          E_OK        successful.
  * @retval          E_NOT_OK    failed.
  *
+ * @api
+ *
+ * @implements Eth_StopTas_Activity
  */
-Std_ReturnType Eth_43_GMAC_StopTas(uint8 CtrlIdx)
+Std_ReturnType Eth_43_GMAC_StopTas( uint8 CtrlIdx)
 {
     Std_ReturnType checkStatus = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_STOP_TAS))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_STOP_TAS))
     {
 #endif
 
@@ -2189,23 +2108,23 @@ Std_ReturnType Eth_43_GMAC_StopTas(uint8 CtrlIdx)
 
 #if (STD_ON == ETH_43_GMAC_INGRESS_PORT_FILTER)
 /*================================================================================================*/
-Std_ReturnType Eth_43_GMAC_EnableIngressPortFiltering(uint8 CtrlIdx, boolean Enable )
+Std_ReturnType Eth_43_GMAC_EnableIngressPortFiltering( uint8 CtrlIndex, boolean Enable )
 {
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_ENABLE_IPF))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIndex, ETH_43_GMAC_SID_ENABLE_IPF))
     {
         /* The controller must have been enabled previosly */
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIndex))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_ENABLE_IPF, ETH_43_GMAC_E_INV_MODE);
         }
         else
         {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-            FunctionSuccess = Eth_43_GMAC_Ipw_EnableIngressPortFiltering(CtrlIdx, Enable);
+            FunctionSuccess = Eth_43_GMAC_Ipw_EnableIngressPortFiltering(CtrlIndex, Enable);
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
         }
@@ -2216,17 +2135,17 @@ Std_ReturnType Eth_43_GMAC_EnableIngressPortFiltering(uint8 CtrlIdx, boolean Ena
 }
 
 /*================================================================================================*/
-Std_ReturnType Eth_43_GMAC_AddIngressPortFilterTableEntry( uint8 CtrlIdx, uint32 *MatchedEntries,
+Std_ReturnType Eth_43_GMAC_AddIngressPortFilterTableEntry( uint8 CtrlIndex, uint32 *MatchedEntries,
                                                                    Eth_43_GMAC_IngressPortFilterEntryDataType * IngressPortFilterTableEntry )
 {
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_ADD_IPF))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIndex, ETH_43_GMAC_SID_ADD_IPF))
     {
         /* The controller must have been enabled previosly */
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIndex))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_ADD_IPF, ETH_43_GMAC_E_INV_MODE);
         }
@@ -2239,7 +2158,7 @@ Std_ReturnType Eth_43_GMAC_AddIngressPortFilterTableEntry( uint8 CtrlIdx, uint32
             else
             {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-            FunctionSuccess = Eth_43_GMAC_Ipw_AddIngressPortFilterTableEntry(CtrlIdx, MatchedEntries, IngressPortFilterTableEntry);
+            FunctionSuccess = Eth_43_GMAC_Ipw_AddIngressPortFilterTableEntry(CtrlIndex, MatchedEntries, IngressPortFilterTableEntry);
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
             }
@@ -2251,17 +2170,17 @@ Std_ReturnType Eth_43_GMAC_AddIngressPortFilterTableEntry( uint8 CtrlIdx, uint32
 }
 
 /*================================================================================================*/
-Std_ReturnType Eth_43_GMAC_QueryIngressPortFilterTableEntry( uint8 CtrlIdx, uint32 *MatchedEntries,
+Std_ReturnType Eth_43_GMAC_QueryIngressPortFilterTableEntry( uint8 CtrlIndex, uint32 *MatchedEntries,
                                                                      Eth_43_GMAC_IngressPortFilterEntryDataType * IngressPortFilterTableEntry )
 {
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_QUERY_IPF))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIndex, ETH_43_GMAC_SID_QUERY_IPF))
     {
         /* The controller must have been enabled previosly */
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIndex))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_QUERY_IPF, ETH_43_GMAC_E_INV_MODE);
         }
@@ -2274,7 +2193,7 @@ Std_ReturnType Eth_43_GMAC_QueryIngressPortFilterTableEntry( uint8 CtrlIdx, uint
             else
             {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-            FunctionSuccess = Eth_43_GMAC_Ipw_QueryIngressPortFilterTableEntry(CtrlIdx, MatchedEntries, IngressPortFilterTableEntry);
+            FunctionSuccess = Eth_43_GMAC_Ipw_QueryIngressPortFilterTableEntry(CtrlIndex, MatchedEntries, IngressPortFilterTableEntry);
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
             }
@@ -2286,24 +2205,24 @@ Std_ReturnType Eth_43_GMAC_QueryIngressPortFilterTableEntry( uint8 CtrlIdx, uint
 }
 
 /*================================================================================================*/
-Std_ReturnType Eth_43_GMAC_DeleteIngressPortFilterTableEntry( uint8 CtrlIdx, uint32 *MatchedEntries,
+Std_ReturnType Eth_43_GMAC_DeleteIngressPortFilterTableEntry( uint8 CtrlIndex, uint32 *MatchedEntries,
                                                                       uint32 IngressPortFilterEntryId )
 {
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_DELETE_IPF))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIndex, ETH_43_GMAC_SID_DELETE_IPF))
     {
         /* The controller must have been enabled previosly */
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIndex))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_DELETE_IPF, ETH_43_GMAC_E_INV_MODE);
         }
         else
         {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-            FunctionSuccess = Eth_43_GMAC_Ipw_DeleteIngressPortFilterTableEntry(CtrlIdx, MatchedEntries, IngressPortFilterEntryId);
+            FunctionSuccess = Eth_43_GMAC_Ipw_DeleteIngressPortFilterTableEntry(CtrlIndex, MatchedEntries, IngressPortFilterEntryId);
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
         }
@@ -2316,16 +2235,16 @@ Std_ReturnType Eth_43_GMAC_DeleteIngressPortFilterTableEntry( uint8 CtrlIdx, uin
 
 #if (STD_ON == ETH_43_GMAC_GET_SYNC_STATE_API)
 /*================================================================================================*/
-Std_ReturnType Eth_43_GMAC_GetSyncState(uint8 CtrlIdx, boolean *SyncState)
+Std_ReturnType Eth_43_GMAC_GetSyncState( uint8 CtrlIdx, boolean *SyncState)
 {
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_GET_SYNC_STATE))
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
+    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(CoreId, CtrlIdx, ETH_43_GMAC_SID_GET_SYNC_STATE))
     {
         /* The controller must have been enabled previosly */
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
+        if(ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
         {
             (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_SYNC_STATE, ETH_43_GMAC_E_INV_MODE);
         }
@@ -2345,495 +2264,51 @@ Std_ReturnType Eth_43_GMAC_GetSyncState(uint8 CtrlIdx, boolean *SyncState)
 
 #if (STD_ON == ETH_43_GMAC_SET_SI_PHYS_ADDR_API)
 /*================================================================================================*/
-Std_ReturnType Eth_43_GMAC_SetSiPhysAddr(uint8 CtrIdx, uint8 SiIdx,  const uint8 *PhysAddrPtr)
+Std_ReturnType Eth_43_GMAC_SetSiPhysAddr( const uint8 CtrlIndex, const uint8 SiId,  const uint8 *MacAddr )
 {
     Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
+    uint32 CoreId = Eth_43_GMAC_GetCoreID();
 
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
+  #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    if ((CoreId >= ETH_43_GMAC_MAX_COREIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]))
   #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
+    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId])
   #endif
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SET_SI_PHYADDR, ETH_43_GMAC_E_UNINIT);
     }
-    else if ((CtrIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrIdx]))
+    else if ((CtrlIndex >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[CtrlIndex]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SET_SI_PHYADDR, ETH_43_GMAC_E_INV_CTRL_IDX);
     }
-    else if ((SiIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[SiIdx]))
+    else if ((SiId >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[CoreId]->Eth_43_GMAC_apCtrlConfig[SiId]))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SET_SI_PHYADDR, ETH_43_GMAC_E_INV_PARAM);
     }
-    else if (NULL_PTR == PhysAddrPtr)
+    else if (NULL_PTR == MacAddr)
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SET_SI_PHYADDR, ETH_43_GMAC_E_PARAM_POINTER);
 
     }
-    else if (ETH_STATE_INIT != Eth_43_GMAC_axCtrlState[CtrIdx])
+    else if (ETH_STATE_INIT != Eth_43_GMAC_axCtrlState[CtrlIndex])
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SET_SI_PHYADDR, ETH_43_GMAC_E_UNINIT);
     }
-    else if ( E_NOT_OK == Eth_43_GMAC_Ipw_SetSiPhysAddrCheckParameter(CtrIdx))
+    else if( E_NOT_OK == Eth_43_GMAC_Ipw_SetSiPhysAddrCheckParameter(CtrlIndex))
     {
         (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SET_SI_PHYADDR, ETH_43_GMAC_E_INV_PARAM);
     }
     else
     {
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-      FunctionSuccess = Eth_43_GMAC_Ipw_SetSiPhysAddr(CtrIdx, SiIdx, PhysAddrPtr);
+      FunctionSuccess = Eth_43_GMAC_Ipw_SetSiPhysAddr(CtrlIndex, SiId, MacAddr);
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
     }
 #endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
     return FunctionSuccess;
 }
 #endif
-
-
-#if (STD_ON == ETH_43_GMAC_PPS_OUTPUT_SUPPORT)
-Std_ReturnType Eth_43_GMAC_SetPpsSignalMode(uint8 CtrlIdx, boolean SignalMode)
-{
-    Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-  #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-  #endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETPPSSIGNALMODE, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETPPSSIGNALMODE, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (ETH_STATE_INIT != Eth_43_GMAC_axCtrlState[CtrlIdx])
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_SETPPSSIGNALMODE, ETH_43_GMAC_E_UNINIT);
-    }
-    else
-    {
-#endif
-        FunctionSuccess = Eth_43_GMAC_Ipw_SetPpsSignalMode(CtrlIdx, SignalMode);
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-    return FunctionSuccess;
-}
-
-Std_ReturnType Eth_43_GMAC_UpdatePpsConfig(uint8 CtrlIdx, uint8 PPSOutputIdx, Eth_43_GMAC_PPSConfigType * PPSConfig)
-{
-    Std_ReturnType FunctionSuccess = (Std_ReturnType)E_NOT_OK;
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-
-  #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-  #else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-  #endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_UPDATEPPSCONFIG, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_UPDATEPPSCONFIG, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (ETH_STATE_INIT != Eth_43_GMAC_axCtrlState[CtrlIdx])
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_UPDATEPPSCONFIG, ETH_43_GMAC_E_UNINIT);
-    }
-    else
-    {
-#endif
-        FunctionSuccess = Eth_43_GMAC_Ipw_UpdatePpsConfig(CtrlIdx, PPSOutputIdx, PPSConfig);
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-    return FunctionSuccess;
-}
-
-#endif /* STD_ON == ETH_43_GMAC_PPS_OUTPUT_SUPPORT */
-
-#if STD_ON == ETH_43_GMAC_LPI_ENABLE
-void Eth_43_GMAC_EnteringTxLpi(uint8 CtrlIdx)
-{
-    const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_Controller = NULL_PTR;
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_ENTERINGTXLPI))
-    {
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
-        {
-            (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_ENTERINGTXLPI, ETH_43_GMAC_E_INV_MODE);
-        }
-        else
-        {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-            Eth_43_GMAC_Controller = Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx];
-
-            Eth_43_GMAC_Ipw_EnteringTxLpi(CtrlIdx, Eth_43_GMAC_Controller->Eth_43_GMAC_pClockConfig);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-        }
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-}
-
-void Eth_43_GMAC_ExitingTxLpi(uint8 CtrlIdx)
-{
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-    if ((Std_ReturnType)E_OK == Eth_43_GMAC_Local_CheckEthHLDEntry(PartitionId, CtrlIdx, ETH_43_GMAC_SID_EXITINGTXLPI))
-    {
-        if (ETH_MODE_ACTIVE != Eth_43_GMAC_Ipw_GetControllerMode(CtrlIdx))
-        {
-            (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_EXITINGTXLPI, ETH_43_GMAC_E_INV_MODE);
-        }
-        else
-        {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-            Eth_43_GMAC_Ipw_ExitingTxLpi(CtrlIdx);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-        }
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-}
-#endif /* STD_ON == ETH_43_GMAC_LPI_ENABLE */
-
-#if defined(ETH_43_GMAC_MACSEC_SUPPORT)
-#if (STD_ON == ETH_43_GMAC_MACSEC_SUPPORT)
-
-Std_ReturnType Eth_43_GMAC_MacSecUpdateSecY(const uint8 CtrlIdx, const Mka_MacSecConfigType* MACsecCfgPtr, uint64 TxSci)
-{
-    Std_ReturnType CheckStatus =  (Std_ReturnType)E_NOT_OK;
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_UPDATE_SECY, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_UPDATE_SECY, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (NULL_PTR == MACsecCfgPtr)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_UPDATE_SECY, ETH_43_GMAC_E_PARAM_POINTER);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    CheckStatus = Eth_43_GMAC_Ipw_MacSecUpdateSecY(CtrlIdx, MACsecCfgPtr, TxSci);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-    return CheckStatus;
-}
-
-Std_ReturnType Eth_43_GMAC_MacSecInitRxSc(const uint8 CtrlIdx, uint64 Sci)
-{
- Std_ReturnType CheckStatus =  (Std_ReturnType)E_NOT_OK;
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_UPDATE_SECY, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_UPDATE_SECY, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    CheckStatus = Eth_43_GMAC_Ipw_MacSecInitRxSc(CtrlIdx, Sci);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    return CheckStatus;
-}
-
-Std_ReturnType Eth_43_GMAC_MacSecAddTxSa(uint8 CtrlIdx, uint8 An, uint64 NextPn, uint32 Ssci, const Mka_SakKeyPtrType* KeysPtr, boolean Active)
-{
-    Std_ReturnType CheckStatus =  (Std_ReturnType)E_NOT_OK;
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_ADD_TX_SA, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_ADD_TX_SA, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (NULL_PTR == KeysPtr)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_ADD_TX_SA, ETH_43_GMAC_E_PARAM_POINTER);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-        CheckStatus = Eth_43_GMAC_Ipw_MacSecAddTxSa(CtrlIdx, An, NextPn, Ssci, KeysPtr, Active);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    return CheckStatus;
-}
-
-Std_ReturnType Eth_43_GMAC_MacSecAddRxSa(const uint8 CtrlIdx, uint8 An, uint64 LowestPn, uint32 Ssci, const Mka_SakKeyPtrType* KeysPtr, boolean Active)
-{
-    Std_ReturnType CheckStatus =  (Std_ReturnType)E_NOT_OK;
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_ADD_RX_SA, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_ADD_RX_SA, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (NULL_PTR == KeysPtr)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_ADD_RX_SA, ETH_43_GMAC_E_PARAM_POINTER);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-        CheckStatus = Eth_43_GMAC_Ipw_MacSecAddRxSa(CtrlIdx, An, LowestPn, Ssci, KeysPtr, Active);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    return CheckStatus;
-}
-/*================================================================================================*/
-
-Std_ReturnType Eth_43_GMAC_MacSecGetMacSecStats(const uint8 CtrlIdx)
-{
-    Std_ReturnType CheckStatus =  (Std_ReturnType)E_NOT_OK;
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_GET_STATS, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_GET_STATS, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-        CheckStatus = Eth_43_GMAC_Ipw_MacSecGetMacSecStats(CtrlIdx);
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    return CheckStatus;
-}
-
-/*================================================================================================*/
-
-void Eth_43_GMAC_MacSecGetMacSecStatsNotification(const uint8 CtrlIdx, const Mka_Stats_SecYType* MacSecStats)
-{
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_GET_STATS_NOTIFICATION, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_GET_STATS_NOTIFICATION, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (NULL_PTR == MacSecStats)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_GET_STATS_NOTIFICATION, ETH_43_GMAC_E_PARAM_POINTER);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-        Eth_43_GMAC_Ipw_MacSecGetMacSecStatsNotification(CtrlIdx, (Mka_Stats_SecYType*) MacSecStats);
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-}
-
-Std_ReturnType Eth_43_GMAC_MacSecInit(const uint8 CtrlIdx)
-{
-    Std_ReturnType CheckStatus =  (Std_ReturnType)E_NOT_OK;
-
-   #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_INIT, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_INIT, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (ETH_STATE_INIT != Eth_43_GMAC_axCtrlState[CtrlIdx])
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_MACSEC_INIT, ETH_43_GMAC_E_UNINIT);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-       CheckStatus = Eth_43_GMAC_Ipw_Init(CtrlIdx);
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-    return CheckStatus;
-}
-#endif /* (STD_ON == ETH_43_GMAC_MACSEC_SUPPORT) */
-#endif /* defined(ETH_43_GMAC_MACSEC_SUPPORT)*/
-
-
-#if defined(ETH_43_GMAC_FILL_LEVEL_API_ENABLE)
-#if (ETH_43_GMAC_FILL_LEVEL_API_ENABLE == STD_ON)
-Std_ReturnType Eth_43_GMAC_GetRxRingFillLevel(const uint8 CtrlIdx, const uint8 RingIdx, Eth_43_GMAC_FillLevelInfo *FillInfo)
-{
-    Std_ReturnType CheckStatus = (Std_ReturnType)E_NOT_OK;
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_RX_RING_FILL_LEVEL, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_RX_RING_FILL_LEVEL, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (ETH_STATE_INIT != Eth_43_GMAC_axCtrlState[CtrlIdx])
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_RX_RING_FILL_LEVEL, ETH_43_GMAC_E_UNINIT);
-    }
-    else if (RingIdx >= Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->Eth_43_GMAC_pIngressConfig->FifoCount)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_RX_RING_FILL_LEVEL, ETH_43_GMAC_E_INV_PARAM);
-    }
-    else if (NULL_PTR == FillInfo)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_RX_RING_FILL_LEVEL, ETH_43_GMAC_E_PARAM_POINTER);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-        CheckStatus = Eth_43_GMAC_Ipw_GetRxRingFillLevel(CtrlIdx, RingIdx, FillInfo);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    return CheckStatus;
-}
-
-Std_ReturnType Eth_43_GMAC_GetTxRingFillLevel(const uint8 CtrlIdx, const uint8 RingIdx, Eth_43_GMAC_FillLevelInfo *FillInfo)
-{
-    Std_ReturnType CheckStatus = (Std_ReturnType)E_NOT_OK;
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    uint32 PartitionId = Eth_43_GMAC_GetUserID();
-
-#if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-    if ((PartitionId >= ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]))
-#else
-    if (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId])
-#endif
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_TX_RING_FILL_LEVEL, ETH_43_GMAC_E_UNINIT);
-    }
-    else if ((CtrlIdx >= ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED) || (NULL_PTR == Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]))
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_TX_RING_FILL_LEVEL, ETH_43_GMAC_E_INV_CTRL_IDX);
-    }
-    else if (ETH_STATE_INIT != Eth_43_GMAC_axCtrlState[CtrlIdx])
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_TX_RING_FILL_LEVEL, ETH_43_GMAC_E_UNINIT);
-    }
-    else if (RingIdx >= Eth_43_GMAC_apxInternalCfg[PartitionId]->Eth_43_GMAC_apCtrlConfig[CtrlIdx]->Eth_43_GMAC_pEgressConfig->FifoCount)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_TX_RING_FILL_LEVEL, ETH_43_GMAC_E_INV_PARAM);
-    }
-    else if (NULL_PTR == FillInfo)
-    {
-        (void)Det_ReportError(ETH_43_GMAC_MODULE_ID, ETH_43_GMAC_DRIVER_INSTANCE, ETH_43_GMAC_SID_GET_TX_RING_FILL_LEVEL, ETH_43_GMAC_E_PARAM_POINTER);
-    }
-    else
-    {
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-        CheckStatus = Eth_43_GMAC_Ipw_GetTxRingFillLevel(CtrlIdx, RingIdx, FillInfo);
-
-#if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
-    }
-#endif /* ETH_43_GMAC_DEV_ERROR_DETECT  */
-
-    return CheckStatus;
-}
-
-#endif  /* STD_ON == ETH_43_GMAC_FILL_LEVEL_API_ENABLE  */
-#endif /* defined(ETH_43_GMAC_FILL_LEVEL_API_ENABLE) */
 
 #define ETH_43_GMAC_STOP_SEC_CODE
 #include "Eth_43_GMAC_MemMap.h"

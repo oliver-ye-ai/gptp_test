@@ -7,12 +7,13 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
-*   Copyright 2020 - 2024 NXP
+*   (c) Copyright 2020 - 2024 NXP
+*   All Rights Reserved.
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -48,7 +49,7 @@ extern "C"{
 #define GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION_C       4
 #define GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION_C       7
 #define GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION_C    0
-#define GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION_C               5
+#define GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION_C               4
 #define GMAC_IP_HW_ACCESS_SW_MINOR_VERSION_C               0
 #define GMAC_IP_HW_ACCESS_SW_PATCH_VERSION_C               0
 
@@ -61,29 +62,26 @@ extern "C"{
 #endif
 #if ((GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION_C    != GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION) || \
      (GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION_C    != GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION) || \
-     (GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION) \
-    )
+     (GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip_Hw_Access.c and Gmac_Ip_Hw_Access.h are different"
 #endif
 #if ((GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION_C != GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION) || \
      (GMAC_IP_HW_ACCESS_SW_MINOR_VERSION_C != GMAC_IP_HW_ACCESS_SW_MINOR_VERSION) || \
-     (GMAC_IP_HW_ACCESS_SW_PATCH_VERSION_C != GMAC_IP_HW_ACCESS_SW_PATCH_VERSION)    \
-    )
+     (GMAC_IP_HW_ACCESS_SW_PATCH_VERSION_C != GMAC_IP_HW_ACCESS_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip_Hw_Access.c and Gmac_Ip_Hw_Access.h are different"
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Checks against OsIf.h */
     #if (( GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION_C    != OSIF_AR_RELEASE_MAJOR_VERSION) || \
-         ( GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION_C    != OSIF_AR_RELEASE_MINOR_VERSION)    \
-        )
+        ( GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION_C    != OSIF_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Gmac_Ip_Hw_Access.c and OsIf.h are different"
     #endif
 #endif
 
-/*==================================================================================================
-*                                          LOCAL MACROS
-==================================================================================================*/
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 
 #define GMAC_CRC32_BITS_31_28_MASK     (0xF0000000U)
 #define GMAC_CRC32_BITS_31_28_SHIFT    28U
@@ -102,13 +100,9 @@ extern "C"{
 
 #define FEATURE_GMAC_HASH_TABLE_DIM              (FEATURE_GMAC_HASH_TABLE_SZ / 32U)
 
-/*==================================================================================================
-*                                         LOCAL CONSTANTS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                         LOCAL VARIABLES
-==================================================================================================*/
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
 #define ETH_43_GMAC_START_SEC_CONST_UNSPECIFIED
 #include "Eth_43_GMAC_MemMap.h"
 
@@ -123,22 +117,9 @@ Gmac_Ip_QueueType * const Gmac_apxQueueBases[FEATURE_GMAC_NUM_INSTANCES][FEATURE
 #define ETH_43_GMAC_STOP_SEC_CONST_UNSPECIFIED
 #include "Eth_43_GMAC_MemMap.h"
 
-/*==================================================================================================
-*                                        GLOBAL CONSTANTS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                        GLOBAL VARIABLES
-==================================================================================================*/
-
-/*==================================================================================================
-*                                    LOCAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
-/*==================================================================================================
-*                                         LOCAL FUNCTIONS
-==================================================================================================*/
-
+/*******************************************************************************
+ * Private Functions
+ ******************************************************************************/
 #define ETH_43_GMAC_START_SEC_CODE
 #include "Eth_43_GMAC_MemMap.h"
 
@@ -161,28 +142,29 @@ static inline uint32 REV_BITS_32(uint32 value)
 }
 
 #if (FEATURE_GMAC_ASP_ALL || FEATURE_GMAC_ASP_ECC)
-static void GMAC_IrqFSMHandler(const uint8 Instance, \
-                               uint32 ErrorStatusFlags, \
-                               uint32 ErrorEnFlags \
-                              );
-static void GMAC_IrqFSMDPPHandler(const uint8 Instance, \
-                                  uint32 ErrorStatusFlags, \
-                                  uint32 ErrorEnFlags \
-                                 );
-static void GMAC_IrqECCHandler(const uint8 Instance, \
-                               uint32 ErrorStatusFlags, \
-                               uint32 ErrorEnFlags \
-                              );
+static void GMAC_IrqFSMHandler( \
+                                const uint8 Instance, \
+                                uint32 ErrorStatusFlags, \
+                                uint32 ErrorEnFlags \
+                             );
+static void GMAC_IrqFSMDPPHandler( \
+                                const uint8 Instance, \
+                                uint32 ErrorStatusFlags, \
+                                uint32 ErrorEnFlags \
+                             );
+static void GMAC_IrqECCHandler( \
+                                const uint8 Instance, \
+                                uint32 ErrorStatusFlags, \
+                                uint32 ErrorEnFlags \
+                             );
 
 #define GMAC_ECC_CTL_MASK           (GMAC_MTL_ECC_CONTROL_MTXEE_MASK | \
                                      GMAC_MTL_ECC_CONTROL_MRXEE_MASK | \
-                                     GMAC_MTL_ECC_CONTROL_MESTEE_MASK  \
-                                    )
+                                     GMAC_MTL_ECC_CONTROL_MESTEE_MASK)
 
 #define GMAC_ECC_STS_MASK           (GMAC_MTL_ECC_INTERRUPT_STATUS_EUES_MASK  | GMAC_MTL_ECC_INTERRUPT_STATUS_EAMS_MASK  | \
                                      GMAC_MTL_ECC_INTERRUPT_STATUS_RXUES_MASK | GMAC_MTL_ECC_INTERRUPT_STATUS_RXAMS_MASK | \
-                                     GMAC_MTL_ECC_INTERRUPT_STATUS_TXUES_MASK | GMAC_MTL_ECC_INTERRUPT_STATUS_TXAMS_MASK   \
-                                    )
+                                     GMAC_MTL_ECC_INTERRUPT_STATUS_TXUES_MASK | GMAC_MTL_ECC_INTERRUPT_STATUS_TXAMS_MASK)
 
 
 #define GMAC_CSR_TIMEOUT_CTL_MASK   (GMAC_MAC_FSM_CONTROL_TMOUTEN_MASK)
@@ -195,8 +177,7 @@ static void GMAC_IrqECCHandler(const uint8 Instance, \
 #define GMAC_FSM_TIMEOUT_STS_MASK   (GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_PTES_MASK |  \
                                      GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_ATES_MASK |  \
                                      GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_RTES_MASK |  \
-                                     GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_TTES_MASK    \
-                                    )
+                                     GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_TTES_MASK)
 
 
 #define GMAC_FSM_SPP_CTL_MASK       (GMAC_MAC_FSM_CONTROL_PRTYEN_MASK)
@@ -209,13 +190,13 @@ static void GMAC_IrqECCHandler(const uint8 Instance, \
 #define GMAC_DPP_STS_MASK           (GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_ARPES_MASK  | \
                                      GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_MTSPES_MASK | \
                                      GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_MPES_MASK   | \
-                                     GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_RDPES_MASK    \
-                                    )
+                                     GMAC_MAC_DPP_FSM_INTERRUPT_STATUS_RDPES_MASK)
 #if FEATURE_GMAC_ASP_ALL
-static void GMAC_IrqFSMHandler(const uint8 Instance, \
-                               uint32 ErrorStatusFlags, \
-                               uint32 ErrorEnFlags \
-                              )
+static void GMAC_IrqFSMHandler( \
+                                const uint8 Instance, \
+                                uint32 ErrorStatusFlags, \
+                                uint32 ErrorEnFlags \
+                             )
 {
     if (((ErrorStatusFlags & GMAC_FSM_SPP_STS_MASK) != 0U) && ((ErrorEnFlags & GMAC_FSM_SPP_CTL_MASK) != 0U))
     {
@@ -239,10 +220,11 @@ static void GMAC_IrqFSMHandler(const uint8 Instance, \
     }
 }
 
-static void GMAC_IrqFSMDPPHandler(const uint8 Instance, \
-                                  uint32 ErrorStatusFlags, \
-                                  uint32 ErrorEnFlags \
-                                 )
+static void GMAC_IrqFSMDPPHandler( \
+                                const uint8 Instance, \
+                                uint32 ErrorStatusFlags, \
+                                uint32 ErrorEnFlags \
+                             )
 {
     const GMAC_Type *Base = Gmac_apxBases[Instance];
 
@@ -264,10 +246,11 @@ static void GMAC_IrqFSMDPPHandler(const uint8 Instance, \
     }
 }
 #endif
-static void GMAC_IrqECCHandler(const uint8 Instance, \
-                               uint32 ErrorStatusFlags, \
-                               uint32 ErrorEnFlags \
-                              )
+static void GMAC_IrqECCHandler( \
+                                const uint8 Instance, \
+                                uint32 ErrorStatusFlags, \
+                                uint32 ErrorEnFlags \
+                             )
 {
     /* Check if driver is initialized */
     if (Gmac_apxState[Instance] != NULL_PTR)
@@ -318,9 +301,9 @@ static void GMAC_MACIRQHandler(uint8 Instance)
         }
     }
 }
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
 
 /*FUNCTION**********************************************************************
  *
@@ -351,7 +334,7 @@ boolean GMAC_TimeoutExpired(uint32 *StartTimeInOut,
     boolean RetVal = FALSE;
     *ElapsedTimeInOut += OsIf_GetElapsed(StartTimeInOut, GMAC_TIMEOUT_TYPE);
 
-    if (*ElapsedTimeInOut >= TimeoutTicks)
+    if(*ElapsedTimeInOut >= TimeoutTicks)
     {
         RetVal = TRUE;
     }
@@ -433,11 +416,11 @@ void GMAC_CommonIRQHandler(uint8 Instance)
             /* Clear the interrupt event. */
             ChBase->DMA_STATUS = Flags;
             (void)ChBase->DMA_STATUS;
-            if ((Flags & GMAC_RX_INTERRUPTS) != 0U)
+            if((Flags & GMAC_RX_INTERRUPTS) != 0U)
             {
                 RxInterruptStatus[i] = 1;
             }
-            if ((Flags & GMAC_TX_INTERRUPTS) != 0U)
+            if((Flags & GMAC_TX_INTERRUPTS) != 0U)
             {
                 TxInterruptStatus[i] = 1;
             }
@@ -449,10 +432,10 @@ void GMAC_CommonIRQHandler(uint8 Instance)
         if (RxInterruptStatus[i] != 0U)
         {
             if (Gmac_apxState[Instance]->RxChCallback[i] != NULL_PTR)
-            {
+            {    
                 Gmac_apxState[Instance]->RxChCallback[i](Instance, i);
-            }
-        }
+            }   
+        }   
     }
     /* Callback function for TX*/
     for (i = 0U; i < Gmac_apxState[Instance]->TxRingCount; i++)
@@ -460,9 +443,9 @@ void GMAC_CommonIRQHandler(uint8 Instance)
         if (TxInterruptStatus[i] != 0U)
         {
             if (Gmac_apxState[Instance]->TxChCallback[i] != NULL_PTR)
-            {
+            {    
                 Gmac_apxState[Instance]->TxChCallback[i](Instance, i);
-            }
+            }   
         }
     }
 }
@@ -518,7 +501,7 @@ void GMAC_SafetyIRQHandler(uint8 Instance)
  * interrupt flags.
  *
  *END**************************************************************************/
-
+ /* implements GMAC_RxIRQHandler_Activity */
 void GMAC_RxIRQHandler(uint8 Instance,
                        uint8 Channel)
 {
@@ -558,7 +541,7 @@ void GMAC_RxIRQHandler(uint8 Instance,
  * interrupt flags.
  *
  *END**************************************************************************/
-
+ /* implements GMAC_TxIRQHandler_Activity  */
 void GMAC_TxIRQHandler(uint8 Instance,
                        uint8 Channel)
 {
@@ -764,68 +747,6 @@ void GMAC_SetPowerState(GMAC_Type * Base, Gmac_Ip_PowerStateType PowerState)
         }
     }
 }
-#ifdef GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE
-    #if (GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE == STD_ON)
-/*FUNCTION**********************************************************************
- *
- * Function Name : GMAC_SetArbitrationScheme
- * Description   : Sets the arbitration scheme between the Transmit and Receive paths of all channels
- *
- *END**************************************************************************/
-void GMAC_SetArbitrationScheme(GMAC_Type * Base, uint8 ArbitrationScheme)
-{
-    Base->DMA_MODE |= GMAC_DMA_MODE_DA(ArbitrationScheme);
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : GMAC_SetTransmitPriority
- * Description   : Sets the priority over TX and Rx
- *
- *END**************************************************************************/
-void GMAC_SetTransmitPriority(GMAC_Type * Base, boolean Enable)
-{
-    Base->DMA_MODE |= GMAC_DMA_MODE_TXPR(Enable ? 1U : 0U); 
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : GMAC_SetTransmitArbitrationAlgorithm
- * Description   : Sets the Transmit Arbitration Algorithm
- *
- *END**************************************************************************/
-void GMAC_SetTransmitArbitrationAlgorithm(GMAC_Type * Base, uint8 ArbitrationScheme)
-{
-    Base->DMA_MODE |= GMAC_DMA_MODE_TAA(ArbitrationScheme);
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : GMAC_SetPriorityRatio
- * Description   : Sets the priority ratio for Weighted Round Robin arbitration algorithm in DMA
- *
- *END**************************************************************************/
-void GMAC_SetPriorityRatio(GMAC_Type *Base, uint8 PriorityRatio)
-{
-    /* Check if the Arbitration Scheme is Weighted Round Robin */
-    if ((Base->DMA_MODE & GMAC_DMA_MODE_DA_MASK) == 0U)
-    {
-        Base->DMA_MODE |= GMAC_DMA_MODE_PR(PriorityRatio);
-    }
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : GMAC_SetTransmitChannelWeight
- * Description   : Sets the transmission weight of a channel
- *
- *END**************************************************************************/
-void GMAC_SetTransmitChannelWeight(uint8 Controller, uint8 Channel, uint8 Weight)
-{
-    Gmac_apxChBases[Controller][Channel]->DMA_TX_CONTROL = GMAC_DMA_CH0_TX_CONTROL_TCW(Weight);
-}
-    #endif
-#endif
 
 /*FUNCTION**********************************************************************
  *
@@ -924,7 +845,6 @@ void GMAC_SetTxQueueOperationMode(Gmac_Ip_QueueType * QueueBase,
                                   uint32 QueueSize)
 {
     uint32 BlockNum;
-
     BlockNum = QueueSize / FEATURE_GMAC_MTL_TX_FIFO_BLOCK_SIZE;
     BlockNum = (BlockNum == 0U)? 0U : (BlockNum - 1UL);
 
@@ -998,7 +918,6 @@ void GMAC_SetRxQueueOperationMode(Gmac_Ip_QueueType * QueueBase,
                                   uint32 QueueSize)
 {
     uint32 BlockNum;
-
     BlockNum = QueueSize / FEATURE_GMAC_MTL_RX_FIFO_BLOCK_SIZE;
     BlockNum = (BlockNum == 0U)? 0U : (BlockNum - 1UL);
 
@@ -1091,7 +1010,7 @@ Gmac_Ip_StatusType GMAC_ReadVlanTagRxFilter(GMAC_Type * Base,
     }
     while (!GMAC_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
 
-    if (GMAC_STATUS_SUCCESS == Status)
+    if (Status == GMAC_STATUS_SUCCESS)
     {
         /* Read the VLAN tag. */
         *VlanTag = (uint16)(Base->MAC_VLAN_TAG_DATA_REG &

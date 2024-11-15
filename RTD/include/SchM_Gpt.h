@@ -7,23 +7,23 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 
 /**
 *   @file    SchM_Gpt.h
-*   @version 5.0.0
+*   @version 4.0.0
 *
 *   @brief   AUTOSAR Rte - module interface
 *   @details This file contains the functions prototypes and data types of the AUTOSAR Rte.
@@ -52,7 +52,7 @@ extern "C" {
 #define SCHM_GPT_AR_RELEASE_MAJOR_VERSION     4
 #define SCHM_GPT_AR_RELEASE_MINOR_VERSION     7
 #define SCHM_GPT_AR_RELEASE_REVISION_VERSION  0
-#define SCHM_GPT_SW_MAJOR_VERSION             5
+#define SCHM_GPT_SW_MAJOR_VERSION             4
 #define SCHM_GPT_SW_MINOR_VERSION             0
 #define SCHM_GPT_SW_PATCH_VERSION             0
 
@@ -233,6 +233,12 @@ extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_60(void);
 extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_61(void);
 extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_61(void);
 
+extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_62(void);
+extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_62(void);
+
+extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_63(void);
+extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_63(void);
+
 extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_64(void);
 extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_64(void);
 
@@ -262,42 +268,6 @@ extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_72(void);
 
 extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_73(void);
 extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_73(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_80(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_80(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_81(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_81(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_82(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_82(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_83(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_83(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_84(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_84(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_85(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_85(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_86(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_86(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_87(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_87(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_88(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_88(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_89(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_89(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_90(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_90(void);
-
-extern void SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_91(void);
-extern void SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_91(void);
 
 
 

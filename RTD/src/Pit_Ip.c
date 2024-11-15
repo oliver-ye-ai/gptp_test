@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -51,7 +51,7 @@ extern "C"{
 #define PIT_IP_AR_RELEASE_MAJOR_VERSION_C     4
 #define PIT_IP_AR_RELEASE_MINOR_VERSION_C     7
 #define PIT_IP_AR_RELEASE_REVISION_VERSION_C  0
-#define PIT_IP_SW_MAJOR_VERSION_C             5
+#define PIT_IP_SW_MAJOR_VERSION_C             4
 #define PIT_IP_SW_MINOR_VERSION_C             0
 #define PIT_IP_SW_PATCH_VERSION_C             0
 
@@ -124,14 +124,14 @@ static boolean Pit_Ip_bIsChangedTimeout;
 *                                      GLOBAL VARIABLES
 ==================================================================================================*/
 #if (PIT_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON)
-#define GPT_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#define GPT_START_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 /**
 * @brief            Pit_Ip_u32OldTargetValue
 * @details          Local variable used to store the previous target time value after call ChangeNextTimeout.
 */
-uint32 Pit_Ip_u32OldTargetValue = 0UL;
-#define GPT_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
+uint32 Pit_Ip_u32OldTargetValue;
+#define GPT_STOP_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 #endif /* (PIT_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON) */
 
@@ -141,20 +141,20 @@ uint32 Pit_Ip_u32OldTargetValue = 0UL;
 #if (defined(CRS_FSS_AND_RTU_BASE_ADDR_OF_PIT_REGISTERS_CONCATENATED) && (CRS_FSS_AND_RTU_BASE_ADDR_OF_PIT_REGISTERS_CONCATENATED == STD_ON))
 #define IP_PIT_BASE_PTRS_CONCATENATED   { IP_CRS__PIT_0, IP_CRS__PIT_1, IP_FSS__COSS_PIT_0, IP_FSS__COSS_PIT_1, IP_FSS__COSS_PIT_2, IP_FSS__COSS_PIT_3, IP_FSS__COSS_PIT_4, IP_FSS__COSS_PIT_5, IP_FSS__COSS_PIT_6, IP_FSS__HKI_PIT, IP_FSS__PIT, (PIT_Type *)IP_RTU0__RTU_PIT0_BASE, (PIT_Type *)IP_RTU0__RTU_PIT1_BASE, (PIT_Type *)IP_RTU1__RTU_PIT0_BASE, (PIT_Type *)IP_RTU1__RTU_PIT1_BASE, (PIT_Type *)IP_RTU2__RTU_PIT0_BASE, (PIT_Type *)IP_RTU2__RTU_PIT1_BASE, (PIT_Type *)IP_RTU3__RTU_PIT0_BASE, (PIT_Type *)IP_RTU3__RTU_PIT1_BASE }
 /** @brief Table of base addresses for PIT instances. */
-static PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS_CONCATENATED;
+PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS_CONCATENATED;
 #elif (defined(PIT_IP_INSTANCE_GAP_EXISTS) && (PIT_IP_INSTANCE_GAP_EXISTS == STD_ON))
 #define IP_PIT_BASE_PTRS_ALT               {IP_PIT_0, NULL_PTR, IP_PIT_2}
 /** @brief Table of base addresses for PIT instances. */
-static PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS_ALT;
+PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS_ALT;
 #else
 /** @brief Table of base addresses for PIT instances. */
-static PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS;
+PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS;
 #endif
 
 #define GPT_STOP_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
-#define GPT_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#define GPT_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 #if (   defined(PIT_0_ISR_USED) || defined(PIT_1_ISR_USED) || defined(PIT_2_ISR_USED) || defined(PIT_4_ISR_USED) || defined(PIT_5_ISR_USED) || \
         defined(CE_PIT_0_CH_0_ISR_USED) || defined(CE_PIT_0_CH_1_ISR_USED) || \
@@ -169,6 +169,7 @@ static PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS;
         defined(CE_PIT_4_CH_2_ISR_USED) || defined(CE_PIT_4_CH_3_ISR_USED) || \
         defined(CE_PIT_5_CH_0_ISR_USED) || defined(CE_PIT_5_CH_1_ISR_USED) || \
         defined(CE_PIT_5_CH_2_ISR_USED) || defined(CE_PIT_5_CH_3_ISR_USED) || \
+        defined(RTU_PIT_0_ISR_USED) || defined(RTU_PIT_1_ISR_USED) || \
         defined(RTU0_PIT_0_ISR_USED) || defined(RTU0_PIT_1_ISR_USED) || \
         defined(RTU1_PIT_0_ISR_USED) || defined(RTU1_PIT_1_ISR_USED) || \
         defined(RTU2_PIT_0_ISR_USED) || defined(RTU2_PIT_1_ISR_USED) || \
@@ -181,11 +182,43 @@ static PIT_Type * const pitBase[GPT_PIT_INSTANCE_COUNT] = IP_PIT_BASE_PTRS;
         defined(FSS_COSS_PIT_1_CH_1_ISR_USED) || defined(CRS_PIT_1_CH_1_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_2_ISR_USED) || defined(CRS_PIT_1_CH_2_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_3_ISR_USED) || defined(CRS_PIT_1_CH_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_2_ISR_USED) || defined(FSS_COSS_PIT_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_4_ISR_USED) || defined(FSS_COSS_PIT_5_ISR_USED) || \
-        defined(FSS_COSS_PIT_6_ISR_USED) || \
-        defined(FSS_HKI_PIT_0_ISR_USED) || \
-        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || defined(FSS_PIT_0_CH_2_ISR_USED) )
+        defined(FSS_COSS_PIT_2_CH_0_ISR_USED) || defined(FSS_COSS_PIT_2_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_2_CH_2_ISR_USED) || defined(FSS_COSS_PIT_2_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_0_ISR_USED) || defined(FSS_COSS_PIT_3_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_2_ISR_USED) || defined(FSS_COSS_PIT_3_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_0_ISR_USED) || defined(FSS_COSS_PIT_4_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_2_ISR_USED) || defined(FSS_COSS_PIT_4_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_0_ISR_USED) || defined(FSS_COSS_PIT_5_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_2_ISR_USED) || defined(FSS_COSS_PIT_5_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_0_ISR_USED) || defined(FSS_COSS_PIT_6_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_2_ISR_USED) || defined(FSS_COSS_PIT_6_CH_3_ISR_USED) || \
+        defined(FSS_HKI_PIT_ISR_USED) || \
+        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || \
+        defined(FSS_PIT_0_CH_2_ISR_USED) || defined(FSS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_0_ISR_USED) || defined(RTU0_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_2_ISR_USED) || defined(RTU0_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_4_ISR_USED) || defined(RTU0_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_0_ISR_USED) || defined(RTU0_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_2_ISR_USED) || defined(RTU0_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_4_ISR_USED) || defined(RTU0_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_0_ISR_USED) || defined(RTU1_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_2_ISR_USED) || defined(RTU1_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_4_ISR_USED) || defined(RTU1_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_0_ISR_USED) || defined(RTU1_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_2_ISR_USED) || defined(RTU1_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_4_ISR_USED) || defined(RTU1_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_0_ISR_USED) || defined(RTU2_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_2_ISR_USED) || defined(RTU2_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_4_ISR_USED) || defined(RTU2_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_0_ISR_USED) || defined(RTU2_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_2_ISR_USED) || defined(RTU2_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_4_ISR_USED) || defined(RTU2_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_0_ISR_USED) || defined(RTU3_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_2_ISR_USED) || defined(RTU3_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_4_ISR_USED) || defined(RTU3_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_0_ISR_USED) || defined(RTU3_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_2_ISR_USED) || defined(RTU3_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_4_ISR_USED) || defined(RTU3_COS_PIT_1_CH_5_ISR_USED) )
 /** @brief Global array variable used to channel state for process common interrupt */
 static Pit_Ip_State Pit_Ip_u32ChState[GPT_PIT_INSTANCE_COUNT][PIT_CHANNEL_COUNT] =  {
                                                                                     {
@@ -198,7 +231,7 @@ static Pit_Ip_State Pit_Ip_u32ChState[GPT_PIT_INSTANCE_COUNT][PIT_CHANNEL_COUNT]
                                                                                     }
                                                                                 };
 #endif
-#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 /*==================================================================================================
 *                                  LOCAL FUNCTION PROTOTYPES
@@ -319,8 +352,15 @@ ISR(CE_PIT_5_CH_2_ISR);
 ISR(CE_PIT_5_CH_3_ISR);
 #endif
 
-#if defined(FSS_HKI_PIT_0_ISR_USED)
-ISR(FSS_HKI_PIT_0_ISR);
+#if defined(RTU_PIT_0_ISR_USED)
+ISR(RTU_PIT_0_ISR);
+#endif
+#if defined(RTU_PIT_1_ISR_USED)
+ISR(RTU_PIT_1_ISR);
+#endif
+
+#if defined(FSS_HKI_PIT_ISR_USED)
+ISR(FSS_HKI_PIT_0);
 #endif
 
 #if defined(RTU0_PIT_0_ISR_USED)
@@ -400,24 +440,69 @@ ISR(FSS_COSS_PIT_1_CH_2_ISR);
 ISR(FSS_COSS_PIT_1_CH_3_ISR);
 #endif
 
-#if defined(FSS_COSS_PIT_2_ISR_USED)
-ISR(FSS_COSS_PIT_2_ISR);
+#if defined(FSS_COSS_PIT_2_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_0_ISR);
+#endif
+#if defined(FSS_COSS_PIT_2_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_1_ISR);
+#endif
+#if defined(FSS_COSS_PIT_2_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_2_ISR);
+#endif
+#if defined(FSS_COSS_PIT_2_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_3_ISR);
 #endif
 
-#if defined(FSS_COSS_PIT_3_ISR_USED)
-ISR(FSS_COSS_PIT_3_ISR);
+#if defined(FSS_COSS_PIT_3_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_0_ISR);
+#endif
+#if defined(FSS_COSS_PIT_3_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_1_ISR);
+#endif
+#if defined(FSS_COSS_PIT_3_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_2_ISR);
+#endif
+#if defined(FSS_COSS_PIT_3_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_3_ISR);
 #endif
 
-#if defined(FSS_COSS_PIT_4_ISR_USED)
-ISR(FSS_COSS_PIT_4_ISR);
+#if defined(FSS_COSS_PIT_4_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_0_ISR);
+#endif
+#if defined(FSS_COSS_PIT_4_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_1_ISR);
+#endif
+#if defined(FSS_COSS_PIT_4_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_2_ISR);
+#endif
+#if defined(FSS_COSS_PIT_4_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_3_ISR);
 #endif
 
-#if defined(FSS_COSS_PIT_5_ISR_USED)
-ISR(FSS_COSS_PIT_5_ISR);
+#if defined(FSS_COSS_PIT_5_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_0_ISR);
+#endif
+#if defined(FSS_COSS_PIT_5_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_1_ISR);
+#endif
+#if defined(FSS_COSS_PIT_5_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_2_ISR);
+#endif
+#if defined(FSS_COSS_PIT_5_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_3_ISR);
 #endif
 
-#if defined(FSS_COSS_PIT_6_ISR_USED)
-ISR(FSS_COSS_PIT_6_ISR);
+#if defined(FSS_COSS_PIT_6_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_0_ISR);
+#endif
+#if defined(FSS_COSS_PIT_6_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_1_ISR);
+#endif
+#if defined(FSS_COSS_PIT_6_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_2_ISR);
+#endif
+#if defined(FSS_COSS_PIT_6_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_3_ISR);
 #endif
 
 #if defined(FSS_PIT_0_CH_0_ISR_USED)
@@ -429,11 +514,166 @@ ISR(FSS_PIT_0_CH_1_ISR);
 #if defined(FSS_PIT_0_CH_2_ISR_USED)
 ISR(FSS_PIT_0_CH_2_ISR);
 #endif
+#if defined(FSS_PIT_0_CH_3_ISR_USED)
+ISR(FSS_PIT_0_CH_3_ISR);
+#endif
+
+#if (defined(RTU0_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_0_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_1_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_2_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_3_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_4_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_5_ISR);
+#endif
+
+#if (defined(RTU0_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_0_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_1_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_2_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_3_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_4_ISR);
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_5_ISR);
+#endif
+
+#if (defined(RTU1_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_0_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_1_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_2_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_3_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_4_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_5_ISR);
+#endif
+
+#if (defined(RTU1_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_0_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_1_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_2_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_3_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_4_ISR);
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_5_ISR);
+#endif
+
+#if (defined(RTU2_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_0_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_1_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_2_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_3_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_4_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_5_ISR);
+#endif
+
+#if (defined(RTU2_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_0_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_1_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_2_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_3_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_4_ISR);
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_5_ISR);
+#endif
+
+#if (defined(RTU3_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_0_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_1_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_2_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_3_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_4_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_5_ISR);
+#endif
+
+#if (defined(RTU3_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_0_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_1_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_2_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_3_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_4_ISR);
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_5_ISR);
+#endif
 
 #endif /* STD_ON == PIT_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS */
 
 #if (STD_ON == PIT_GPT_IP_MODULE_SINGLE_INTERRUPT)
-
+    
 #if defined(PIT_2_ISR_USED)
 ISR(PIT_2_ISR);
 #endif
@@ -458,6 +698,7 @@ ISR(PIT_3_ISR);
         defined(CE_PIT_4_CH_2_ISR_USED) || defined(CE_PIT_4_CH_3_ISR_USED) || \
         defined(CE_PIT_5_CH_0_ISR_USED) || defined(CE_PIT_5_CH_1_ISR_USED) || \
         defined(CE_PIT_5_CH_2_ISR_USED) || defined(CE_PIT_5_CH_3_ISR_USED) || \
+        defined(RTU_PIT_0_ISR_USED) || defined(RTU_PIT_1_ISR_USED) || \
         defined(RTU0_PIT_0_ISR_USED) || defined(RTU0_PIT_1_ISR_USED) || \
         defined(RTU1_PIT_0_ISR_USED) || defined(RTU1_PIT_1_ISR_USED) || \
         defined(RTU2_PIT_0_ISR_USED) || defined(RTU2_PIT_1_ISR_USED) || \
@@ -470,11 +711,43 @@ ISR(PIT_3_ISR);
         defined(FSS_COSS_PIT_1_CH_1_ISR_USED) || defined(CRS_PIT_1_CH_1_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_2_ISR_USED) || defined(CRS_PIT_1_CH_2_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_3_ISR_USED) || defined(CRS_PIT_1_CH_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_2_ISR_USED) || defined(FSS_COSS_PIT_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_4_ISR_USED) || defined(FSS_COSS_PIT_5_ISR_USED) || \
-        defined(FSS_COSS_PIT_6_ISR_USED) || \
-        defined(FSS_HKI_PIT_0_ISR_USED) || \
-        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || defined(FSS_PIT_0_CH_2_ISR_USED) )
+        defined(FSS_COSS_PIT_2_CH_0_ISR_USED) || defined(FSS_COSS_PIT_2_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_2_CH_2_ISR_USED) || defined(FSS_COSS_PIT_2_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_0_ISR_USED) || defined(FSS_COSS_PIT_3_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_2_ISR_USED) || defined(FSS_COSS_PIT_3_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_0_ISR_USED) || defined(FSS_COSS_PIT_4_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_2_ISR_USED) || defined(FSS_COSS_PIT_4_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_0_ISR_USED) || defined(FSS_COSS_PIT_5_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_2_ISR_USED) || defined(FSS_COSS_PIT_5_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_0_ISR_USED) || defined(FSS_COSS_PIT_6_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_2_ISR_USED) || defined(FSS_COSS_PIT_6_CH_3_ISR_USED) || \
+        defined(FSS_HKI_PIT_ISR_USED) || \
+        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || \
+        defined(FSS_PIT_0_CH_2_ISR_USED) || defined(FSS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_0_ISR_USED) || defined(RTU0_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_2_ISR_USED) || defined(RTU0_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_4_ISR_USED) || defined(RTU0_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_0_ISR_USED) || defined(RTU0_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_2_ISR_USED) || defined(RTU0_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_4_ISR_USED) || defined(RTU0_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_0_ISR_USED) || defined(RTU1_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_2_ISR_USED) || defined(RTU1_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_4_ISR_USED) || defined(RTU1_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_0_ISR_USED) || defined(RTU1_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_2_ISR_USED) || defined(RTU1_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_4_ISR_USED) || defined(RTU1_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_0_ISR_USED) || defined(RTU2_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_2_ISR_USED) || defined(RTU2_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_4_ISR_USED) || defined(RTU2_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_0_ISR_USED) || defined(RTU2_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_2_ISR_USED) || defined(RTU2_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_4_ISR_USED) || defined(RTU2_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_0_ISR_USED) || defined(RTU3_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_2_ISR_USED) || defined(RTU3_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_4_ISR_USED) || defined(RTU3_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_0_ISR_USED) || defined(RTU3_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_2_ISR_USED) || defined(RTU3_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_4_ISR_USED) || defined(RTU3_COS_PIT_1_CH_5_ISR_USED) )
 static void Pit_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel);
 static inline boolean Pit_Ip_GetInterruptEnableFlag(uint8 instance, uint8 channel);
 #endif
@@ -766,46 +1039,10 @@ static inline void Pit_Ip_Reset(uint8 instance, uint8 channelNum, boolean availa
         pitBase[instance]->TIMER[i].TCTRL = PIT_TCTRL_TEN(0U) | PIT_TCTRL_TIE(0U) | PIT_TCTRL_CHN(0U);
         pitBase[instance]->TIMER[i].LDVAL = PIT_LDVAL_TSV(0U);
         pitBase[instance]->TIMER[i].TFLG = PIT_TFLG_TIF_MASK;
-#if (   defined(PIT_0_ISR_USED) || defined(PIT_1_ISR_USED) || defined(PIT_2_ISR_USED) || defined(PIT_4_ISR_USED) || defined(PIT_5_ISR_USED) || \
-        defined(CE_PIT_0_CH_0_ISR_USED) || defined(CE_PIT_0_CH_1_ISR_USED) || \
-        defined(CE_PIT_0_CH_2_ISR_USED) || defined(CE_PIT_0_CH_3_ISR_USED) || \
-        defined(CE_PIT_1_CH_0_ISR_USED) || defined(CE_PIT_1_CH_1_ISR_USED) || \
-        defined(CE_PIT_1_CH_2_ISR_USED) || defined(CE_PIT_1_CH_3_ISR_USED) || \
-        defined(CE_PIT_2_CH_0_ISR_USED) || defined(CE_PIT_2_CH_1_ISR_USED) || \
-        defined(CE_PIT_2_CH_2_ISR_USED) || defined(CE_PIT_2_CH_3_ISR_USED) || \
-        defined(CE_PIT_3_CH_0_ISR_USED) || defined(CE_PIT_3_CH_1_ISR_USED) || \
-        defined(CE_PIT_3_CH_2_ISR_USED) || defined(CE_PIT_3_CH_3_ISR_USED) || \
-        defined(CE_PIT_4_CH_0_ISR_USED) || defined(CE_PIT_4_CH_1_ISR_USED) || \
-        defined(CE_PIT_4_CH_2_ISR_USED) || defined(CE_PIT_4_CH_3_ISR_USED) || \
-        defined(CE_PIT_5_CH_0_ISR_USED) || defined(CE_PIT_5_CH_1_ISR_USED) || \
-        defined(CE_PIT_5_CH_2_ISR_USED) || defined(CE_PIT_5_CH_3_ISR_USED) || \
-        defined(RTU0_PIT_0_ISR_USED) || defined(RTU0_PIT_1_ISR_USED) || \
-        defined(RTU1_PIT_0_ISR_USED) || defined(RTU1_PIT_1_ISR_USED) || \
-        defined(RTU2_PIT_0_ISR_USED) || defined(RTU2_PIT_1_ISR_USED) || \
-        defined(RTU3_PIT_0_ISR_USED) || defined(RTU3_PIT_1_ISR_USED) || \
-        defined(FSS_COSS_PIT_0_CH_0_ISR_USED) || defined(CRS_PIT_0_CH_0_ISR_USED) || \
-        defined(FSS_COSS_PIT_0_CH_1_ISR_USED) || defined(CRS_PIT_0_CH_1_ISR_USED) || \
-        defined(FSS_COSS_PIT_0_CH_2_ISR_USED) || defined(CRS_PIT_0_CH_2_ISR_USED) || \
-        defined(FSS_COSS_PIT_0_CH_3_ISR_USED) || defined(CRS_PIT_0_CH_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_1_CH_0_ISR_USED) || defined(CRS_PIT_1_CH_0_ISR_USED) || \
-        defined(FSS_COSS_PIT_1_CH_1_ISR_USED) || defined(CRS_PIT_1_CH_1_ISR_USED) || \
-        defined(FSS_COSS_PIT_1_CH_2_ISR_USED) || defined(CRS_PIT_1_CH_2_ISR_USED) || \
-        defined(FSS_COSS_PIT_1_CH_3_ISR_USED) || defined(CRS_PIT_1_CH_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_2_ISR_USED) || defined(FSS_COSS_PIT_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_4_ISR_USED) || defined(FSS_COSS_PIT_5_ISR_USED) || \
-        defined(FSS_COSS_PIT_6_ISR_USED) || \
-        defined(FSS_HKI_PIT_0_ISR_USED) || \
-        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || defined(FSS_PIT_0_CH_2_ISR_USED) )
-        /* Set state variab values to default value */
-        Pit_Ip_u32ChState[instance][i].chInit = FALSE;
-        Pit_Ip_u32ChState[instance][i].callback = NULL_PTR;
-        Pit_Ip_u32ChState[instance][i].callbackParam = 0;
-        Pit_Ip_u32ChState[instance][i].channelMode = PIT_IP_CH_MODE_CONTINUOUS;
-#endif
     }
+
     pitBase[instance]->MCR = mask;
 }
-
 /**
 * @brief         Pit_Ip_IsChannelRunning
 * @details       Support enable/disable Timer Enable
@@ -1092,6 +1329,7 @@ static inline Pit_Ip_StatusType Pit_Ip_ValidateInstCall(uint8 instance)
         defined(CE_PIT_4_CH_2_ISR_USED) || defined(CE_PIT_4_CH_3_ISR_USED) || \
         defined(CE_PIT_5_CH_0_ISR_USED) || defined(CE_PIT_5_CH_1_ISR_USED) || \
         defined(CE_PIT_5_CH_2_ISR_USED) || defined(CE_PIT_5_CH_3_ISR_USED) || \
+        defined(RTU_PIT_0_ISR_USED) || defined(RTU_PIT_1_ISR_USED) || \
         defined(RTU0_PIT_0_ISR_USED) || defined(RTU0_PIT_1_ISR_USED) || \
         defined(RTU1_PIT_0_ISR_USED) || defined(RTU1_PIT_1_ISR_USED) || \
         defined(RTU2_PIT_0_ISR_USED) || defined(RTU2_PIT_1_ISR_USED) || \
@@ -1104,11 +1342,43 @@ static inline Pit_Ip_StatusType Pit_Ip_ValidateInstCall(uint8 instance)
         defined(FSS_COSS_PIT_1_CH_1_ISR_USED) || defined(CRS_PIT_1_CH_1_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_2_ISR_USED) || defined(CRS_PIT_1_CH_2_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_3_ISR_USED) || defined(CRS_PIT_1_CH_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_2_ISR_USED) || defined(FSS_COSS_PIT_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_4_ISR_USED) || defined(FSS_COSS_PIT_5_ISR_USED) || \
-        defined(FSS_COSS_PIT_6_ISR_USED) || \
-        defined(FSS_HKI_PIT_0_ISR_USED) || \
-        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || defined(FSS_PIT_0_CH_2_ISR_USED) )
+        defined(FSS_COSS_PIT_2_CH_0_ISR_USED) || defined(FSS_COSS_PIT_2_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_2_CH_2_ISR_USED) || defined(FSS_COSS_PIT_2_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_0_ISR_USED) || defined(FSS_COSS_PIT_3_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_2_ISR_USED) || defined(FSS_COSS_PIT_3_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_0_ISR_USED) || defined(FSS_COSS_PIT_4_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_2_ISR_USED) || defined(FSS_COSS_PIT_4_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_0_ISR_USED) || defined(FSS_COSS_PIT_5_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_2_ISR_USED) || defined(FSS_COSS_PIT_5_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_0_ISR_USED) || defined(FSS_COSS_PIT_6_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_2_ISR_USED) || defined(FSS_COSS_PIT_6_CH_3_ISR_USED) || \
+        defined(FSS_HKI_PIT_ISR_USED) || \
+        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || \
+        defined(FSS_PIT_0_CH_2_ISR_USED) || defined(FSS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_0_ISR_USED) || defined(RTU0_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_2_ISR_USED) || defined(RTU0_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_4_ISR_USED) || defined(RTU0_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_0_ISR_USED) || defined(RTU0_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_2_ISR_USED) || defined(RTU0_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_4_ISR_USED) || defined(RTU0_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_0_ISR_USED) || defined(RTU1_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_2_ISR_USED) || defined(RTU1_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_4_ISR_USED) || defined(RTU1_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_0_ISR_USED) || defined(RTU1_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_2_ISR_USED) || defined(RTU1_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_4_ISR_USED) || defined(RTU1_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_0_ISR_USED) || defined(RTU2_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_2_ISR_USED) || defined(RTU2_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_4_ISR_USED) || defined(RTU2_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_0_ISR_USED) || defined(RTU2_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_2_ISR_USED) || defined(RTU2_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_4_ISR_USED) || defined(RTU2_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_0_ISR_USED) || defined(RTU3_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_2_ISR_USED) || defined(RTU3_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_4_ISR_USED) || defined(RTU3_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_0_ISR_USED) || defined(RTU3_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_2_ISR_USED) || defined(RTU3_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_4_ISR_USED) || defined(RTU3_COS_PIT_1_CH_5_ISR_USED) )
 /*!
  * @brief   Get the Interrupt Enable Flag of PIT peripheral timer channel.
  * @details Support PIT interrupt flags
@@ -1162,9 +1432,6 @@ static void Pit_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
 
     if ((instance < GPT_PIT_INSTANCE_COUNT) && (channel < PIT_CHANNEL_COUNT))
     {
-        /* get the driver status */
-        chInit = Pit_Ip_u32ChState[instance][channel].chInit;
-
         /* enter critical section */
         SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_03();
         {
@@ -1174,49 +1441,32 @@ static void Pit_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
             /* check if channel event has occurred */
             HasChEvOccurred = Pit_Ip_GetInterruptStatusFlag(instance, channel);
 
-            /* Check if driver is initialized */
-            if (TRUE == chInit)
+            if (IsChEvEnabled && HasChEvOccurred)
             {
-                /* Check for spurious interrupts */
-                if (IsChEvEnabled && HasChEvOccurred)
-                {
-                    /* Clear pending interrupts */
-                    Pit_Ip_ClearInterruptStatusFlag(instance, channel);
-                }
-            }
-            else
-            {
-                /* Driver isn't initialized and just clear pending interrupts */
-                if (HasChEvOccurred)
-                {
-                    /* Clear pending interrupts */
-                    Pit_Ip_ClearInterruptStatusFlag(instance, channel);
-                }
+                /* Clear pending interrupts */
+                Pit_Ip_ClearInterruptStatusFlag(instance, channel);
             }
         }
         /* exit critical section */
         SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_03();
 
-        /* Check if driver is initialized */
-        if (TRUE == chInit)
+        /* Check for spurious interrupts */
+        if (IsChEvEnabled && HasChEvOccurred)
         {
-            /* Check for spurious interrupts */
-            if (IsChEvEnabled && HasChEvOccurred)
+            chInit          = Pit_Ip_u32ChState[instance][channel].chInit;
+            callback        = Pit_Ip_u32ChState[instance][channel].callback;
+            channelMode     = Pit_Ip_u32ChState[instance][channel].channelMode;
+            callbackParam   = Pit_Ip_u32ChState[instance][channel].callbackParam;
+
+            if(PIT_IP_CH_MODE_ONESHOT == channelMode)
             {
-                callback        = Pit_Ip_u32ChState[instance][channel].callback;
-                channelMode     = Pit_Ip_u32ChState[instance][channel].channelMode;
-                callbackParam   = Pit_Ip_u32ChState[instance][channel].callbackParam;
+                Pit_Ip_StopChannel(instance, channel);
+            }
 
-                if(PIT_IP_CH_MODE_ONESHOT == channelMode)
-                {
-                    Pit_Ip_StopChannel(instance, channel);
-                }
-
-                /* Call GPT upper layer handler */
-                if (NULL_PTR != callback)
-                {
-                    callback(callbackParam);
-                }
+            /* Call GPT upper layer handler */
+            if ((TRUE == chInit) && (NULL_PTR != callback))
+            {
+                callback(callbackParam);
             }
         }
     }
@@ -1225,36 +1475,6 @@ static void Pit_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
 /*==================================================================================================
 *                                      GLOBAL FUNCTIONS
 ==================================================================================================*/
-/*!
- * @brief   Get the Interrupt Status Flag of PIT peripheral timer channel.
- * @details Support get of PIT interrupt status flag
- *          This register is intended for Timer interrupt status flag
- *
- * @param[in] instance - Instance number of PIT module
- * @param[in] channel - The channel in the PIT instance
- *
- * @return Channel Interrupt Status Flag
- *         - True : Channel interrupt has occurred
- *         - False: No channel interrupt has occurred
- * @pre The driver needs to be initialized.
- *
- */
-boolean Pit_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel)
-{
-    boolean returnFlag;
-#ifdef PIT_IP_RTI_CHANNEL_EXISTS
-    if (RTI == channel)
-    {
-        returnFlag = (0U != (pitBase[instance]->RTI_TFLG & PIT_RTI_TFLG_TIF_MASK)) ? TRUE : FALSE;
-    }
-    else
-#endif
-    {
-        returnFlag = (0U != (pitBase[instance]->TIMER[channel].TFLG & PIT_TFLG_TIF_MASK)) ? TRUE : FALSE;
-    }
-    return returnFlag;
-}
-
 /**
 * @brief         Function Name : Pit_Ip_Init
 * @details       Driver initialization function. This function is called for each PIT hw Instance and
@@ -1366,6 +1586,7 @@ void Pit_Ip_InitChannel(uint8 instance, const Pit_Ip_ChannelConfigType *chnlConf
         defined(CE_PIT_4_CH_2_ISR_USED) || defined(CE_PIT_4_CH_3_ISR_USED) || \
         defined(CE_PIT_5_CH_0_ISR_USED) || defined(CE_PIT_5_CH_1_ISR_USED) || \
         defined(CE_PIT_5_CH_2_ISR_USED) || defined(CE_PIT_5_CH_3_ISR_USED) || \
+        defined(RTU_PIT_0_ISR_USED) || defined(RTU_PIT_1_ISR_USED) || \
         defined(RTU0_PIT_0_ISR_USED) || defined(RTU0_PIT_1_ISR_USED) || \
         defined(RTU1_PIT_0_ISR_USED) || defined(RTU1_PIT_1_ISR_USED) || \
         defined(RTU2_PIT_0_ISR_USED) || defined(RTU2_PIT_1_ISR_USED) || \
@@ -1378,11 +1599,43 @@ void Pit_Ip_InitChannel(uint8 instance, const Pit_Ip_ChannelConfigType *chnlConf
         defined(FSS_COSS_PIT_1_CH_1_ISR_USED) || defined(CRS_PIT_1_CH_1_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_2_ISR_USED) || defined(CRS_PIT_1_CH_2_ISR_USED) || \
         defined(FSS_COSS_PIT_1_CH_3_ISR_USED) || defined(CRS_PIT_1_CH_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_2_ISR_USED) || defined(FSS_COSS_PIT_3_ISR_USED) || \
-        defined(FSS_COSS_PIT_4_ISR_USED) || defined(FSS_COSS_PIT_5_ISR_USED) || \
-        defined(FSS_COSS_PIT_6_ISR_USED) || \
-        defined(FSS_HKI_PIT_0_ISR_USED) || \
-        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || defined(FSS_PIT_0_CH_2_ISR_USED) )
+        defined(FSS_COSS_PIT_2_CH_0_ISR_USED) || defined(FSS_COSS_PIT_2_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_2_CH_2_ISR_USED) || defined(FSS_COSS_PIT_2_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_0_ISR_USED) || defined(FSS_COSS_PIT_3_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_3_CH_2_ISR_USED) || defined(FSS_COSS_PIT_3_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_0_ISR_USED) || defined(FSS_COSS_PIT_4_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_4_CH_2_ISR_USED) || defined(FSS_COSS_PIT_4_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_0_ISR_USED) || defined(FSS_COSS_PIT_5_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_5_CH_2_ISR_USED) || defined(FSS_COSS_PIT_5_CH_3_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_0_ISR_USED) || defined(FSS_COSS_PIT_6_CH_1_ISR_USED) || \
+        defined(FSS_COSS_PIT_6_CH_2_ISR_USED) || defined(FSS_COSS_PIT_6_CH_3_ISR_USED) || \
+        defined(FSS_HKI_PIT_ISR_USED) || \
+        defined(FSS_PIT_0_CH_0_ISR_USED) || defined(FSS_PIT_0_CH_1_ISR_USED) || \
+        defined(FSS_PIT_0_CH_2_ISR_USED) || defined(FSS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_0_ISR_USED) || defined(RTU0_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_2_ISR_USED) || defined(RTU0_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_0_CH_4_ISR_USED) || defined(RTU0_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_0_ISR_USED) || defined(RTU0_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_2_ISR_USED) || defined(RTU0_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_PIT_1_CH_4_ISR_USED) || defined(RTU0_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_0_ISR_USED) || defined(RTU1_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_2_ISR_USED) || defined(RTU1_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_0_CH_4_ISR_USED) || defined(RTU1_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_0_ISR_USED) || defined(RTU1_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_2_ISR_USED) || defined(RTU1_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_PIT_1_CH_4_ISR_USED) || defined(RTU1_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_0_ISR_USED) || defined(RTU2_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_2_ISR_USED) || defined(RTU2_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_0_CH_4_ISR_USED) || defined(RTU2_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_0_ISR_USED) || defined(RTU2_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_2_ISR_USED) || defined(RTU2_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_PIT_1_CH_4_ISR_USED) || defined(RTU2_COS_PIT_1_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_0_ISR_USED) || defined(RTU3_COS_PIT_0_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_2_ISR_USED) || defined(RTU3_COS_PIT_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_0_CH_4_ISR_USED) || defined(RTU3_COS_PIT_0_CH_5_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_0_ISR_USED) || defined(RTU3_COS_PIT_1_CH_1_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_2_ISR_USED) || defined(RTU3_COS_PIT_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_PIT_1_CH_4_ISR_USED) || defined(RTU3_COS_PIT_1_CH_5_ISR_USED) )
     Pit_Ip_u32ChState[instance][chnlConfig->hwChannel].chInit = TRUE;
     Pit_Ip_u32ChState[instance][chnlConfig->hwChannel].callback = chnlConfig->callback;
     Pit_Ip_u32ChState[instance][chnlConfig->hwChannel].callbackParam = chnlConfig->callbackParam;
@@ -1498,6 +1751,47 @@ void Pit_Ip_Deinit(uint8 instance)
             channelNum = CE_PIT_5_IP_CHANNELS_NUMBER;
         break;
 #endif
+
+#ifdef RTU0_COS_PIT_0_IP_EXISTS
+        case RTU0_COS_PIT_0_IP_INSTANCE_NUMBER:
+            channelNum = RTU0_COS_PIT_0_IP_CHANNELS_NUMBER;
+        break;
+#endif
+#ifdef RTU0_COS_PIT_1_IP_EXISTS
+        case RTU0_COS_PIT_1_IP_INSTANCE_NUMBER:
+            channelNum = RTU0_COS_PIT_1_IP_CHANNELS_NUMBER;
+        break;
+#endif
+#ifdef RTU1_COS_PIT_0_IP_EXISTS
+        case RTU1_COS_PIT_0_IP_INSTANCE_NUMBER:
+            channelNum = RTU1_COS_PIT_0_IP_CHANNELS_NUMBER;
+        break;
+#endif
+#ifdef RTU1_COS_PIT_1_IP_EXISTS
+        case RTU1_COS_PIT_1_IP_INSTANCE_NUMBER:
+            channelNum = RTU1_COS_PIT_1_IP_CHANNELS_NUMBER;
+        break;
+#endif
+#ifdef RTU2_COS_PIT_0_IP_EXISTS
+        case RTU2_COS_PIT_0_IP_INSTANCE_NUMBER:
+            channelNum = RTU2_COS_PIT_0_IP_CHANNELS_NUMBER;
+        break;
+#endif
+#ifdef RTU2_COS_PIT_1_IP_EXISTS
+        case RTU2_COS_PIT_1_IP_INSTANCE_NUMBER:
+            channelNum = RTU2_COS_PIT_1_IP_CHANNELS_NUMBER;
+        break;
+#endif
+#ifdef RTU3_COS_PIT_0_IP_EXISTS
+        case RTU3_COS_PIT_0_IP_INSTANCE_NUMBER:
+            channelNum = RTU3_COS_PIT_0_IP_CHANNELS_NUMBER;
+        break;
+#endif
+#ifdef RTU3_COS_PIT_1_IP_EXISTS
+        case RTU3_COS_PIT_1_IP_INSTANCE_NUMBER:
+            channelNum = RTU3_COS_PIT_1_IP_CHANNELS_NUMBER;
+        break;
+#endif
 #ifdef FSS_COSS_PIT_0_IP_EXISTS
         case FSS_COSS_PIT_0_IP_INSTANCE_NUMBER:
             channelNum = FSS_COSS_PIT_0_IP_CHANNELS_NUMBER;
@@ -1543,58 +1837,23 @@ void Pit_Ip_Deinit(uint8 instance)
             channelNum = FSS_PIT_0_IP_CHANNELS_NUMBER;
         break;
 #endif
-#ifdef CRS_PIT_0_IP_EXISTS
-        case CRS_PIT_0_IP_INSTANCE_NUMBER:
-            channelNum = CRS_PIT_0_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef CRS_PIT_1_IP_EXISTS
-        case CRS_PIT_1_IP_INSTANCE_NUMBER:
-            channelNum = CRS_PIT_1_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU0_PIT_0_IP_EXISTS
-        case RTU0_PIT_0_IP_INSTANCE_NUMBER:
-            channelNum = RTU0_PIT_0_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU0_PIT_1_IP_EXISTS
-        case RTU0_PIT_1_IP_INSTANCE_NUMBER:
-            channelNum = RTU0_PIT_1_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU1_PIT_0_IP_EXISTS
-        case RTU1_PIT_0_IP_INSTANCE_NUMBER:
-            channelNum = RTU1_PIT_0_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU1_PIT_1_IP_EXISTS
-        case RTU1_PIT_1_IP_INSTANCE_NUMBER:
-            channelNum = RTU1_PIT_1_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU2_PIT_0_IP_EXISTS
-        case RTU2_PIT_0_IP_INSTANCE_NUMBER:
-            channelNum = RTU2_PIT_0_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU2_PIT_1_IP_EXISTS
-        case RTU2_PIT_1_IP_INSTANCE_NUMBER:
-            channelNum = RTU2_PIT_1_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU3_PIT_0_IP_EXISTS
-        case RTU3_PIT_0_IP_INSTANCE_NUMBER:
-            channelNum = RTU3_PIT_0_IP_CHANNELS_NUMBER;
-        break;
-#endif
-#ifdef RTU3_PIT_1_IP_EXISTS
-        case RTU3_PIT_1_IP_INSTANCE_NUMBER:
-            channelNum = RTU3_PIT_1_IP_CHANNELS_NUMBER;
-        break;
-#endif
         default:
             /* This switch branch is empty because it shall not be executed for normal behaviour */
+        {
+#if defined(RTU_PIT_0_IP_EXISTS)
+            if (RTU_PIT_0_IP_INSTANCE_NUMBER == instance)
+            {
+                channelNum = RTU_PIT_0_IP_CHANNELS_NUMBER;
+            }
+#elif defined(RTU_PIT_1_IP_EXISTS)
+            if (RTU_PIT_1_IP_INSTANCE_NUMBER == instance)
+            {
+                channelNum = RTU_PIT_1_IP_CHANNELS_NUMBER;
+            }
+#else
+            channelNum = 0U;
+#endif
+        }
         break;
     }
 
@@ -2529,8 +2788,56 @@ ISR(CE_PIT_5_CH_3_ISR)
 }
 #endif
 
-#if defined(FSS_HKI_PIT_0_ISR_USED)
-ISR(FSS_HKI_PIT_0_ISR){
+#if defined(RTU_PIT_0_ISR_USED)
+/**
+* @brief   Interrupt handler for RTU_PIT_0 channels.
+* @details Interrupt Service Routine corresponding to RTU_PIT_0 hw module.
+* @param[in] none
+* @return  void
+* @isr
+* @pre      The driver needs to be initialized
+*/
+ISR(RTU_PIT_0_ISR)
+{
+    uint8 channel;
+#if defined(RTU_PIT_0_IP_EXISTS)
+    uint8 instance = RTU_PIT_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
+    for (channel = 0U; channel < RTU_PIT_0_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Pit_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(RTU_PIT_1_ISR_USED)
+/**
+* @brief   Interrupt handler for RTU_PIT_1 channels.
+* @details Interrupt Service Routine corresponding to RTU_PIT_1 hw module.
+* @param[in] none
+* @return  void
+* @isr
+* @pre      The driver needs to be initialized.
+*/
+ISR(RTU_PIT_1_ISR)
+{
+    uint8 channel;
+#if defined(RTU_PIT_1_IP_EXISTS)
+    uint8 instance = RTU_PIT_1_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
+    for (channel = 0U; channel < RTU_PIT_1_IP_CHANNELS_NUMBER; ++channel)
+    {
+        Pit_Ip_ProcessCommonInterrupt(instance, channel);
+    }
+}
+#endif
+
+#if defined(FSS_HKI_PIT_ISR_USED)
+ISR(FSS_HKI_PIT_0){
     uint8 channel;
 #if defined(FSS_HKI_PIT_0_IP_EXISTS)
     uint8 instance = FSS_HKI_PIT_0_IP_INSTANCE_NUMBER;
@@ -2932,8 +3239,8 @@ ISR(FSS_COSS_PIT_1_CH_3_ISR){
 }
 #endif
 
-#if defined(FSS_COSS_PIT_2_ISR_USED)
-ISR(FSS_COSS_PIT_2_ISR){
+#if defined(FSS_COSS_PIT_2_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_0_ISR){
     uint8 channel = 0U;
 #if defined(FSS_COSS_PIT_2_IP_EXISTS)
     uint8 instance = FSS_COSS_PIT_2_IP_INSTANCE_NUMBER;
@@ -2944,12 +3251,45 @@ ISR(FSS_COSS_PIT_2_ISR){
     Pit_Ip_ProcessCommonInterrupt(instance, channel);
 }
 #endif
+#if defined(FSS_COSS_PIT_2_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_1_ISR){
+    uint8 channel = 1U;
+#if defined(FSS_COSS_PIT_2_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_2_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_2_ISR){
+    uint8 channel = 2U;
+#if defined(FSS_COSS_PIT_2_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
-#if defined(FSS_COSS_PIT_3_ISR_USED)
-ISR(FSS_COSS_PIT_3_ISR){
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_2_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_2_CH_3_ISR){
+    uint8 channel = 3U;
+#if defined(FSS_COSS_PIT_2_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_2_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
 
+#if defined(FSS_COSS_PIT_3_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_0_ISR){
     uint8 channel = 0U;
 #if defined(FSS_COSS_PIT_3_IP_EXISTS)
     uint8 instance = FSS_COSS_PIT_3_IP_INSTANCE_NUMBER;
@@ -2960,12 +3300,45 @@ ISR(FSS_COSS_PIT_3_ISR){
     Pit_Ip_ProcessCommonInterrupt(instance, channel);
 }
 #endif
+#if defined(FSS_COSS_PIT_3_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_1_ISR){
+    uint8 channel = 1U;
+#if defined(FSS_COSS_PIT_3_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_3_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_2_ISR){
+    uint8 channel = 2U;
+#if defined(FSS_COSS_PIT_3_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_3_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_3_CH_3_ISR){
+    uint8 channel = 3U;
+#if defined(FSS_COSS_PIT_3_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_3_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
 
-#if defined(FSS_COSS_PIT_4_ISR_USED)
-ISR(FSS_COSS_PIT_4_ISR){
+#if defined(FSS_COSS_PIT_4_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_0_ISR){
     uint8 channel = 0U;
 #if defined(FSS_COSS_PIT_4_IP_EXISTS)
     uint8 instance = FSS_COSS_PIT_4_IP_INSTANCE_NUMBER;
@@ -2976,12 +3349,45 @@ ISR(FSS_COSS_PIT_4_ISR){
     Pit_Ip_ProcessCommonInterrupt(instance, channel);
 }
 #endif
+#if defined(FSS_COSS_PIT_4_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_1_ISR){
+    uint8 channel = 1U;
+#if defined(FSS_COSS_PIT_4_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_4_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_4_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_2_ISR){
+    uint8 channel = 2U;
+#if defined(FSS_COSS_PIT_4_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_4_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_4_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_4_CH_3_ISR){
+    uint8 channel = 3U;
+#if defined(FSS_COSS_PIT_4_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_4_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
 
-#if defined(FSS_COSS_PIT_5_ISR_USED)
-ISR(FSS_COSS_PIT_5_ISR){
+#if defined(FSS_COSS_PIT_5_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_0_ISR){
     uint8 channel = 0U;
 #if defined(FSS_COSS_PIT_5_IP_EXISTS)
     uint8 instance = FSS_COSS_PIT_5_IP_INSTANCE_NUMBER;
@@ -2992,16 +3398,82 @@ ISR(FSS_COSS_PIT_5_ISR){
     Pit_Ip_ProcessCommonInterrupt(instance, channel);
 }
 #endif
+#if defined(FSS_COSS_PIT_5_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_1_ISR){
+    uint8 channel = 1U;
+#if defined(FSS_COSS_PIT_5_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_5_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_5_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_2_ISR){
+    uint8 channel = 2U;
+#if defined(FSS_COSS_PIT_5_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_5_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_5_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_5_CH_3_ISR){
+    uint8 channel = 3U;
+#if defined(FSS_COSS_PIT_5_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_5_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
 
-#if defined(FSS_COSS_PIT_6_ISR_USED)
-ISR(FSS_COSS_PIT_6_ISR){
+#if defined(FSS_COSS_PIT_6_CH_0_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_0_ISR){
     uint8 channel = 0U;
+#if defined(FSS_COSS_PIT_6_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_6_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_6_CH_1_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_1_ISR){
+    uint8 channel = 1U;
+#if defined(FSS_COSS_PIT_6_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_6_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_6_CH_2_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_2_ISR){
+    uint8 channel = 2U;
+#if defined(FSS_COSS_PIT_6_IP_EXISTS)
+    uint8 instance = FSS_COSS_PIT_6_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
 
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_COSS_PIT_6_CH_3_ISR_USED)
+ISR(FSS_COSS_PIT_6_CH_3_ISR){
+    uint8 channel = 3U;
 #if defined(FSS_COSS_PIT_6_IP_EXISTS)
     uint8 instance = FSS_COSS_PIT_6_IP_INSTANCE_NUMBER;
 #else
@@ -3046,6 +3518,315 @@ ISR(FSS_PIT_0_CH_2_ISR){
 #endif
 
     Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+#if defined(FSS_PIT_0_CH_3_ISR_USED)
+ISR(FSS_PIT_0_CH_3_ISR){
+    uint8 channel = 3U;
+#if defined(FSS_PIT_0_IP_EXISTS)
+    uint8 instance = FSS_PIT_0_IP_INSTANCE_NUMBER;
+#else
+    #error "undefined PIT instance number"
+#endif
+
+    Pit_Ip_ProcessCommonInterrupt(instance, channel);
+}
+#endif
+
+#if (defined(RTU0_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU0_COS_PIT_0_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#if (defined(RTU0_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU0_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU0_COS_PIT_1_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU0_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#if (defined(RTU1_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU1_COS_PIT_0_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#if (defined(RTU1_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU1_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU1_COS_PIT_1_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU1_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+
+#if (defined(RTU2_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU2_COS_PIT_0_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#if (defined(RTU2_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU2_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU2_COS_PIT_1_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU2_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#if (defined(RTU3_COS_PIT_0_CH_0_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_1_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_2_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_3_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_4_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_0_CH_5_ISR_USED))
+ISR(RTU3_COS_PIT_0_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#if (defined(RTU3_COS_PIT_1_CH_0_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_1_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_2_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_3_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_4_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_4_ISR){
+    uint8 channel = 4U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if (defined(RTU3_COS_PIT_1_CH_5_ISR_USED))
+ISR(RTU3_COS_PIT_1_CH_5_ISR){
+    uint8 channel = 5U;
+    Pit_Ip_ProcessCommonInterrupt(RTU3_COS_PIT_1_IP_INSTANCE_NUMBER, channel);
 }
 #endif
 
@@ -3102,7 +3883,7 @@ ISR(PIT_3_ISR)
 #endif
 
 #endif /* STD_ON == PIT_GPT_IP_MODULE_SINGLE_INTERRUPT */
-
+ 
 #endif /* (STD_ON == PIT_GPT_IP_MODULE_SINGLE_INTERRUPT) || (STD_ON == PIT_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS) */
 
 #define GPT_STOP_SEC_CODE

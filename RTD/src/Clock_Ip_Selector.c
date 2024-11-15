@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Clock_Ip_Selector.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -53,7 +53,7 @@ extern "C"{
 #define CLOCK_IP_SELECTOR_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_SELECTOR_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_SELECTOR_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_SELECTOR_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_SELECTOR_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_SELECTOR_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_SELECTOR_SW_PATCH_VERSION_C               0
 
@@ -112,30 +112,9 @@ extern "C"{
 
 #include "Mcu_MemMap.h"
 
-
-
-
 #ifdef CLOCK_IP_RTC_RTCC_CLKSELECT
 void Clock_Ip_SetRtcRtccClksel_TrustedCall(Clock_Ip_SelectorConfigType const *Config);
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
@@ -148,40 +127,19 @@ static void Clock_Ip_ResetCgmXCscCssClkswSwip(Clock_Ip_SelectorConfigType const 
 static void Clock_Ip_SetCgmXCscCssClkswSwip(Clock_Ip_SelectorConfigType const *Config);
 #endif
 
-
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_RAMPDOWN_RAMPUP_SWIP
 static void Clock_Ip_ResetCgmXCscCssClkswRampupRampdownSwip(Clock_Ip_SelectorConfigType const *Config);
 static void Clock_Ip_SetCgmXCscCssClkswRampupRampdownSwip(Clock_Ip_SelectorConfigType const *Config);
 #endif
-
 
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP
 static void Clock_Ip_SetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Config);
 static void Clock_Ip_ResetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Config);
 #endif
 
-
-
 #ifdef CLOCK_IP_RTC_RTCC_CLKSELECT
 static void Clock_Ip_SetRtcRtccClksel(Clock_Ip_SelectorConfigType const *Config);
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -332,7 +290,6 @@ static void Clock_Ip_SetCgmXCscCssClkswSwip(Clock_Ip_SelectorConfigType const *C
 }
 #endif
 
-
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_RAMPDOWN_RAMPUP_SWIP
 /* Reset MC_CGM_m_MUX_n[CSC] register */
 static void Clock_Ip_ResetCgmXCscCssClkswRampupRampdownSwip(Clock_Ip_SelectorConfigType const *Config)
@@ -468,7 +425,6 @@ static void Clock_Ip_SetCgmXCscCssClkswRampupRampdownSwip(Clock_Ip_SelectorConfi
 }
 #endif
 
-
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP
 static void Clock_Ip_ResetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Config)
 {
@@ -494,8 +450,7 @@ static void Clock_Ip_ResetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Co
         SelectorMask       = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueMask;
         SelectorShift      = Clock_Ip_axFeatureExtensions[Clock_Ip_au8ClockFeatures[Config->Name][CLOCK_IP_EXTENSION_INDEX]].SelectorValueShift;
 
-        /* FCG is set to 1 to cover the case has default inactive source */
-        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC |= (MC_CGM_MUX_CSC_CG_MASK | MC_CGM_MUX_CSC_FCG_MASK);
+        Clock_Ip_apxCgm[Instance][SelectorIndex]->CSC |= (MC_CGM_MUX_CSC_CG_MASK);
 
         Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
         do
@@ -615,8 +570,6 @@ static void Clock_Ip_SetCgmXCscCssCsGrip(Clock_Ip_SelectorConfigType const *Conf
 }
 #endif
 
-
-
 #ifdef CLOCK_IP_RTC_RTCC_CLKSELECT
 static void Clock_Ip_SetRtcRtccClksel(Clock_Ip_SelectorConfigType const *Config)
 {
@@ -634,30 +587,9 @@ static void Clock_Ip_SetRtcRtccClksel(Clock_Ip_SelectorConfigType const *Config)
 #endif
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /*==================================================================================================
 *                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
-
-
-
-
 #ifdef CLOCK_IP_RTC_RTCC_CLKSELECT
 void Clock_Ip_SetRtcRtccClksel_TrustedCall(Clock_Ip_SelectorConfigType const *Config)
 {
@@ -670,23 +602,6 @@ void Clock_Ip_SetRtcRtccClksel_TrustedCall(Clock_Ip_SelectorConfigType const *Co
     IP_RTC->RTCC = RegValue;
 }
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -705,57 +620,36 @@ void Clock_Ip_SetRtcRtccClksel_TrustedCall(Clock_Ip_SelectorConfigType const *Co
 const Clock_Ip_SelectorCallbackType Clock_Ip_axSelectorCallbacks[CLOCK_IP_SELECTOR_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_CallbackSelectorEmpty,            /* Reset */
-        &Clock_Ip_CallbackSelectorEmpty,            /* Set */
+        Clock_Ip_CallbackSelectorEmpty,            /* Reset */
+        Clock_Ip_CallbackSelectorEmpty,            /* Set */
     },
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_SWIP
     {
-        &Clock_Ip_ResetCgmXCscCssClkswSwip,          /* Reset */
-        &Clock_Ip_SetCgmXCscCssClkswSwip,            /* Set */
+        Clock_Ip_ResetCgmXCscCssClkswSwip,          /* Reset */
+        Clock_Ip_SetCgmXCscCssClkswSwip,            /* Set */
     },
 #endif
-
 
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CLK_SW_RAMPDOWN_RAMPUP_SWIP
     {
-        &Clock_Ip_ResetCgmXCscCssClkswRampupRampdownSwip,     /* Reset */
-        &Clock_Ip_SetCgmXCscCssClkswRampupRampdownSwip,       /* Set */
+        Clock_Ip_ResetCgmXCscCssClkswRampupRampdownSwip,     /* Reset */
+        Clock_Ip_SetCgmXCscCssClkswRampupRampdownSwip,       /* Set */
     },
 #endif
-
 
 #ifdef CLOCK_IP_CGM_X_CSC_CSS_CS_GRIP
     {
-        &Clock_Ip_ResetCgmXCscCssCsGrip,           /* Reset */
-        &Clock_Ip_SetCgmXCscCssCsGrip,             /* Set */
+        Clock_Ip_ResetCgmXCscCssCsGrip,           /* Reset */
+        Clock_Ip_SetCgmXCscCssCsGrip,             /* Set */
     },
 #endif
-
-
 
 #ifdef CLOCK_IP_RTC_RTCC_CLKSELECT
     {
-        &Clock_Ip_CallbackSelectorEmpty,          /* Reset */
-        &Clock_Ip_SetRtcRtccClksel,               /* Set */
+        Clock_Ip_CallbackSelectorEmpty,          /* Reset */
+        Clock_Ip_SetRtcRtccClksel,               /* Set */
     },
 #endif
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 };
 
@@ -763,6 +657,8 @@ const Clock_Ip_SelectorCallbackType Clock_Ip_axSelectorCallbacks[CLOCK_IP_SELECT
 #define MCU_STOP_SEC_CONST_UNSPECIFIED
 
 #include "Mcu_MemMap.h"
+
+
 
 #ifdef __cplusplus
 }

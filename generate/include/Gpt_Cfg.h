@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -51,7 +51,7 @@ extern "C"{
 #define GPT_AR_RELEASE_MAJOR_VERSION_CFG     4
 #define GPT_AR_RELEASE_MINOR_VERSION_CFG     7
 #define GPT_AR_RELEASE_REVISION_VERSION_CFG  0
-#define GPT_SW_MAJOR_VERSION_CFG             5
+#define GPT_SW_MAJOR_VERSION_CFG             4
 #define GPT_SW_MINOR_VERSION_CFG             0
 #define GPT_SW_PATCH_VERSION_CFG             0
 
@@ -85,7 +85,6 @@ extern "C"{
 /*==================================================================================================
 *                                          CONSTANTS
 ==================================================================================================*/
-
 /*==================================================================================================
 *                                      DEFINES AND MACROS
 ==================================================================================================*/
@@ -93,67 +92,67 @@ extern "C"{
 * @brief    GPT_DEV_ERROR_DETECT switch
 * @details  Enable/disable GPT_DEV_ERROR_DETECT.
 */
-#define GPT_DEV_ERROR_DETECT (STD_OFF)
+#define GPT_DEV_ERROR_DETECT      (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_REPORT_WAKEUP_SOURCE switch
 * @details  Enable/disable GPT_REPORT_WAKEUP_SOURCE.
 */
-#define GPT_REPORT_WAKEUP_SOURCE (STD_OFF)
+#define GPT_REPORT_WAKEUP_SOURCE       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_VERSION_INFO_API switch
 * @details  Enable/disable GPT_VERSION_INFO_API.
 */
-#define GPT_VERSION_INFO_API (STD_OFF)
+#define GPT_VERSION_INFO_API       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_DEINIT_API switch
 * @details  Enable/disable GPT_DEINIT_API.
 */
-#define GPT_DEINIT_API (STD_OFF)
+#define GPT_DEINIT_API       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_TIME_ELAPSED_API switch
 * @details  Enable/disable GPT_VERSION_INFO_API.
 */
-#define GPT_TIME_ELAPSED_API (STD_OFF)
+#define GPT_TIME_ELAPSED_API       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_TIME_REMAINING_API switch
 * @details  Enable/disable GPT_VERSION_INFO_API.
 */
-#define GPT_TIME_REMAINING_API (STD_OFF)
+#define GPT_TIME_REMAINING_API       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_ENABLE_DISABLE_NOTIFICATION_API switch
 * @details  Enable/disable GPT_VERSION_INFO_API.
 */
-#define GPT_ENABLE_DISABLE_NOTIFICATION_API (STD_ON)
+#define GPT_ENABLE_DISABLE_NOTIFICATION_API       (STD_ON)
 /*================================================================================================*/
 /**
 * @brief    GPT_WAKEUP_FUNCTIONALITY_API switch
 * @details  Enable/disable GPT_VERSION_INFO_API.
 */
-#define GPT_WAKEUP_FUNCTIONALITY_API (STD_OFF)
+#define GPT_WAKEUP_FUNCTIONALITY_API       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_CHANGE_NEXT_TIMEOUT_VALUE switch
 * @details  Enable/disable support for changing timeout value during timer running
 */
-#define GPT_CHANGE_NEXT_TIMEOUT_VALUE (STD_OFF)
+#define GPT_CHANGE_NEXT_TIMEOUT_VALUE       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_SET_CLOCK_MODE switch
 * @details  Enable/disable API for Dual Mode support.
 */
-#define GPT_SET_CLOCK_MODE (STD_OFF)
+#define GPT_SET_CLOCK_MODE       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_CHAIN_MODE switch
 * @details  Enable/disable API for Chain Mode.
 */
-#define GPT_CHAIN_MODE (STD_OFF)
+#define GPT_CHAIN_MODE       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_STANDBY_WAKEUP_SUPPORT switch
@@ -161,13 +160,13 @@ extern "C"{
 *           The driver shall NOT CLEAR the interrupt flag,
 *           the interrupt enable bit and also should not disable the counter, during init *(Gpt_Rtc_Init()) the flag is already set.
 */
-#define GPT_STANDBY_WAKEUP_SUPPORT (STD_OFF)
+#define GPT_STANDBY_WAKEUP_SUPPORT       (STD_OFF)
 /*================================================================================================*/
 /**
 * @brief    GPT_ENABLE_USER_MODE_SUPPORT switch
-* @details  Enable/disable support usermode.If this parameter has been configured to TRUE the GPT driver code can be executed from both supervisor and user mode.
+* @details  Enable/disable support usermode.If this user mode is supported the GPT driver code can be executed from both supervisor and user mode.
 */
-#define GPT_ENABLE_USER_MODE_SUPPORT (STD_OFF)
+#define GPT_ENABLE_USER_MODE_SUPPORT       (STD_OFF)
 
 #ifndef MCAL_ENABLE_USER_MODE_SUPPORT
  #ifdef GPT_ENABLE_USER_MODE_SUPPORT
@@ -181,19 +180,20 @@ extern "C"{
 * @brief    GPT_PREDEFTIMER_FUNCTIONALITY_API switch
 * @details  Enable/disable GPT_PREDEFTIMER_FUNCTIONALITY_API.
 */
-#define GPT_PREDEFTIMER_FUNCTIONALITY_API (STD_OFF)
+#define GPT_PREDEFTIMER_FUNCTIONALITY_API       (STD_OFF)
 /*================================================================================================*/
 /**
-* @brief    GPT_MULTIPARTITION_ENABLED switch
-* @details  Enable/disable GPT_MULTIPARTITION_ENABLED.
+* @brief    GPT_MULTICORE_ENABLED switch
+* @details  Enable/disable GPT_MULTICORE_ENABLED.
 */
-#define GPT_MULTIPARTITION_ENABLED (STD_OFF)
+#define GPT_MULTICORE_ENABLED      (STD_OFF)
+
 /*================================================================================================*/
 /**
 * @brief    GPT_HW_CHANNEL_USED switch
 * @details  Enable/disable GPT_HW_CHANNEL_USED.
 */
-#define GPT_HW_CHANNEL_USED (STD_ON)
+#define GPT_HW_CHANNEL_USED      (STD_ON)
 /*================================================================================================*/
 /**
 * @brief    GPT_PRECOMPILE_SUPPORT Switch
@@ -211,32 +211,36 @@ extern "C"{
 * @brief       GPT_HW_CHANNEL_NUM
 * @details     The maximum number of HW channels. This is used to allocate memory space for channel runtime info.
 */
-#define GPT_HW_CHANNEL_NUM (1U)
+#define GPT_HW_CHANNEL_NUM      (1U)
 /*================================================================================================*/
 /**
 * @brief        GPT_MAX_PARTITIONS_CFG.
 * @details      Number of configured partitions.
 */
-#define GPT_MAX_PARTITIONS_CFG (0U)
+#define GPT_MAX_PARTITIONS_CFG      (0U)
 /*================================================================================================*/
 /**
 * @brief        GPT_MAX_PARTITIONS.
 * @details      Number of maximum partitions.
 */
-#define GPT_MAX_PARTITIONS (1U)
+#define GPT_MAX_PARTITIONS       (1U)
 /*================================================================================================*/
 /**
 * @brief        GPT_NUM_CONFIG.
 * @details      Number of ChannelConfiguration
 */
-#define GPT_NUM_CONFIG (1U)
+#define GPT_NUM_CONFIG       (1U)
 /*================================================================================================*/
 /**
 *   @brief      GPT_HW_PREDEFTIMER_NUM
 *   @details    Number of Predefined timers supported
 */
-#define GPT_HW_PREDEFTIMER_NUM (4U)
-/*================================================================================================
+#define GPT_HW_PREDEFTIMER_NUM      (4U)
+
+/*================================================================================================*/
+
+/*================================================================================================*/
+/*===============================================================================
 *                                             ENUMS
 ==================================================================================================*/
 #if(GPT_PREDEFTIMER_FUNCTIONALITY_API == STD_ON)
