@@ -10,14 +10,13 @@
 *   SW Version           : 4.0.0
 *   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
-*   (c) Copyright 2020 - 2024 NXP
-*   All Rights Reserved.
+*   Copyright 2020-2024 NXP
 *
-*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
-*   comply with and are bound by, such license terms. If you do not agree to be
+*   comply with and are bound by, such license terms.  If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -29,10 +28,6 @@
 *   @{
 */
 
-#ifdef __cplusplus
-extern "C"{
-#endif
-
 /*==================================================================================================
 *                                        INCLUDE FILES
 * 1) system and project includes
@@ -40,7 +35,9 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "ComStackTypes.h"
-#include "EthIf.h"
+#include "EthIf_Cbk.h"
+#include "gptp_port_platform.h"
+#include "gptp_frame.h"
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -59,19 +56,19 @@ extern "C"{
 ==================================================================================================*/
 /* Check if current file and ETHIF header file are of the same vendor */
 #if (ETHIF_VENDOR_ID_C != ETHIF_VENDOR_ID)
-    #error "EthIf.c and EthIf.h have different vendor ids"
+    #error "EthIf_Cbk.c and EthIf_Cbk.h have different vendor ids"
 #endif
 /* Check if current file and ETHIF header file are of the same Autosar version */
 #if ((ETHIF_AR_RELEASE_MAJOR_VERSION_C    != ETHIF_AR_RELEASE_MAJOR_VERSION) || \
      (ETHIF_AR_RELEASE_MINOR_VERSION_C    != ETHIF_AR_RELEASE_MINOR_VERSION) || \
      (ETHIF_AR_RELEASE_REVISION_VERSION_C != ETHIF_AR_RELEASE_REVISION_VERSION))
-    #error "AutoSar Version Numbers of EthIf.c and EthIf.h are different"
+    #error "AutoSar Version Numbers of EthIf_Cbk.c and EthIf_Cbk.h are different"
 #endif
 /* Check if current file and ETHIF header file are of the same Software version */
 #if ((ETHIF_SW_MAJOR_VERSION_C != ETHIF_SW_MAJOR_VERSION) || \
      (ETHIF_SW_MINOR_VERSION_C != ETHIF_SW_MINOR_VERSION) || \
      (ETHIF_SW_PATCH_VERSION_C != ETHIF_SW_PATCH_VERSION))
-    #error "Software Version Numbers of EthIf.c and EthIf.h are different"
+    #error "Software Version Numbers of EthIf_Cbk.c and EthIf_Cbk.h are different"
 #endif
 /*==================================================================================================
 *                          LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
@@ -101,10 +98,7 @@ extern "C"{
 /*==================================================================================================
 *                                      GLOBAL VARIABLES
 ==================================================================================================*/
-volatile uint32 EthIf_RxIndications[10]    = {0};
-volatile uint32 EthIf_TxConfirmations[10]  = {0};
-volatile boolean EthIf_ModeIndications[10] = {0};
-volatile uint16 EthIf_ChecksumValue[10]    = {0};
+
 
 /*==================================================================================================
 *                                   LOCAL FUNCTION PROTOTYPES
@@ -140,24 +134,22 @@ volatile uint16 EthIf_ChecksumValue[10]    = {0};
 * @param[in]      LenByte Length of the data in the buffer DataPtr.
 *
 */
-void EthIf_RxIndication(\
-                        uint8 CtrlIdx,\
-                        Eth_FrameType FrameType, \
-                        boolean IsBroadcast, \
-                        const uint8* PhysAddrPtr, \
-                        const Eth_DataType* DataPtr,\
+void EthIf_RxIndication(uint8 CtrlIdx,
+                        Eth_FrameType FrameType,
+                        boolean IsBroadcast,
+                        const uint8* PhysAddrPtr,
+                        const Eth_DataType* DataPtr,
                         uint16 LenByte)
 {
-    /* This is an empty stub function */
-    ++EthIf_RxIndications[CtrlIdx];
-    EthIf_ChecksumValue[CtrlIdx] = *((uint16 *)(&DataPtr[10U]));
-    (void)FrameType;
-    (void)IsBroadcast;
-    (void)PhysAddrPtr;
-    (void)DataPtr;
-    (void)LenByte;
-}
+    /* If gPTP frame is received, pass it to the gPTP stack. */
+    if (GPTP_FR_ETH_TYPE_PTP == FrameType) 
+    {
+        GPTP_PORT_RxIndication(CtrlIdx, FrameType, IsBroadcast, PhysAddrPtr,
+                               DataPtr, LenByte);
+    }
 
+    /* User can process other non-gPTP frames here. */
+}
 
 /*================================================================================================*/
 /**
@@ -171,14 +163,11 @@ void EthIf_RxIndication(\
 * @param[in]      BufIdx Index of the transmitted data buffer.
 
 */
-void EthIf_TxConfirmation(uint8 CtrlIdx, \
-                          Eth_BufIdxType BufIdx, \
+void EthIf_TxConfirmation(uint8 CtrlIdx,
+                          Eth_BufIdxType BufIdx,
                           Std_ReturnType Result)
 {
-    /* This is an empty stub function */ 
-    ++EthIf_TxConfirmations[CtrlIdx];
-    (void)BufIdx;
-    (void)Result;
+    GPTP_PORT_TxConfirmation(CtrlIdx, BufIdx, Result);
 }
 
 /*================================================================================================*/
@@ -192,13 +181,11 @@ void EthIf_TxConfirmation(uint8 CtrlIdx, \
 * @param[in]      CtrlMode New mode of correspond Eth driver.
 
 */
-void EthIf_CtrlModeIndication( \
-                                uint8 CtrlIdx, \
-                                Eth_ModeType CtrlMode \
-                             )
+void EthIf_CtrlModeIndication(uint8 CtrlIdx,
+                              Eth_ModeType CtrlMode)
 {
-    /* This is an empty stub function */ 
-    EthIf_ModeIndications[CtrlIdx] = TRUE;
+    /* This is an empty stub function. */ 
+    (void)CtrlIdx;
     (void)CtrlMode;
 }
 
@@ -219,10 +206,9 @@ void EthIf_CtrlModeIndication( \
 void EthIf_SwitchIngressTimeStampIndication(uint8 CtrlIdx,
                                             Eth_DataType* DataPtr,
                                             EthSwt_MgmtInfoType* MgmtInfoPtr,
-                                            Eth_TimeStampType* timeStampPtr
-                                           )
+                                            Eth_TimeStampType* timeStampPtr)
 {
-    /* This is an empty stub function */
+    /* This is an empty stub function. */
     (void)CtrlIdx;
     (void)DataPtr;
     (void)MgmtInfoPtr;
@@ -244,10 +230,9 @@ void EthIf_SwitchIngressTimeStampIndication(uint8 CtrlIdx,
 void EthIf_SwitchEgressTimeStampIndication(uint8 CtrlIdx,
                                            Eth_DataType* DataPtr,
                                            EthSwt_MgmtInfoType* MgmtInfoPtr,
-                                           Eth_TimeStampType* timeStampPtr
-                                          )
+                                           Eth_TimeStampType* timeStampPtr)
 {
-    /* This is an empty stub function */
+    /* This is an empty stub function. */
     (void)CtrlIdx;
     (void)DataPtr;
     (void)MgmtInfoPtr;
@@ -265,10 +250,9 @@ void EthIf_SwitchEgressTimeStampIndication(uint8 CtrlIdx,
 */
 void EthIf_SwitchMgmtInfoIndication(uint8 CtrlIdx,
                                     Eth_DataType* DataPtr,
-                                    EthSwt_MgmtInfoType* MgmtInfoPtr
-                                   )
+                                    EthSwt_MgmtInfoType* MgmtInfoPtr)
 {
-    /* This is an empty stub function */ 
+    /* This is an empty stub function. */ 
     (void)CtrlIdx;
     (void)DataPtr;
     (void)MgmtInfoPtr;
@@ -284,10 +268,9 @@ void EthIf_SwitchMgmtInfoIndication(uint8 CtrlIdx,
 * @param[in]      TrcvMode      Notified Ethernet transceiver mode
 */
 void EthIf_TrcvModeIndication(uint8 TrcvIdx,
-                              EthTrcv_ModeType TrcvMode
-                             )
+                              EthTrcv_ModeType TrcvMode)
 {
-    /* This is an empty stub function */ 
+    /* This is an empty stub function. */ 
     (void)TrcvIdx;
     (void)TrcvMode;
 }
@@ -305,17 +288,34 @@ void EthIf_TrcvModeIndication(uint8 TrcvIdx,
 */
 void EthIf_SwitchPortModeIndication(uint8 SwitchIdx,
                                     uint8 SwitchPortIdx,
-                                    EthTrcv_ModeType PortMode
-                                   )
+                                    EthTrcv_ModeType PortMode)
 {
-    /* This is an empty stub function */
+    /* This is an empty stub function. */
     (void)SwitchIdx;
     (void)SwitchPortIdx;
     (void)PortMode;
 }
 
-#ifdef __cplusplus
+/**
+* @brief          This function indicates that a transceiver's link state was changed.
+* @details        Function should notify the appropriate upper layer module that
+*                 the link state of transceiver module has been changed.
+* @param[in]      u8CtrlIdx       Index of the controller which link state has been changed.
+* @param[in]      eTrcvLinkState Notified transceiver link state.
+*/
+void EthIf_TrcvLinkStateChg(uint8 u8CtrlIdx,
+                            EthTrcv_LinkStateType eTrcvLinkState)
+{
+    if (ETHTRCV_LINK_STATE_ACTIVE == eTrcvLinkState)
+    {
+        /* Link is up, notify GPTP stack. */
+        GPTP_LinkUpNotify(0u, u8CtrlIdx);
+    }
+    else
+    {
+        /* Link is down, notify GPTP stack. */
+        GPTP_LinkDownNotify(0u, u8CtrlIdx);
+    }
 }
-#endif
 
 /** @} */

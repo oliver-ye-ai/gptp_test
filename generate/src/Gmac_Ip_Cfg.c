@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -49,7 +49,7 @@ extern "C"{
 #define GMAC_IP_CFG_AR_RELEASE_MAJOR_VERSION_C      4
 #define GMAC_IP_CFG_AR_RELEASE_MINOR_VERSION_C      7
 #define GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION_C   0
-#define GMAC_IP_CFG_SW_MAJOR_VERSION_C              5
+#define GMAC_IP_CFG_SW_MAJOR_VERSION_C              4
 #define GMAC_IP_CFG_SW_MINOR_VERSION_C              0
 #define GMAC_IP_CFG_SW_PATCH_VERSION_C              0
 
@@ -62,8 +62,7 @@ extern "C"{
 #endif
 #if ((GMAC_IP_CFG_AR_RELEASE_MAJOR_VERSION_C    != GMAC_IP_TYPES_AR_RELEASE_MAJOR_VERSION) || \
      (GMAC_IP_CFG_AR_RELEASE_MINOR_VERSION_C    != GMAC_IP_TYPES_AR_RELEASE_MINOR_VERSION) || \
-     (GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION) \
-    )
+     (GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip_Cfg.h and Gmac_Ip_Types.h are different"
 #endif
 #if ((GMAC_IP_CFG_SW_MAJOR_VERSION_C != GMAC_IP_TYPES_SW_MAJOR_VERSION) || \
@@ -79,8 +78,7 @@ extern "C"{
 #endif
 #if ((GMAC_IP_CFG_AR_RELEASE_MAJOR_VERSION_C    != GMAC_IP_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (GMAC_IP_CFG_AR_RELEASE_MINOR_VERSION_C    != GMAC_IP_CFG_AR_RELEASE_MINOR_VERSION) || \
-     (GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION) \
-    )
+     (GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_CFG_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip_Cfg.h and Gmac_Ip_Cfg.h are different"
 #endif
 #if ((GMAC_IP_CFG_SW_MAJOR_VERSION_C != GMAC_IP_CFG_SW_MAJOR_VERSION) || \
@@ -93,8 +91,7 @@ extern "C"{
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Checks against Mcal.h */
     #if ((GMAC_IP_CFG_AR_RELEASE_MAJOR_VERSION_C != MCAL_AR_RELEASE_MAJOR_VERSION) || \
-         (GMAC_IP_CFG_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (GMAC_IP_CFG_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Gmac_Ip_Cfg.h and Mcal.h are different"
     #endif
 #endif
@@ -133,19 +130,19 @@ extern "C"{
 #endif
 #ifdef GMAC_0_RXRING_0_DATA
     /*! @brief Reception data buffers for Rx Ring 0 */
-    VAR_ALIGN(uint8 GMAC_0_RxRing_0_DataBuffer[(GMAC_0_MAX_RXBUFF_SUPPORTED * GMAC_0_MAX_RXBUFFLEN_SUPPORTED)], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
+    VAR_ALIGN(uint8 GMAC_0_RxRing_0_DataBuffer[GMAC_0_MAX_RXBUFF_SUPPORTED * GMAC_0_MAX_RXBUFFLEN_SUPPORTED], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
 #endif
 #ifdef GMAC_0_RXRING_1_DATA
     /*! @brief Reception data buffers for Rx Ring 1 */
-    VAR_ALIGN(uint8 GMAC_0_RxRing_1_DataBuffer[(GMAC_0_MAX_RXBUFF_SUPPORTED * GMAC_0_MAX_RXBUFFLEN_SUPPORTED)], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
+    VAR_ALIGN(uint8 GMAC_0_RxRing_1_DataBuffer[GMAC_0_MAX_RXBUFF_SUPPORTED * GMAC_0_MAX_RXBUFFLEN_SUPPORTED], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
 #endif
 #ifdef GMAC_0_TXRING_0_DATA
     /*! @brief Transmission data buffers for Tx Ring 0 */
-    VAR_ALIGN(uint8 GMAC_0_TxRing_0_DataBuffer[(GMAC_0_MAX_TXBUFF_SUPPORTED * GMAC_0_MAX_TXBUFFLEN_SUPPORTED)], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
+    VAR_ALIGN(uint8 GMAC_0_TxRing_0_DataBuffer[GMAC_0_MAX_TXBUFF_SUPPORTED * GMAC_0_MAX_TXBUFFLEN_SUPPORTED], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
 #endif
 #ifdef GMAC_0_TXRING_1_DATA
     /*! @brief Transmission data buffers for Tx Ring 1 */
-    VAR_ALIGN(uint8 GMAC_0_TxRing_1_DataBuffer[(GMAC_0_MAX_TXBUFF_SUPPORTED * GMAC_0_MAX_TXBUFFLEN_SUPPORTED)], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
+    VAR_ALIGN(uint8 GMAC_0_TxRing_1_DataBuffer[GMAC_0_MAX_TXBUFF_SUPPORTED * GMAC_0_MAX_TXBUFFLEN_SUPPORTED], FEATURE_GMAC_BUFF_ALIGNMENT_BYTES)
 #endif
 
 #if (STD_OFF == GMAC_HAS_CACHE_MANAGEMENT)
@@ -192,7 +189,7 @@ extern "C"{
 
 #define ETH_43_GMAC_START_SEC_CONST_16
 #include "Eth_43_GMAC_MemMap.h"
- const uint16 Gmac_aRxExternalBuffLength[1U] =
+ const uint16 Gmac_aRxExternalBuffLength[1] =
 {
     GMAC_0_MAX_RXBUFFLEN_SUPPORTED
 };

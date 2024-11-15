@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -26,7 +26,7 @@
 
 /**
 *   @file       Clock_Ip_Derivative_001.h
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   AUTOSAR Mcu - Post-Build(PB) configuration file code template.
 *   @details Code template for Post-Build(PB) configuration file generation.
@@ -54,7 +54,7 @@ extern "C"{
 #define CLOCK_IP_DERIVATIVE_001_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_DERIVATIVE_001_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_DERIVATIVE_001_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_DERIVATIVE_001_SW_MAJOR_VERSION                5
+#define CLOCK_IP_DERIVATIVE_001_SW_MAJOR_VERSION                4
 #define CLOCK_IP_DERIVATIVE_001_SW_MINOR_VERSION                0
 #define CLOCK_IP_DERIVATIVE_001_SW_PATCH_VERSION                0
 
@@ -71,11 +71,10 @@ extern "C"{
 ==================================================================================================*/
 
 
-#define CLOCK_IP_DIVIDER_CALLBACKS_COUNT                                               5U
+#define CLOCK_IP_DIVIDER_CALLBACKS_COUNT                                               4U
 #define CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE                                       1U
-#define CLOCK_IP_CGM_X_DE_DIV_STAT_WITHOUT_PHASE_WAIT_FOR_HSE_CORE                     2U
-#define CLOCK_IP_PLL_PLL0DIV_DE_DIV_OUTPUT                                             3U
-#define CLOCK_IP_PLL_PLLDV_ODIV2_OUTPUT                                                4U
+#define CLOCK_IP_PLL_PLL0DIV_DE_DIV_OUTPUT                                             2U
+#define CLOCK_IP_PLL_PLLDV_ODIV2_OUTPUT                                                3U
 
 #define CLOCK_IP_DIVIDERTRIGGER_CALLBACKS_COUNT                                        2U
 #define CLOCK_IP_CGM_X_DIV_TRIG_CTRL_TCTL_HHEN_UPD_STAT                                1U

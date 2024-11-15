@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Ram_Ip.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   RAM driver implementations.
 *   @details RAM driver implementations.
@@ -63,7 +63,7 @@ extern "C"{
 #define RAM_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define RAM_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define RAM_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define RAM_IP_SW_MAJOR_VERSION_C               5
+#define RAM_IP_SW_MAJOR_VERSION_C               4
 #define RAM_IP_SW_MINOR_VERSION_C               0
 #define RAM_IP_SW_PATCH_VERSION_C               0
 
@@ -163,7 +163,7 @@ static void Ram_Ip_ReportRamErrors( Ram_Ip_RamReportErrorType Error,
 #include "Mcu_MemMap.h"
 
 /* Ram Report Error Callback */
-static Ram_Ip_ReportErrorsCallbackType Ram_Ip_pfReportErrorsCallback = &Ram_Ip_ReportRamErrorsEmptyCallback;
+static Ram_Ip_ReportErrorsCallbackType Ram_Ip_pfReportErrorsCallback = Ram_Ip_ReportRamErrorsEmptyCallback;
 
 #define MCU_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "Mcu_MemMap.h"
@@ -419,37 +419,18 @@ Ram_Ip_RamStateType Ram_Ip_GetRamState(void)
         IP_MC_ME->PRTN1_PUPD        |= MC_ME_PRTN1_PUPD_PCUD_MASK;          /* PCUD=1: Trigger the hardware process */
         IP_MC_ME->CTL_KEY = 0x5AF0U;                                         /* Enter key */
         IP_MC_ME->CTL_KEY = 0xA50FU;
-        
-        /* 
-            Check whether hardware update process finished (PCUD is zero in this case)
-            and peripheral clock gate state (Gate State is 1U in this case).
-            Otherwise wait for hardware status to update.
-         */
-        if ((0U != (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) ||
-            (0U == (IP_MC_ME->PRTN1_COFB3_STAT & MC_ME_PRTN1_COFB3_STAT_BLOCK104_MASK)))
-
+        /* Wait until STCU2 clock is running */
+        Ram_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, RAM_IP_TIMEOUT_VALUE_US);
+        do
         {
-            /* Wait for hardware to update */
-            Ram_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, RAM_IP_TIMEOUT_VALUE_US);
-            do
-            {
-                TimeoutOccurred = Ram_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                /*
-                    Check whether hardware update process finished (PCUD is zero in this case)
-                    and peripheral clock gate state (Gate State is 1U in this case).
-                 */
-                if ((0U == (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) &&
-                    (0U != (IP_MC_ME->PRTN1_COFB3_STAT & MC_ME_PRTN1_COFB3_STAT_BLOCK104_MASK)))
-                {
-                    break;
-                }
-            }while (FALSE == TimeoutOccurred);
-
-            if (TRUE == TimeoutOccurred)
-            {
-                /* Report timeout error */
-                Ram_Ip_ReportRamErrors(RAM_IP_REPORT_TIMEOUT_ERROR,RAM_IP_ERR_CODE_RESERVED);
-            }
+            TimeoutOccurred = Ram_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while(((IP_MC_ME->PRTN1_COFB3_STAT & MC_ME_PRTN1_COFB3_STAT_BLOCK104_MASK) == 0U) && (FALSE == TimeoutOccurred));
+        /* timeout notification */
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Ram_Ip_ReportRamErrors(RAM_IP_REPORT_TIMEOUT_ERROR,RAM_IP_ERR_CODE_RESERVED);
         }
     }
     /* Stay in this loop until these registers are automatically updated following the

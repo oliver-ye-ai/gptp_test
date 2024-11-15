@@ -7,19 +7,18 @@
 * Autosar Version      : 4.7.0
 * Autosar Revision     : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version           : 5.0.0
-* Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version           : 4.0.0
+* Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be used strictly
-* in accordance with the applicable license terms.  By expressly accepting
-* such terms or by downloading, installing, activating and/or otherwise using
-* the software, you are agreeing that you have read, and that you agree to
-* comply with and are bound by, such license terms.  If you do not agree to
-* be bound by the applicable license terms, then you may not retain,
-* install, activate or otherwise use the software.
-*
+* NXP Confidential. This software is owned or controlled by NXP and may only be
+* used strictly in accordance with the applicable license terms. By expressly
+* accepting such terms or by downloading, installing, activating and/or otherwise
+* using the software, you are agreeing that you have read, and that you agree to
+* comply with and are bound by, such license terms. If you do not agree to be
+* bound by the applicable license terms, then you may not retain, install,
+* activate or otherwise use the software.
 ==================================================================================================*/
 #ifndef FEE_TYPES_H
 #define FEE_TYPES_H
@@ -54,7 +53,7 @@ extern "C"{
 #define FEE_TYPES_AR_RELEASE_MAJOR_VERSION     4
 #define FEE_TYPES_AR_RELEASE_MINOR_VERSION     7
 #define FEE_TYPES_AR_RELEASE_REVISION_VERSION  0
-#define FEE_TYPES_SW_MAJOR_VERSION             5
+#define FEE_TYPES_SW_MAJOR_VERSION             4
 #define FEE_TYPES_SW_MINOR_VERSION             0
 #define FEE_TYPES_SW_PATCH_VERSION             0
 
@@ -107,8 +106,8 @@ extern "C"{
 */
 typedef struct
 {
-    uint32        SubAddressAreaAddr;           /**< @brief Logical address of subAddressArea on MemAcc */
-    uint32        SubAddressAreaSize;           /**< @brief Size of subAddressArea in bytes */
+    MemAcc_AddressType       SubAddressAreaAddr;           /**< @brief Logical address of subAddressArea on MemAcc */
+    MemAcc_LengthType        SubAddressAreaSize;           /**< @brief Size of subAddressArea in bytes */
 } Fee_SubAddressAreaRuntimeInfoType;
 
 /**
@@ -117,7 +116,7 @@ typedef struct
 */
 typedef struct
 {
-    uint32                     Length;             /**< @brief Size of Fee cluster in bytes */
+    MemAcc_LengthType             Length;             /**< @brief Size of Fee cluster in bytes */
     uint16                     SubAddressAreaCount;        /**< @brief Number of subAddressArea in cluster */
     Fee_SubAddressAreaRuntimeInfoType *SubAddressAreaList;         /**< @brief Pointer to array of subAddressArea configurations */
 } Fee_ClusterRuntimeInfoType;
@@ -130,7 +129,7 @@ typedef struct
 typedef struct
 {
     Fee_SubAddressAreaRuntimeInfoType  *SubAddressAreaToRecover;   /**< @brief Position of subAddressArea configuration */
-    uint32              SubAddressAreaSize;        /**< @brief Size of subAddressArea in bytes */
+    MemAcc_LengthType              SubAddressAreaSize;        /**< @brief Size of subAddressArea in bytes */
 } Fee_SubAddressAreaToRecoverType;
 #endif
 
@@ -142,8 +141,8 @@ typedef struct
 */
 typedef struct
 {
-    uint32           ClusterTotalSpace;    /**< @brief Total space in the selected cluster group */
-    uint32           ClusterFreeSpace;     /**< @brief Free space in the selected cluster group */
+    MemAcc_AddressType  ClusterTotalSpace;    /**< @brief Total space in the selected cluster group */
+    MemAcc_AddressType  ClusterFreeSpace;     /**< @brief Free space in the selected cluster group */
     uint16           BlockHeaderOverhead; /**< @brief Block Overhead (header valid and inval flag)*/
     uint16           VirtualPageSize;     /**< @brief Fee Virtual Page Size */
     uint32           NumberOfSwap;         /**< @brief Number of cluster swap performed in the
@@ -190,9 +189,9 @@ typedef struct
 */
 typedef struct
 {
-    uint32 StartAddr;   /**< @brief Address of Fee cluster in flash */
+    MemAcc_AddressType StartAddr;   /**< @brief Address of Fee cluster in flash */
 #if (FEE_SUBADDRESSAREA_RETIREMENT == STD_OFF)
-    uint32 Length;       /**< @brief Size of Fee cluster in bytes */
+    MemAcc_LengthType Length;       /**< @brief Size of Fee cluster in bytes */
 #endif
 } Fee_ClusterType;
 
@@ -205,7 +204,7 @@ typedef struct
 {
     const Fee_ClusterType *const ClrPtr;  /**< @brief Pointer to array of Fee cluster configurations */
     uint32 ClrCount;                      /**< @brief Number of clusters in cluster group */
-    uint32 ReservedSize;          /**< @brief Size of reserved area in the given cluster group (memory occupied by immediate blocks) */
+    MemAcc_LengthType ReservedSize;          /**< @brief Size of reserved area in the given cluster group (memory occupied by immediate blocks) */
 } Fee_ClusterGroupType;
 
 /**
@@ -233,8 +232,8 @@ typedef struct
 typedef struct
 {
     uint32                           ClrID;              /**< @brief 32-bit cluster ID */
-    uint32               StartAddr;          /**< @brief Start address of Fee cluster in MemAcc address space */
-    uint32                Length;             /**< @brief Length of Fee cluster in bytes */
+    MemAcc_AddressType               StartAddr;          /**< @brief Start address of Fee cluster in MemAcc address space */
+    MemAcc_LengthType                Length;             /**< @brief Length of Fee cluster in bytes */
 #if (FEE_SUBADDRESSAREA_RETIREMENT == STD_ON)
     Fee_ClusterRuntimeInfoType      *ClrInfo;            /**< @brief Pointer to the cluster runtime information */
 #endif

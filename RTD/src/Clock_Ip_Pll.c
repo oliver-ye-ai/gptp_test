@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Clock_Ip_Pll.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -52,7 +52,7 @@ extern "C"{
 #define CLOCK_IP_PLL_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_PLL_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_PLL_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_PLL_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_PLL_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_PLL_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_PLL_SW_PATCH_VERSION_C               0
 
@@ -112,29 +112,14 @@ extern "C"{
 
 #include "Mcu_MemMap.h"
 
-
-
-
-
-
-
-
-
-
-
-
-
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
 
+
 static void Clock_Ip_CallbackPllEmpty(Clock_Ip_PllConfigType const* Config);
 static Clock_Ip_PllStatusReturnType Clock_Ip_CallbackPllEmptyComplete(Clock_Ip_NameType PllName);
 static void Clock_Ip_CallbackPllEmptyDisable(Clock_Ip_NameType PllName);
-
-
-
-
 
 #ifdef CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE
 static void Clock_Ip_ResetPllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize(Clock_Ip_PllConfigType const* Config);
@@ -143,19 +128,12 @@ static Clock_Ip_PllStatusReturnType Clock_Ip_CompletePllRdivMfiMfnOdiv2SdmenSssc
 static void Clock_Ip_EnablePllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize(Clock_Ip_PllConfigType const* Config);
 #endif
 
-
-
-
-
-
-
 #ifdef CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN
 static void Clock_Ip_ResetPllRdivMfiMfnOdiv2Sdmen(Clock_Ip_PllConfigType const* Config);
 static void Clock_Ip_SetPllRdivMfiMfnOdiv2Sdmen(Clock_Ip_PllConfigType const* Config);
 static Clock_Ip_PllStatusReturnType Clock_Ip_CompletePllRdivMfiMfnOdiv2Sdmen(Clock_Ip_NameType PllName);
 static void Clock_Ip_EnablePllRdivMfiMfnOdiv2Sdmen(Clock_Ip_PllConfigType const* Config);
 #endif
-
 
 
 /* Clock stop section code */
@@ -191,9 +169,7 @@ static void Clock_Ip_CallbackPllEmptyDisable(Clock_Ip_NameType PllName)
 }
 
 
-
-
-
+/* Pll with frequency modulation and VCO clock post divider for driving the PHI output clocks */
 #ifdef CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE
 /* Recommended unlock control accuracy when frequency modulation is bypassed */
 #define CLOCK_IP_RECOMMENTED_ULKCTL_BYPASSED_FM     0U
@@ -275,10 +251,7 @@ static void Clock_Ip_SetPllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize(C
             Clock_Ip_apxPll[Instance].PllInstance->PLLFM = Value;
 
             /* Unlock Control Accuracy - accuracy necessary to achieve unlock. */
-            Value = Clock_Ip_apxPll[Instance].PllInstance->PLLCAL2;
-            Value &= ~PLL_PLLCAL2_ULKCTL_MASK;
-            Value |= PLL_PLLCAL2_ULKCTL((Config->FrequencyModulationBypass != 0U) ?  CLOCK_IP_RECOMMENTED_ULKCTL_BYPASSED_FM : CLOCK_IP_RECOMMENTED_ULKCTL_NOT_BYPASSED_FM);
-            Clock_Ip_apxPll[Instance].PllInstance->PLLCAL2 = Value;
+            Clock_Ip_apxPll[Instance].PllInstance->PLLCAL2 = PLL_PLLCAL2_ULKCTL((Config->FrequencyModulationBypass != 0U) ?  CLOCK_IP_RECOMMENTED_ULKCTL_BYPASSED_FM : CLOCK_IP_RECOMMENTED_ULKCTL_NOT_BYPASSED_FM);
 
             /* Send command to enable PLL device. */
             Clock_Ip_apxPll[Instance].PllInstance->PLLCR &= ~PLL_PLLCR_PLLPD_MASK;
@@ -349,13 +322,16 @@ static void Clock_Ip_EnablePllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsiz
 }
 #endif
 
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
 
 
 
 
-
-
+/* Pll with frequency modulation and VCO clock post divider for driving the PHI output clocks */
 #ifdef CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN
+
 static void Clock_Ip_ResetPllRdivMfiMfnOdiv2Sdmen(Clock_Ip_PllConfigType const* Config)
 {
     uint32 Instance;
@@ -468,25 +444,6 @@ static void Clock_Ip_EnablePllRdivMfiMfnOdiv2Sdmen(Clock_Ip_PllConfigType const*
 
 
 
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
@@ -502,45 +459,34 @@ static void Clock_Ip_EnablePllRdivMfiMfnOdiv2Sdmen(Clock_Ip_PllConfigType const*
 const Clock_Ip_PllCallbackType Clock_Ip_axPllCallbacks[CLOCK_IP_PLL_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_CallbackPllEmpty,            /* Reset */
-        &Clock_Ip_CallbackPllEmpty,            /* Set */
-        &Clock_Ip_CallbackPllEmptyComplete,    /* Complete */
-        &Clock_Ip_CallbackPllEmpty,            /* Enable */
-        &Clock_Ip_CallbackPllEmptyDisable,     /* Disable */
+        Clock_Ip_CallbackPllEmpty,            /* Reset */
+        Clock_Ip_CallbackPllEmpty,            /* Set */
+        Clock_Ip_CallbackPllEmptyComplete,    /* Complete */
+        Clock_Ip_CallbackPllEmpty,            /* Enable */
+        Clock_Ip_CallbackPllEmptyDisable,     /* Disable */
     },
-
-
-
-
+    /* Pll with frequency modulation and VCO clock post divider for driving the PHI output clocks */
 #ifdef CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE
     {
-        &Clock_Ip_ResetPllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,              /* Reset */
-        &Clock_Ip_SetPllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,                /* Set */
-        &Clock_Ip_CompletePllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,           /* Complete */
-        &Clock_Ip_EnablePllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,             /* Enable */
-        &Clock_Ip_CallbackPllEmptyDisable,                                                 /* Disable */
+        Clock_Ip_ResetPllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,              /* Reset */
+        Clock_Ip_SetPllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,                /* Set */
+        Clock_Ip_CompletePllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,           /* Complete */
+        Clock_Ip_EnablePllRdivMfiMfnOdiv2SdmenSsscgbypSpreadctlStepnoStepsize,             /* Enable */
+        Clock_Ip_CallbackPllEmptyDisable,                                                 /* Disable */
     },
-#endif
-
-
-
-
-
-
-
+#endif /* CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN_SSCGBYP_SPREADCTL_STEPNO_STEPSIZE */
+    /* Pll with frequency modulation and VCO clock post divider for driving the PHI output clocks */
 #ifdef CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN
     {
-        &Clock_Ip_ResetPllRdivMfiMfnOdiv2Sdmen,              /* Reset */
-        &Clock_Ip_SetPllRdivMfiMfnOdiv2Sdmen,                /* Set */
-        &Clock_Ip_CompletePllRdivMfiMfnOdiv2Sdmen,           /* Complete */
-        &Clock_Ip_EnablePllRdivMfiMfnOdiv2Sdmen,             /* Enable */
-        &Clock_Ip_CallbackPllEmptyDisable,                   /* Disable */
+        Clock_Ip_ResetPllRdivMfiMfnOdiv2Sdmen,              /* Reset */
+        Clock_Ip_SetPllRdivMfiMfnOdiv2Sdmen,                /* Set */
+        Clock_Ip_CompletePllRdivMfiMfnOdiv2Sdmen,           /* Complete */
+        Clock_Ip_EnablePllRdivMfiMfnOdiv2Sdmen,             /* Enable */
+        Clock_Ip_CallbackPllEmptyDisable,                   /* Disable */
     },
-#endif
-
-
-
+#endif /* CLOCK_IP_PLL_RDIV_MFI_MFN_ODIV2_SDMEN */
 };
+
 
 /* Clock stop constant section data */
 #define MCU_STOP_SEC_CONST_UNSPECIFIED
@@ -552,3 +498,4 @@ const Clock_Ip_PllCallbackType Clock_Ip_axPllCallbacks[CLOCK_IP_PLL_CALLBACKS_CO
 #endif
 
 /** @} */
+

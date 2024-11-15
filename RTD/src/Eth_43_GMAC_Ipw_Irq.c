@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -53,7 +53,7 @@ extern "C"{
 #define ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MAJOR_VERSION_C       4
 #define ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MINOR_VERSION_C       7
 #define ETH_43_GMAC_IPW_IRQ_AR_RELEASE_REVISION_VERSION_C    0
-#define ETH_43_GMAC_IPW_IRQ_SW_MAJOR_VERSION_C               5
+#define ETH_43_GMAC_IPW_IRQ_SW_MAJOR_VERSION_C               4
 #define ETH_43_GMAC_IPW_IRQ_SW_MINOR_VERSION_C               0
 #define ETH_43_GMAC_IPW_IRQ_SW_PATCH_VERSION_C               0
 
@@ -66,8 +66,7 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MAJOR_VERSION_C    != ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MINOR_VERSION_C    != ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_REVISION_VERSION_C != ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC_Ipw_Irq.c and Eth_43_GMAC_Ipw.h are different"
 #endif
 #if ((ETH_43_GMAC_IPW_IRQ_SW_MAJOR_VERSION_C != ETH_43_GMAC_IPW_SW_MAJOR_VERSION) || \
@@ -83,14 +82,12 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MAJOR_VERSION_C    != GMAC_IP_TYPES_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MINOR_VERSION_C    != GMAC_IP_TYPES_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_REVISION_VERSION_C != GMAC_IP_TYPES_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC_Ipw_Irq.c and Gmac_Ip_Types.h are different"
 #endif
 #if ((ETH_43_GMAC_IPW_IRQ_SW_MAJOR_VERSION_C != GMAC_IP_TYPES_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_IRQ_SW_MINOR_VERSION_C != GMAC_IP_TYPES_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_IRQ_SW_PATCH_VERSION_C != GMAC_IP_TYPES_SW_PATCH_VERSION)    \
-    )
+     (ETH_43_GMAC_IPW_IRQ_SW_PATCH_VERSION_C != GMAC_IP_TYPES_SW_PATCH_VERSION))
     #error "Software Version Numbers of Eth_43_GMAC_Ipw_Irq.c and Gmac_Ip_Types.h are different"
 #endif
 
@@ -98,8 +95,7 @@ extern "C"{
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Checks against Dem.h */
     #if ((ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MAJOR_VERSION_C != DEM_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MINOR_VERSION_C != DEM_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_IPW_IRQ_AR_RELEASE_MINOR_VERSION_C != DEM_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC_Ipw_Irq.c and Dem.h are different"
     #endif
 #endif
@@ -150,6 +146,7 @@ extern "C"{
 #include "Eth_43_GMAC_MemMap.h"
 
 
+void Eth_43_GMAC_Ipw_SafetyIrqCallback(const uint8 CtrlIdx, const Gmac_Ip_SafetyErrorType Error);
 void Eth_43_GMAC_Ipw_SafetyIrqCallback(const uint8 CtrlIdx, const Gmac_Ip_SafetyErrorType Error)
 {
     /* If Dem event enabled for safety */
@@ -161,7 +158,6 @@ void Eth_43_GMAC_Ipw_SafetyIrqCallback(const uint8 CtrlIdx, const Gmac_Ip_Safety
 #endif
     (void)CtrlIdx;
     (void)Error;
-    (void)Eth_43_GMAC_Ipw_apxInternalCfg;
 }
 
 

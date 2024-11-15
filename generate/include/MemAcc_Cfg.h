@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -42,7 +42,6 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-
 #include "MemAcc_PBcfg.h"
 
 /*==================================================================================================
@@ -52,14 +51,13 @@ extern "C"{
 #define MEMACC_AR_RELEASE_MAJOR_VERSION_CFG       4
 #define MEMACC_AR_RELEASE_MINOR_VERSION_CFG       7
 #define MEMACC_AR_RELEASE_REVISION_VERSION_CFG    0
-#define MEMACC_SW_MAJOR_VERSION_CFG               5
+#define MEMACC_SW_MAJOR_VERSION_CFG               4
 #define MEMACC_SW_MINOR_VERSION_CFG               0
 #define MEMACC_SW_PATCH_VERSION_CFG               0
 
 /*==================================================================================================
 *                                       FILE VERSION CHECKS
 ==================================================================================================*/
-
 /* Check if current file and MemAcc_PBcfg header file are of the same vendor */
 #if (MEMACC_VENDOR_ID_CFG != MEMACC_PBCFG_VENDOR_ID)
     #error "MemAcc_Cfg.h and MemAcc_PBcfg.h have different vendor ids"
@@ -86,11 +84,18 @@ extern "C"{
 /*==================================================================================================
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
+#define MEMACC_CONFIG_EXT \
+    MEMACC_CONFIG_PB 
 
 #define MEMACC_PRECOMPILE_SUPPORT
 
+/* Declaration of pre-compile configuration set structure */
+#define MemAcc_Config MemAcc_Config
+
 extern const MemAcc_ConfigType MemAcc_Config;
+
 #if (MEMACC_COMPARE_API == STD_ON)
+
 #define MEMACC_COMPARE_BUFFER_SIZE         128
 #endif
 
@@ -110,6 +115,7 @@ extern const MemAcc_ConfigType MemAcc_Config;
 *                                       FUNCTION PROTOTYPES
 ==================================================================================================*/
 
+
 #ifdef __cplusplus
 }
 #endif
@@ -117,3 +123,4 @@ extern const MemAcc_ConfigType MemAcc_Config;
 /** @} */
 
 #endif /* MEMACC_CFG_H */
+

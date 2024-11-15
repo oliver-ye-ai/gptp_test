@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Power_Ip_MC_RGM.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief
 *   @brief   POWER driver implementations.
@@ -66,7 +66,7 @@ extern "C"{
 #define POWER_IP_MC_RGM_AR_RELEASE_MAJOR_VERSION_C       4
 #define POWER_IP_MC_RGM_AR_RELEASE_MINOR_VERSION_C       7
 #define POWER_IP_MC_RGM_AR_RELEASE_REVISION_VERSION_C    0
-#define POWER_IP_MC_RGM_SW_MAJOR_VERSION_C               5
+#define POWER_IP_MC_RGM_SW_MAJOR_VERSION_C               4
 #define POWER_IP_MC_RGM_SW_MINOR_VERSION_C               0
 #define POWER_IP_MC_RGM_SW_PATCH_VERSION_C               0
 
@@ -179,6 +179,7 @@ static uint32 FesResetStatus;
 static uint32 StandbyResetStatus =0U;
 #endif
 #endif
+
 
 #define MCU_STOP_SEC_VAR_CLEARED_32
 
@@ -329,6 +330,22 @@ void Power_Ip_MC_RGM_SetUserAccessAllowed(void)
 #endif /* (STD_ON == POWER_IP_ENABLE_USER_MODE_SUPPORT) */
 
 
+#if (defined(POWER_IP_ENABLE_USER_MODE_SUPPORT) && (STD_ON == POWER_IP_ENABLE_USER_MODE_SUPPORT))
+  #if (defined(MCAL_RDC_REG_PROT_AVAILABLE))
+    #if(STD_ON == MCAL_RDC_REG_PROT_AVAILABLE)
+/**
+* @brief            This function will enable writing in User mode by configuring REG_PROT
+*/
+void Power_Ip_RDC_SetUserAccessAllowed(void)
+{
+#if (defined(IP_RDC_BASE))
+    SET_USER_ACCESS_ALLOWED(IP_RDC_BASE, RDC_PROT_MEM_U32);
+#endif
+}
+    #endif
+  #endif
+#endif /* (STD_ON == POWER_IP_ENABLE_USER_MODE_SUPPORT) */
+
 
 /**
 * @brief            This function initializes the Reset parameters.
@@ -440,10 +457,10 @@ static Power_Ip_ResetType Power_Ip_MC_RGM_CheckResetReason(uint32 ActiveValue, u
        Type 1 : functional reset */
     if (0U == ResetMode)
     {
-#if ( (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
+#if (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
     defined(POWER_IP_DERIVATIVE_003) || defined(POWER_IP_DERIVATIVE_004) || \
     defined(POWER_IP_DERIVATIVE_005) || defined(POWER_IP_DERIVATIVE_007) || \
-    defined(POWER_IP_DERIVATIVE_009)) && defined(POWER_IP_RESET_REASON_FILTER))
+    defined(POWER_IP_DERIVATIVE_009))
         /* Combination with CM7_CORE_CLK_FAIL bit mask on the derivatives doesn't have to skip CM7_CORE_CLK_FAIL_RESET reason */
         /* The ResetMask variable isn't used to filter the value read from register */
         ResetMask = MC_RGM_DES_RWBITS_MASK32 | MC_RGM_DES_CM7_CORE_CLK_FAIL_MASK32;
@@ -453,14 +470,14 @@ static Power_Ip_ResetType Power_Ip_MC_RGM_CheckResetReason(uint32 ActiveValue, u
     }
     else
     {
-#if ( (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
-     defined(POWER_IP_DERIVATIVE_004) || defined(POWER_IP_DERIVATIVE_005)) && defined(POWER_IP_RESET_REASON_FILTER) )
+#if (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
+     defined(POWER_IP_DERIVATIVE_004) || defined(POWER_IP_DERIVATIVE_005))
         /* Combination with SWT1/SWT2/SWT3 bit mask on the derivatives doesn't have to skip MCU_SWT1_RST_RESET/MCU_SWT2_RST_RESET/MCU_SWT3_RST_RESET reason */
         /* The ResetMask variable isn't used to filter the value read from register */
         ResetMask = (MC_RGM_FES_RWBITS_MASK32 | MC_RGM_FES_SWT1_RST_MASK32 | MC_RGM_FES_SWT2_RST_MASK32 | MC_RGM_FES_SWT3_RST_MASK32);
-#elif ( (defined(POWER_IP_DERIVATIVE_003) || defined(POWER_IP_DERIVATIVE_007)) && defined(POWER_IP_RESET_REASON_FILTER))
+#elif (defined(POWER_IP_DERIVATIVE_003) || defined(POWER_IP_DERIVATIVE_007))
         ResetMask = MC_RGM_FES_RWBITS_MASK32 | MC_RGM_FES_SWT2_RST_MASK32 | MC_RGM_FES_SWT3_RST_MASK32;
-#elif ( (defined(POWER_IP_DERIVATIVE_006) || defined(POWER_IP_DERIVATIVE_009)) && defined(POWER_IP_RESET_REASON_FILTER))
+#elif (defined(POWER_IP_DERIVATIVE_006) || defined(POWER_IP_DERIVATIVE_009))
         ResetMask = MC_RGM_FES_RWBITS_MASK32 | MC_RGM_FES_SWT3_RST_MASK32;
 #else
         ResetMask = MC_RGM_FES_RWBITS_MASK32;
@@ -579,19 +596,6 @@ Power_Ip_ResetType Power_Ip_MC_RGM_GetResetReason(void)
     return ResetReason;
 }
 
-/**
-* @brief            This function is a wrapper around Power_Ip_MC_RGM_GetResetReason.
-* @details          This routine returns the Reset reason that is read from the hardware in uint32 format.
-*                   Called by:
-*                       - Mcu_Ipw_GetResetReason() from IPW when user mode is enabled.
-*
-* @return           Reason of the Reset event.
-* @retval           uint32.
-*/
-uint32 Power_Ip_MC_RGM_GetResetReason_Uint(void)
-{
-    return (uint32)Power_Ip_MC_RGM_GetResetReason();
-}
 
 /**
 * @brief            This function returns the Raw Reset value.
@@ -627,14 +631,14 @@ Power_Ip_RawResetType Power_Ip_MC_RGM_GetResetRawValue(void)
     {
         FesResetStatus = RegValue;
     }
-#if ( (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
-     defined(POWER_IP_DERIVATIVE_004) || defined(POWER_IP_DERIVATIVE_005)) && defined(POWER_IP_RESET_REASON_FILTER))
+#if (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
+     defined(POWER_IP_DERIVATIVE_004) || defined(POWER_IP_DERIVATIVE_005))
     /* Combination with SWT1/SWT2/SWT3 bit mask on the derivatives doesn't have to skip MCU_SWT1_RST_RESET/MCU_SWT2_RST_RESET/MCU_SWT3_RST_RESET reason */
     /* The ResetMask variable isn't used to filter the value read from register */
     ResetMask = (MC_RGM_FES_RWBITS_MASK32 | MC_RGM_FES_SWT1_RST_MASK32 | MC_RGM_FES_SWT2_RST_MASK32 | MC_RGM_FES_SWT3_RST_MASK32);
-#elif ( (defined(POWER_IP_DERIVATIVE_003) || defined(POWER_IP_DERIVATIVE_007)) && defined(POWER_IP_RESET_REASON_FILTER))
+#elif (defined(POWER_IP_DERIVATIVE_003) || defined(POWER_IP_DERIVATIVE_007))
     ResetMask = MC_RGM_FES_RWBITS_MASK32 | MC_RGM_FES_SWT2_RST_MASK32 | MC_RGM_FES_SWT3_RST_MASK32;
-#elif ( (defined(POWER_IP_DERIVATIVE_006) || defined(POWER_IP_DERIVATIVE_009)) && defined(POWER_IP_RESET_REASON_FILTER))
+#elif (defined(POWER_IP_DERIVATIVE_006) || defined(POWER_IP_DERIVATIVE_009))
     ResetMask = MC_RGM_FES_RWBITS_MASK32 | MC_RGM_FES_SWT3_RST_MASK32;
 #else
     ResetMask = MC_RGM_FES_RWBITS_MASK32;
@@ -671,10 +675,10 @@ Power_Ip_RawResetType Power_Ip_MC_RGM_GetResetRawValue(void)
         Power_Ip_MC_RGM_ClearFesResetFlags(RegValue);
     }
 
-#if ( (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
+#if (defined(POWER_IP_DERIVATIVE_001) || defined(POWER_IP_DERIVATIVE_002) || \
     defined(POWER_IP_DERIVATIVE_003) || defined(POWER_IP_DERIVATIVE_004) || \
     defined(POWER_IP_DERIVATIVE_005) || defined(POWER_IP_DERIVATIVE_007) || \
-    defined(POWER_IP_DERIVATIVE_009)) && defined(POWER_IP_RESET_REASON_FILTER))
+    defined(POWER_IP_DERIVATIVE_009))
     ResetMask = MC_RGM_DES_RWBITS_MASK32 | MC_RGM_DES_CM7_CORE_CLK_FAIL_MASK32;
 #else
     ResetMask = MC_RGM_DES_RWBITS_MASK32;
@@ -768,6 +772,7 @@ uint8 Power_Ip_MC_RGM_ResetDuringStandby(void)
 }
     #endif /* (POWER_IP_ENTER_LOW_POWER_MODE == STD_ON) */
 #endif /* (POWER_IP_RESET_DURING_STANDBY_SUPPORTED == STD_ON) */
+
 
 #if (POWER_IP_PERFORM_RESET_API == STD_ON)
 /**

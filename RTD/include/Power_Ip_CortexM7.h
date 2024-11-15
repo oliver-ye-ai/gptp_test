@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -26,7 +26,7 @@
 
 /**
 *   @file       Power_Ip_CortexM7.h
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   POWER IP driver header file.
 *   @details POWER IP driver header file.
@@ -55,7 +55,7 @@ extern "C"{
 #define POWER_IP_CORTEXM7_AR_RELEASE_MAJOR_VERSION     4
 #define POWER_IP_CORTEXM7_AR_RELEASE_MINOR_VERSION     7
 #define POWER_IP_CORTEXM7_AR_RELEASE_REVISION_VERSION  0
-#define POWER_IP_CORTEXM7_SW_MAJOR_VERSION             5
+#define POWER_IP_CORTEXM7_SW_MAJOR_VERSION             4
 #define POWER_IP_CORTEXM7_SW_MINOR_VERSION             0
 #define POWER_IP_CORTEXM7_SW_PATCH_VERSION             0
 
@@ -89,6 +89,14 @@ extern "C"{
     #error "AutoSar Version Numbers of Power_Ip_CortexM7.h and Mcal.h are different"
 #endif
 #endif
+/*==================================================================================================
+*                                 GLOBAL VARIABLE DECLARATIONS
+==================================================================================================*/
+
+/*==================================================================================================
+*                                             ENUMS
+==================================================================================================*/
+
 
 /*==================================================================================================
 *                                           CONSTANTS
@@ -125,18 +133,10 @@ extern "C"{
 #define CM_AIRCR_VECTKEY(x)                 ((uint32)( (uint32)( (x) << CM_AIRCR_VECTKEY_SHIFT32 ) & CM_AIRCR_VECTKEY_MASK32 ))
 
 #define CM_AIRCR_VECTKEY_KEY_U32            ((uint32)0x000005FAU)
-
-/*==================================================================================================
-*                                              ENUMS
-==================================================================================================*/
-
 /*==================================================================================================
 *                                 STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
 
-/*==================================================================================================
-*                                  GLOBAL VARIABLE DECLARATIONS
-==================================================================================================*/
 
 /*==================================================================================================
 *                                      FUNCTION PROTOTYPES

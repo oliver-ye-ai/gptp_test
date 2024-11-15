@@ -7,8 +7,8 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
@@ -67,6 +67,11 @@ StatusType GetElapsedValue (CounterType ctrId, TickRefType valueRef, TickRefType
     (void)valueRef;
     (void)tickRef;
     return (StatusType)E_OK;
+}
+
+uint8 GetCoreID(void)
+{
+    return 0;
 }
 
 #ifdef __cplusplus

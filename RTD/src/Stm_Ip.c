@@ -7,12 +7,12 @@
 * Autosar Version :     4.7.0
 * Autosar Revision :    ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version :          5.0.0
-* Build Version :       S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version :          4.0.0
+* Build Version :       S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +52,7 @@ extern "C"{
 #define STM_IP_AR_RELEASE_MAJOR_VERSION_C     4
 #define STM_IP_AR_RELEASE_MINOR_VERSION_C     7
 #define STM_IP_AR_RELEASE_REVISION_VERSION_C  0
-#define STM_IP_SW_MAJOR_VERSION_C             5
+#define STM_IP_SW_MAJOR_VERSION_C             4
 #define STM_IP_SW_MINOR_VERSION_C             0
 #define STM_IP_SW_PATCH_VERSION_C             0
 
@@ -114,14 +114,10 @@ extern "C"{
 ==================================================================================================*/
 #if (STM_IP_USED == STD_ON)
 
-#define GPT_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#define GPT_START_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 /** @brief Global array variable used to store the runtime target time value. */
-uint32 Stm_Ip_u32TargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =   {
-                                                                                {
-                                                                                    0UL
-                                                                                }
-                                                                            };
+uint32 Stm_Ip_u32TargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
 #if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
         defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
         defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
@@ -140,15 +136,27 @@ uint32 Stm_Ip_u32TargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =   {
         defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) )
-uint32 Stm_Ip_u32NextTargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =   {
-                                                                                    {
-                                                                                        0UL
-                                                                                    }
-                                                                                };
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
+uint32 Stm_Ip_u32NextTargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
 #endif
 
-#define GPT_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 
 #define GPT_START_SEC_CONST_UNSPECIFIED
@@ -157,16 +165,16 @@ uint32 Stm_Ip_u32NextTargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =   
 #if (defined(CRS_FSS_AND_RTU_BASE_ADDR_OF_STM_REGISTERS_CONCATENATED) && (CRS_FSS_AND_RTU_BASE_ADDR_OF_STM_REGISTERS_CONCATENATED == STD_ON))
 /** @brief Table of base addresses for STM instances. */
 #define IP_STM_BASE_PTRS_CONCATENATED   { IP_CRS__STM, IP_FSS__COSS_STM_0, IP_FSS__COSS_STM_1, IP_FSS__COSS_STM_2, IP_FSS__COSS_STM_3, IP_FSS__STM_0, IP_FSS__STM_1, IP_FSS__STM_AUX_0, IP_FSS__STM_AUX_1, IP_FSS__STM_AUX_2, (STM_Type *)IP_RTU0__RTU_STM0_BASE, (STM_Type *)IP_RTU0__RTU_STM1_BASE, (STM_Type *)IP_RTU0__RTU_STM2_BASE, (STM_Type *)IP_RTU0__RTU_STM3_BASE, (STM_Type *)IP_RTU1__RTU_STM0_BASE, (STM_Type *)IP_RTU1__RTU_STM1_BASE, (STM_Type *)IP_RTU1__RTU_STM2_BASE, (STM_Type *)IP_RTU1__RTU_STM3_BASE, (STM_Type *)IP_RTU2__RTU_STM0_BASE, (STM_Type *)IP_RTU2__RTU_STM1_BASE, (STM_Type *)IP_RTU2__RTU_STM2_BASE, (STM_Type *)IP_RTU2__RTU_STM3_BASE, (STM_Type *)IP_RTU3__RTU_STM0_BASE, (STM_Type *)IP_RTU3__RTU_STM1_BASE, (STM_Type *)IP_RTU3__RTU_STM2_BASE, (STM_Type *)IP_RTU3__RTU_STM3_BASE  }
-static STM_Type * const stmBase[GPT_STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS_CONCATENATED;
+STM_Type * const stmBase[GPT_STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS_CONCATENATED;
 #else
 /** @brief Table of base addresses for STM instances. */
-static STM_Type * const stmBase[GPT_STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS;
+STM_Type * const stmBase[GPT_STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS;
 #endif
 
 #define GPT_STOP_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
-#define GPT_START_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#define GPT_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 #if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
         defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
@@ -186,28 +194,44 @@ static STM_Type * const stmBase[GPT_STM_INSTANCE_COUNT] = IP_STM_BASE_PTRS;
         defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) )
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 /** @brief Global array variable used to channel state for process common interrupt */
-static Stm_Ip_ChState Stm_Ip_u32ChState[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =    {
-                                                                                            {
-                                                                                                {
-                                                                                                    (boolean)FALSE,
-                                                                                                    NULL_PTR,
-                                                                                                    0U,
-                                                                                                    STM_IP_CH_MODE_CONTINUOUS
-                                                                                                }
-                                                                                            }
-                                                                                        };
-#endif
-#if (STM_IP_SET_CLOCK_MODE == STD_ON)
-static Stm_Ip_InstanceState Stm_Ip_u32InstanceState[GPT_STM_INSTANCE_COUNT] =   {
+static Stm_Ip_ChState Stm_Ip_u32ChState[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT] =  {
                                                                                     {
-                                                                                        0U,
-                                                                                        0U
+                                                                                        {
+                                                                                            (boolean)FALSE,
+                                                                                            NULL_PTR,
+                                                                                            0U,
+                                                                                            STM_IP_CH_MODE_CONTINUOUS
+                                                                                        }
                                                                                     }
                                                                                 };
 #endif
-#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED_NO_CACHEABLE
+#if (STM_IP_SET_CLOCK_MODE == STD_ON)
+static Stm_Ip_InstanceState Stm_Ip_u32InstanceState[GPT_STM_INSTANCE_COUNT] =   {
+                                                                                {
+                                                                                    0U,
+                                                                                    0U
+                                                                                }
+                                                                            };
+#endif
+#define GPT_STOP_SEC_VAR_INIT_UNSPECIFIED
 #include "Gpt_MemMap.h"
 /*==================================================================================================
 *                                   LOCAL FUNCTION PROTOTYPES
@@ -244,7 +268,23 @@ static inline uint32 Stm_Ip_GetCntValue(uint8 instance);
         defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) )
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 static void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel);
 static inline boolean Stm_Ip_GetInterruptEnableFlag(uint8 instance, uint8 channel);
 #endif
@@ -429,6 +469,208 @@ ISR(FSS_AUX_STM_2_CH_2_ISR);
 ISR(FSS_AUX_STM_2_CH_3_ISR);
 #endif
 
+#if defined(RTU0_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_3_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_3_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_3_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU0_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_3_ISR);
+#endif
+
+#if defined(RTU1_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_3_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_3_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_3_ISR);
+#endif
+
+#if defined(RTU1_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU1_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU1_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU1_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_3_ISR);
+#endif
+
+#if defined(RTU2_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU2_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU2_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU2_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_3_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_3_ISR);
+#endif
+
+#if defined(RTU3_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_3_ISR);
+#endif
+
+#if defined(RTU3_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_3_ISR);
+#endif
+
+#if defined(RTU3_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_0_ISR);
+#endif
+#if defined(RTU3_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_1_ISR);
+#endif
+#if defined(RTU3_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_2_ISR);
+#endif
+#if defined(RTU3_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_3_ISR);
+#endif
+
 #endif  /* STD_ON == STM_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS */
 
 #if (STD_ON == STM_GPT_IP_MODULE_SINGLE_INTERRUPT)
@@ -585,25 +827,41 @@ static inline void Stm_Ip_ClearInterruptStatusFlag(uint8 instance, uint8 channel
     stmBase[instance]->CHANNEL[channel].CIR = STM_CIR_CIF_MASK;
 }
 
-#if (   (defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-        (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-        (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-        (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-        (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-        (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-        (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED) || \
-        (defined RTU2_STM_0_ISR_USED) || (defined RTU2_STM_1_ISR_USED) || (defined RTU2_STM_2_ISR_USED) || (defined RTU2_STM_3_ISR_USED) || \
-        (defined RTU3_STM_0_ISR_USED) || (defined RTU3_STM_1_ISR_USED) || (defined RTU3_STM_2_ISR_USED) || (defined RTU3_STM_3_ISR_USED) || \
-        (defined CRS_STM_0_ISR_USED) || \
-        (defined FSS_COSS_STM_0_CH_0_ISR_USED) || (defined FSS_COSS_STM_0_CH_1_ISR_USED) || (defined FSS_COSS_STM_0_CH_2_ISR_USED) || (defined FSS_COSS_STM_0_CH_3_ISR_USED) || \
-        (defined FSS_COSS_STM_1_CH_0_ISR_USED) || (defined FSS_COSS_STM_1_CH_1_ISR_USED) || (defined FSS_COSS_STM_1_CH_2_ISR_USED) || (defined FSS_COSS_STM_1_CH_3_ISR_USED) || \
-        (defined FSS_COSS_STM_2_CH_0_ISR_USED) || (defined FSS_COSS_STM_2_CH_1_ISR_USED) || (defined FSS_COSS_STM_2_CH_2_ISR_USED) || (defined FSS_COSS_STM_2_CH_3_ISR_USED) || \
-        (defined FSS_COSS_STM_3_CH_0_ISR_USED) || (defined FSS_COSS_STM_3_CH_1_ISR_USED) || (defined FSS_COSS_STM_3_CH_2_ISR_USED) || (defined FSS_COSS_STM_3_CH_3_ISR_USED) || \
-        (defined FSS_STM_0_CH_0_ISR_USED) || (defined FSS_STM_0_CH_1_ISR_USED) || (defined FSS_STM_0_CH_2_ISR_USED) || (defined FSS_STM_0_CH_3_ISR_USED) || \
-        (defined FSS_STM_1_CH_0_ISR_USED) || (defined FSS_STM_1_CH_1_ISR_USED) || (defined FSS_STM_1_CH_2_ISR_USED) || (defined FSS_STM_1_CH_3_ISR_USED) || \
-        (defined FSS_AUX_STM_0_CH_0_ISR_USED) || (defined FSS_AUX_STM_0_CH_1_ISR_USED) || (defined FSS_AUX_STM_0_CH_2_ISR_USED) || (defined FSS_AUX_STM_0_CH_3_ISR_USED) || \
-        (defined FSS_AUX_STM_1_CH_0_ISR_USED) || (defined FSS_AUX_STM_1_CH_1_ISR_USED) || (defined FSS_AUX_STM_1_CH_2_ISR_USED) || (defined FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        (defined FSS_AUX_STM_2_CH_0_ISR_USED) || (defined FSS_AUX_STM_2_CH_1_ISR_USED) || (defined FSS_AUX_STM_2_CH_2_ISR_USED) || (defined FSS_AUX_STM_2_CH_3_ISR_USED) )
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(FSS_COSS_STM_0_CH_0_ISR_USED) || defined(FSS_COSS_STM_0_CH_1_ISR_USED) || defined(FSS_COSS_STM_0_CH_2_ISR_USED) || defined(FSS_COSS_STM_0_CH_3_ISR_USED) || \
+        defined(FSS_COSS_STM_1_CH_0_ISR_USED) || defined(FSS_COSS_STM_1_CH_1_ISR_USED) || defined(FSS_COSS_STM_1_CH_2_ISR_USED) || defined(FSS_COSS_STM_1_CH_3_ISR_USED) || \
+        defined(FSS_COSS_STM_2_CH_0_ISR_USED) || defined(FSS_COSS_STM_2_CH_1_ISR_USED) || defined(FSS_COSS_STM_2_CH_2_ISR_USED) || defined(FSS_COSS_STM_2_CH_3_ISR_USED) || \
+        defined(FSS_COSS_STM_3_CH_0_ISR_USED) || defined(FSS_COSS_STM_3_CH_1_ISR_USED) || defined(FSS_COSS_STM_3_CH_2_ISR_USED) || defined(FSS_COSS_STM_3_CH_3_ISR_USED) || \
+        defined(FSS_STM_0_CH_0_ISR_USED) || defined(FSS_STM_0_CH_1_ISR_USED) || defined(FSS_STM_0_CH_2_ISR_USED) || defined(FSS_STM_0_CH_3_ISR_USED) || \
+        defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
+        defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
+        defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 /**
  * @brief
  * Function Name : Stm_Ip_GetInterruptEnableFlag
@@ -649,25 +907,41 @@ static inline uint32 Stm_Ip_GetCntValue(uint8 instance)
     return currentCntValue;
 }
 
-#if (   (defined STM_0_ISR_USED) || (defined STM_1_ISR_USED) || (defined STM_2_ISR_USED)  || (defined STM_3_ISR_USED)  || \
-        (defined STM_4_ISR_USED) || (defined STM_5_ISR_USED) || (defined STM_6_ISR_USED)  || (defined STM_7_ISR_USED)  || \
-        (defined STM_8_ISR_USED) || (defined STM_9_ISR_USED) || (defined STM_10_ISR_USED) || (defined STM_11_ISR_USED) || \
-        (defined STM_12_ISR_USED)|| (defined SMU_STM_0_ISR_USED) || (defined SMU_STM_2_ISR_USED) || \
-        (defined CE_STM_0_ISR_USED) || (defined CE_STM_1_ISR_USED) || (defined CE_STM_2_ISR_USED) || \
-        (defined RTU0_STM_0_ISR_USED) || (defined RTU0_STM_1_ISR_USED) || (defined RTU0_STM_2_ISR_USED) || (defined RTU0_STM_3_ISR_USED) || \
-        (defined RTU1_STM_0_ISR_USED) || (defined RTU1_STM_1_ISR_USED) || (defined RTU1_STM_2_ISR_USED) || (defined RTU1_STM_3_ISR_USED) || \
-        (defined RTU2_STM_0_ISR_USED) || (defined RTU2_STM_1_ISR_USED) || (defined RTU2_STM_2_ISR_USED) || (defined RTU2_STM_3_ISR_USED) || \
-        (defined RTU3_STM_0_ISR_USED) || (defined RTU3_STM_1_ISR_USED) || (defined RTU3_STM_2_ISR_USED) || (defined RTU3_STM_3_ISR_USED) || \
-        (defined CRS_STM_0_ISR_USED) || \
-        (defined FSS_COSS_STM_0_CH_0_ISR_USED) || (defined FSS_COSS_STM_0_CH_1_ISR_USED) || (defined FSS_COSS_STM_0_CH_2_ISR_USED) || (defined FSS_COSS_STM_0_CH_3_ISR_USED) || \
-        (defined FSS_COSS_STM_1_CH_0_ISR_USED) || (defined FSS_COSS_STM_1_CH_1_ISR_USED) || (defined FSS_COSS_STM_1_CH_2_ISR_USED) || (defined FSS_COSS_STM_1_CH_3_ISR_USED) || \
-        (defined FSS_COSS_STM_2_CH_0_ISR_USED) || (defined FSS_COSS_STM_2_CH_1_ISR_USED) || (defined FSS_COSS_STM_2_CH_2_ISR_USED) || (defined FSS_COSS_STM_2_CH_3_ISR_USED) || \
-        (defined FSS_COSS_STM_3_CH_0_ISR_USED) || (defined FSS_COSS_STM_3_CH_1_ISR_USED) || (defined FSS_COSS_STM_3_CH_2_ISR_USED) || (defined FSS_COSS_STM_3_CH_3_ISR_USED) || \
-        (defined FSS_STM_0_CH_0_ISR_USED) || (defined FSS_STM_0_CH_1_ISR_USED) || (defined FSS_STM_0_CH_2_ISR_USED) || (defined FSS_STM_0_CH_3_ISR_USED) || \
-        (defined FSS_STM_1_CH_0_ISR_USED) || (defined FSS_STM_1_CH_1_ISR_USED) || (defined FSS_STM_1_CH_2_ISR_USED) || (defined FSS_STM_1_CH_3_ISR_USED) || \
-        (defined FSS_AUX_STM_0_CH_0_ISR_USED) || (defined FSS_AUX_STM_0_CH_1_ISR_USED) || (defined FSS_AUX_STM_0_CH_2_ISR_USED) || (defined FSS_AUX_STM_0_CH_3_ISR_USED) || \
-        (defined FSS_AUX_STM_1_CH_0_ISR_USED) || (defined FSS_AUX_STM_1_CH_1_ISR_USED) || (defined FSS_AUX_STM_1_CH_2_ISR_USED) || (defined FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        (defined FSS_AUX_STM_2_CH_0_ISR_USED) || (defined FSS_AUX_STM_2_CH_1_ISR_USED) || (defined FSS_AUX_STM_2_CH_2_ISR_USED) || (defined FSS_AUX_STM_2_CH_3_ISR_USED) )
+#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
+        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
+        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
+        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
+        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
+        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
+        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
+        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
+        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
+        defined(CRS_STM_0_ISR_USED) || \
+        defined(FSS_COSS_STM_0_CH_0_ISR_USED) || defined(FSS_COSS_STM_0_CH_1_ISR_USED) || defined(FSS_COSS_STM_0_CH_2_ISR_USED) || defined(FSS_COSS_STM_0_CH_3_ISR_USED) || \
+        defined(FSS_COSS_STM_1_CH_0_ISR_USED) || defined(FSS_COSS_STM_1_CH_1_ISR_USED) || defined(FSS_COSS_STM_1_CH_2_ISR_USED) || defined(FSS_COSS_STM_1_CH_3_ISR_USED) || \
+        defined(FSS_COSS_STM_2_CH_0_ISR_USED) || defined(FSS_COSS_STM_2_CH_1_ISR_USED) || defined(FSS_COSS_STM_2_CH_2_ISR_USED) || defined(FSS_COSS_STM_2_CH_3_ISR_USED) || \
+        defined(FSS_COSS_STM_3_CH_0_ISR_USED) || defined(FSS_COSS_STM_3_CH_1_ISR_USED) || defined(FSS_COSS_STM_3_CH_2_ISR_USED) || defined(FSS_COSS_STM_3_CH_3_ISR_USED) || \
+        defined(FSS_STM_0_CH_0_ISR_USED) || defined(FSS_STM_0_CH_1_ISR_USED) || defined(FSS_STM_0_CH_2_ISR_USED) || defined(FSS_STM_0_CH_3_ISR_USED) || \
+        defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
+        defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
+        defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 /**
 * @brief   Driver routine to process all the interrupts of STM.
 * @details Support function used by interrupt service routines to implement STM specific operations
@@ -693,9 +967,6 @@ static void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
 
     if ((instance < GPT_STM_INSTANCE_COUNT) && (channel < STM_CHANNEL_COUNT))
     {
-        /* get the driver status */
-        chInit = Stm_Ip_u32ChState[instance][channel].chInit;
-
         /* enter critical section */
         SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_11();
         {
@@ -705,66 +976,49 @@ static void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
             /* check if channel event has occurred */
             HasChEvOccurred = Stm_Ip_GetInterruptStatusFlag(instance, channel);
 
-            /* Check if driver is initialized */
-            if (TRUE == chInit)
+            if (IsChEvEnabled && HasChEvOccurred)
             {
-                /* Check for spurious interrupts */
-                if (IsChEvEnabled && HasChEvOccurred)
-                {
-                    /* Clear pending interrupts */
-                    Stm_Ip_ClearInterruptStatusFlag(instance, channel);
-                }
-            }
-            else
-            {
-                /* Driver isn't initialized and just clear pending interrupts */
-                if (HasChEvOccurred)
-                {
-                    /* Clear pending interrupts */
-                    Stm_Ip_ClearInterruptStatusFlag(instance, channel);
-                }
+                /* Clear pending interrupts */
+                Stm_Ip_ClearInterruptStatusFlag(instance, channel);
             }
         }
         /* exit critical section */
         SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_11();
 
-        /* Check if driver is initialized */
-        if (TRUE == chInit)
+        /* Check for spurious interrupts */
+        if (IsChEvEnabled && HasChEvOccurred)
         {
-            /* Check for spurious interrupts */
-            if (IsChEvEnabled && HasChEvOccurred)
-            {
-                callback        = Stm_Ip_u32ChState[instance][channel].callback;
-                channelMode     = Stm_Ip_u32ChState[instance][channel].channelMode;
-                callbackParam   = Stm_Ip_u32ChState[instance][channel].callbackParam;
-
+            chInit          = Stm_Ip_u32ChState[instance][channel].chInit;
+            callback        = Stm_Ip_u32ChState[instance][channel].callback;
+            channelMode     = Stm_Ip_u32ChState[instance][channel].channelMode;
+            callbackParam   = Stm_Ip_u32ChState[instance][channel].callbackParam;
+            
 #if (STM_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON)
-                if(0x0U != Stm_Ip_u32NextTargetValue[instance][channel])
-                {
-                    Stm_Ip_u32TargetValue[instance][channel] = Stm_Ip_u32NextTargetValue[instance][channel];
-                    Stm_Ip_u32NextTargetValue[instance][channel] = 0x0U;
-                }
+            if(0x0U != Stm_Ip_u32NextTargetValue[instance][channel])
+            {
+                Stm_Ip_u32TargetValue[instance][channel] = Stm_Ip_u32NextTargetValue[instance][channel];
+                Stm_Ip_u32NextTargetValue[instance][channel] = 0x0U;
+            }
 #endif
-                /* Check if channel mode is ONE-SHOT */
-                if(STM_IP_CH_MODE_ONESHOT == channelMode)
-                {
-                    Stm_Ip_DisableChannel(instance, channel);
-                }
-                else
-                {
-                    /*Get current CMP value*/
-                    oldCmpValue = Stm_Ip_GetCmpValue(instance, channel);
-                    /*Get current target value*/
-                    targetValue = Stm_Ip_u32TargetValue[instance][channel];
-                    /*Set new CMP value*/
-                    Stm_Ip_SetCmpValue(instance, channel, (oldCmpValue + targetValue));
-                }
+            /* Check if channel mode is ONE-SHOT */
+            if(STM_IP_CH_MODE_ONESHOT == channelMode)
+            {
+                Stm_Ip_DisableChannel(instance, channel);
+            }
+            else
+            {
+                /*Get current CMP value*/
+                oldCmpValue = Stm_Ip_GetCmpValue(instance, channel);
+                /*Get current target value*/
+                targetValue = Stm_Ip_u32TargetValue[instance][channel];
+                /*Set new CMP value*/
+                Stm_Ip_SetCmpValue(instance, channel, (oldCmpValue + targetValue));
+            }
 
-                /* Call GPT upper layer handler */
-                if (NULL_PTR != callback)
-                {
-                    callback(callbackParam);
-                }
+            /* Call GPT upper layer handler */
+            if ((TRUE == chInit) && (NULL_PTR != callback))
+            {
+                callback(callbackParam);
             }
         }
     }
@@ -774,22 +1028,6 @@ static void Stm_Ip_ProcessCommonInterrupt(uint8 instance, uint8 channel)
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
-/**
- * @brief
- * Function Name : Stm_Ip_GetInterruptStatusFlag
- * Description   : Get the state of Channel Interrupt Status Flag (CIF): channel interrupt registers (CIR0 - CIR3)
- *
- * @param[in]   instance    STM hw instance number
- * @param[in]   channel     STM hw channel number
- *
- * @return  TRUE if a Channel Interrupt has occurred, FALSE otherwise
- * @pre     The driver needs to be initialized.
- */
-boolean Stm_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel)
-{
-    return (0U != (stmBase[instance]->CHANNEL[channel].CIR & STM_CIR_CIF_MASK)) ? TRUE : FALSE;
-}
-
 #if (defined(MCAL_STM_REG_PROT_AVAILABLE) && (STD_ON == STM_IP_ENABLE_USER_MODE_SUPPORT))
 /**
  * @brief        Enables STM registers writing in User Mode by configuring REG_PROT
@@ -888,7 +1126,23 @@ void Stm_Ip_InitChannel(uint8 instance, const Stm_Ip_ChannelConfigType *configPt
         defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) )
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
     Stm_Ip_u32ChState[instance][configPtr->hwChannel].chInit = TRUE;
     Stm_Ip_u32ChState[instance][configPtr->hwChannel].callback = configPtr->callback;
     Stm_Ip_u32ChState[instance][configPtr->hwChannel].callbackParam = configPtr->callbackParam;
@@ -926,30 +1180,6 @@ void Stm_Ip_Deinit(uint8 instance)
         Stm_Ip_ClearInterruptStatusFlag(instance, channelIndex);
         /* Sets compare value to 0 */
         Stm_Ip_SetCmpValue(instance, channelIndex, 0x0U);
-#if (   defined(STM_0_ISR_USED) || defined(STM_1_ISR_USED) || defined(STM_2_ISR_USED)  || defined(STM_3_ISR_USED)  || \
-        defined(STM_4_ISR_USED) || defined(STM_5_ISR_USED) || defined(STM_6_ISR_USED)  || defined(STM_7_ISR_USED)  || \
-        defined(STM_8_ISR_USED) || defined(STM_9_ISR_USED) || defined(STM_10_ISR_USED) || defined(STM_11_ISR_USED) || \
-        defined(STM_12_ISR_USED)|| defined(SMU_STM_0_ISR_USED) || defined(SMU_STM_2_ISR_USED) || \
-        defined(CE_STM_0_ISR_USED) || defined(CE_STM_1_ISR_USED) || defined(CE_STM_2_ISR_USED) || \
-        defined(RTU0_STM_0_ISR_USED) || defined(RTU0_STM_1_ISR_USED) || defined(RTU0_STM_2_ISR_USED) || defined(RTU0_STM_3_ISR_USED) || \
-        defined(RTU1_STM_0_ISR_USED) || defined(RTU1_STM_1_ISR_USED) || defined(RTU1_STM_2_ISR_USED) || defined(RTU1_STM_3_ISR_USED) || \
-        defined(RTU2_STM_0_ISR_USED) || defined(RTU2_STM_1_ISR_USED) || defined(RTU2_STM_2_ISR_USED) || defined(RTU2_STM_3_ISR_USED) || \
-        defined(RTU3_STM_0_ISR_USED) || defined(RTU3_STM_1_ISR_USED) || defined(RTU3_STM_2_ISR_USED) || defined(RTU3_STM_3_ISR_USED) || \
-        defined(CRS_STM_0_ISR_USED) || \
-        defined(FSS_COSS_STM_0_CH_0_ISR_USED) || defined(FSS_COSS_STM_0_CH_1_ISR_USED) || defined(FSS_COSS_STM_0_CH_2_ISR_USED) || defined(FSS_COSS_STM_0_CH_3_ISR_USED) || \
-        defined(FSS_COSS_STM_1_CH_0_ISR_USED) || defined(FSS_COSS_STM_1_CH_1_ISR_USED) || defined(FSS_COSS_STM_1_CH_2_ISR_USED) || defined(FSS_COSS_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_COSS_STM_2_CH_0_ISR_USED) || defined(FSS_COSS_STM_2_CH_1_ISR_USED) || defined(FSS_COSS_STM_2_CH_2_ISR_USED) || defined(FSS_COSS_STM_2_CH_3_ISR_USED) || \
-        defined(FSS_COSS_STM_3_CH_0_ISR_USED) || defined(FSS_COSS_STM_3_CH_1_ISR_USED) || defined(FSS_COSS_STM_3_CH_2_ISR_USED) || defined(FSS_COSS_STM_3_CH_3_ISR_USED) || \
-        defined(FSS_STM_0_CH_0_ISR_USED) || defined(FSS_STM_0_CH_1_ISR_USED) || defined(FSS_STM_0_CH_2_ISR_USED) || defined(FSS_STM_0_CH_3_ISR_USED) || \
-        defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) )
-        /* Set state variab values to default value */
-        Stm_Ip_u32ChState[instance][channelIndex].chInit = FALSE;
-        Stm_Ip_u32ChState[instance][channelIndex].callback = NULL_PTR;
-        Stm_Ip_u32ChState[instance][channelIndex].callbackParam = 0;
-#endif      
     }
 
     /* Set to default prescaler bits */
@@ -986,8 +1216,6 @@ void Stm_Ip_StartCounting(uint8 instance, uint8 channel, uint32 compareValue)
     /* enter critical section */
     SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_39();
     {
-        /* Clear pending interrupts */
-        Stm_Ip_ClearInterruptStatusFlag(instance, channel);
         currentCntValue = Stm_Ip_GetCntValue(instance);
         Stm_Ip_SetCmpValue(instance, channel, (currentCntValue + compareValue));
     }
@@ -1023,8 +1251,6 @@ void Stm_Ip_StartCountingAbsolute(uint8 instance, uint8 channel, uint32 compareV
 
     Stm_Ip_u32TargetValue[instance][channel] = 0U;
     Stm_Ip_SetCmpValue(instance, channel, compareValue);
-    /* Clear pending interrupts */
-    Stm_Ip_ClearInterruptStatusFlag(instance, channel);
     /* Enable Channel Interrupt */
     Stm_Ip_SetInterruptEnableFlag(instance, channel, TRUE);
 }
@@ -1089,7 +1315,7 @@ void Stm_Ip_EnableChannel(uint8 instance, uint8 channel)
     DevAssert(GPT_STM_INSTANCE_COUNT > instance);
     DevAssert(STM_CHANNEL_COUNT > channel);
 #endif
-    /* Clear pending interrupts */
+
     Stm_Ip_ClearInterruptStatusFlag(instance, channel);
     Stm_Ip_SetInterruptEnableFlag(instance, channel, TRUE);
 }
@@ -1204,7 +1430,23 @@ void Stm_Ip_ChangeNextTimeoutValue(uint8 instance, uint8 channel, uint32 value)
         defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) )
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
     /* Update the target time value to be used on next cycle */
     Stm_Ip_u32NextTargetValue[instance][channel] = value;
 #endif
@@ -1889,6 +2131,391 @@ ISR(FSS_AUX_STM_2_CH_2_ISR){
 ISR(FSS_AUX_STM_2_CH_3_ISR){
     uint8 channel = 3U;
     Stm_Ip_ProcessCommonInterrupt(FSS_AUX_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+
+#if defined(RTU0_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU0_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU0_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU0_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU1_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU1_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU1_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU2_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU2_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU2_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_0_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_0_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_0_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_1_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_1_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_1_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_2_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_2_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_2_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_0_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_0_ISR){
+    uint8 channel = 0U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_1_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_1_ISR){
+    uint8 channel = 1U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_2_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_2_ISR){
+    uint8 channel = 2U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
+}
+#endif
+#if defined(RTU3_COS_STM_3_CH_3_ISR_USED)
+ISR(RTU3_COS_STM_3_CH_3_ISR){
+    uint8 channel = 3U;
+    Stm_Ip_ProcessCommonInterrupt(RTU3_COS_STM_3_IP_INSTANCE_NUMBER, channel);
 }
 #endif
 

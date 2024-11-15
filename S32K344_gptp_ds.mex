@@ -90,7 +90,9 @@
          <generated_project_files>
             <file path="generate/include/Clock_Ip_Cfg.h" update_enabled="true"/>
             <file path="generate/include/Clock_Ip_Cfg_Defines.h" update_enabled="true"/>
+            <file path="generate/include/Clock_Ip_PBcfg.h" update_enabled="true"/>
             <file path="generate/src/Clock_Ip_Cfg.c" update_enabled="true"/>
+            <file path="generate/src/Clock_Ip_PBcfg.c" update_enabled="true"/>
          </generated_project_files>
          <clocks_profile>
             <processor_version>0.0.0</processor_version>
@@ -237,7 +239,7 @@
                   <clock_output id="FLEXCAN5_CLK.outFreq" value="16 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXCANA_CLK.outFreq" value="16 MHz" locked="false" accuracy=""/>
                   <clock_output id="FLEXCANB_CLK.outFreq" value="16 MHz" locked="false" accuracy=""/>
-                  <clock_output id="FLEXIO0_CLK.outFreq" value="160 MHz" locked="false" accuracy=""/>
+                  <clock_output id="FLEXIO0_CLK.outFreq" value="80 MHz" locked="false" accuracy=""/>
                   <clock_output id="FXOSCOUT.outFreq" value="40 MHz" locked="false" accuracy=""/>
                   <clock_output id="HSE_CLK.outFreq" value="80 MHz" locked="false" accuracy=""/>
                   <clock_output id="INTM_CLK.outFreq" value="80 MHz" locked="false" accuracy=""/>
@@ -470,6 +472,16 @@
                   <data type="Version">1.0.0</data>
                </feature>
             </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.driver.Platform" description="Platform is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
+               <feature name="enabled" evaluation="equal">
+                  <data type="Boolean">true</data>
+               </feature>
+            </dependency>
+            <dependency resourceType="SWComponent" resourceId="platform.driver.Platform" description="An unsupported version of the Platform in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
+               <feature name="version" evaluation="equivalent">
+                  <data type="Version">1.0.0</data>
+               </feature>
+            </dependency>
             <dependency resourceType="SWComponent" resourceId="platform.driver.gpt" description="Gpt is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
                <feature name="enabled" evaluation="equal">
                   <data type="Boolean">true</data>
@@ -488,16 +500,6 @@
             <dependency resourceType="SWComponent" resourceId="platform.middleware.gPTP_S32K3xx" description="An unsupported version of the gPTP_S32K3xx in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
                <feature name="version" evaluation="equivalent">
                   <data type="Version">0.9.0</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.driver.Platform" description="Platform is not found in the toolchain/IDE project. The project will not compile!" problem_level="2" source="Peripherals">
-               <feature name="enabled" evaluation="equal">
-                  <data type="Boolean">true</data>
-               </feature>
-            </dependency>
-            <dependency resourceType="SWComponent" resourceId="platform.driver.Platform" description="An unsupported version of the Platform in the toolchain/IDE project. Required: ${required_value}, actual: ${actual_value}. The project might not compile correctly." problem_level="1" source="Peripherals">
-               <feature name="version" evaluation="equivalent">
-                  <data type="Version">1.0.0</data>
                </feature>
             </dependency>
             <dependency resourceType="Tool" resourceId="Clocks" description="The Clocks tool is required by the Peripherals tool, but it is disabled." problem_level="2" source="Peripherals">
@@ -520,7 +522,6 @@
             <file path="generate/include/Clock_Ip_Cfg_Defines.h" update_enabled="true"/>
             <file path="generate/include/Clock_Ip_PBcfg.h" update_enabled="true"/>
             <file path="generate/include/Dem_IntErrId.h" update_enabled="true"/>
-            <file path="generate/include/DeviceDefinition.h" update_enabled="true"/>
             <file path="generate/include/Emios_Gpt_Ip_Cfg.h" update_enabled="true"/>
             <file path="generate/include/Emios_Gpt_Ip_Cfg_Defines.h" update_enabled="true"/>
             <file path="generate/include/Emios_Gpt_Ip_PBcfg.h" update_enabled="true"/>
@@ -662,7 +663,7 @@
                               <setting name="Name" value="EthGeneralVendorSpecific"/>
                               <setting name="EthDisableDemEventDetect" value="false"/>
                               <setting name="EthEnableUserModeSupport" value="false"/>
-                              <setting name="EthMultiPartitionSupport" value="false"/>
+                              <setting name="EthMulticoreSupport" value="false"/>
                               <setting name="EthUpdatePhysAddrFilterApi" value="true"/>
                               <setting name="EthSwtManagementSupportApi" value="false"/>
                               <setting name="EthTimeoutMethod" value="OSIF_COUNTER_DUMMY"/>
@@ -672,10 +673,6 @@
                               <setting name="EthTimeAwareShaper" value="false"/>
                               <setting name="EthEnableSporadicRxBigBufferSupport" value="false"/>
                               <setting name="EthEnableSporadicTxBigBufferSupport" value="false"/>
-                              <setting name="EthRxHeaderSplit" value="false"/>
-                              <setting name="EthDMAPriorityConfiguration" value="false"/>
-                              <setting name="EthPPSOutputSupport" value="false"/>
-                              <setting name="EthLPIModeEnable" value="false"/>
                            </struct>
                         </struct>
                         <struct name="EthConfigSet">
@@ -745,14 +742,10 @@
                                        <setting name="MAC_CONFIG_IPG_VALUE" value="0"/>
                                        <setting name="MAC_CONFIG_EIPG_STATE" value="false"/>
                                        <setting name="MAC_CONFIG_EIPG_VALUE" value="0"/>
-                                       <setting name="MAC_CONFIG_MAX_SPLIT_HEADER_SIZE" value="OP_0_64"/>
-                                       <setting name="MAC_CONFIG_SPLIT_MODE_TYPE" value="L3_L4_SPLIT"/>
-                                       <setting name="MAC_CONFIG_SPLIT_OFFSET" value="2"/>
                                     </struct>
                                     <struct name="EthCtrlConfigPacketFilter">
                                        <setting name="Name" value="EthCtrlConfigPacketFilter"/>
                                        <setting name="PKT_FILTER_RECV_ALL" value="true"/>
-                                       <setting name="PKT_FILTER_LAYER3_LAYER4" value="false"/>
                                        <setting name="PKT_FILTER_HASH_OR_PERFECT_FILTER" value="true"/>
                                        <setting name="PKT_FILTER_BLOCK_CONTROL_PKTS" value="false"/>
                                        <setting name="PKT_FILTER_BLOCK_PAUSE_PKTS" value="false"/>
@@ -765,24 +758,6 @@
                                        <setting name="PKT_FILTER_HASH_UNICAST" value="false"/>
                                        <setting name="PKT_FILTER_PROMISCUOUS_MODE" value="true"/>
                                     </struct>
-                                    <struct name="EthCtrlConfigDMAPriority">
-                                       <setting name="Name" value="EthCtrlConfigDMAPriority"/>
-                                       <setting name="EthCtrlTransmitPriority" value="false"/>
-                                       <setting name="EthCtrlDMAArbitrationScheme" value="GMAC_DMA_FIXED_PRIORITY"/>
-                                       <setting name="EthCtrlDMATransmitArbitrationAlgorithm" value="GMAC_DMA_TX_FIXED_PRIORITY"/>
-                                       <setting name="EthCtrlDMAPriorityRatio" value="R_1_1"/>
-                                    </struct>
-                                    <struct name="EthCtrlLowPowerIdleModeConfig">
-                                       <setting name="Name" value="EthCtrlVendorSpecific"/>
-                                       <setting name="MAC_LPI_CONTROL_STATUS_LPITCSE" value="false"/>
-                                       <setting name="MAC_LPI_CONTROL_STATUS_LPIATE" value="false"/>
-                                       <setting name="MAC_LPI_CONTROL_STATUS_LPITXA" value="false"/>
-                                       <setting name="MAC_LPI_CONTROL_STATUS_PLS" value="false"/>
-                                       <setting name="MAC_LPI_TIMERS_CONTROL_LST" value="0"/>
-                                       <setting name="MAC_LPI_TIMERS_CONTROL_TWT" value="0"/>
-                                       <setting name="MAC_LPI_ENTRY_TIMER_LPIET" value="0"/>
-                                       <setting name="EthCtrlRxLpiCallback" value=""/>
-                                    </struct>
                                  </struct>
                                  <struct name="EthCtrlConfigEgress">
                                     <setting name="Name" value="EthCtrlConfigEgress"/>
@@ -794,7 +769,6 @@
                                           <setting name="EthCtrlConfigEgressFifoBufTotal" value="6"/>
                                           <setting name="EthCtrlConfigEgressFifoIdx" value="0"/>
                                           <setting name="EthCtrlConfigEgressFifoCallback" value="Eth_TxIrqCallback"/>
-                                          <setting name="EthCtrlConfigEgressTransmitChannelWeight" value="1"/>
                                           <array name="EthCtrlConfigEgressFifoPriorityAssignment"/>
                                        </struct>
                                     </array>
@@ -831,8 +805,6 @@
                                           <setting name="EthCtrlConfigIngressFifoBufTotal" value="6"/>
                                           <setting name="EthCtrlConfigIngressFifoIdx" value="0"/>
                                           <setting name="EthCtrlConfigIngressFifoCallback" value="Eth_RxIrqCallback"/>
-                                          <setting name="EthCtrlRxHeaderSplitFifoSupport" value="false"/>
-                                          <setting name="EthCtrlRxHeaderSplitOffset" value="14"/>
                                           <array name="EthCtrlConfigIngressFifoPriorityAssignment"/>
                                        </struct>
                                     </array>
@@ -840,14 +812,6 @@
                                  <struct name="EthCtrlConfigTimeAwareShaper" quick_selection="Default">
                                     <setting name="Name" value="EthCtrlConfigTimeAwareShaper"/>
                                     <array name="EthCtrlConfigTimeAwareShaper"/>
-                                 </struct>
-                                 <struct name="EthCtrlConfigLayer3Layer4Filter">
-                                    <setting name="Name" value="EthCtrlConfigLayer3Layer4Filter"/>
-                                    <array name="EthCtrlConfigLayer3Layer4Filter"/>
-                                 </struct>
-                                 <struct name="EthCtrlPulsePerSecondConfig">
-                                    <setting name="Name" value="EthCtrlPulsePerSecondConfig"/>
-                                    <array name="EthCtrlPulsePerSecondConfig"/>
                                  </struct>
                                  <array name="EthDemEventParameterRefs"/>
                               </struct>
@@ -906,7 +870,7 @@
                            <setting name="PortSetAsUnusedPinApi" value="false"/>
                            <setting name="PortResetPinModeApi" value="false"/>
                            <setting name="PortEnableUserModeSupport" value="false"/>
-                           <setting name="PortMultiPartitionSupport" value="false"/>
+                           <setting name="PortMulticoreSupport" value="false"/>
                            <setting name="PortTspcSupport" value="false"/>
                            <setting name="SignalInversionConfigEnable" value="false"/>
                            <setting name="VirtWrapperSupport" value="false"/>
@@ -1436,7 +1400,6 @@
                                     <setting name="McuFxoscPowerDownCtr" value="true"/>
                                     <setting name="McuFxoscBypass" value="false"/>
                                     <setting name="McuFxoscMainComparator" value="true"/>
-                                    <setting name="McuFxoscALCEnable" value="Enabled"/>
                                  </struct>
                                  <struct name="McuSXOSC">
                                     <setting name="Name" value="McuSXOSC"/>
@@ -1551,7 +1514,7 @@
                                     <struct name="McuPll_Configuration">
                                        <setting name="Name" value="McuPll_Configuration"/>
                                        <setting name="McuPllFmSscgbyp" value="true"/>
-                                       <setting name="McuPllFmSpreadctl" value="Down_Spread"/>
+                                       <setting name="McuPllFmSpreadctl" value="Center_Spread"/>
                                        <setting name="McuPllFdSdmen" value="false"/>
                                        <setting name="McuPllFdSdm2" value="false"/>
                                        <setting name="McuPllFdSdm3" value="false"/>
@@ -2296,12 +2259,19 @@
                                           <setting name="McuModeEntrySlot" value="PRTN2_COFB1_REQ58"/>
                                           <setting name="McuPeripheralClockEnable" value="true"/>
                                        </struct>
+                                       <struct name="106">
+                                          <setting name="Name" value="McuPeripheral_106"/>
+                                          <setting name="McuPeripheralName" value="CM7_0_TCM"/>
+                                          <setting name="McuModeEntrySlot" value="PRTN2_COFB1_REQ62"/>
+                                          <setting name="McuPeripheralClockEnable" value="true"/>
+                                       </struct>
                                     </array>
                                  </struct>
                                  <struct name="McuDcmGprConfiguration">
                                     <setting name="Name" value="McuDcmGprConfiguration"/>
                                     <setting name="McuDcmGprUnderMcuControl" value="false"/>
                                     <setting name="McuBootBaseAddress" value="0"/>
+                                    <setting name="McuSIRC_TRIM_BYP_STDBY_EXTControl" value="false"/>
                                     <setting name="McuPMC_TRIM_RGM_DCF_BYP_STDBY_EXTControl" value="false"/>
                                     <setting name="McuFIRC_TRIM_BYP_STDBY_EXTControl" value="false"/>
                                     <setting name="McuDCM_SCAN_BYP_STDBY_EXTControl" value="false"/>
@@ -2366,9 +2336,7 @@
                            <setting name="OsIfDevErrorDetect" value="true"/>
                            <setting name="OsIfUseSystemTimer" value="false"/>
                            <setting name="OsIfUseCustomTimer" value="false"/>
-                           <setting name="OsIfUseGetUserId" value="GET_CORE_ID"/>
                            <setting name="OsIfInstanceId" value="0"/>
-                           <setting name="OsIfGetPhysicalCoreIdEnable" value="false"/>
                            <struct name="OsIfOperatingSystemType">
                               <setting name="Name" value="OsIfOperatingSystemType"/>
                               <setting name="Choice" value="OsIfAutosarOsType"/>
@@ -2480,7 +2448,7 @@
                                     <array name="FeeSubAddressArea">
                                        <struct name="0">
                                           <setting name="Name" value="FeeSubAddressArea_0"/>
-                                          <setting name="FeeSubAddressAreaRef" value="/MemAcc/MemAcc/MemAccAddressAreaConfiguration_0/MemAccSubAddressAreaConfiguration_1"/>
+                                          <setting name="FeeSubAddressAreaRef" value="/MemAcc/MemAcc/MemAccAddressAreaConfiguration_1/MemAccSubAddressAreaConfiguration_1"/>
                                           <setting name="FeeSubAddressAreaIndex" value="0"/>
                                        </struct>
                                     </array>
@@ -2522,7 +2490,7 @@
                            <setting name="ArReleaseMinorVersion" value="7"/>
                            <setting name="ArReleaseRevisionVersion" value="0"/>
                            <setting name="ModuleId" value="21"/>
-                           <setting name="SwMajorVersion" value="5"/>
+                           <setting name="SwMajorVersion" value="4"/>
                            <setting name="SwMinorVersion" value="0"/>
                            <setting name="SwPatchVersion" value="0"/>
                            <array name="VendorApiInfix">
@@ -2571,20 +2539,6 @@
                                     <setting name="MemAccUseWriteBurst" value="false"/>
                                     <setting name="MemAccSectorBatchRef" value="/Mem_43_INFLS/Mem/MemInstance_0/MemSectorBatch"/>
                                  </struct>
-                                 <struct name="1">
-                                    <setting name="Name" value="MemAccSubAddressAreaConfiguration_1"/>
-                                    <setting name="MemAccLogicalStartAddress" value="8192"/>
-                                    <setting name="MemAccSectorOffset" value="0"/>
-                                    <setting name="MemAccNumberOfSectors" value="1"/>
-                                    <setting name="MemAccMemInvocation" value="DIRECT_STATIC"/>
-                                    <setting name="MemAccMemNamePrefix" value="Mem_43_EXFLS"/>
-                                    <array name="MemAccNumberOfEraseRetries"/>
-                                    <array name="MemAccNumberOfWriteRetries"/>
-                                    <setting name="MemAccUseEraseBurst" value="false"/>
-                                    <setting name="MemAccUseReadBurst" value="false"/>
-                                    <setting name="MemAccUseWriteBurst" value="false"/>
-                                    <setting name="MemAccSectorBatchRef" value="/Mem_43_INFLS/Mem/MemInstance_0/MemSectorBatch_1"/>
-                                 </struct>
                               </array>
                               <array name="MemAccAddressAreaEcucPartitionRef"/>
                            </struct>
@@ -2617,6 +2571,10 @@
                            <setting name="Name" value="AutosarExt"/>
                            <setting name="MemAccEnableUserModeSupport" value="false"/>
                            <setting name="MemAccMulticoreType1Support" value="false"/>
+                           <setting name="MemAccDomainID" value="0"/>
+                           <setting name="MemAccTimeoutSupervisionEnabled" value="false"/>
+                           <setting name="MemAccMCoreArbitrationTimeout" value="0"/>
+                           <setting name="MemAccMCoreInitTimeout" value="0"/>
                            <array name="MemAccMCoreSemaphoreGates"/>
                            <setting name="MemAccMulticoreType3Support" value="false"/>
                            <array name="MemAccEcucPartitionRef"/>
@@ -2627,7 +2585,7 @@
                            <setting name="ArReleaseMinorVersion" value="7"/>
                            <setting name="ArReleaseRevisionVersion" value="0"/>
                            <setting name="ModuleId" value="41"/>
-                           <setting name="SwMajorVersion" value="5"/>
+                           <setting name="SwMajorVersion" value="4"/>
                            <setting name="SwMinorVersion" value="0"/>
                            <setting name="SwPatchVersion" value="0"/>
                            <array name="VendorApiInfix">
@@ -2653,16 +2611,12 @@
                            <setting name="MemSectorSetLockApi" value="false"/>
                            <setting name="MemEraseVerificationEnabled" value="false"/>
                            <setting name="MemWriteVerificationEnabled" value="false"/>
-                           <setting name="MemSyncModeEnable" value="false"/>
                            <setting name="MemAcLoadOnJobStart" value="false"/>
                            <setting name="MemCleanCacheAfterLoadAc" value="false"/>
                            <setting name="MemAcErase" value="0"/>
                            <setting name="MemAcWrite" value="0"/>
                            <setting name="MemAcErasePointer" value="NULL_PTR"/>
                            <setting name="MemAcWritePointer" value="NULL_PTR"/>
-                           <setting name="Mem_SoftwareSemaphoreSupport" value="false"/>
-                           <setting name="Mem_SemaphoreAddress" value="0"/>
-                           <setting name="Mem_SemaphoreSymbol" value=""/>
                            <array name="MemAcCallback"/>
                            <array name="MemStartFlashAccessNotif"/>
                            <array name="MemFinishedFlashAccessNotif"/>
@@ -2671,6 +2625,8 @@
                            <setting name="MemEraseTimeout" value="0"/>
                            <setting name="MemWriteTimeout" value="0"/>
                            <setting name="MemAbortTimeout" value="0"/>
+                           <setting name="MemEraseSuspendTimeout" value="0"/>
+                           <setting name="MemEraseResumeTimeout" value="0"/>
                            <setting name="MemUtestSuspendTimeout" value="0"/>
                            <setting name="MemUtestResumeTimeout" value="0"/>
                         </struct>
@@ -2733,12 +2689,69 @@
                            <setting name="ArReleaseMinorVersion" value="7"/>
                            <setting name="ArReleaseRevisionVersion" value="0"/>
                            <setting name="ModuleId" value="91"/>
-                           <setting name="SwMajorVersion" value="5"/>
+                           <setting name="SwMajorVersion" value="4"/>
                            <setting name="SwMinorVersion" value="0"/>
                            <setting name="SwPatchVersion" value="0"/>
                            <setting name="VendorApiInfix" value="INFLS"/>
                            <setting name="VendorId" value="43"/>
                         </struct>
+                     </config_set>
+                  </instance>
+                  <instance name="Platform" uuid="06a1a9ea-e753-4f16-8f60-18caf9edfa62" type="Platform" type_id="Platform" mode="autosar" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
+                     <config_set name="Platform">
+                        <setting name="Name" value="Platform"/>
+                        <struct name="ConfigTimeSupport">
+                           <setting name="POST_BUILD_VARIANT_USED" value="false"/>
+                           <setting name="IMPLEMENTATION_CONFIG_VARIANT" value="VARIANT-PRE-COMPILE"/>
+                        </struct>
+                        <struct name="GeneralConfiguration">
+                           <setting name="Name" value="GeneralConfiguration"/>
+                           <setting name="PlatformDevErrorDetect" value="true"/>
+                           <setting name="PlatformIntmConfigurable" value="false"/>
+                           <setting name="PlatformMcmConfigurable" value="false"/>
+                           <setting name="PlatformMpuM7Configurable" value="false"/>
+                           <setting name="PlatformIpAPIsAvailable" value="false"/>
+                           <setting name="PlatformEnableUserModeSupport" value="false"/>
+                           <setting name="PlatformMulticoreSupport" value="false"/>
+                           <array name="PlatformEcucPartitionRef"/>
+                        </struct>
+                        <struct name="CommonPublishedInformation">
+                           <setting name="Name" value="CommonPublishedInformation"/>
+                           <setting name="ArReleaseMajorVersion" value="4"/>
+                           <setting name="ArReleaseMinorVersion" value="7"/>
+                           <setting name="ArReleaseRevisionVersion" value="0"/>
+                           <setting name="ModuleId" value="255"/>
+                           <setting name="SwMajorVersion" value="4"/>
+                           <setting name="SwMinorVersion" value="0"/>
+                           <setting name="SwPatchVersion" value="0"/>
+                           <array name="VendorApiInfix"/>
+                           <setting name="VendorId" value="43"/>
+                        </struct>
+                        <array name="McmConfig"/>
+                        <struct name="MPU_M7_Configuration">
+                           <setting name="Name" value="MPU_M7_Configuration"/>
+                           <array name="MPU_M7_ModuleConfig"/>
+                        </struct>
+                        <struct name="IntmConfig">
+                           <setting name="Name" value="IntmConfig"/>
+                           <array name="IntmGenericSettings"/>
+                           <array name="IntmChannel"/>
+                        </struct>
+                        <array name="IntCtrlConfig">
+                           <struct name="0">
+                              <setting name="Name" value="IntCtrlConfig_0"/>
+                              <array name="PlatformIsrConfig">
+                                 <struct name="0">
+                                    <setting name="Name" value="PlatformIsrConfig_0"/>
+                                    <setting name="IsrName" value="PIT0_IRQn"/>
+                                    <setting name="IsrEnabled" value="true"/>
+                                    <setting name="IsrPriority" value="0"/>
+                                    <setting name="IsrHandler" value="PIT_0_ISR"/>
+                                 </struct>
+                              </array>
+                              <array name="PlatformNvicEcucPartitionRef"/>
+                           </struct>
+                        </array>
                      </config_set>
                   </instance>
                   <instance name="Gpt" uuid="1cd0e48c-1448-4c82-a0d9-946661eebad2" type="Gpt" type_id="Gpt" mode="autosar" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
@@ -3088,7 +3101,7 @@
                            <setting name="GptTimeoutMethod" value="OSIF_COUNTER_DUMMY"/>
                            <setting name="GptTimeoutDuration" value="800"/>
                            <setting name="GptReportWakeupSource" value="false"/>
-                           <setting name="GptMultiPartitionSupport" value="false"/>
+                           <setting name="GptMulticoreSupport" value="false"/>
                            <setting name="GptPredefTimer100us32bitEnable" value="false"/>
                            <setting name="GptPredefTimer1usEnablingGrade" value="GPT_PREDEF_TIMER_1US_DISABLED"/>
                            <array name="GptEcucPartitionRef"/>
@@ -3203,50 +3216,6 @@
                            <setting name="SwMinorVersion" value="0"/>
                            <setting name="SwPatchVersion" value="0"/>
                         </struct>
-                     </config_set>
-                  </instance>
-                  <instance name="Platform" uuid="8b5c2771-8a9e-4a46-a6fa-de48d0ed16e9" type="Platform" type_id="Platform" mode="autosar" enabled="true" comment="" custom_name_enabled="false" editing_lock="false">
-                     <config_set name="Platform">
-                        <setting name="Name" value="Platform"/>
-                        <struct name="ConfigTimeSupport">
-                           <setting name="POST_BUILD_VARIANT_USED" value="false"/>
-                           <setting name="IMPLEMENTATION_CONFIG_VARIANT" value="VARIANT-PRE-COMPILE"/>
-                        </struct>
-                        <struct name="GeneralConfiguration">
-                           <setting name="Name" value="GeneralConfiguration"/>
-                           <setting name="PlatformDevErrorDetect" value="true"/>
-                           <setting name="PlatformIntmConfigurable" value="false"/>
-                           <setting name="PlatformMcmConfigurable" value="false"/>
-                           <setting name="PlatformMpuM7Configurable" value="false"/>
-                           <setting name="PlatformEnableIntCtrlConfiguration" value="true"/>
-                           <setting name="PlatformIpAPIsAvailable" value="false"/>
-                           <setting name="PlatformEnableUserModeSupport" value="false"/>
-                           <setting name="PlatformMulticoreSupport" value="false"/>
-                           <array name="PlatformEcucPartitionRef"/>
-                        </struct>
-                        <struct name="CommonPublishedInformation">
-                           <setting name="Name" value="CommonPublishedInformation"/>
-                           <setting name="ArReleaseMajorVersion" value="4"/>
-                           <setting name="ArReleaseMinorVersion" value="7"/>
-                           <setting name="ArReleaseRevisionVersion" value="0"/>
-                           <setting name="ModuleId" value="255"/>
-                           <setting name="SwMajorVersion" value="5"/>
-                           <setting name="SwMinorVersion" value="0"/>
-                           <setting name="SwPatchVersion" value="0"/>
-                           <array name="VendorApiInfix"/>
-                           <setting name="VendorId" value="43"/>
-                        </struct>
-                        <array name="McmConfig"/>
-                        <struct name="MPU_M7_Configuration">
-                           <setting name="Name" value="MPU_M7_Configuration"/>
-                           <array name="MPU_M7_ModuleConfig"/>
-                        </struct>
-                        <struct name="IntmConfig">
-                           <setting name="Name" value="IntmConfig"/>
-                           <array name="IntmGenericSettings"/>
-                           <array name="IntmChannel"/>
-                        </struct>
-                        <array name="IntCtrlConfig"/>
                      </config_set>
                   </instance>
                </instances>

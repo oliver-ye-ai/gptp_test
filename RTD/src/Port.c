@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -46,7 +46,6 @@ extern "C"{
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
     #include "Det.h"
 #endif
-#include "Port_Ipw.h"
 
 /*=================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -59,7 +58,7 @@ extern "C"{
 #define PORT_AR_RELEASE_MAJOR_VERSION_C     4
 #define PORT_AR_RELEASE_MINOR_VERSION_C     7
 #define PORT_AR_RELEASE_REVISION_VERSION_C  0
-#define PORT_SW_MAJOR_VERSION_C             5
+#define PORT_SW_MAJOR_VERSION_C             4
 #define PORT_SW_MINOR_VERSION_C             0
 #define PORT_SW_PATCH_VERSION_C             0
 
@@ -96,25 +95,6 @@ extern "C"{
             #error "AutoSar Version Numbers of Port.c and Det.h are different"
         #endif
     #endif
-#endif
-
-/* Check if source file Port.c and header file Port_Ipw.h are of the same vendor */
-#if (PORT_VENDOR_ID_C != PORT_VENDOR_ID_IPW_H)
-    #error "Port.c and Port_Ipw.h have different vendor ids"
-#endif
-/* Check if source file Port.c and header file Port_Ipw.h are of the same Autosar version */
-#if ((PORT_AR_RELEASE_MAJOR_VERSION_C    != PORT_AR_RELEASE_MAJOR_VERSION_IPW_H) || \
-     (PORT_AR_RELEASE_MINOR_VERSION_C    != PORT_AR_RELEASE_MINOR_VERSION_IPW_H) || \
-     (PORT_AR_RELEASE_REVISION_VERSION_C != PORT_AR_RELEASE_REVISION_VERSION_IPW_H) \
-    )
-    #error "AutoSar Version Numbers of Port.c and Port_Ipw.h are different"
-#endif
-/* Check if source file Port.c and header file Port'_Ipw.h are of the same Software version */
-#if ((PORT_SW_MAJOR_VERSION_C != PORT_SW_MAJOR_VERSION_IPW_H) || \
-     (PORT_SW_MINOR_VERSION_C != PORT_SW_MINOR_VERSION_IPW_H) || \
-     (PORT_SW_PATCH_VERSION_C != PORT_SW_PATCH_VERSION_IPW_H)    \
-    )
-    #error "Software Version Numbers of Port.c and Port_Ipw.h are different"
 #endif
 /*=================================================================================================
 *                         LOCAL TYPEDEFS (STRUCTURES, UNIONS, ENUMS)
@@ -192,9 +172,9 @@ void Port_Init(const Port_ConfigType * ConfigPtr)
 #endif /* (STD_ON == PORT_PRECOMPILE_SUPPORT) */
 
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-    uint8 PartitionId;
+    uint8 CoreId;
 
-    PartitionId = (uint8)Port_GetUserId();
+    CoreId = (uint8)Port_GetCoreID();
 #if (STD_OFF == PORT_PRECOMPILE_SUPPORT)
     if (NULL_PTR == ConfigPtr)
 #else /*(STD_OFF == PORT_PRECOMPILE_SUPPORT) */
@@ -208,7 +188,7 @@ void Port_Init(const Port_ConfigType * ConfigPtr)
     {
 
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-        if ((uint32)1 != pLocalConfigPtr->pau8Port_PartitionList[PartitionId])
+        if ((uint32)1 != pLocalConfigPtr->pau8Port_PartitionList[CoreId])
         {
             (void)Det_ReportError((uint16)PORT_MODULE_ID, PORT_INSTANCE_ID, (uint8)PORT_INIT_ID, (uint8)PORT_E_PARAM_CONFIG);
         }
@@ -268,6 +248,61 @@ void Port_SetPinDirection(Port_PinType Pin,
 }
 #endif /* (STD_ON == PORT_SET_PIN_DIRECTION_API) */
 
+#ifdef PORT_SET_2_PINS_DIRECTION_API
+#if (STD_ON == PORT_SET_2_PINS_DIRECTION_API)
+/**
+* @brief   Sets the direction of 2 pins.
+* @details The function @p Port_Set2PinsDirection() will set the port pins direction
+*          during runtime.
+* @pre     @p Port_Init() must have been called first. In order to change the
+*          pin direction the PortPinDirectionChangeable flag must have been set
+*          to @p TRUE for both pins.
+*
+* @param[in] Pin1          Pin 1 ID number.
+* @param[in] Pin2          Pin 2 ID number.
+* @param[in] Direction     Port Pin direction.
+*
+* Port_Set2PinsDirection_Activity
+* @api
+*/
+void Port_Set2PinsDirection(Port_PinType Pin1,
+                            Port_PinType Pin2,
+                            Port_PinDirectionType Direction
+                           )
+{
+#if (STD_ON == PORT_DEV_ERROR_DETECT)
+    /* Variable used to store current error status */
+    Std_ReturnType ErrStatus = (Std_ReturnType)E_OK;
+
+    /* Check if Port module is initialized */
+    if (NULL_PTR == Port_pConfigPtr)
+    {
+        (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SET2PINSDIRECTION_ID, (uint8)PORT_E_UNINIT);
+    }
+    /* Check port pin validity */
+    else if ((Pin1 >= (Port_PinType)Port_pConfigPtr->u16NumPins) || (Pin2 >= (Port_PinType)Port_pConfigPtr->u16NumPins))
+    {
+        (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SET2PINSDIRECTION_ID, (uint8)PORT_E_PARAM_PIN);
+    }
+    else
+#endif /* PORT_DEV_ERROR_DETECT */
+    {
+#if (STD_ON == PORT_DEV_ERROR_DETECT)
+        ErrStatus = Port_Ipw_Set2PinsDirection(Pin1, Pin2, (Port_PinDirectionType)Direction, Port_pConfigPtr);
+#else
+        (void)Port_Ipw_Set2PinsDirection(Pin1, Pin2, (Port_PinDirectionType)Direction, Port_pConfigPtr);
+#endif
+
+#if (STD_ON == PORT_DEV_ERROR_DETECT)
+        if ((Std_ReturnType)E_NOT_OK == ErrStatus)
+        {
+            (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_SET2PINSDIRECTION_ID, (uint8)PORT_E_DIRECTION_UNCHANGEABLE);
+        }
+#endif /* (STD_ON == PORT_DEV_ERROR_DETECT) */
+    }
+}
+#endif /*(STD_ON == PORT_SET_2_PINS_DIRECTION_API) */
+#endif
 
 #ifdef PORT_CODE_SIZE_OPTIMIZATION
 #if (STD_ON == PORT_SET_PIN_MODE_API) && (STD_OFF == PORT_CODE_SIZE_OPTIMIZATION)
@@ -327,15 +362,15 @@ void Port_SetPinMode(Port_PinType Pin,
 void Port_RefreshPortDirection(void)
 {
 #if (STD_ON == PORT_DEV_ERROR_DETECT)
-    uint8 PartitionId;
+    uint8 CoreId;
 
-    PartitionId = (uint8)Port_GetUserId();
+    CoreId = (uint8)Port_GetCoreID();
     /* Check if Port module is initialized */
     if (NULL_PTR == Port_pConfigPtr)
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, (uint8)PORT_INSTANCE_ID, (uint8)PORT_REFRESHPINDIRECTION_ID, (uint8)PORT_E_UNINIT);
     }
-    else if ((uint32)1 != Port_pConfigPtr->pau8Port_PartitionList[PartitionId])
+    else if ((uint32)1 != Port_pConfigPtr->pau8Port_PartitionList[CoreId])
     {
         (void)Det_ReportError((uint16)PORT_MODULE_ID, PORT_INSTANCE_ID, (uint8)PORT_REFRESHPINDIRECTION_ID, (uint8)PORT_E_PARAM_CONFIG);
     }
@@ -345,6 +380,7 @@ void Port_RefreshPortDirection(void)
         Port_Ipw_RefreshPortDirection(Port_pConfigPtr);
     }
 }
+
 
 #if  (STD_ON == PORT_VERSION_INFO_API)
 /**
@@ -404,6 +440,7 @@ void Port_SetAsUnusedPin(Port_PinType Pin)
     }
 }
 
+
 /**
 * @brief   Set as used pin.
 * @details This function shall configure the referenced pin with
@@ -453,7 +490,6 @@ void Port_ResetPinMode(Port_PinType Pin)
         Port_Ipw_ResetPinMode(Pin, Port_pConfigPtr);
     }
 }
-
 #endif /* (STD_ON == PORT_RESET_PIN_MODE_API) && (STD_OFF == PORT_CODE_SIZE_OPTIMIZATION) */
 #endif /* PORT_RESET_PIN_MODE_API */
 #endif /* PORT_CODE_SIZE_OPTIMIZATION */

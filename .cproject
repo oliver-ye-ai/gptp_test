@@ -217,7 +217,7 @@
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
-		<project id="S32K344_gptp_ds_.com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.677821282" name="Arm32 Executable" projectType="com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe"/>
+		<project id="S32K344_gptp_ds.com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe.677821282" name="Arm32 Executable" projectType="com.nxp.s32ds.cle.arm.mbs.arm32.bare.gnu.10.2.exe"/>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
 	<storageModule moduleId="refreshScope"/>

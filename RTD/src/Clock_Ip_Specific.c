@@ -8,22 +8,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Clock_Ip_Specific.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -59,7 +59,7 @@ extern "C"{
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_SPECIFIC_SW_PATCH_VERSION_C               0
 
@@ -160,7 +160,7 @@ static const Clock_Ip_IntOscCallbackType *Clock_Ip_pxFircStdbyClock;
 #include "Mcu_MemMap.h"
 
 #ifdef CLOCK_IP_HAS_FLASH_WAIT_STATES
-static SetFlashWaitStatesCallbackType Clock_Ip_SetFlashWaitStatesCallback = &Clock_Ip_CodeInRamSetFlashWaitStates;   /* Set Flash Wait States callback */
+static SetFlashWaitStatesCallbackType Clock_Ip_SetFlashWaitStatesCallback = Clock_Ip_CodeInRamSetFlashWaitStates;   /* Set Flash Wait States callback */
 #endif
 
 /* Clock stop initialized section data */
@@ -187,21 +187,28 @@ static boolean Clock_Ip_bObjectsAreInitialized;   /* Clock objects are initializ
 /*==================================================================================================
 *                                    GLOBAL FUNCTION PROTOTYPES
 ==================================================================================================*/
+/* Clock start rom section code */
+#define MCU_START_SEC_CODE_AC
+#include "Mcu_MemMap.h"
+
+#ifdef CLOCK_IP_HAS_RAM_WAIT_STATES
+void Clock_Ip_PRAMCSetRamIWS(void);
+#endif
+
+/* Clock stop rom section code */
+#define MCU_STOP_SEC_CODE_AC
+#include "Mcu_MemMap.h"
+
 
 /* Clock start section code */
 #define MCU_START_SEC_CODE
 #include "Mcu_MemMap.h"
 
+void Clock_Ip_PowerClockIpModules(void);
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
-static void Clock_Ip_PllPowerClockIp(void);
-static void Clock_Ip_FxoscPowerClockIp(void);
-#if defined(CLOCK_IP_HAS_SXOSC_CLK)
-static void Clock_Ip_SxoscPowerClockIp(void);
-#endif
-static void Clock_Ip_CmusPowerClockIp(void);
-static void Clock_Ip_MscmPowerClockIp(void);
+
 /*==================================================================================================
 *                                         LOCAL FUNCTIONS
 ==================================================================================================*/
@@ -221,37 +228,18 @@ static void Clock_Ip_PllPowerClockIp(void)
         IP_MC_ME->PRTN1_PCONF       |= MC_ME_PRTN1_PCONF_PCE_MASK;          /* PCE=1: Enable the clock to Partition #1 */
         IP_MC_ME->PRTN1_PUPD        |= MC_ME_PRTN1_PUPD_PCUD_MASK;          /* PCUD=1: Trigger the hardware process */
         Clock_Ip_McMeEnterKey();
-
-        /* 
-            Check whether hardware update process finished (PCUD is zero in this case)
-            and peripheral clock gate state (Gate State is 1U in this case).
-            Otherwise wait for hardware status to update.
-         */
-        if ((0U != (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) ||
-            (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK56_MASK)))
-
+        /* Wait until PLL clock is running */
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        do
         {
-            /* Wait for hardware to update */
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            do
-            {
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                /*
-                    Check whether hardware update process finished (PCUD is zero in this case)
-                    and peripheral clock gate state (Gate State is 1U in this case).
-                 */
-                if ((0U == (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) &&
-                    (0U != (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK56_MASK)))
-                {
-                    break;
-                }
-            }while (FALSE == TimeoutOccurred);
-
-            if (TRUE == TimeoutOccurred)
-            {
-                /* Report timeout error */
-                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, PLL_CLK);
-            }
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while((0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK56_MASK)) && (FALSE == TimeoutOccurred));
+        /* timeout notification */
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, PLL_CLK);
         }
     }
 
@@ -264,47 +252,33 @@ static void Clock_Ip_PllPowerClockIp(void)
         IP_MC_ME->PRTN1_PCONF       |= MC_ME_PRTN1_PCONF_PCE_MASK;          /* PCE=1: Enable the clock to Partition #1 */
         IP_MC_ME->PRTN1_PUPD        |= MC_ME_PRTN1_PUPD_PCUD_MASK;          /* PCUD=1: Trigger the hardware process */
         Clock_Ip_McMeEnterKey();
-
-        /* 
-            Check whether hardware update process finished (PCUD is zero in this case)
-            and peripheral clock gate state (Gate State is 1U in this case).
-            Otherwise wait for hardware status to update.
-         */
-        if ((0U != (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) ||
-            (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK57_MASK)))
-
+        /* Wait until PLL clock is running */
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        do
         {
-            /* Wait for hardware to update */
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            do
-            {
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                /*
-                    Check whether hardware update process finished (PCUD is zero in this case)
-                    and peripheral clock gate state (Gate State is 1U in this case).
-                 */
-                if ((0U == (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) &&
-                    (0U != (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK57_MASK)))
-                {
-                    break;
-                }
-            }while (FALSE == TimeoutOccurred);
-
-            if (TRUE == TimeoutOccurred)
-            {
-                /* Report timeout error */
-                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, PLLAUX_CLK);
-            }
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while((0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK57_MASK)) && (FALSE == TimeoutOccurred));
+        /* timeout notification */
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, PLLAUX_CLK);
         }
     }
 #endif
 }
-static void Clock_Ip_FxoscPowerClockIp(void)
+
+
+/* Power clock ip modules */
+void Clock_Ip_PowerClockIpModules(void)
 {
     uint32 StartTime;
     uint32 ElapsedTime;
     uint32 TimeoutTicks;
     boolean TimeoutOccurred = FALSE;
+
+    Clock_Ip_PllPowerClockIp();
 
     /* FXOSC is not powered */
     if (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK53_MASK))
@@ -314,49 +288,22 @@ static void Clock_Ip_FxoscPowerClockIp(void)
         IP_MC_ME->PRTN1_PCONF       |= MC_ME_PRTN1_PCONF_PCE_MASK;          /* PCE=1: Enable the clock to Partition #1 */
         IP_MC_ME->PRTN1_PUPD        |= MC_ME_PRTN1_PUPD_PCUD_MASK;          /* PCUD=1: Trigger the hardware process */
         Clock_Ip_McMeEnterKey();
-
-        /* 
-            Check whether hardware update process finished (PCUD is zero in this case)
-            and peripheral clock gate state (Gate State is 1U in this case).
-            Otherwise wait for hardware status to update.
-         */
-        if ((0U != (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) ||
-            (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK53_MASK)))
-
+        /* Wait until FXOSC clock is running */
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        do
         {
-            /* Wait for hardware to update */
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            do
-            {
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                /*
-                    Check whether hardware update process finished (PCUD is zero in this case)
-                    and peripheral clock gate state (Gate State is 1U in this case).
-                 */
-                if ((0U == (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) &&
-                    (0U != (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK53_MASK)))
-                {
-                    break;
-                }
-            }while (FALSE == TimeoutOccurred);
-
-            if (TRUE == TimeoutOccurred)
-            {
-                /* Report timeout error */
-                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, FXOSC_CLK);
-            }
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while((0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK53_MASK)) && (FALSE == TimeoutOccurred));
+        /* timeout notification */
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, FXOSC_CLK);
         }
     }
-}
 
 #if defined(CLOCK_IP_HAS_SXOSC_CLK)
-static void Clock_Ip_SxoscPowerClockIp(void)
-{
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
-    boolean TimeoutOccurred = FALSE;
-
     /* SXOSC is not powered */
     if (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK51_MASK))
     {
@@ -365,48 +312,21 @@ static void Clock_Ip_SxoscPowerClockIp(void)
         IP_MC_ME->PRTN1_PCONF       |= MC_ME_PRTN1_PCONF_PCE_MASK;          /* PCE=1: Enable the clock to Partition #1 */
         IP_MC_ME->PRTN1_PUPD        |= MC_ME_PRTN1_PUPD_PCUD_MASK;          /* PCUD=1: Trigger the hardware process */
         Clock_Ip_McMeEnterKey();
-
-        /*
-            Check whether hardware update process finished (PCUD is zero in this case)
-            and peripheral clock gate state (Gate State is 1U in this case).
-            Otherwise wait for hardware status to update.
-         */
-        if ((0U != (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) ||
-            (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK51_MASK)))
-
+        /* Wait until SXOSC clock is running */
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        do
         {
-            /* Wait for hardware to update */
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            do
-            {
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                /*
-                    Check whether hardware update process finished (PCUD is zero in this case)
-                    and peripheral clock gate state (Gate State is 1U in this case).
-                 */
-                if ((0U == (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) &&
-                    (0U != (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK51_MASK)))
-                {
-                    break;
-                }
-            }while (FALSE == TimeoutOccurred);
-
-            if (TRUE == TimeoutOccurred)
-            {
-                /* Report timeout error */
-                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, SXOSC_CLK);
-            }
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while((0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK51_MASK)) && (FALSE == TimeoutOccurred));
+        /* timeout notification */
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, SXOSC_CLK);
         }
     }
-}
 #endif
-
-static void Clock_Ip_CmusPowerClockIp(void)
-{
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
-    boolean TimeoutOccurred = FALSE;
 
     /* CMUs are not powered */
     if (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK47_MASK))
@@ -416,46 +336,20 @@ static void Clock_Ip_CmusPowerClockIp(void)
         IP_MC_ME->PRTN1_PCONF       |= MC_ME_PRTN1_PCONF_PCE_MASK;          /* PCE=1: Enable the clock to Partition #1 */
         IP_MC_ME->PRTN1_PUPD        |= MC_ME_PRTN1_PUPD_PCUD_MASK;          /* PCUD=1: Trigger the hardware process */
         Clock_Ip_McMeEnterKey();
-
-        /*
-            Check whether hardware update process finished (PCUD is zero in this case)
-            and peripheral clock gate state (Gate State is 1U in this case).
-            Otherwise wait for hardware status to update.
-         */
-        if ((0U != (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) ||
-            (0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK47_MASK)))
-
+        /* Wait until CMU clock is running */
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        do
         {
-            /* Wait for hardware to update */
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            do
-            {
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                /*
-                    Check whether hardware update process finished (PCUD is zero in this case)
-                    and peripheral clock gate state (Gate State is 1U in this case).
-                 */
-                if ((0U == (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) &&
-                    (0U != (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK47_MASK)))
-                {
-                    break;
-                }
-            }while (FALSE == TimeoutOccurred);
-
-            if (TRUE == TimeoutOccurred)
-            {
-                /* Report timeout error */
-                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, RESERVED_CLK);
-            }
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while((0U == (IP_MC_ME->PRTN1_COFB1_STAT & MC_ME_PRTN1_COFB1_STAT_BLOCK47_MASK)) && (FALSE == TimeoutOccurred));
+        /* timeout notification */
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, RESERVED_CLK);
         }
     }
-}
-static void Clock_Ip_MscmPowerClockIp(void)
-{
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
-    boolean TimeoutOccurred = FALSE;
 
     /* MSCM is not powered */
     if (0U == (IP_MC_ME->PRTN1_COFB0_STAT & MC_ME_PRTN1_COFB0_STAT_BLOCK24_MASK))
@@ -465,51 +359,21 @@ static void Clock_Ip_MscmPowerClockIp(void)
         IP_MC_ME->PRTN1_PCONF       |= MC_ME_PRTN1_PCONF_PCE_MASK;          /* PCE=1: Enable the clock to Partition #1 */
         IP_MC_ME->PRTN1_PUPD        |= MC_ME_PRTN1_PUPD_PCUD_MASK;          /* PCUD=1: Trigger the hardware process */
         Clock_Ip_McMeEnterKey();
-
-        /*
-            Check whether hardware update process finished (PCUD is zero in this case)
-            and peripheral clock gate state (Gate State is 1U in this case).
-            Otherwise wait for hardware status to update.
-         */
-        if ((0U != (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) ||
-            (0U == (IP_MC_ME->PRTN1_COFB0_STAT & MC_ME_PRTN1_COFB0_STAT_BLOCK24_MASK)))
-
+        /* Wait until MSCM clock is running */
+        Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
+        do
         {
-            /* Wait for hardware to update */
-            Clock_Ip_StartTimeout(&StartTime, &ElapsedTime, &TimeoutTicks, CLOCK_IP_TIMEOUT_VALUE_US);
-            do
-            {
-                TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
-                /*
-                    Check whether hardware update process finished (PCUD is zero in this case)
-                    and peripheral clock gate state (Gate State is 1U in this case).
-                 */
-                if ((0U == (IP_MC_ME->PRTN1_PUPD & MC_ME_PRTN1_PUPD_PCUD_MASK)) &&
-                    (0U != (IP_MC_ME->PRTN1_COFB0_STAT & MC_ME_PRTN1_COFB0_STAT_BLOCK24_MASK)))
-                {
-                    break;
-                }
-            }while (FALSE == TimeoutOccurred);
-
-            if (TRUE == TimeoutOccurred)
-            {
-                /* Report timeout error */
-                Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, RESERVED_CLK);
-            }
+            TimeoutOccurred = Clock_Ip_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
+        }
+        while((0U == (IP_MC_ME->PRTN1_COFB0_STAT & MC_ME_PRTN1_COFB0_STAT_BLOCK24_MASK)) && (FALSE == TimeoutOccurred));
+        /* timeout notification */
+        if (TRUE == TimeoutOccurred)
+        {
+            /* Report timeout error */
+            Clock_Ip_ReportClockErrors(CLOCK_IP_REPORT_TIMEOUT_ERROR, RESERVED_CLK);
         }
     }
-}
 
-/* Power clock ip modules */
-void Clock_Ip_PowerClockIpModules(void)
-{
-    Clock_Ip_PllPowerClockIp();
-    Clock_Ip_FxoscPowerClockIp();
-#if defined(CLOCK_IP_HAS_SXOSC_CLK)
-    Clock_Ip_SxoscPowerClockIp();
-#endif
-    Clock_Ip_CmusPowerClockIp();
-    Clock_Ip_MscmPowerClockIp();
 }
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -680,7 +544,7 @@ void DisableFircInStandbyMode(void)
 void EnableFircInStandbyMode(void)
 {
     Clock_Ip_IrcoscConfigType FircConfig;
-    FircConfig.Enable = 1U;                                             /* TRUE */
+    FircConfig.Enable = TRUE;
     Clock_Ip_pxFircStdbyClock->Enable(&FircConfig);
 }
 
@@ -694,7 +558,7 @@ void DisableSircInStandbyMode(void)
 void EnableSircInStandbyMode(void)
 {
     Clock_Ip_IrcoscConfigType SircConfig;
-    SircConfig.Enable = 1U;                                             /* TRUE */
+    SircConfig.Enable = TRUE;
     Clock_Ip_pxSircStdbyClock->Enable(&SircConfig);
 }
 

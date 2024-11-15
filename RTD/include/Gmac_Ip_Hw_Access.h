@@ -7,12 +7,13 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
-*   Copyright 2020 - 2024 NXP
+*   (c) Copyright 2020 - 2024 NXP
+*   All Rights Reserved.
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +53,7 @@ extern "C"{
 #define GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION     4
 #define GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION     7
 #define GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION  0
-#define GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION             5
+#define GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION             4
 #define GMAC_IP_HW_ACCESS_SW_MINOR_VERSION             0
 #define GMAC_IP_HW_ACCESS_SW_PATCH_VERSION             0
 
@@ -63,16 +64,14 @@ extern "C"{
 #if (GMAC_IP_HW_ACCESS_VENDOR_ID != GMAC_IP_VENDOR_ID)
     #error "Gmac_Ip_Hw_Access.h and Gmac_Ip.h have different vendor ids"
 #endif
-#if ((GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION    != GMAC_IP_AR_RELEASE_MAJOR_VERSION) || \
-     (GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION    != GMAC_IP_AR_RELEASE_MINOR_VERSION) || \
-     (GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION != GMAC_IP_AR_RELEASE_REVISION_VERSION) \
-    )
+#if (( GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION    != GMAC_IP_AR_RELEASE_MAJOR_VERSION) || \
+     ( GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION    != GMAC_IP_AR_RELEASE_MINOR_VERSION) || \
+     ( GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION != GMAC_IP_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip_Hw_Access.h and Gmac_Ip.h are different"
 #endif
 #if (( GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION != GMAC_IP_SW_MAJOR_VERSION) || \
      ( GMAC_IP_HW_ACCESS_SW_MINOR_VERSION != GMAC_IP_SW_MINOR_VERSION) || \
-     ( GMAC_IP_HW_ACCESS_SW_PATCH_VERSION != GMAC_IP_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_HW_ACCESS_SW_PATCH_VERSION != GMAC_IP_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip_Hw_Access.h and Gmac_Ip.h are different"
 #endif
 
@@ -82,14 +81,12 @@ extern "C"{
 #endif
 #if (( GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION    != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION    != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION != GMAC_IP_DEVICE_REGISTERS_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip_Hw_Access.h and Gmac_Ip_Device_Registers.h are different"
 #endif
 #if (( GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_MAJOR_VERSION) || \
      ( GMAC_IP_HW_ACCESS_SW_MINOR_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_MINOR_VERSION) || \
-     ( GMAC_IP_HW_ACCESS_SW_PATCH_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_HW_ACCESS_SW_PATCH_VERSION != GMAC_IP_DEVICE_REGISTERS_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip_Hw_Access.h and Gmac_Ip_Device_Registers.h are different"
 #endif
 
@@ -300,50 +297,6 @@ Gmac_Ip_PowerStateType GMAC_GetPowerState(const GMAC_Type * Base);
  */
 void GMAC_SetPowerState(GMAC_Type * Base, Gmac_Ip_PowerStateType PowerState);
 
-#ifdef GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE
-    #if (GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE == STD_ON)
-/*!
- * @brief Sets the arbitration scheme between the Transmit and Receive paths of all channels
- *
- * @param[in] base       The base address of the module
- * @param[in] ArbitrationScheme The arbitration scheme
- */
-void GMAC_SetArbitrationScheme(GMAC_Type * Base, uint8 ArbitrationScheme);
-
-/*!
- * @brief Sets the priority over TX and Rx
- *
- * @param[in] base       The base address of the module
- * @param[in] Enable     Sets if Tx is prior to Rx or otherwise.
- */
-void GMAC_SetTransmitPriority(GMAC_Type * Base, boolean Enable);
-
-/*!
- * @brief Sets the Transmit Arbitration Algorithm
- *
- * @param[in] base                   The base address of the module
- * @param[in] ArbitrationScheme      Transmit Arbitration Algorithm
- */
-void GMAC_SetTransmitArbitrationAlgorithm(GMAC_Type * Base, uint8 ArbitrationScheme);
-
-/*!
- * @brief Sets the priority ratio for Weighted Round Robin arbitration algorithm in DMA
- *
- * @param[in] Base              The base address of the module
- * @param[in] PriorityRatio     The ratio to be set
- */
-void GMAC_SetPriorityRatio(GMAC_Type *Base, uint8 PriorityRatio);
-
-/*!
- * @brief Sets the transmission weight of a channel
- *
- * @param[in] Controller        Controller Index
- * @param[in] Channel           DMA Tx channel
- * @param[in] Weight            Weight to be set
- */
-void GMAC_SetTransmitChannelWeight(uint8 Controller, uint8 Channel, uint8 Weight);
-    #endif
-#endif
 /*!
  * @brief Sets the speed of the MII interface.
  *

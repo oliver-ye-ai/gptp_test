@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -48,12 +48,10 @@ extern "C"{
 #endif
 #include "SchM_Mem_43_INFLS.h"
 
-#if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+#if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
 #include "Mcal.h"
 #endif
-#if (MEM_43_INFLS_USING_SW_SEMAPHORE == STD_ON)
-#include "Mem_43_INFLS_Software_Semaphore.h"
-#endif
+
 /*==================================================================================================
  *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -61,7 +59,7 @@ extern "C"{
 #define MEM_43_INFLS_AR_RELEASE_MAJOR_VERSION_C       4
 #define MEM_43_INFLS_AR_RELEASE_MINOR_VERSION_C       7
 #define MEM_43_INFLS_AR_RELEASE_REVISION_VERSION_C    0
-#define MEM_43_INFLS_SW_MAJOR_VERSION_C               5
+#define MEM_43_INFLS_SW_MAJOR_VERSION_C               4
 #define MEM_43_INFLS_SW_MINOR_VERSION_C               0
 #define MEM_43_INFLS_SW_PATCH_VERSION_C               0
 
@@ -86,7 +84,7 @@ extern "C"{
         #error "AutoSar Version Numbers of Mem_43_INFLS.c and SchM_Mem_43_INFLS.h are different"
     #endif
 
-    #if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+    #if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
     /* Check if current file  and Mcal.h are of the same version */
         #if ((MEM_43_INFLS_AR_RELEASE_MAJOR_VERSION_C != MCAL_AR_RELEASE_MAJOR_VERSION) || \
              (MEM_43_INFLS_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION)    \
@@ -137,7 +135,7 @@ extern "C"{
 /*==================================================================================================
  *                                      GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
-#if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+#if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_INFLS_START_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_INFLS_START_SEC_VAR_CLEARED_UNSPECIFIED
@@ -145,17 +143,9 @@ extern "C"{
 #include "Mem_43_INFLS_MemMap.h"
 
 /* Pointer to current mem internal flash module configuration set */
-const Mem_43_INFLS_ConfigType              *Mem_43_INFLS_pConfigPtr;
+const Mem_43_INFLS_ConfigType           *Mem_43_INFLS_pConfigPtr;
 
-/* Information of the current processing job of each Mem instance */
-static Mem_43_INFLS_JobRuntimeInfoType      Mem_43_INFLS_eJobRuntimeInfo[MEM_43_INFLS_MEM_INSTANCE_COUNT];
-
-#if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
-/* Information of the current processing job of utest config */
-static Mem_43_INFLS_UtestRuntimeConfigType  Mem_43_INFLS_eJobUtestRuntimeInfo[MEM_43_INFLS_MEM_UTESTCONFIG_COUNT];
-#endif
-
-#if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+#if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
 #define MEM_43_INFLS_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
 #else
 #define MEM_43_INFLS_STOP_SEC_VAR_CLEARED_UNSPECIFIED
@@ -183,6 +173,19 @@ static Mem_43_INFLS_UtestRuntimeConfigType  Mem_43_INFLS_eJobUtestRuntimeInfo[ME
  */
 static uint32 Mem_43_INFLS_u32AccCRCremainder;
 #endif /* MEM_43_INFLS_CHECK_CFG_CRC */
+
+#define MEM_43_INFLS_START_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
+#include "Mem_43_INFLS_MemMap.h"
+
+/* Information of the current processing job of each Mem instance */
+static Mem_43_INFLS_JobRuntimeInfoType    Mem_43_INFLS_eJobRuntimeInfo[MEM_43_INFLS_MEM_INSTANCE_COUNT];
+
+#if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
+/* Information of the current processing job of utest config */
+static Mem_43_INFLS_UtestRuntimeConfigType  Mem_43_INFLS_eJobUtestRuntimeInfo[MEM_43_INFLS_MEM_UTESTCONFIG_COUNT];
+#endif
+#define MEM_43_INFLS_STOP_SEC_VAR_SHARED_CLEARED_UNSPECIFIED_NO_CACHEABLE
+#include "Mem_43_INFLS_MemMap.h"
 
 /*==================================================================================================
                                        LOCAL CONSTANTS
@@ -779,8 +782,12 @@ static void Mem_43_INFLS_InitJobRequest(Mem_43_INFLS_JobRuntimeInfoType    *JobR
     /* Prepare for a new job */
     JobRequest->JobFlags         = MEM_43_INFLS_JOB_FLAG_STARTED;
     JobRequest->JobResult        = MEM_43_INFLS_JOB_PENDING;
-#if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
-    JobRequest->PartitionId      = OsIf_GetUserId();
+#if (MEM_43_INFLS_SUSPEND_RESUME_SUPPORT == STD_ON)
+    JobRequest->SuspendState     = FALSE;
+#endif
+
+#if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+    JobRequest->CoreId           = OsIf_GetCoreID();
 #endif
 }
 #if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
@@ -833,9 +840,6 @@ static uint32 Mem_43_INFLS_ConfigureJobRequest(const Mem_43_INFLS_JobRuntimeInfo
 {
     uint32 ErrorId;
 
-    /* Start of exclusive area */
-    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01();
-
     if (MEM_43_INFLS_JOB_PENDING == Mem_43_INFLS_eJobRuntimeInfo[JobRequest->InstanceIndex].JobResult)
     {
         /* A previous job is still being processed */
@@ -849,9 +853,6 @@ static uint32 Mem_43_INFLS_ConfigureJobRequest(const Mem_43_INFLS_JobRuntimeInfo
         Mem_43_INFLS_eJobRuntimeInfo[JobRequest->InstanceIndex] = *JobRequest;
     }
 
-    /* End of exclusive area */
-    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01();
-
     return ErrorId;
 }
 
@@ -863,15 +864,8 @@ static uint32 Mem_43_INFLS_ConfigureJobRequest(const Mem_43_INFLS_JobRuntimeInfo
 */
 static Mem_43_INFLS_JobResultType Mem_43_INFLS_ProcessHwSpecificServiceJob(uint32 InstanceIndex, Mem_43_INFLS_JobRuntimeInfoType* JobInfo)
 {
-    Mem_43_INFLS_JobResultType JobResult = MEM_43_INFLS_JOB_FAILED;
+    Mem_43_INFLS_JobResultType JobResult    = MEM_43_INFLS_JOB_FAILED;
 
-    if (MEM_43_INFLS_HWSERVICEID_CANCEL == JobInfo->HwServiceIdJob)
-    {
-        /* Update job JobResult to MEM_43_INFLS_JOB_OK */
-        JobResult = MEM_43_INFLS_JOB_OK;
-        /* Update length  - with this job length is unuse, it only need use for first loop */
-        JobInfo->Length = 0;
-    }
 #if (MEM_43_INFLS_HW_COMPARE_SERVICE == STD_ON)
     if (MEM_43_INFLS_HWSERVICEID_COMPARE == JobInfo->HwServiceIdJob)
     {
@@ -879,37 +873,20 @@ static Mem_43_INFLS_JobResultType Mem_43_INFLS_ProcessHwSpecificServiceJob(uint3
     }
 #endif
 #if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
-switch (JobInfo->HwServiceIdJob)
-{
-    case MEM_43_INFLS_HWSERVICEID_ARRAY_INTEGRITY_CHECK:
+    if (MEM_43_INFLS_HWSERVICEID_ARRAY_INTEGRITY_CHECK == JobInfo->HwServiceIdJob)
+    {
         JobResult = Mem_43_INFLS_IPW_ArrayIntegrityCheck(InstanceIndex, JobInfo);
         /* Update length  - with this job length is unuse, it only need use for first loop */
         JobInfo->Length = 0;
-        break;
-    case MEM_43_INFLS_HWSERVICEID_USER_MARGIN_READ_CHECK:
+
+    }
+    if (MEM_43_INFLS_HWSERVICEID_USER_MARGIN_READ_CHECK == JobInfo->HwServiceIdJob)
+    {
         JobResult = Mem_43_INFLS_IPW_UserMarginReadCheck(InstanceIndex, JobInfo);
         /* Update length  - with this job length is unuse, it only need use for first loop */
         JobInfo->Length = 0;
-        break;
-    case MEM_43_INFLS_HWSERVICEID_ECC_LOGIC_CHECK:
-        JobResult = Mem_43_INFLS_IPW_EccLogicCheck(JobInfo->UtestRuntime[JobInfo->UtestConfigIndex].UtestEdcEccLogicCheck);
-        /* Update length  - with this job length is unuse, it only need use for first loop */
-        JobInfo->Length = 0;
-        break;
-    case MEM_43_INFLS_HWSERVICEID_EDC_AFTER_ECC_LOGIC_CHECK:
-        JobResult = Mem_43_INFLS_IPW_EdcAfterEccLogicCheck(JobInfo->UtestRuntime[JobInfo->UtestConfigIndex].UtestEdcEccLogicCheck);
-        /* Update length  - with this job length is unuse, it only need use for first loop */
-        JobInfo->Length = 0;
-        break;
-    case MEM_43_INFLS_HWSERVICEID_ADDRESS_ENCODE_LOGIC_CHECK:
-        JobResult = Mem_43_INFLS_IPW_AddressEncodeLogicCheck(JobInfo->UtestRuntime[JobInfo->UtestConfigIndex].UtestAddressEncodeCheck);
-        /* Update length  - with this job length is unuse, it only need use for first loop */
-        JobInfo->Length = 0;
-        break;
-    default:
-        /*Do nothing*/
-        break;
-}
+
+    }
 #endif
     (void)InstanceIndex;
     (void)JobInfo;
@@ -960,8 +937,7 @@ static Mem_43_INFLS_JobResultType Mem_43_INFLS_DoRequestedJobs(uint32 InstanceIn
                 JobResult = MEM_43_INFLS_JOB_FAILED;
                 break;
         };
-        /* if This is Read/Compare/BlankCheck Jobs */
-        if (((MEM_43_INFLS_JOB_OK == JobResult) || (MEM_43_INFLS_ECC_CORRECTED == JobResult))  && (0U != JobInfo->Length))
+        if (((MEM_43_INFLS_JOB_OK == JobResult) || (MEM_43_INFLS_JOB_ECC_CORRECTED == JobResult))  && (0U != JobInfo->Length))
         {
             /* The current chunk has completed but there is still data to process, need more MainFunction calls */
             JobResult = MEM_43_INFLS_JOB_PENDING;
@@ -989,68 +965,22 @@ static void Mem_43_INFLS_ProcessRequestedJobs(uint32 InstanceIndex)
         /* Check the status of the job is being processed in the low-level driver */
         JobResult = Mem_43_INFLS_IPW_GetJobResult(InstanceIndex, JobInfo);
     }
-    /* The case MEM_43_INFLS_ECC_CORRECTED == JobResult can be true when enable EraseVerify/ProgramVerify of Erase/Write job */
-    if (((MEM_43_INFLS_JOB_OK == JobResult) || (MEM_43_INFLS_ECC_CORRECTED == JobResult)) && (0U != JobInfo->Length))
+
+    if (MEM_43_INFLS_JOB_OK == JobResult)
     {
         /* The previous pending job has been done, launch new operation */
         JobResult = Mem_43_INFLS_DoRequestedJobs(InstanceIndex, JobInfo);
     }
 
-    /* Start of exclusive area */
-    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06();
-
-    if (MEM_43_INFLS_ECC_UNCORRECTED == JobResult)
+    if (MEM_43_INFLS_JOB_ECC_UNCORRECTED == JobResult)
     {
         /* abort pending job */
         JobInfo->JobType = MEM_43_INFLS_JOB_NONE;
     }
-
     /* Update the latest job result */
     JobInfo->JobResult = JobResult;
-
-    /* End of exclusive area */
-    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06();
 }
 
-static Std_ReturnType Mem_43_INFLS_Cancel(Mem_43_INFLS_InstanceIdType    InstanceId
-                                          )
-{
-    Std_ReturnType RetVal = (Std_ReturnType)E_OK;
-    uint32 InstanceIndex;
-
-    InstanceIndex = Mem_43_INFLS_GetInstanceIndex(InstanceId);
-
-    if ((InstanceIndex          != MEM_43_INFLS_MEM_INSTANCE_INDEX_INVALID)
-    && ((MEM_43_INFLS_JOB_ERASE == Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].JobType)
-    ||  (MEM_43_INFLS_JOB_WRITE == Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].JobType)))
-    {
-        /* Check if there was a pending job in each instance */
-        if (MEM_43_INFLS_JOB_PENDING == Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].JobResult)
-        {
-            /* Start of exclusive area */
-            SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02();
-
-            /* Configure the new job request to global runtime variable */
-            Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].JobType = MEM_43_INFLS_JOB_HWSPECIFICSERVICE;
-            Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].HwServiceIdJob = MEM_43_INFLS_HWSERVICEID_CANCEL;
-
-            /* End of exclusive area */
-            SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02();
-        }
-        else
-        {
-            /* Reject the requested job */
-            RetVal = (Std_ReturnType)E_NOT_OK;
-        }
-    }
-    else
-    {
-        /* Reject the requested job */
-        RetVal = (Std_ReturnType)E_NOT_OK;
-    }
-
-    return RetVal;
-}
 
 #if (MEM_43_INFLS_HW_COMPARE_SERVICE == STD_ON)
 static Std_ReturnType Mem_43_INFLS_Compare(Mem_43_INFLS_InstanceIdType    InstanceId,
@@ -1075,8 +1005,14 @@ static Std_ReturnType Mem_43_INFLS_Compare(Mem_43_INFLS_InstanceIdType    Instan
 
     if (MEM_43_INFLS_E_OK == ErrorId)
     {
+        /* Start of exclusive area */
+        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05();
+
         /* Configure the new job request to global runtime variable */
         ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
+
+        /* End of exclusive area */
+        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05();
     }
 
     if (MEM_43_INFLS_E_OK != ErrorId)
@@ -1084,7 +1020,7 @@ static Std_ReturnType Mem_43_INFLS_Compare(Mem_43_INFLS_InstanceIdType    Instan
         /* Reject the requested job */
         RetVal = (Std_ReturnType)E_NOT_OK;
         /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
+        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_READ_ID, ErrorId);
     }
 
     return RetVal;
@@ -1106,6 +1042,12 @@ static Std_ReturnType Mem_43_INFLS_ArrayIntegrityCheck(Mem_43_INFLS_InstanceIdTy
     /* with this job the length not use . so to run first loop we will init a value for it */
     Mem_43_INFLS_InitJobRequest(&JobRequest, InstanceId, 0U, NULL_PTR, 1U);
 
+    /* Config Hardware Service job for ArrayIntegrityCheck Function  */
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrSeedValues     = MisrSeedValues;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrExpectedValues = MisrExpectedValues;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestStateType     = MEM_43_INFLS_UTEST_JOB_OK;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestConfig        = NULL_PTR;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestSuspendState  = FALSE;
 
     JobRequest.UtestConfigIndex = UtestConfigIndex;
     JobRequest.JobType          = MEM_43_INFLS_JOB_HWSPECIFICSERVICE;
@@ -1117,25 +1059,22 @@ static Std_ReturnType Mem_43_INFLS_ArrayIntegrityCheck(Mem_43_INFLS_InstanceIdTy
 
     if (MEM_43_INFLS_E_OK == ErrorId)
     {
+        /* Start of exclusive area */
+        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06();
+
         /* Configure the new job request to global runtime variable */
         ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
+
+        /* End of exclusive area */
+        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_06();
     }
 
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-        /* The job is accepted, store Utest param*/
-        /* Config Hardware Service job for ArrayIntegrityCheck Function  */
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrSeedValues     = MisrSeedValues;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrExpectedValues = MisrExpectedValues;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestStateType     = MEM_43_INFLS_UTEST_JOB_OK;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestSuspendState  = FALSE;
-    }
-    else
+    if (MEM_43_INFLS_E_OK != ErrorId)
     {
         /* Reject the requested job */
         RetVal = (Std_ReturnType)E_NOT_OK;
         /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
+        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_READ_ID, ErrorId);
     }
 
     return RetVal;
@@ -1155,6 +1094,15 @@ static Std_ReturnType Mem_43_INFLS_UserMarginReadCheck(Mem_43_INFLS_InstanceIdTy
     /* With this job the length not use. So to run first loop we will init a value for it */
     Mem_43_INFLS_InitJobRequest(&JobRequest, InstanceId, 0U, NULL_PTR, 1U);
 
+    /* Start of exclusive area */
+    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07();
+
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrSeedValues     = MisrSeedValues;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrExpectedValues = MisrExpectedValues;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestStateType     = MEM_43_INFLS_UTEST_JOB_OK;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestConfig        = NULL_PTR;
+    Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestSuspendState  = FALSE;
+
     JobRequest.UtestConfigIndex = UtestConfigIndex;
     JobRequest.JobType          = MEM_43_INFLS_JOB_HWSPECIFICSERVICE;
     JobRequest.HwServiceIdJob   = MEM_43_INFLS_HWSERVICEID_USER_MARGIN_READ_CHECK;
@@ -1169,162 +1117,20 @@ static Std_ReturnType Mem_43_INFLS_UserMarginReadCheck(Mem_43_INFLS_InstanceIdTy
         ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
     }
 
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-        /*The job is accepted, store Utest param*/
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrSeedValues     = MisrSeedValues;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].MisrExpectedValues = MisrExpectedValues;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestStateType     = MEM_43_INFLS_UTEST_JOB_OK;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[UtestConfigIndex].UtestSuspendState  = FALSE;
-    }
-    else
+    /* End of exclusive area */
+    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07();
+
+    if (MEM_43_INFLS_E_OK != ErrorId)
     {
         /* Reject the requested job */
         RetVal = (Std_ReturnType)E_NOT_OK;
         /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
+        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_READ_ID, ErrorId);
     }
 
     return RetVal;
 }
 
-static Std_ReturnType Mem_43_INFLS_EccLogicCheck(Mem_43_INFLS_InstanceIdType InstanceId,
-                                                 Mem_43_INFLS_EccLogicCheckDataType *UtestEdcEccLogicCheck
-                                                )
-{
-    Std_ReturnType RetVal = (Std_ReturnType)E_OK;
-    uint32 ErrorId;
-
-    /* Prepare for input parameter checking before update runtime information */
-    Mem_43_INFLS_JobRuntimeInfoType JobRequest;
-    /* With this job the length not use. So to run first loop we will init a value for it */
-    Mem_43_INFLS_InitJobRequest(&JobRequest, InstanceId, 0U, NULL_PTR, 1U);
-
-    JobRequest.UtestConfigIndex = 0U;
-    JobRequest.JobType          = MEM_43_INFLS_JOB_HWSPECIFICSERVICE;
-    JobRequest.HwServiceIdJob   = MEM_43_INFLS_HWSERVICEID_ECC_LOGIC_CHECK;
-    JobRequest.UtestRuntime     = Mem_43_INFLS_eJobUtestRuntimeInfo;
-
-    /* Perform the input parameters checking */
-    ErrorId = Mem_43_INFLS_ValidateParamJobDataTransferForUtestMode(&JobRequest);
-
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-        /* Configure the new job request to global runtime variable */
-        ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
-    }
-
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-        /* The job is accepted, store Utest param*/
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].MisrSeedValues        = NULL_PTR;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].MisrExpectedValues    = NULL_PTR;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestStateType        = MEM_43_INFLS_UTEST_JOB_OK;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestSuspendState     = FALSE;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestEdcEccLogicCheck = UtestEdcEccLogicCheck;
-    }
-    else
-    {
-        /* Reject the requested job */
-        RetVal = (Std_ReturnType)E_NOT_OK;
-        /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
-    }
-
-    return RetVal;
-}
-
-static Std_ReturnType Mem_43_INFLS_EdcAfterEccLogicCheck( Mem_43_INFLS_InstanceIdType InstanceId,
-                                                          Mem_43_INFLS_EccLogicCheckDataType *UtestEdcEccLogicCheck
-                                                        )
-{
-    Std_ReturnType RetVal = (Std_ReturnType)E_OK;
-    uint32 ErrorId;
-
-    /* Prepare for input parameter checking before update runtime information */
-    Mem_43_INFLS_JobRuntimeInfoType JobRequest;
-    /* With this job the length not use. So to run first loop we will init a value for it */
-    Mem_43_INFLS_InitJobRequest(&JobRequest, InstanceId, 0U, NULL_PTR, 1U);
-
-    JobRequest.UtestConfigIndex = 0U;
-    JobRequest.JobType          = MEM_43_INFLS_JOB_HWSPECIFICSERVICE;
-    JobRequest.HwServiceIdJob   = MEM_43_INFLS_HWSERVICEID_EDC_AFTER_ECC_LOGIC_CHECK;
-    JobRequest.UtestRuntime     = Mem_43_INFLS_eJobUtestRuntimeInfo;
-
-    /* Perform the input parameters checking */
-    ErrorId = Mem_43_INFLS_ValidateParamJobDataTransferForUtestMode(&JobRequest);
-
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-
-        /* Configure the new job request to global runtime variable */
-        ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
-    }
-
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-        /* The job is accepted, store Utest param*/
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].MisrSeedValues        = NULL_PTR;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].MisrExpectedValues    = NULL_PTR;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestStateType        = MEM_43_INFLS_UTEST_JOB_OK;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestSuspendState     = FALSE;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestEdcEccLogicCheck = UtestEdcEccLogicCheck;
-    }
-    else
-    {
-        /* Reject the requested job */
-        RetVal = (Std_ReturnType)E_NOT_OK;
-        /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
-    }
-
-    return RetVal;
-}
-static Std_ReturnType Mem_43_INFLS_AddressEncodeLogicCheck( Mem_43_INFLS_InstanceIdType InstanceId,
-                                                            Mem_43_INFLS_AddressEncodeDataType *AddressEncodeData
-                                                          )
-{
-    Std_ReturnType RetVal = (Std_ReturnType)E_OK;
-    uint32 ErrorId;
-
-    /* Prepare for input parameter checking before update runtime information */
-    Mem_43_INFLS_JobRuntimeInfoType JobRequest;
-    /* With this job the length not use. So to run first loop we will init a value for it */
-    Mem_43_INFLS_InitJobRequest(&JobRequest, InstanceId, 0U, NULL_PTR, 1U);
-
-    JobRequest.UtestConfigIndex = 0U;
-    JobRequest.JobType          = MEM_43_INFLS_JOB_HWSPECIFICSERVICE;
-    JobRequest.HwServiceIdJob   = MEM_43_INFLS_HWSERVICEID_ADDRESS_ENCODE_LOGIC_CHECK;
-    JobRequest.UtestRuntime     = Mem_43_INFLS_eJobUtestRuntimeInfo;
-
-    /* Perform the input parameters checking */
-    ErrorId = Mem_43_INFLS_ValidateParamJobDataTransferForUtestMode(&JobRequest);
-
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-        /* Configure the new job request to global runtime variable */
-        ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
-    }
-
-    if (MEM_43_INFLS_E_OK == ErrorId)
-    {
-        /* The job is accepted, store Utest param*/
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].MisrSeedValues        = NULL_PTR;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].MisrExpectedValues    = NULL_PTR;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestStateType        = MEM_43_INFLS_UTEST_JOB_OK;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestSuspendState     = FALSE;
-        Mem_43_INFLS_eJobUtestRuntimeInfo[0U].UtestAddressEncodeCheck = AddressEncodeData;
-    }
-    else
-    {
-        /* Reject the requested job */
-        RetVal = (Std_ReturnType)E_NOT_OK;
-        /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
-    }
-
-    return RetVal;
-}
 static Std_ReturnType Mem_43_INFLS_ArrayIntegrityCheckSuspend(Mem_43_INFLS_InstanceIdType InstanceId)
 {
     Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
@@ -1343,7 +1149,7 @@ static Std_ReturnType Mem_43_INFLS_ArrayIntegrityCheckSuspend(Mem_43_INFLS_Insta
     {
         RetVal = (Std_ReturnType)E_NOT_OK;
         /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
+        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_SUSPEND_ID, ErrorId);
     }
     else
 #endif /* MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON */
@@ -1391,7 +1197,7 @@ static Std_ReturnType Mem_43_INFLS_ArrayIntegrityCheckResume(Mem_43_INFLS_Instan
     {
         RetVal = (Std_ReturnType)E_NOT_OK;
         /* Report the error */
-        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_HW_SPECIFIC_SERVICE_ID, ErrorId);
+        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_RESUME_ID, ErrorId);
     }
     else
 #endif /* MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON */
@@ -1435,6 +1241,8 @@ static Std_ReturnType Mem_43_INFLS_ArrayIntegrityCheckResume(Mem_43_INFLS_Instan
  * @return       Mem_43_INFLS_GetJobUtestState    Most recent job result.
  *
  * @api
+ *
+ * @implements   Mem_43_INFLS_GetJobUtestState_Activity
  */
 static Std_ReturnType Mem_43_INFLS_GetJobUtestState(Mem_43_INFLS_InstanceIdType InstanceId, Mem_43_INFLS_UtestStateType *UtestState)
 {
@@ -1491,7 +1299,6 @@ static Std_ReturnType Mem_43_INFLS_CheckDevErrorCommon_HwSpecificService(Mem_43_
             ErrorId = MEM_43_INFLS_E_PARAM_INSTANCE_ID;
         }
         else if (((NULL_PTR == dataPtr) || (NULL_PTR == lengthPtr))
-                 && (hwServiceId != MEM_43_INFLS_HWSERVICEID_CANCEL)
 #if (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON)
                  && (hwServiceId != MEM_43_INFLS_HWSERVICEID_ARRAYINTEGRITYCHECK_SUSPEND) && (hwServiceId != MEM_43_INFLS_HWSERVICEID_ARRAYINTEGRITYCHECK_RESUME)
                  && (hwServiceId != MEM_43_INFLS_HWSERVICEID_GETSTATEUTEST_JOB)
@@ -1571,19 +1378,8 @@ void Mem_43_INFLS_Init(const Mem_43_INFLS_ConfigType *ConfigPtr)
         Status = Mem_43_INFLS_ValidateConfigCRC();
         if ((Std_ReturnType)E_OK == Status)
         {
-#if (MEM_43_INFLS_USING_SW_SEMAPHORE == STD_ON)
-            Status = Mem_43_INFLS_Software_Semaphore_RequestLock();
-            if ((Std_ReturnType)E_OK == Status)
-            {
-#endif
-                /* Initialize low-level hardware */
-                Status = Mem_43_INFLS_IPW_Init();
-
-#if (MEM_43_INFLS_USING_SW_SEMAPHORE == STD_ON)
-
-                (void)Mem_43_INFLS_Software_Semaphore_ReleaseLock();
-            }
-#endif
+            /* Initialize low-level hardware */
+            Status = Mem_43_INFLS_IPW_Init();
         }
 
         if ((Std_ReturnType)E_OK != Status)
@@ -1724,7 +1520,6 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_GetJobResult(Mem_43_INFLS_InstanceIdType
 
     return JobResult;
 }
-
 /**
  * @brief        Suspends active memory operation using hardware mechanism.
  *
@@ -1745,8 +1540,67 @@ Mem_43_INFLS_JobResultType Mem_43_INFLS_GetJobResult(Mem_43_INFLS_InstanceIdType
  */
 Std_ReturnType Mem_43_INFLS_Suspend(Mem_43_INFLS_InstanceIdType InstanceId)
 {
+#if (MEM_43_INFLS_SUSPEND_RESUME_SUPPORT == STD_ON)
+    Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
+    uint32                           InstanceIndex = 0U;
+    Mem_43_INFLS_JobResultType       JobCurrentResult = MEM_43_INFLS_JOB_FAILED;
+    Mem_43_INFLS_JobRuntimeInfoType *JobCurrentInfo;
+
+#if (MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON)
+    uint32 ErrorId;
+
+    /* Checks if the Mem module has been initialized */
+    ErrorId = Mem_43_INFLS_ValidateModuleInitialized();
+
+    if (MEM_43_INFLS_E_OK != ErrorId)
+    {
+        RetVal = (Std_ReturnType)E_NOT_OK;
+        /* Report the error */
+        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_SUSPEND_ID, ErrorId);
+    }
+    else
+#endif /* MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON */
+    {
+        InstanceIndex  = Mem_43_INFLS_GetInstanceIndex(InstanceId);
+        if (InstanceIndex != MEM_43_INFLS_MEM_INSTANCE_INDEX_INVALID)
+        {
+            /* Start of exclusive area */
+            SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08();
+
+            /* Get Information of Job Current */
+            JobCurrentInfo = &(Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex]);
+
+            /* Check if Job current: in case not suspend operation is already in pending */
+            if ((FALSE == JobCurrentInfo->SuspendState) &&
+                (MEM_43_INFLS_JOB_PENDING == JobCurrentInfo->JobResult))
+            {
+                switch (JobCurrentInfo->JobType)
+                {
+                    case MEM_43_INFLS_JOB_ERASE:
+                        JobCurrentResult = Mem_43_INFLS_IPW_EraseSuspend(InstanceId);
+                        break;
+                    default: /* Read, compare or blank check*/
+                        RetVal = E_MEM_SERVICE_NOT_AVAIL;
+                        break;
+                }
+
+                if (JobCurrentResult == MEM_43_INFLS_JOB_OK)
+                {
+                    JobCurrentInfo->SuspendState = TRUE;
+                    RetVal = E_OK;
+                }
+            }
+
+            /* End of exclusive area */
+            SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08();
+        }
+    }
+
+#else /* Hardware not support Resume feature */
     (void)InstanceId;
     Std_ReturnType RetVal = E_MEM_SERVICE_NOT_AVAIL;
+#endif /* MEM_43_INFLS_SUSPEND_RESUME_SUPPORT == STD_ON */
+
     return RetVal;
 }
 
@@ -1770,11 +1624,69 @@ Std_ReturnType Mem_43_INFLS_Suspend(Mem_43_INFLS_InstanceIdType InstanceId)
  */
 Std_ReturnType Mem_43_INFLS_Resume(Mem_43_INFLS_InstanceIdType InstanceId)
 {
+#if (MEM_43_INFLS_SUSPEND_RESUME_SUPPORT == STD_ON)
+    Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
+    uint32                           InstanceIndex = 0U;
+    Mem_43_INFLS_JobResultType       JobCurrentResult = MEM_43_INFLS_JOB_FAILED;
+    Mem_43_INFLS_JobRuntimeInfoType *JobCurrentInfo;
+
+#if (MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON)
+    uint32 ErrorId;
+
+    /* Checks if the Mem module has been initialized */
+    ErrorId = Mem_43_INFLS_ValidateModuleInitialized();
+
+    if (MEM_43_INFLS_E_OK != ErrorId)
+    {
+        RetVal = (Std_ReturnType)E_NOT_OK;
+        /* Report the error */
+        Mem_43_INFLS_ReportDevError(InstanceId, MEM_43_INFLS_RESUME_ID, ErrorId);
+    }
+    else
+#endif /* MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON */
+    {
+        InstanceIndex  = Mem_43_INFLS_GetInstanceIndex(InstanceId);
+        if (InstanceIndex != MEM_43_INFLS_MEM_INSTANCE_INDEX_INVALID)
+        {
+            /* Start of exclusive area */
+            SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09();
+
+            /* Get Information of Job Current */
+            JobCurrentInfo = &(Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex]);
+
+            /* Check if Job current: in case not suspend operation is already in pending */
+            if ((TRUE == JobCurrentInfo->SuspendState) &&
+                (MEM_43_INFLS_JOB_PENDING == JobCurrentInfo->JobResult))
+            {
+                switch (JobCurrentInfo->JobType)
+                {
+                    case MEM_43_INFLS_JOB_ERASE:
+                        JobCurrentResult = Mem_43_INFLS_IPW_EraseResume(InstanceId);
+                        break;
+                    default: /* Read, compare or blank check*/
+                        RetVal = E_MEM_SERVICE_NOT_AVAIL;
+                        break;
+                }
+
+                if (JobCurrentResult == MEM_43_INFLS_JOB_OK)
+                {
+                    JobCurrentInfo->SuspendState = FALSE;
+                    RetVal = E_OK;
+                }
+            }
+
+            /* End of exclusive area */
+            SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09();
+        }
+    }
+
+#else /* Hardware not support Resume feature */
     (void)InstanceId;
     Std_ReturnType RetVal = E_MEM_SERVICE_NOT_AVAIL;
+#endif /* MEM_43_INFLS_SUSPEND_RESUME_SUPPORT == STD_ON */
+
     return RetVal;
 }
-
 /*==================================================================================================
                                        GLOBAL FUNCTIONS (Asynchronous Functions)
 ==================================================================================================*/
@@ -1824,8 +1736,14 @@ Std_ReturnType Mem_43_INFLS_Read(Mem_43_INFLS_InstanceIdType    InstanceId,
 
     if (MEM_43_INFLS_E_OK == ErrorId)
     {
+        /* Start of exclusive area */
+        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_03();
+
         /* Configure the new job request to global runtime variable */
         ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
+
+        /* End of exclusive area */
+        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_03();
     }
 
     if (MEM_43_INFLS_E_OK != ErrorId)
@@ -1887,9 +1805,14 @@ Std_ReturnType Mem_43_INFLS_Write(Mem_43_INFLS_InstanceIdType     InstanceId,
 
     if (MEM_43_INFLS_E_OK == ErrorId)
     {
+        /* Start of exclusive area */
+        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02();
+
         /* Configure the new job request to global runtime variable */
         ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
 
+        /* End of exclusive area */
+        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_02();
     }
 
     if (MEM_43_INFLS_E_OK != ErrorId)
@@ -1947,8 +1870,14 @@ Std_ReturnType Mem_43_INFLS_Erase(Mem_43_INFLS_InstanceIdType    InstanceId,
 
     if (MEM_43_INFLS_E_OK == ErrorId)
     {
+        /* Start of exclusive area */
+        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01();
+
         /* Configure the new job request to global runtime variable */
         ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
+
+        /* End of exclusive area */
+        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_01();
     }
 
     if (MEM_43_INFLS_E_OK != ErrorId)
@@ -2006,8 +1935,14 @@ Std_ReturnType Mem_43_INFLS_BlankCheck(Mem_43_INFLS_InstanceIdType    InstanceId
 
     if (MEM_43_INFLS_E_OK == ErrorId)
     {
+        /* Start of exclusive area */
+        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_04();
+
         /* Configure the new job request to global runtime variable */
         ErrorId = Mem_43_INFLS_ConfigureJobRequest(&JobRequest);
+
+        /* End of exclusive area */
+        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_04();
     }
 
     if (MEM_43_INFLS_E_OK != ErrorId)
@@ -2070,11 +2005,9 @@ Std_ReturnType Mem_43_INFLS_HwSpecificService(Mem_43_INFLS_InstanceIdType     in
     if ((Std_ReturnType)E_OK == RetVal)
     {
 #endif
+#if ((MEM_43_INFLS_HW_COMPARE_SERVICE == STD_ON) || (MEM_43_INFLS_HW_UTESTMODE_SERVICE == STD_ON))
         switch (hwServiceId)
         {
-            case MEM_43_INFLS_HWSERVICEID_CANCEL:
-                RetVal = Mem_43_INFLS_Cancel(instanceId);
-                break;
 #if (MEM_43_INFLS_HW_COMPARE_SERVICE == STD_ON)
             case MEM_43_INFLS_HWSERVICEID_COMPARE:
                 pCompareConfig = (Mem_43_INFLS_CompareConfigType *)((uint32)dataPtr);
@@ -2090,15 +2023,6 @@ Std_ReturnType Mem_43_INFLS_HwSpecificService(Mem_43_INFLS_InstanceIdType     in
                 pUtestConfig = (Mem_43_INFLS_UtestModeConfigType *)((uint32)dataPtr);
                 RetVal = Mem_43_INFLS_UserMarginReadCheck(instanceId, pUtestConfig->UtestConfigIndex, pUtestConfig->MisrSeedValues,pUtestConfig->MisrExpectedValues);
                 break;
-            case MEM_43_INFLS_HWSERVICEID_ECC_LOGIC_CHECK:
-                RetVal = Mem_43_INFLS_EccLogicCheck(instanceId, (Mem_43_INFLS_EccLogicCheckDataType *)dataPtr);
-                break;
-            case MEM_43_INFLS_HWSERVICEID_EDC_AFTER_ECC_LOGIC_CHECK:
-                RetVal = Mem_43_INFLS_EdcAfterEccLogicCheck(instanceId, (Mem_43_INFLS_EccLogicCheckDataType *)dataPtr);
-                break;
-            case MEM_43_INFLS_HWSERVICEID_ADDRESS_ENCODE_LOGIC_CHECK:
-                RetVal = Mem_43_INFLS_AddressEncodeLogicCheck(instanceId, (Mem_43_INFLS_AddressEncodeDataType *)dataPtr);
-                break;
             case MEM_43_INFLS_HWSERVICEID_ARRAYINTEGRITYCHECK_SUSPEND:
                 RetVal = Mem_43_INFLS_ArrayIntegrityCheckSuspend(instanceId);
                 break;
@@ -2113,6 +2037,11 @@ Std_ReturnType Mem_43_INFLS_HwSpecificService(Mem_43_INFLS_InstanceIdType     in
                 RetVal = E_MEM_SERVICE_NOT_AVAIL;
                 break;
         }
+#else
+        RetVal = E_MEM_SERVICE_NOT_AVAIL;
+        (void)hwServiceId;
+#endif
+
 #if (MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON)
     }
 #else
@@ -2176,14 +2105,14 @@ void Mem_43_INFLS_PropagateError(Mem_43_INFLS_InstanceIdType InstanceId)
 #endif /* MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON */
 
         /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05();
+        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10();
 
         Mem_43_INFLS_eJobRuntimeInfo[Index].JobType = MEM_43_INFLS_JOB_NONE;
         /* Set the job result code to MEM_ECC_UNCORRECTED */
-        Mem_43_INFLS_eJobRuntimeInfo[Index].JobResult = MEM_43_INFLS_ECC_UNCORRECTED;
+        Mem_43_INFLS_eJobRuntimeInfo[Index].JobResult = MEM_43_INFLS_JOB_ECC_UNCORRECTED;
 
         /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_05();
+        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10();
 
         Mem_43_INFLS_IPW_ReportEccValueToLayerUnder();
 #if (MEM_43_INFLS_DEV_ERROR_DETECT == STD_ON)
@@ -2219,9 +2148,6 @@ void Mem_43_INFLS_PropagateError(Mem_43_INFLS_InstanceIdType InstanceId)
 void Mem_43_INFLS_MainFunction(void)
 {
     uint32 InstanceIndex;
-#if (MEM_43_INFLS_USING_SW_SEMAPHORE == STD_ON)
-    Std_ReturnType Status;
-#endif
 
     /* SWS_BSW_00037 - If the module is not initialized and the main function is executed
        then no error shall be reported and the main function shall return immediately.
@@ -2233,23 +2159,13 @@ void Mem_43_INFLS_MainFunction(void)
             /* Check if there was a pending job in each instance */
             if (MEM_43_INFLS_JOB_PENDING == Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].JobResult)
             {
-#if (MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
+#if( MEM_43_INFLS_MULTICORE_ENABLED == STD_ON)
                 /*Check if the core is the core that requested the job*/
-                if (OsIf_GetUserId() == Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].PartitionId)
+                if(OsIf_GetCoreID() == Mem_43_INFLS_eJobRuntimeInfo[InstanceIndex].CoreId)
 #endif
                 {
-#if (MEM_43_INFLS_USING_SW_SEMAPHORE == STD_ON)
-                    Status = Mem_43_INFLS_Software_Semaphore_RequestLock();
-                    if ((Std_ReturnType)E_OK == Status)
-#endif
-                    {
-                        /* Process the requested job for this mem instance */
-                        Mem_43_INFLS_ProcessRequestedJobs(InstanceIndex);
-                    }
-#if (MEM_43_INFLS_USING_SW_SEMAPHORE == STD_ON)
-                    (void)Mem_43_INFLS_Software_Semaphore_ReleaseLock();
-#endif
-
+                    /* Process the requested job for this mem instance */
+                    Mem_43_INFLS_ProcessRequestedJobs(InstanceIndex);
                 }
             }
         }

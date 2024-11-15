@@ -7,8 +7,8 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   (c) Copyright 2020 - 2024 NXP
 *   All Rights Reserved.
@@ -69,20 +69,14 @@ extern "C"{
 #define DET_AR_RELEASE_MAJOR_VERSION        4
 #define DET_AR_RELEASE_MINOR_VERSION        7
 #define DET_AR_RELEASE_REVISION_VERSION     0
-#define DET_SW_MAJOR_VERSION                5
+#define DET_SW_MAJOR_VERSION                4
 #define DET_SW_MINOR_VERSION                0
 #define DET_SW_PATCH_VERSION                0
 
 /*==================================================================================================
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
-#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if Det.h and Std_Types.h header file are of the same Autosar version */
-    #if ((DET_AR_RELEASE_MAJOR_VERSION != STD_AR_RELEASE_MAJOR_VERSION) || \
-         (DET_AR_RELEASE_MINOR_VERSION != STD_AR_RELEASE_MINOR_VERSION))
-        #error "AutoSar Version Numbers of Det.h and Std_Types.h are different"
-    #endif
-#endif
+
 /*==================================================================================================
 *                                           CONSTANTS
 ==================================================================================================*/
@@ -92,7 +86,7 @@ extern "C"{
 ==================================================================================================*/
 /* Max numbers of ECU cores supported */
 #define DET_NO_ECU_CORES                        (uint8)(4U)
-#define DET_MAX_NUMBER_OF_EVENTS                (uint32)(10U)
+
 /*==================================================================================================
 *                                             ENUMS
 ==================================================================================================*/
@@ -100,63 +94,52 @@ extern "C"{
 /*==================================================================================================
 *                                 STRUCTURES AND OTHER TYPEDEFS
 ==================================================================================================*/
-/**
-* @brief          Configuration structure for Node within Det Linked List.
-* @details        TBD
-*/
-typedef enum
-{
-    DET_NORMAL_ERROR    = 0U,
-    DET_RUNTIME_ERROR   = 1U,
-    DET_TRANSIENT_ERROR = 2U
-}Det_ErrorType;
+
 
 /*==================================================================================================
 *                                 GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
 #define DET_START_SEC_VAR_CLEARED_8_NO_CACHEABLE
+/*
+ * @violates @ref Det_h_REF_1 Precautions shall be taken in order to prevent the contents of a header file being included more than once
+ * @violates @ref Det_h_REF_2 #Include directives should only be preceded by preprocessor directives or comments
+ */
 #include "Det_MemMap.h"
 /* Variables to store last DET error */
-extern uint8 Det_InstanceId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];                /**< @brief DET instance ID*/
-extern uint8 Det_ApiId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];                     /**< @brief DET API ID*/
-extern uint8 Det_ErrorId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];                   /**< @brief DET Error ID*/
+extern uint8 Det_InstanceId[DET_NO_ECU_CORES];                /**< @brief DET instance ID*/
+extern uint8 Det_ApiId[DET_NO_ECU_CORES];                     /**< @brief DET API ID*/
+extern uint8 Det_ErrorId[DET_NO_ECU_CORES];                   /**< @brief DET Error ID*/
 /* Variables to store last DET runtime error */
-extern uint8 Det_RuntimeInstanceId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];         /**< @brief DET Runtime instance ID*/
-extern uint8 Det_RuntimeApiId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];              /**< @brief DET Runtime API ID*/
-extern uint8 Det_RuntimeErrorId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];            /**< @brief DET Runtime Error ID*/
+extern uint8 Det_RuntimeInstanceId[DET_NO_ECU_CORES];         /**< @brief DET instance ID*/
+extern uint8 Det_RuntimeApiId[DET_NO_ECU_CORES];              /**< @brief DET API ID*/
+extern uint8 Det_RuntimeErrorId[DET_NO_ECU_CORES];            /**< @brief DET Error ID*/
 /* Variables to store last DET transient error */
-extern uint8 Det_TransientInstanceId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];       /**< @brief DET Transient instance ID*/
-extern uint8 Det_TransientApiId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];            /**< @brief DET Transient API ID*/
-extern uint8 Det_TransientFaultId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];          /**< @brief DET Transient Error ID*/
+extern uint8 Det_TransientInstanceId[DET_NO_ECU_CORES];       /**< @brief DET instance ID*/
+extern uint8 Det_TransientApiId[DET_NO_ECU_CORES];            /**< @brief DET API ID*/
+extern uint8 Det_TransientFaultId[DET_NO_ECU_CORES];          /**< @brief DET Error ID*/
 #define DET_STOP_SEC_VAR_CLEARED_8_NO_CACHEABLE
+/*
+ * @violates @ref Det_h_REF_1 Precautions shall be taken in order to prevent the contents of a header file being included more than once
+ * @violates @ref Det_h_REF_2 #Include directives should only be preceded by preprocessor directives or comments
+ */
 #include "Det_MemMap.h"
 
 #define DET_START_SEC_VAR_CLEARED_16_NO_CACHEABLE
+/*
+ * @violates @ref Det_h_REF_1 Precautions shall be taken in order to prevent the contents of a header file being included more than once
+ * @violates @ref Det_h_REF_2 #Include directives should only be preceded by preprocessor directives or comments
+ */
 #include "Det_MemMap.h"
-extern uint16 Det_TransientModuleId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];       /**< @brief DET Transient module ID*/
-extern uint16 Det_ModuleId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];                /**< @brief DET module ID*/
-extern uint16 Det_RuntimeModuleId[DET_NO_ECU_CORES][DET_MAX_NUMBER_OF_EVENTS];         /**< @brief DET Runtime module ID*/
+extern uint16 Det_TransientModuleId[DET_NO_ECU_CORES];       /**< @brief DET module ID*/
+extern uint16 Det_ModuleId[DET_NO_ECU_CORES];       /**< @brief DET module ID*/
+extern uint16 Det_RuntimeModuleId[DET_NO_ECU_CORES];       /**< @brief DET module ID*/
 #define DET_STOP_SEC_VAR_CLEARED_16_NO_CACHEABLE
+/*
+ * @violates @ref Det_h_REF_1 Precautions shall be taken in order to prevent the contents of a header file being included more than once
+ * @violates @ref Det_h_REF_2 #Include directives should only be preceded by preprocessor directives or comments
+ */
 #include "Det_MemMap.h"
 
-#define DET_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
-#include "Det_MemMap.h"
-extern uint32 Det_numEventErrors[DET_NO_ECU_CORES];               /**< @brief number of DET error ID*/
-extern uint32 Det_numRuntimeEventErrors[DET_NO_ECU_CORES];        /**< @brief number of runtime DET error ID*/
-extern uint32 Det_numTransientEventErrors[DET_NO_ECU_CORES];      /**< @brief number of transient DET error ID*/
-#define DET_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
-#include "Det_MemMap.h"
-
-#define DET_START_SEC_VAR_INIT_BOOLEAN_NO_CACHEABLE
-#include "Det_MemMap.h"
-/**< @brief Overflow flag of DET error */
-extern boolean Det_OverflowErrorFlag[DET_NO_ECU_CORES];
-/**< @brief Overflow flag of Runtime DET error */
-extern boolean Det_OverflowRuntimeErrorFlag[DET_NO_ECU_CORES];
-/**< @brief Overflow flag of Transient DET error */
-extern boolean Det_OverflowTransientErrorFlag[DET_NO_ECU_CORES];
-#define DET_STOP_SEC_VAR_INIT_BOOLEAN_NO_CACHEABLE
-#include "Det_MemMap.h"
 /*==================================================================================================
 *                                     FUNCTION PROTOTYPES
 ==================================================================================================*/

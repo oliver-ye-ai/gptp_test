@@ -7,12 +7,12 @@
 * Autosar Version :     4.7.0
 * Autosar Revision :    ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version :          5.0.0
-* Build Version :       S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version :          4.0.0
+* Build Version :       S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -63,7 +63,7 @@ extern "C"{
 #define STM_IP_AR_RELEASE_MAJOR_VERSION        4
 #define STM_IP_AR_RELEASE_MINOR_VERSION        7
 #define STM_IP_AR_RELEASE_REVISION_VERSION     0
-#define STM_IP_SW_MAJOR_VERSION                5
+#define STM_IP_SW_MAJOR_VERSION                4
 #define STM_IP_SW_MINOR_VERSION                0
 #define STM_IP_SW_PATCH_VERSION                0
 
@@ -162,7 +162,7 @@ extern "C"{
 * @internal
 * @brief MemMap section
 */
-#define GPT_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#define GPT_START_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 
 extern uint32 Stm_Ip_u32TargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
@@ -184,7 +184,23 @@ extern uint32 Stm_Ip_u32TargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
         defined(FSS_STM_1_CH_0_ISR_USED) || defined(FSS_STM_1_CH_1_ISR_USED) || defined(FSS_STM_1_CH_2_ISR_USED) || defined(FSS_STM_1_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_0_CH_0_ISR_USED) || defined(FSS_AUX_STM_0_CH_1_ISR_USED) || defined(FSS_AUX_STM_0_CH_2_ISR_USED) || defined(FSS_AUX_STM_0_CH_3_ISR_USED) || \
         defined(FSS_AUX_STM_1_CH_0_ISR_USED) || defined(FSS_AUX_STM_1_CH_1_ISR_USED) || defined(FSS_AUX_STM_1_CH_2_ISR_USED) || defined(FSS_AUX_STM_1_CH_3_ISR_USED) || \
-        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) )
+        defined(FSS_AUX_STM_2_CH_0_ISR_USED) || defined(FSS_AUX_STM_2_CH_1_ISR_USED) || defined(FSS_AUX_STM_2_CH_2_ISR_USED) || defined(FSS_AUX_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_0_CH_0_ISR_USED) || defined(RTU0_COS_STM_0_CH_1_ISR_USED) || defined(RTU0_COS_STM_0_CH_2_ISR_USED) || defined(RTU0_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_1_CH_0_ISR_USED) || defined(RTU0_COS_STM_1_CH_1_ISR_USED) || defined(RTU0_COS_STM_1_CH_2_ISR_USED) || defined(RTU0_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_2_CH_0_ISR_USED) || defined(RTU0_COS_STM_2_CH_1_ISR_USED) || defined(RTU0_COS_STM_2_CH_2_ISR_USED) || defined(RTU0_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU0_COS_STM_3_CH_0_ISR_USED) || defined(RTU0_COS_STM_3_CH_1_ISR_USED) || defined(RTU0_COS_STM_3_CH_2_ISR_USED) || defined(RTU0_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_0_CH_0_ISR_USED) || defined(RTU1_COS_STM_0_CH_1_ISR_USED) || defined(RTU1_COS_STM_0_CH_2_ISR_USED) || defined(RTU1_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_1_CH_0_ISR_USED) || defined(RTU1_COS_STM_1_CH_1_ISR_USED) || defined(RTU1_COS_STM_1_CH_2_ISR_USED) || defined(RTU1_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_2_CH_0_ISR_USED) || defined(RTU1_COS_STM_2_CH_1_ISR_USED) || defined(RTU1_COS_STM_2_CH_2_ISR_USED) || defined(RTU1_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU1_COS_STM_3_CH_0_ISR_USED) || defined(RTU1_COS_STM_3_CH_1_ISR_USED) || defined(RTU1_COS_STM_3_CH_2_ISR_USED) || defined(RTU1_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_0_CH_0_ISR_USED) || defined(RTU2_COS_STM_0_CH_1_ISR_USED) || defined(RTU2_COS_STM_0_CH_2_ISR_USED) || defined(RTU2_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_1_CH_0_ISR_USED) || defined(RTU2_COS_STM_1_CH_1_ISR_USED) || defined(RTU2_COS_STM_1_CH_2_ISR_USED) || defined(RTU2_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_2_CH_0_ISR_USED) || defined(RTU2_COS_STM_2_CH_1_ISR_USED) || defined(RTU2_COS_STM_2_CH_2_ISR_USED) || defined(RTU2_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU2_COS_STM_3_CH_0_ISR_USED) || defined(RTU2_COS_STM_3_CH_1_ISR_USED) || defined(RTU2_COS_STM_3_CH_2_ISR_USED) || defined(RTU2_COS_STM_3_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_0_CH_0_ISR_USED) || defined(RTU3_COS_STM_0_CH_1_ISR_USED) || defined(RTU3_COS_STM_0_CH_2_ISR_USED) || defined(RTU3_COS_STM_0_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_1_CH_0_ISR_USED) || defined(RTU3_COS_STM_1_CH_1_ISR_USED) || defined(RTU3_COS_STM_1_CH_2_ISR_USED) || defined(RTU3_COS_STM_1_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_2_CH_0_ISR_USED) || defined(RTU3_COS_STM_2_CH_1_ISR_USED) || defined(RTU3_COS_STM_2_CH_2_ISR_USED) || defined(RTU3_COS_STM_2_CH_3_ISR_USED) || \
+        defined(RTU3_COS_STM_3_CH_0_ISR_USED) || defined(RTU3_COS_STM_3_CH_1_ISR_USED) || defined(RTU3_COS_STM_3_CH_2_ISR_USED) || defined(RTU3_COS_STM_3_CH_3_ISR_USED) )
 extern uint32 Stm_Ip_u32NextTargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUNT];
 #endif
 
@@ -192,7 +208,17 @@ extern uint32 Stm_Ip_u32NextTargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUN
 * @internal
 * @brief MemMap section
 */
-#define GPT_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_CLEARED_32
+#include "Gpt_MemMap.h"
+
+
+#define GPT_START_SEC_CONST_UNSPECIFIED
+#include "Gpt_MemMap.h"
+
+/** @brief Table of base addresses for STM instances. */
+extern STM_Type * const stmBase[];
+
+#define GPT_STOP_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
 /*==================================================================================================
@@ -216,7 +242,10 @@ extern uint32 Stm_Ip_u32NextTargetValue[GPT_STM_INSTANCE_COUNT][STM_CHANNEL_COUN
  * @return  TRUE if a Channel Interrupt has occurred, FALSE otherwise
  * @pre     The driver needs to be initialized.
  */
-boolean Stm_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel);
+static inline boolean Stm_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel)
+{
+    return (0U != (stmBase[instance]->CHANNEL[channel].CIR & STM_CIR_CIF_MASK)) ? TRUE : FALSE;
+}
 
 /*================================================================================================*/
 /**

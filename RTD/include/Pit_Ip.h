@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -59,7 +59,7 @@ extern "C"{
 #define PIT_IP_AR_RELEASE_MAJOR_VERSION        4
 #define PIT_IP_AR_RELEASE_MINOR_VERSION        7
 #define PIT_IP_AR_RELEASE_REVISION_VERSION     0
-#define PIT_IP_SW_MAJOR_VERSION                5
+#define PIT_IP_SW_MAJOR_VERSION                4
 #define PIT_IP_SW_MINOR_VERSION                0
 #define PIT_IP_SW_PATCH_VERSION                0
 
@@ -154,13 +154,21 @@ extern "C"{
 /*==================================================================================================
 *                                 GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
+#define GPT_START_SEC_CONST_UNSPECIFIED
+#include "Gpt_MemMap.h"
+
+/** @brief Table of base addresses for PIT instances. */
+extern PIT_Type * const pitBase[];
+
+#define GPT_STOP_SEC_CONST_UNSPECIFIED
+#include "Gpt_MemMap.h"
 
 #if (PIT_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON)
 /**
 * @internal
 * @brief MemMap section
 */
-#define GPT_START_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#define GPT_START_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 
 /**
@@ -174,7 +182,7 @@ extern uint32 Pit_Ip_u32OldTargetValue;
 * @internal
 * @brief MemMap section
 */
-#define GPT_STOP_SEC_VAR_CLEARED_32_NO_CACHEABLE
+#define GPT_STOP_SEC_VAR_CLEARED_32
 #include "Gpt_MemMap.h"
 #endif /* (PIT_IP_CHANGE_NEXT_TIMEOUT_VALUE == STD_ON) */
 /*==================================================================================================
@@ -201,7 +209,21 @@ extern uint32 Pit_Ip_u32OldTargetValue;
  * @pre The driver needs to be initialized.
  *
  */
-boolean Pit_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel);
+static inline boolean Pit_Ip_GetInterruptStatusFlag(uint8 instance, uint8 channel)
+{
+    boolean returnFlag;
+#ifdef PIT_IP_RTI_CHANNEL_EXISTS
+    if (RTI == channel)
+    {
+        returnFlag = (0U != (pitBase[instance]->RTI_TFLG & PIT_RTI_TFLG_TIF_MASK)) ? TRUE : FALSE;
+    }
+    else
+#endif
+    {
+        returnFlag = (0U != (pitBase[instance]->TIMER[channel].TFLG & PIT_TFLG_TIF_MASK)) ? TRUE : FALSE;
+    }
+    return returnFlag;
+}
 
 uint32 Pit_Ip_GetLoadValue(uint8 instance, uint8 channel);
 

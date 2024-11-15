@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -31,15 +31,11 @@
 *   @{
 */
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 /*==================================================================================================
 *                                        INCLUDE FILES
 ==================================================================================================*/
 #include "System_Ip.h"
-#include "Mcal.h"
+
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -47,7 +43,7 @@ extern "C"
 #define CDD_PLATFORM_SYSTEM_IP_AR_RELEASE_MAJOR_VERSION_C           4
 #define CDD_PLATFORM_SYSTEM_IP_AR_RELEASE_MINOR_VERSION_C           7
 #define CDD_PLATFORM_SYSTEM_IP_AR_RELEASE_REVISION_VERSION_C        0
-#define CDD_PLATFORM_SYSTEM_IP_SW_MAJOR_VERSION_C                   5
+#define CDD_PLATFORM_SYSTEM_IP_SW_MAJOR_VERSION_C                   4
 #define CDD_PLATFORM_SYSTEM_IP_SW_MINOR_VERSION_C                   0
 #define CDD_PLATFORM_SYSTEM_IP_SW_PATCH_VERSION_C                   0
 
@@ -73,14 +69,10 @@ extern "C"
     #error "Software Version Numbers of System_Ip.c and System_Ip.h are different"
 #endif
 
-#ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Checks against Mcal.h */
-    #if ((CDD_PLATFORM_SYSTEM_IP_AR_RELEASE_MAJOR_VERSION_C != MCAL_AR_RELEASE_MAJOR_VERSION) || \
-         (CDD_PLATFORM_SYSTEM_IP_AR_RELEASE_MINOR_VERSION_C != MCAL_AR_RELEASE_MINOR_VERSION) \
-        )
-        #error "AUTOSAR Version Numbers of System_Ip.c and Mcal.h are different"
-    #endif
-#endif
+
+#include "Mcal.h"
+
+
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
 ==================================================================================================*/
@@ -286,9 +278,5 @@ uint32 System_Ip_GetPlatformRevision(void)
 
 #define PLATFORM_STOP_SEC_CODE
 #include "Platform_MemMap.h"
-
-#ifdef __cplusplus
-}
-#endif
 
 /** @} */

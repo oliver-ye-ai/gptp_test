@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -43,7 +43,7 @@ extern "C"{
 * 2) needed interfaces from external units
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
-#include "Std_Types.h"
+#include "StandardTypes.h"
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -52,7 +52,7 @@ extern "C"{
 #define C40_IP_TYPES_AR_RELEASE_MAJOR_VERSION_CFG     4
 #define C40_IP_TYPES_AR_RELEASE_MINOR_VERSION_CFG     7
 #define C40_IP_TYPES_AR_RELEASE_REVISION_VERSION_CFG  0
-#define C40_IP_TYPES_SW_MAJOR_VERSION_CFG             5
+#define C40_IP_TYPES_SW_MAJOR_VERSION_CFG             4
 #define C40_IP_TYPES_SW_MINOR_VERSION_CFG             0
 #define C40_IP_TYPES_SW_PATCH_VERSION_CFG             0
 
@@ -60,11 +60,11 @@ extern "C"{
 *                                     FILE VERSION CHECKS
 ==================================================================================================*/
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
-    /* Check if C40_Ip_Types header file and Std_Types.h header file are of the same Autosar version */
+    /* Check if C40_Ip_Types header file and StandardTypes.h header file are of the same Autosar version */
     #if ((C40_IP_TYPES_AR_RELEASE_MAJOR_VERSION_CFG != STD_AR_RELEASE_MAJOR_VERSION) || \
          (C40_IP_TYPES_AR_RELEASE_MINOR_VERSION_CFG != STD_AR_RELEASE_MINOR_VERSION) \
         )
-        #error "Autosar Version Numbers of C40_Ip_Types.h and Std_Types.h are different"
+        #error "Autosar Version Numbers of C40_Ip_Types.h and StandardTypes.h are different"
     #endif
 #endif
 
@@ -117,10 +117,7 @@ extern "C"{
 #define C40_IP_SIZE_2BYTE            (2U)
 /*! @brief the number of bytes uses to compare (4 byte) */
 #define C40_IP_SIZE_4BYTE            (4U)
-/*! @brief the size of a double word in byte */
-#define C40_IP_DWORD_SIZE            (8U)
-/*! @brief the size of a page in byte */
-#define C40_IP_PAGE_SIZE             (32U)
+
 
 /*==================================================================================================
                                  ENUM TYPEDEFS

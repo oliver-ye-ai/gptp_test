@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -26,7 +26,7 @@
 
 /**
 *   @file    Clock_Ip_Specific.h
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK IP specific header file.
 *   @details CLOCK IP specific header file.
@@ -84,7 +84,7 @@ extern "C"{
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MAJOR_VERSION        4
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_MINOR_VERSION        7
 #define CLOCK_IP_SPECIFIC_AR_RELEASE_REVISION_VERSION     0
-#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION                5
+#define CLOCK_IP_SPECIFIC_SW_MAJOR_VERSION                4
 #define CLOCK_IP_SPECIFIC_SW_MINOR_VERSION                0
 #define CLOCK_IP_SPECIFIC_SW_PATCH_VERSION                0
 
@@ -313,7 +313,7 @@ extern "C"{
 *                                       DEFINES AND MACROS
 ==================================================================================================*/
 
-#define CLOCK_IP_ALL_CALLBACKS_COUNT                                                   10U
+#define CLOCK_IP_ALL_CALLBACKS_COUNT                                                   9U
 #define CLOCK_IP_TRIGGER_VALUE               0xFFFFFFFFU              /* Trigger value. */
 
 #define CLOCK_IP_NUMBER_OF_HARDWARE_DFS                                                0U
@@ -328,7 +328,7 @@ extern "C"{
 #define CLOCK_IP_PLL_INSTANCES_ARRAY_SIZE    2U
 #define CLOCK_IP_MC_ME_PARTITIONS_COUNT      4U
 #define CLOCK_IP_CMU_INFO_SIZE               7U
-#define CLOCK_IP_GATE_INFO_SIZE              217U
+#define CLOCK_IP_GATE_INFO_SIZE              219U
 #define CLOCK_IP_EXTENSIONS_SIZE             36U
 #define CLOCK_IP_MC_CGM_MUX_MUX_DIV_COUNT     7u
 #define CLOCK_IP_MC_CGM_PCFS_COUNT            8u
@@ -367,10 +367,6 @@ extern "C"{
 #define CLOCK_IP_CMU_ISR_MASK                         3U
 
 #define CLOCK_IP_CMU_INSTANCES_ARRAY_SIZE             7U
-
-#define CLOCK_IP_FXOSC_ALC_SUPPORTED         (STD_ON)
-
-#define CLOCK_IP_WFI_EXECUTED MC_ME_PRTN0_CORE2_STAT_WFI_MASK
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/
@@ -519,24 +515,11 @@ extern const uint16 Clock_Ip_au16SelectorEntryRtcHardwareValue[CLOCK_IP_FEATURE_
 /*==================================================================================================
 *                                    FUNCTION PROTOTYPES
 ==================================================================================================*/
-/* Clock start rom section code */
-#define MCU_START_SEC_CODE_AC
-#include "Mcu_MemMap.h"
-
-#ifdef CLOCK_IP_HAS_RAM_WAIT_STATES
-void Clock_Ip_PRAMCSetRamIWS(void);
-#endif
-
-/* Clock stop rom section code */
-#define MCU_STOP_SEC_CODE_AC
-#include "Mcu_MemMap.h"
-
 
 /* Clock start section code */
 #define MCU_START_SEC_CODE
-#include "Mcu_MemMap.h"
 
-void Clock_Ip_PowerClockIpModules(void);
+#include "Mcu_MemMap.h"
 void DisableFircInStandbyMode(void);
 void EnableFircInStandbyMode(void);
 void DisableSircInStandbyMode(void);

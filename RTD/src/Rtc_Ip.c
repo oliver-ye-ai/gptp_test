@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -48,7 +48,7 @@ extern "C"{
 #define RTC_IP_AR_RELEASE_MAJOR_VERSION_C     4
 #define RTC_IP_AR_RELEASE_MINOR_VERSION_C     7
 #define RTC_IP_AR_RELEASE_REVISION_VERSION_C  0
-#define RTC_IP_SW_MAJOR_VERSION_C             5
+#define RTC_IP_SW_MAJOR_VERSION_C             4
 #define RTC_IP_SW_MINOR_VERSION_C             0
 #define RTC_IP_SW_PATCH_VERSION_C             0
 
@@ -130,7 +130,7 @@ static const uint16 MONTH_DAYS[] = {0U, 0U, 31U, 59U, 90U, 120U, 151U, 181U, 212
 #define GPT_START_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 /** @brief Table of RTC base pointers */
-static RTC_Type * const rtcBase[RTC_INSTANCE_COUNT] = IP_RTC_BASE_PTRS;
+RTC_Type * const rtcBase[RTC_INSTANCE_COUNT] = IP_RTC_BASE_PTRS;
 #define GPT_STOP_SEC_CONST_UNSPECIFIED
 #include "Gpt_MemMap.h"
 
@@ -672,81 +672,68 @@ static void Rtc_Ip_ProcessInterrupt(uint8 instance)
 
     if (instance < RTC_INSTANCE_COUNT)
     {
-        /* Check if driver is initialized */
-        chInit = Rtc_Ip_u32ChState[instance].chInit;
         /* enter critical section */
         SchM_Enter_Gpt_GPT_EXCLUSIVE_AREA_05();
         {
-            if (TRUE == chInit)
-            {
-                /* Check for spurious interrupts: check the status flag register and interrupts enable register */
-                apiInterruptStatusFlag = Rtc_Ip_GetInterruptStatusFlag(instance, RTC_IP_API_INTERRUPT);
-                apiInterruptEnableFlag = Rtc_Ip_GetInterruptEnableFlag(instance, RTC_IP_API_INTERRUPT);
-                rtcInterruptStatusFlag = Rtc_Ip_GetInterruptStatusFlag(instance, RTC_IP_COUNTER_INTERRUPT);
-                rtcInterruptEnableFlag = Rtc_Ip_GetInterruptEnableFlag(instance, RTC_IP_COUNTER_INTERRUPT);
-                rollOverInterruptStatusFlag = Rtc_Ip_GetInterruptStatusFlag(instance, RTC_IP_ROLLOVER_INTERRUPT);
-                rollOverInterruptEnableFlag = Rtc_Ip_GetInterruptEnableFlag(instance, RTC_IP_ROLLOVER_INTERRUPT);
-
-                if (apiInterruptStatusFlag && apiInterruptEnableFlag)
-                {
-                    /* Clear interrupt status flags */
-                    Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_API_INTERRUPT);
-                }
-
-                /* Check if an alarm has occurred */
-                if(rtcInterruptStatusFlag && rtcInterruptEnableFlag)
-                {
-                    /* Clear interrupt status flags */
-                    Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_COUNTER_INTERRUPT);
-                }
-
-                if (rollOverInterruptStatusFlag && rollOverInterruptEnableFlag)
-                {
-                    /* Clear interrupt status flags */
-                    Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_ROLLOVER_INTERRUPT);
-                }
-            }
-            else
-            {
-                /* Driver isn't initialized and just clear pending interrupts */
-                Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_API_INTERRUPT);
-                Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_COUNTER_INTERRUPT);
-                Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_ROLLOVER_INTERRUPT);
-            }
-        }
-        /* exit critical section */
-        SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_05();
-        if (TRUE == chInit)
-        {
-            Rtc_Ip_u32CounterValueInterrupt = Rtc_Ip_u32TargetValue + Rtc_Ip_GetCounterRegister(instance);
+            /* Check the status flag register and interrupts enable register */
+            apiInterruptStatusFlag = Rtc_Ip_GetInterruptStatusFlag(instance, RTC_IP_API_INTERRUPT);
+            apiInterruptEnableFlag = Rtc_Ip_GetInterruptEnableFlag(instance, RTC_IP_API_INTERRUPT);
+            rtcInterruptStatusFlag = Rtc_Ip_GetInterruptStatusFlag(instance, RTC_IP_COUNTER_INTERRUPT);
+            rtcInterruptEnableFlag = Rtc_Ip_GetInterruptEnableFlag(instance, RTC_IP_COUNTER_INTERRUPT);
+            rollOverInterruptStatusFlag = Rtc_Ip_GetInterruptStatusFlag(instance, RTC_IP_ROLLOVER_INTERRUPT);
+            rollOverInterruptEnableFlag = Rtc_Ip_GetInterruptEnableFlag(instance, RTC_IP_ROLLOVER_INTERRUPT);
+            
             if (apiInterruptStatusFlag && apiInterruptEnableFlag)
             {
-                callback        = Rtc_Ip_u32ChState[instance].callback;
-                channelMode     = Rtc_Ip_u32ChState[instance].channelMode;
-                callbackParam   = Rtc_Ip_u32ChState[instance].callbackParam;
-                /* Check if channel mode is ONE-SHOT */
-                if(RTC_IP_CH_MODE_ONESHOT == channelMode)
-                {
-                    Rtc_Ip_StopTimer(instance);
-                }
-                /* Call upper layer handler */
-                if(NULL_PTR != callback)
-                {
-                    callback(callbackParam);
-                }
+                /* Clear interrupt status flags */
+                Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_API_INTERRUPT);
             }
 
             /* Check if an alarm has occurred */
             if(rtcInterruptStatusFlag && rtcInterruptEnableFlag)
             {
-                /* Process AlarmInterrupt */
-                Rtc_Ip_ProcessAlarmInterrupt(instance);
+                /* Clear interrupt status flags */
+                Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_COUNTER_INTERRUPT);
             }
-
+            
             if (rollOverInterruptStatusFlag && rollOverInterruptEnableFlag)
             {
-                Rtc_Ip_u32ChState[instance].rolloverCount++;
+                /* Clear interrupt status flags */
+                Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_ROLLOVER_INTERRUPT);
             }
+        }
+        /* exit critical section */
+        SchM_Exit_Gpt_GPT_EXCLUSIVE_AREA_05();
+
+        Rtc_Ip_u32CounterValueInterrupt = Rtc_Ip_u32TargetValue + Rtc_Ip_GetCounterRegister(instance);
+        if (apiInterruptStatusFlag && apiInterruptEnableFlag)
+        {
+            chInit          = Rtc_Ip_u32ChState[instance].chInit;
+            callback        = Rtc_Ip_u32ChState[instance].callback;
+            channelMode     = Rtc_Ip_u32ChState[instance].channelMode;
+            callbackParam   = Rtc_Ip_u32ChState[instance].callbackParam;
+            /* Check if channel mode is ONE-SHOT */
+            if(RTC_IP_CH_MODE_ONESHOT == channelMode)
+            {
+                Rtc_Ip_StopTimer(instance);
+            }
+            /* Call upper layer handler */
+            if((TRUE == chInit) && (NULL_PTR != callback))
+            {
+                callback(callbackParam);
+            }
+        }
+
+        /* Check if an alarm has occurred */
+        if(rtcInterruptStatusFlag && rtcInterruptEnableFlag)
+        {
+            /* Process AlarmInterrupt */
+            Rtc_Ip_ProcessAlarmInterrupt(instance);
+        }
+
+        if (rollOverInterruptStatusFlag && rollOverInterruptEnableFlag)
+        {
+            Rtc_Ip_u32ChState[instance].rolloverCount++;
         }
     }
 }
@@ -755,48 +742,6 @@ static void Rtc_Ip_ProcessInterrupt(uint8 instance)
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
-/**
- * @brief
- * Function Name : Rtc_Ip_GetInterruptStatusFlag
- * Description   : Get the state of RTC Interrupt Flag (RTCF),
- *                  API Interrupt Flag (APIF) and Counter Roll Over Interrupt Flag (ROVRF): RTC Status register (RTCS)
- *
- * @param[in]   instance        RTC hw instance number
- * @param[in]   interruptMode   Enum containing RTC interrupt type
- *
- * @return  TRUE if an interrupt has occurred, FALSE otherwise
- * @pre     The driver needs to be initialized.
- */
-boolean Rtc_Ip_GetInterruptStatusFlag(uint8 instance, Rtc_Ip_InterruptType interruptMode)
-{
-    boolean returnFlag;
-    /* Check all RTC interrupt flags */
-    switch(interruptMode)
-    {
-        case RTC_IP_COUNTER_INTERRUPT:
-        {
-            returnFlag = (0U != (rtcBase[instance]->RTCS & RTC_RTCS_RTCF_MASK)) ? TRUE : FALSE;
-        }
-        break;
-        case RTC_IP_API_INTERRUPT:
-        {
-            returnFlag = (0U != (rtcBase[instance]->RTCS & RTC_RTCS_APIF_MASK)) ? TRUE : FALSE;
-        }
-        break;
-        case RTC_IP_ROLLOVER_INTERRUPT:
-        {
-            returnFlag = (0U != (rtcBase[instance]->RTCS & RTC_RTCS_ROVRF_MASK)) ? TRUE : FALSE;
-        }
-        break;
-        default:
-        {
-            returnFlag = FALSE;
-        }
-        break;
-    }
-
-    return returnFlag;
-}
 
 #if (STD_ON == RTC_IP_ENABLE_USER_MODE_SUPPORT)
 void Rtc_Ip_SetUserAccessAllowed(void)
@@ -935,7 +880,7 @@ void Rtc_Ip_StartTimer(uint8 instance, uint32 value)
     Rtc_Ip_u32TargetValue = value;
     RTC_Type * base = rtcBase[instance];
 
-    /* Disable API(Autonomous Periodic Interrupt) */
+    /* Disable API(Autonomous Periodic Interrupt) Interrupt */
     Rtc_Ip_ApiEnable(base, FALSE);
 
     /* Disable Counter */
@@ -943,9 +888,8 @@ void Rtc_Ip_StartTimer(uint8 instance, uint32 value)
 
     /* Configure channel compare register */
     Rtc_Ip_ApivalCompareValue(base, value);
-    /* Clear interrupt status flags */
-    Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_API_INTERRUPT);
-    /* Enable API(Autonomous Periodic Interrupt) */
+
+    /* Enable Interrupt */
     Rtc_Ip_ApiEnable(base, TRUE);
 
     /* Enable Counter */
@@ -1228,11 +1172,8 @@ Rtc_Ip_StatusType Rtc_Ip_ConfigurePeriodicInterrupt(uint8 instance,
             returnValue = Rtc_Ip_IsAPICompareValueValid(instance);
             if(RTC_IP_SUCCESS == returnValue)
             {
-                /* Configure the API with new values */
+                 /* Configure the API with new values */
                 Rtc_Ip_ApivalCompareValue(base, (uint32)configuredPeriod);
-                /* Clear interrupt status flags */
-                Rtc_Ip_ClearInterruptStatusFlag(instance, RTC_IP_API_INTERRUPT);
-                /* Enable API(Autonomous Periodic Interrupt) */
                 Rtc_Ip_ApiEnable(base, TRUE);
                 /* Enable API Interrupt */
                 Rtc_Ip_SetInterruptEnableFlag(instance, RTC_IP_API_INTERRUPT, TRUE);

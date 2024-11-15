@@ -8,12 +8,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -62,7 +62,7 @@ extern "C" {
 #define PORT_CFG_AR_RELEASE_MAJOR_VERSION_H        4
 #define PORT_CFG_AR_RELEASE_MINOR_VERSION_H        7
 #define PORT_CFG_AR_RELEASE_REVISION_VERSION_H     0
-#define PORT_CFG_SW_MAJOR_VERSION_H                5
+#define PORT_CFG_SW_MAJOR_VERSION_H                4
 #define PORT_CFG_SW_MINOR_VERSION_H                0
 #define PORT_CFG_SW_PATCH_VERSION_H                0
 
@@ -172,9 +172,9 @@ extern "C" {
 =================================================================================================*/
 
 /**
-* @brief Enable/Disable MultiPartition function from the driver
+* @brief Enable/Disable multicore function from the driver
 */
-#define PORT_MULTIPARTITION_ENABLED              (STD_OFF)
+#define PORT_MULTICORE_ENABLED              (STD_OFF)
 /**
 * @brief The number of SIUL2 instances on the platform
 */
@@ -2843,6 +2843,20 @@ typedef struct
   uint32   u32MSCR;          /**< Content of Mscr Register */
   uint8   u8PDO;            /**< Pad Data Output */
 } Port_Siul2_UnUsedPinConfigType;
+
+/**
+* @brief   DiPort signal configuration.
+* @details This structure contains all configuration parameters of a DiPort Signal pin
+*
+* @api
+*/
+
+typedef struct
+{
+  uint8 u8MscrSiulInstance;   /**< @brief Siul Instance of the Mscr configuring the DiPort signal */
+  uint16 u16MscrIdx;           /**< @brief Index of the Mscr configuring the DiPort signal */
+  uint8 u8MscrValue;          /**< @brief Value of the Mscr configuring the DiPort signal */
+} Port_DiPort_SignalConfigType;
 
 /**
 * @brief   Type defining the size of the arrays used to keep the information about pin mode availability

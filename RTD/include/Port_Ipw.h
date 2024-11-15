@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -63,7 +63,7 @@ extern "C"{
 #define PORT_AR_RELEASE_MAJOR_VERSION_IPW_H     4
 #define PORT_AR_RELEASE_MINOR_VERSION_IPW_H     7
 #define PORT_AR_RELEASE_REVISION_VERSION_IPW_H  0
-#define PORT_SW_MAJOR_VERSION_IPW_H             5
+#define PORT_SW_MAJOR_VERSION_IPW_H             4
 #define PORT_SW_MINOR_VERSION_IPW_H             0
 #define PORT_SW_PATCH_VERSION_IPW_H             0
 
@@ -155,12 +155,6 @@ extern "C"{
 /*=================================================================================================
 *                                      DEFINES AND MACROS
 =================================================================================================*/
-#if (STD_ON == PORT_MULTIPARTITION_ENABLED)
-    #define Port_GetUserId()            OsIf_GetUserId()
-#else
-    #define Port_GetUserId()            ((uint32)0UL)
-#endif
-
 #define SIUL2_MODE_BIT_OFFSET_MASK_U8  ((uint8)0x0F)
 /* @brief Mask definitions for MSCR bit field IBE */
 #define SIUL2_MSCR_IBE_U32                          ((uint32)0x00080000U)
@@ -169,7 +163,7 @@ extern "C"{
 #define SIUL2_MSCR_OBE_U32                          ((uint32)0x00200000U)
 #define SIUL2_MSCR_OBE_ON_U32                       ((uint32)0x00200000U)
 
-#define SIUL2_MSCR_SSS_U32                          ((uint32)0x0000000FU)
+#define SIUL2_MSCR_SSS_U32                          ((uint32)0x00000007U)
 #define SIUL2_MSCR_SSS_OFFSET_U32                   ((uint32)0)
 
 /*

@@ -7,16 +7,16 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -28,15 +28,12 @@
 *   @{
 */
 
-#ifdef __cplusplus
-extern "C"
-{
-#endif
 /*==================================================================================================
 *                                        INCLUDE FILES
 ==================================================================================================*/
-#include "IntCtrl_Ip.h"
 
+#include "IntCtrl_Ip.h"
+#include "Mcal.h"
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -44,15 +41,12 @@ extern "C"
 #define CDD_PLATFORM_INTCTRL_IP_AR_RELEASE_MAJOR_VERSION_C           4
 #define CDD_PLATFORM_INTCTRL_IP_AR_RELEASE_MINOR_VERSION_C           7
 #define CDD_PLATFORM_INTCTRL_IP_AR_RELEASE_REVISION_VERSION_C        0
-#define CDD_PLATFORM_INTCTRL_IP_SW_MAJOR_VERSION_C                   5
+#define CDD_PLATFORM_INTCTRL_IP_SW_MAJOR_VERSION_C                   4
 #define CDD_PLATFORM_INTCTRL_IP_SW_MINOR_VERSION_C                   0
 #define CDD_PLATFORM_INTCTRL_IP_SW_PATCH_VERSION_C                   0
-
 /*==================================================================================================
                                       FILE VERSION CHECKS
 ==================================================================================================*/
-#ifdef  PLATFORM_IP_ENABLE_INT_CTRL
-#if  (PLATFORM_IP_ENABLE_INT_CTRL == STD_ON)
 /* Check if current file and IntCtrl_Ip header file are of the same vendor */
 #if (CDD_PLATFORM_INTCTRL_IP_VENDOR_ID_C != CDD_PLATFORM_INTCTRL_IP_VENDOR_ID)
     #error "IntCtrl_Ip.c and IntCtrl_Ip.h have different vendor ids"
@@ -71,17 +65,21 @@ extern "C"
     )
     #error "Software Version Numbers of IntCtrl_Ip.c and IntCtrl_Ip.h are different"
 #endif
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL == STD_ON */
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL*/
 
 /*==================================================================================================
 *                                       GLOBAL VARIABLES
 ==================================================================================================*/
+
+#if defined(S32K3XX) || defined(SAF85) || defined(S32R41) || defined(S32NZ5X)
+extern uint32 __RAM_INTERRUPT_START[1U];
+#else
+extern uint32 __INT_SRAM_START[1U];
+#endif
+
+
 /*==================================================================================================
-*                                  LOCAL FUNCTION PROTOTYPES
+*                                       LOCAL FUNCTIONS
 ==================================================================================================*/
-#ifdef  PLATFORM_IP_ENABLE_INT_CTRL
-#if  (PLATFORM_IP_ENABLE_INT_CTRL == STD_ON)
 #if ((STD_ON == INTCTRL_PLATFORM_ENABLE_USER_MODE_SUPPORT) && (defined (MCAL_ENABLE_USER_MODE_SUPPORT)))
     #define Call_IntCtrl_Ip_InstallHandlerPrivileged(eIrqNumber,pfNewHandler,pfOldHandler)  \
                 OsIf_Trusted_Call3params(IntCtrl_Ip_InstallHandlerPrivileged,(eIrqNumber),(pfNewHandler),(pfOldHandler))
@@ -99,10 +97,10 @@ extern "C"
     #define Call_IntCtrl_Ip_SetPendingPrivileged(eIrqNumber)  \
                 OsIf_Trusted_Call1param(IntCtrl_Ip_SetPendingPrivileged,(eIrqNumber))
     #define Call_IntCtrl_Ip_GetPendingPrivileged(eIrqNumber)  \
-                (boolean)((OsIf_Trusted_Call_Return1param((uint32)IntCtrl_Ip_GetPendingPrivileged,(eIrqNumber)) > 0U)? TRUE : FALSE)
+                OsIf_Trusted_Call_Return1param(IntCtrl_Ip_GetPendingPrivileged,(eIrqNumber))
 #if ((INT_CTRL_IP_CORTEXM == STD_ON) && (INT_CTRL_IP_CORTEXM0PLUS == STD_OFF))
     #define Call_IntCtrl_Ip_GetActivePrivileged(eIrqNumber)  \
-                (boolean)((OsIf_Trusted_Call_Return1param((uint32)IntCtrl_Ip_GetActivePrivileged,(eIrqNumber)) > 0U)? TRUE : FALSE)
+                OsIf_Trusted_Call_Return1param(IntCtrl_Ip_GetActivePrivileged,(eIrqNumber))
 #endif
 #endif
 #if (INT_CTRL_IP_MSI_AVAILABLE == STD_ON)
@@ -111,7 +109,7 @@ extern "C"
     #define Call_IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged(eIrqNumber)  \
                 OsIf_Trusted_Call1param(IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged,(eIrqNumber))
     #define Call_IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(eIrqNumber)  \
-                (boolean)((OsIf_Trusted_Call_Return1param((uint32)IntCtrl_Ip_GetDirectedCpuInterruptPrivileged,(eIrqNumber)) > 0U)? TRUE : FALSE)
+                OsIf_Trusted_Call_Return1param(IntCtrl_Ip_GetDirectedCpuInterruptPrivileged,(eIrqNumber))
 #endif
 #else /*STD_ON == INTCTRL_PLATFORM_ENABLE_USER_MODE_SUPPORT*/
     #define Call_IntCtrl_Ip_InstallHandlerPrivileged(eIrqNumber,pfNewHandler,pfOldHandler)  \
@@ -126,6 +124,7 @@ extern "C"
                 IntCtrl_Ip_GetPriorityPrivileged((eIrqNumber))
     #define Call_IntCtrl_Ip_ClearPendingPrivileged(eIrqNumber)  \
                 IntCtrl_Ip_ClearPendingPrivileged((eIrqNumber))
+
 #if (INT_CTRL_IP_STANDALONE_APIS == STD_ON)
     #define Call_IntCtrl_Ip_SetPendingPrivileged(eIrqNumber)  \
                 IntCtrl_Ip_SetPendingPrivileged((eIrqNumber))
@@ -149,77 +148,54 @@ extern "C"
 #define PLATFORM_START_SEC_CODE
 #include "Platform_MemMap.h"
 void IntCtrl_Ip_InstallHandlerPrivileged(IRQn_Type eIrqNumber,
-                                         const IntCtrl_Ip_IrqHandlerType pfNewHandler,
-                                         IntCtrl_Ip_IrqHandlerType* const pfOldHandler);
+                               const IntCtrl_Ip_IrqHandlerType pfNewHandler,
+                               IntCtrl_Ip_IrqHandlerType* const pfOldHandler);
 void IntCtrl_Ip_EnableIrqPrivileged(IRQn_Type eIrqNumber);
 void IntCtrl_Ip_DisableIrqPrivileged(IRQn_Type eIrqNumber);
 void IntCtrl_Ip_SetPriorityPrivileged(IRQn_Type eIrqNumber, uint8 u8Priority);
 uint8 IntCtrl_Ip_GetPriorityPrivileged(IRQn_Type eIrqNumber);
 void IntCtrl_Ip_ClearPendingPrivileged(IRQn_Type eIrqNumber);
+
+
 #if (INT_CTRL_IP_STANDALONE_APIS == STD_ON)
 void IntCtrl_Ip_SetPendingPrivileged(IRQn_Type eIrqNumber);
-boolean IntCtrl_Ip_GetPendingPrivileged(IRQn_Type eIrqNumber);
+uint32 IntCtrl_Ip_GetPendingPrivileged(IRQn_Type eIrqNumber);
 #if ((INT_CTRL_IP_CORTEXM == STD_ON) && (INT_CTRL_IP_CORTEXM0PLUS == STD_OFF))
-boolean IntCtrl_Ip_GetActivePrivileged(IRQn_Type eIrqNumber);
+uint32 IntCtrl_Ip_GetActivePrivileged(IRQn_Type eIrqNumber);
 #endif
 #endif
 #if (INT_CTRL_IP_MSI_AVAILABLE == STD_ON)
-void IntCtrl_Ip_GenerateDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber,
-                                                       IntCtrl_Ip_IrqTargetType eCpuTarget);
+void IntCtrl_Ip_GenerateDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber, IntCtrl_Ip_IrqTargetType eCpuTarget);
 void IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber);
-boolean IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber);
+uint32 IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber);
 #endif
-#define PLATFORM_STOP_SEC_CODE
-#include "Platform_MemMap.h"
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL == STD_ON */
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL */
 
-/*==================================================================================================
-*                                       LOCAL FUNCTIONS
-==================================================================================================*/
-#ifdef  PLATFORM_IP_ENABLE_INT_CTRL
-#if  (PLATFORM_IP_ENABLE_INT_CTRL == STD_ON)
-#define PLATFORM_START_SEC_CODE
-#include "Platform_MemMap.h"
-
-/**
- * @brief      Installs a handler for an IRQ.
- * @details    Installs a handler for an IRQ.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- * @param[in]  pfNewHandler  Pointer function to the new handler.
- * @param[in]  pfOldHandler  Pointer function to the old handler.
- *
- * @return     void
- */
 void IntCtrl_Ip_InstallHandlerPrivileged(IRQn_Type eIrqNumber,
                                const IntCtrl_Ip_IrqHandlerType pfNewHandler,
                                IntCtrl_Ip_IrqHandlerType* const pfOldHandler)
 {
-#if ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
-#if (defined(INT_CTRL_CORE_SPECIFIC_VTABLE) && (INT_CTRL_CORE_SPECIFIC_VTABLE == STD_ON))
-    uint8 u8CoreId = (uint8)(OsIf_GetCoreID());
-#endif
-#endif
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-    /* Check IRQ number - s32DevIrqNumber is used to avoid compiler warning */
-    sint32 s32DevIrqNumber = (sint32)eIrqNumber;
-
-    DevAssert((sint32)INT_CTRL_IP_IRQ_MIN <= s32DevIrqNumber);
-    DevAssert(s32DevIrqNumber <= (sint32)INT_CTRL_IP_IRQ_MAX);
-#if ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
-#if (defined(INT_CTRL_CORE_SPECIFIC_VTABLE) && (INT_CTRL_CORE_SPECIFIC_VTABLE == STD_ON))
-    DevAssert(u8CoreId < INT_CTRL_NUM_CORE_IN_RTU);
+    /* Check IRQ number - dev_irqNumber is used to avoid compiler warning */
+    sint32 dev_irqNumber = (sint32)eIrqNumber;
+    DevAssert((sint32)INT_CTRL_IP_IRQ_MIN <= dev_irqNumber);
+    DevAssert(dev_irqNumber <= (sint32)INT_CTRL_IP_IRQ_MAX);
+#if (MCAL_PLATFORM_ARM == MCAL_ARM_MARCH)
+#if defined(S32K3XX) || defined(SAF85) || defined(S32R41) || defined(S32NZ5X)
+    DevAssert(S32_SCB->VTOR >= (uint32)__RAM_INTERRUPT_START);
+#else
+    DevAssert(S32_SCB->VTOR >= (uint32)__INT_SRAM_START);
 #endif
-#endif
+#endif /* (MCAL_PLATFORM_ARM == MCAL_ARM_MARCH) */
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
 
 #if ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
+    
     OsIf_SuspendAllInterrupts();
+    extern uint32 VTABLE[INT_CTRL_IP_IRQ_MAX + 1U];
 #if (defined(INT_CTRL_CORE_SPECIFIC_VTABLE) && (INT_CTRL_CORE_SPECIFIC_VTABLE == STD_ON))
-    IntCtrl_Ip_IrqHandlerType *pVectorRam = (IntCtrl_Ip_IrqHandlerType *)R52VtabeRefArray[u8CoreId];
+    IntCtrl_Ip_IrqHandlerType *pVectorRam = (IntCtrl_Ip_IrqHandlerType *)VTABLE[OsIf_GetCoreID()];
 #else
-    IntCtrl_Ip_IrqHandlerType *pVectorRam = (IntCtrl_Ip_IrqHandlerType *)R52VtabeRefArray;
+    IntCtrl_Ip_IrqHandlerType *pVectorRam = (IntCtrl_Ip_IrqHandlerType *)VTABLE;
 #endif
         /* Save the former handler pointer */
     if (pfOldHandler != NULL_PTR)
@@ -245,22 +221,14 @@ void IntCtrl_Ip_InstallHandlerPrivileged(IRQn_Type eIrqNumber,
     /* Invalidate ICache */
     S32_SCB->ICIALLU = 0UL;
 #endif
-
+    
 #endif /* (INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON) */
 /*LDRA_NOANALYSIS*/
     MCAL_INSTRUCTION_SYNC_BARRIER();
     MCAL_DATA_SYNC_BARRIER();
-/*LDRA_ANALYSIS*/
+/*LDRA_ANALYSIS*/    
 }
 
-/**
- * @brief      Enables an interrupt request.
- * @details    Enables an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- */
 void IntCtrl_Ip_EnableIrqPrivileged(IRQn_Type eIrqNumber)
 {
 
@@ -274,14 +242,14 @@ void IntCtrl_Ip_EnableIrqPrivileged(IRQn_Type eIrqNumber)
 #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
     S32_GICD->GICD_ISENABLER[((uint32)(eIrqNumber) >> 5U)] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
 #else
-    uint32 u32CpuId;
+    uint32 cpuId;
     if ((uint32)(eIrqNumber) < GIC500_MIN_SPI_ID)
     {
-        u32CpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
+        cpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-        DevAssert(GIC500_CPU_COUNT > u32CpuId);
+        DevAssert(GIC500_CPU_COUNT > cpuId);
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
-        IP_GIC500->CPU[u32CpuId].GICR_SGII.ISENABLER0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
+        IP_GIC500->CPU[cpuId].GICR_SGII.ISENABLER0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
     }
     else
     {
@@ -293,14 +261,6 @@ void IntCtrl_Ip_EnableIrqPrivileged(IRQn_Type eIrqNumber)
 #endif
 }
 
-/**
- * @brief      Disables an interrupt request.
- * @details    Disables an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- */
 void IntCtrl_Ip_DisableIrqPrivileged(IRQn_Type eIrqNumber)
 {
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
@@ -310,50 +270,44 @@ void IntCtrl_Ip_DisableIrqPrivileged(IRQn_Type eIrqNumber)
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
     /* Disable interrupt */
 #if ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
-    #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
+#if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
     /* Disable interrupt */
     S32_GICD->GICD_ICENABLER[((uint32)(eIrqNumber) >> 5U)] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
-    #else
-    uint32 u32CpuId;
+#else
+    uint32 cpuId;
     /* Disable interrupt */
     if ((uint32)(eIrqNumber) < GIC500_MIN_SPI_ID)
     {
-        u32CpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
-        #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-        DevAssert(GIC500_CPU_COUNT > u32CpuId);
-        #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
-        IP_GIC500->CPU[u32CpuId].GICR_SGII.ICENABLER0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
+        cpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
+#if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
+        DevAssert(GIC500_CPU_COUNT > cpuId);
+#endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
+        IP_GIC500->CPU[cpuId].GICR_SGII.ICENABLER0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
     }
     else
     {
         S32_GICD->GICD_ICENABLER[((uint32)(eIrqNumber) >> 5U) - 1U] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
     }
-    #endif  /* (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64) */
+#endif
 #else
     S32_NVIC->ICER[(uint32)(eIrqNumber) >> 5U] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
-#endif  /* (INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON) */
+#endif
 }
 
-/**
- * @brief      Sets the priority for an interrupt request.
- * @details    Sets the priority for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- * @param[in]  u8Priority    Priority of the interrupt.
- *
- * @return     Priority of the corresponding interurpt
- */
 void IntCtrl_Ip_SetPriorityPrivileged(IRQn_Type eIrqNumber, uint8 u8Priority)
 {
+
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
+
     /* Check IRQ number and priority - dev_irqNumber is used to avoid compiler warning */
     DevAssert((sint32)INT_CTRL_IP_IRQ_MIN <= (sint32)eIrqNumber);
     DevAssert((sint32)eIrqNumber <= (sint32)INT_CTRL_IP_IRQ_MAX);
-    #if (INT_CTRL_IP_CORTEXM == STD_ON)
+#if (INT_CTRL_IP_CORTEXM == STD_ON)
     DevAssert(u8Priority < (uint8)(1U << INT_CTRL_IP_NVIC_PRIO_BITS));
-    #else
+#else
     DevAssert(u8Priority < (uint8)(1U << INT_CTRL_IP_GIC_PRIO_BITS));
-    #endif  /* (INT_CTRL_IP_CORTEXM == STD_ON) */
+#endif
+
 #endif /* (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
 
 #if (INT_CTRL_IP_CORTEXM == STD_ON)
@@ -369,7 +323,7 @@ void IntCtrl_Ip_SetPriorityPrivileged(IRQn_Type eIrqNumber, uint8 u8Priority)
         S32_NVIC->IP[iprVectorId] &= ~(0xFFUL << priByteShift);
 
         S32_NVIC->IP[iprVectorId] |= ((uint32)(((((uint32)u8Priority) << shift)) & 0xFFUL)) << priByteShift;
-    #endif  /* (INT_CTRL_IP_CORTEXM0PLUS == STD_OFF) */
+    #endif
 #elif ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
     uint8 shift_gic = (uint8) (8U - INT_CTRL_IP_GIC_PRIO_BITS);
     #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
@@ -379,17 +333,17 @@ void IntCtrl_Ip_SetPriorityPrivileged(IRQn_Type eIrqNumber, uint8 u8Priority)
         S32_GICD->GICD_IPRIORITYR[iprVectorId] &= ~(0xFFUL << priByteShift);
         S32_GICD->GICD_IPRIORITYR[iprVectorId] |= ((uint32)(((((uint32)u8Priority) << shift_gic)) & 0xFFUL)) << priByteShift;
     #else
-        uint32 u32CpuId;
+        uint32 cpuId;
         if ((uint32)(eIrqNumber) < GIC500_MIN_SPI_ID)
         {
             uint32 iprVectorId = ((uint32)(eIrqNumber) >> 2U);
             uint8 priByteShift = (uint8)((((uint8)eIrqNumber) & 0x3U) << 3U);
-            u32CpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
-        #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-            DevAssert(GIC500_CPU_COUNT > u32CpuId);
-        #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
-            IP_GIC500->CPU[u32CpuId].GICR_SGII.IPRIORITYR[iprVectorId] &= ~(0xFFUL << priByteShift);
-            IP_GIC500->CPU[u32CpuId].GICR_SGII.IPRIORITYR[iprVectorId] |= ((uint32)(((((uint32)u8Priority) << shift_gic)) & 0xFFUL)) << priByteShift;
+            cpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
+#if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
+            DevAssert(GIC500_CPU_COUNT > cpuId);
+#endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
+            IP_GIC500->CPU[cpuId].GICR_SGII.IPRIORITYR[iprVectorId] &= ~(0xFFUL << priByteShift);
+            IP_GIC500->CPU[cpuId].GICR_SGII.IPRIORITYR[iprVectorId] |= ((uint32)(((((uint32)u8Priority) << shift_gic)) & 0xFFUL)) << priByteShift;
         }
         else
         {
@@ -399,29 +353,22 @@ void IntCtrl_Ip_SetPriorityPrivileged(IRQn_Type eIrqNumber, uint8 u8Priority)
             IP_GIC500->GICD.IPRIORITYR[iprVectorId] &= ~(0xFFUL << priByteShift);
             IP_GIC500->GICD.IPRIORITYR[iprVectorId] |= ((uint32)(((((uint32)u8Priority) << shift_gic)) & 0xFFUL)) << priByteShift;
         }
-    #endif  /* (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64) */
+    #endif
 #endif
 }
 
-/**
- * @brief      Gets the priority for an interrupt request.
- * @details    Gets the priority for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     Priority of the corresponding interurpt
- */
 uint8 IntCtrl_Ip_GetPriorityPrivileged(IRQn_Type eIrqNumber)
 {
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
 
     /* Check IRQ number */
-    DevAssert((sint32)INT_CTRL_IP_IRQ_MIN <= (sint32)eIrqNumber);
+    DevAssert(INT_CTRL_IP_IRQ_MIN <= eIrqNumber);
     DevAssert((sint32)eIrqNumber <= (sint32)INT_CTRL_IP_IRQ_MAX);
 
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
 
     uint8 priority=0;
+
 
 #if (INT_CTRL_IP_CORTEXM == STD_ON)
     uint8 shift = (uint8)(8U - INT_CTRL_IP_NVIC_PRIO_BITS);
@@ -440,16 +387,16 @@ uint8 IntCtrl_Ip_GetPriorityPrivileged(IRQn_Type eIrqNumber)
         uint8 priByteShift = (uint8)((((uint8)(eIrqNumber)) & 0x3U) << 3U);
         priority = ((uint8)(S32_GICD->GICD_IPRIORITYR[iprVectorId] >> priByteShift)) >> shift_gic;
     #else
-        uint32 u32CpuId;
+        uint32 cpuId;
         if ((uint32)(eIrqNumber) < GIC500_MIN_SPI_ID)
         {
             uint32 iprVectorId = ((uint32)(eIrqNumber) >> 2U);
             uint8 priByteShift = (uint8)((((uint8)(eIrqNumber)) & 0x3U) << 3U);
-            u32CpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
+            cpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-            DevAssert(GIC500_CPU_COUNT > u32CpuId);
+            DevAssert(GIC500_CPU_COUNT > cpuId);
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
-            priority = ((uint8)(IP_GIC500->CPU[u32CpuId].GICR_SGII.IPRIORITYR[iprVectorId] >> priByteShift)) >> shift_gic;
+            priority = ((uint8)(IP_GIC500->CPU[cpuId].GICR_SGII.IPRIORITYR[iprVectorId] >> priByteShift)) >> shift_gic;
         }
         else
         {
@@ -462,14 +409,6 @@ uint8 IntCtrl_Ip_GetPriorityPrivileged(IRQn_Type eIrqNumber)
     return priority;
 }
 
-/**
- * @brief      Clears the pending flag for an interrupt request.
- * @details    Clears the pending flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- */
 void IntCtrl_Ip_ClearPendingPrivileged(IRQn_Type eIrqNumber)
 {
 
@@ -479,42 +418,36 @@ void IntCtrl_Ip_ClearPendingPrivileged(IRQn_Type eIrqNumber)
     DevAssert((sint32)eIrqNumber <= (sint32)INT_CTRL_IP_IRQ_MAX);
 #endif /* (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
 #if ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
-    #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
+#if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
     /* Clear Pending Interrupt */
     S32_GICD->GICD_ICPENDR[((uint32)(eIrqNumber) >> 5U)] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
-    #else
-    uint32 u32CpuId;
+#else
+    uint32 cpuId;
     /* Clear Pending Interrupt */
     if ((uint32)(eIrqNumber) < GIC500_MIN_SPI_ID)
     {
-        u32CpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
-        #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-        DevAssert(GIC500_CPU_COUNT > u32CpuId);
-        #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
-        IP_GIC500->CPU[u32CpuId].GICR_SGII.ICPENDR0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
+        cpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
+#if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
+        DevAssert(GIC500_CPU_COUNT > cpuId);
+#endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
+        IP_GIC500->CPU[cpuId].GICR_SGII.ICPENDR0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
 
     }
     else
     {
         S32_GICD->GICD_ICPENDR[((uint32)(eIrqNumber) >> 5U) - 1U] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
     }
-    #endif  /* MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64 */
+#endif
+
 #else
     /* Clear Pending Interrupt */
     S32_NVIC->ICPR[(uint32)(eIrqNumber) >> 5U] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
-#endif  /* (INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON) */
+#endif
+
 }
 
 
 #if (INT_CTRL_IP_STANDALONE_APIS == STD_ON)
-/**
- * @brief      Sets the pending flag for an interrupt request.
- * @details    Sets the pending flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- */
 void IntCtrl_Ip_SetPendingPrivileged(IRQn_Type eIrqNumber)
 {
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
@@ -523,75 +456,66 @@ void IntCtrl_Ip_SetPendingPrivileged(IRQn_Type eIrqNumber)
     DevAssert(((sint32)eIrqNumber) <= (sint32)INT_CTRL_IP_IRQ_MAX);
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
 #if ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
-    #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
+#if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
     /* Set Pending Interrupt */
     S32_GICD->GICD_ISPENDR[((uint32)(eIrqNumber) >> 5U)] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
-    #else
-    uint32 u32CpuId;
+#else
+    uint32 cpuId;
     /* Set Pending Interrupt */
     if ((uint32)(eIrqNumber) < GIC500_MIN_SPI_ID)
     {
-        u32CpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
-        #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-        DevAssert(GIC500_CPU_COUNT > u32CpuId);
-        #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
-        IP_GIC500->CPU[u32CpuId].GICR_SGII.ISPENDR0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
+        cpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
+#if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
+        DevAssert(GIC500_CPU_COUNT > cpuId);
+#endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
+        IP_GIC500->CPU[cpuId].GICR_SGII.ISPENDR0 = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
     }
     else
     {
         S32_GICD->GICD_ISPENDR[((uint32)(eIrqNumber) >> 5U) - 1U] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
     }
-    #endif  /* (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64) */
+#endif
+
 #else
     /* Set Pending Interrupt */
     S32_NVIC->ISPR[(uint32)(eIrqNumber) >> 5U] = (uint32)(1UL << ((uint32)(eIrqNumber) & (uint32)0x1FU));
-#endif  /* (INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON) */
+#endif
 
 }
 
-/**
- * @brief      Gets the pending flag for an interrupt request.
- * @details    Gets the pending flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     State of the given interurpt source.
- *                  - TRUE: The interrupt source is pended
- *                  - FALSE: The interrupt source is not pended
- */
-boolean IntCtrl_Ip_GetPendingPrivileged(IRQn_Type eIrqNumber)
+uint32 IntCtrl_Ip_GetPendingPrivileged(IRQn_Type eIrqNumber)
 {
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
     /* Check IRQ number */
     DevAssert(0 <= (sint32)eIrqNumber);
     DevAssert(((sint32)eIrqNumber) <= (sint32)INT_CTRL_IP_IRQ_MAX);
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
-
+    
 #if ((INT_CTRL_IP_CORTEXR == STD_ON) || (INT_CTRL_IP_CORTEXA == STD_ON))
 #if (MCAL_PLATFORM_ARM == MCAL_ARM_AARCH64)
 /* Get Pending Interrupt */
-    return ((((S32_GICD->GICD_ICPENDR[(((uint32)eIrqNumber) >> 5UL)] & (1UL << (((uint32)eIrqNumber) & 0x1FUL))) != 0UL) ? 1U : 0U));
+    return ((((S32_GICD->GICD_ICPENDR[(((uint32)eIrqNumber) >> 5UL)] & (1UL << (((uint32)eIrqNumber) & 0x1FUL))) != 0UL) ? TRUE : FALSE));
 #else
-    uint32 u32CpuId;
-    volatile boolean bResult = 0;
+    uint32 cpuId;
+    volatile uint32 result = 0;
 /* Get Pending Interrupt */
     if ((uint32)(eIrqNumber) < GIC500_MIN_SPI_ID)
     {
         /* Convert internal linear ID in RTU */
-        u32CpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
+        cpuId = IntCtrl_Ip_gic500_convertAffinityToLinearId(IntCtrl_Ip_read_MPIDR());
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
-        DevAssert(GIC500_CPU_COUNT > u32CpuId);
+        DevAssert(GIC500_CPU_COUNT > cpuId);
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
         /* Get Pending Interrupt */
-        bResult = (((IP_GIC500->CPU[u32CpuId].GICR_SGII.ISPENDR0 & (1UL << (((uint32)eIrqNumber) & 0x1FUL))) != 0UL) ? TRUE : FALSE);
+        result = (((IP_GIC500->CPU[cpuId].GICR_SGII.ISPENDR0 & (1UL << (((uint32)eIrqNumber) & 0x1FUL))) != 0UL) ? TRUE : FALSE);
     }
     else
     {
         /* Get Pending Interrupt */
-        bResult =  ((((S32_GICD->GICD_ICPENDR[(((uint32)eIrqNumber) >> 5UL) - 1UL] & (1UL << (((uint32)eIrqNumber) & 0x1FUL))) != 0UL) ? TRUE : FALSE));
+        result =  ((((S32_GICD->GICD_ICPENDR[(((uint32)eIrqNumber) >> 5UL) - 1UL] & (1UL << (((uint32)eIrqNumber) & 0x1FUL))) != 0UL) ? TRUE : FALSE));
     }
-
-    return bResult;
+    
+    return result;
 #endif
 
 #else
@@ -599,19 +523,8 @@ boolean IntCtrl_Ip_GetPendingPrivileged(IRQn_Type eIrqNumber)
     return ((((S32_NVIC->ISPR[(((uint32)eIrqNumber) >> 5UL)] & (1UL << (((uint32)eIrqNumber) & 0x1FUL))) != 0UL) ? TRUE : FALSE));
 #endif
 }
-
 #if ((INT_CTRL_IP_CORTEXM == STD_ON) && (INT_CTRL_IP_CORTEXM0PLUS == STD_OFF))
-/**
- * @brief      Gets the active flag for an interrupt request.
- * @details    Gets the active flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     State of the given interurpt source.
- *                  - TRUE: Active
- *                  - FALSE: Inactive
- */
-boolean IntCtrl_Ip_GetActivePrivileged(IRQn_Type eIrqNumber)
+uint32 IntCtrl_Ip_GetActivePrivileged(IRQn_Type eIrqNumber)
 {
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
     /* Check IRQ number */
@@ -634,16 +547,17 @@ void IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber)
     DevAssert(eIrqNumber <= INT_CTRL_IP_DIRECTED_CPU_INT_MAX);
 #endif /* (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
 
-    uint32 u32CurrentCpu;
-    uint32 u32IrqId;
+    uint32 currentCpu;
+    uint32 irqId;
 
-    u32CurrentCpu = MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM);
-    u32IrqId = (uint32)eIrqNumber - (uint32)INT_CTRL_IP_DIRECTED_CPU_INT_MIN;
+    currentCpu = MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM);
+    irqId = (uint32)eIrqNumber - (uint32)INT_CTRL_IP_DIRECTED_CPU_INT_MIN;
     /* Clear Directed CPU Pending Interrupt */
-    MSCM_IRCPnIRx->IRCPnIRx[u32CurrentCpu][u32IrqId].IntStatusR = 0x7FU;
+    MSCM_IRCPnIRx->IRCPnIRx[currentCpu][irqId].IntStatusR = 0x7FU;
+
 }
 
-boolean IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber)
+uint32 IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber)
 {
 #if (INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON)
     /* Check IRQ number */
@@ -651,14 +565,16 @@ boolean IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber)
     DevAssert(eIrqNumber <= INT_CTRL_IP_DIRECTED_CPU_INT_MAX);
 #endif /*(INT_CTRL_IP_DEV_ERROR_DETECT == STD_ON) */
 
-    uint32 u32CurrentCpu;
-    uint32 u32IrqId;
 
-    u32CurrentCpu = MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM);
-    u32IrqId = (uint32)eIrqNumber - (uint32)INT_CTRL_IP_DIRECTED_CPU_INT_MIN;
+    uint32 currentCpu;
+    uint32 irqId;
 
-    return ((MSCM_IRCPnIRx->IRCPnIRx[u32CurrentCpu][u32IrqId].IntStatusR != 0U) ? TRUE : FALSE);
+    currentCpu = MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM);
+    irqId = (uint32)eIrqNumber - (uint32)INT_CTRL_IP_DIRECTED_CPU_INT_MIN;
+
+    return ((MSCM_IRCPnIRx->IRCPnIRx[currentCpu][irqId].IntStatusR != 0U) ? TRUE : FALSE);
 }
+
 
 void IntCtrl_Ip_GenerateDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber, IntCtrl_Ip_IrqTargetType eCpuTarget)
 {
@@ -668,20 +584,20 @@ void IntCtrl_Ip_GenerateDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber, Int
     DevAssert(eIrqNumber <= INT_CTRL_IP_DIRECTED_CPU_INT_MAX);
 #endif
 
-    uint32 u32IrqId = (uint32)eIrqNumber - (uint32)INT_CTRL_IP_DIRECTED_CPU_INT_MIN;
-    uint32 u32Core;
-    uint32 u32Target;
+    uint32 irqId = (uint32)eIrqNumber - (uint32)INT_CTRL_IP_DIRECTED_CPU_INT_MIN;
+    uint32 core;
+    uint32 target;
 
     if (eCpuTarget == INTCTRL_IP_TARGET_OTHERS)
     {
         /* Add Fault Injection point for processor number */
         MCAL_FAULT_INJECTION_POINT(PLATFORM_CPN_ERROR_CPUINTERRUPT);
-        for (u32Core = 0U; u32Core < INT_CTRL_IP_MSI_CORE_CNT; u32Core++)
+        for (core = 0U; core < INT_CTRL_IP_MSI_CORE_CNT; core++)
         {
             /* Generate a Directed CPU Interrupt to every other core */
-            if (u32Core != (MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM)))
+            if (core != (MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM)))
             {
-                MSCM_IRCPnIRx->IRCPnIRx[u32Core][u32IrqId].IGR = 0x1U;
+                MSCM_IRCPnIRx->IRCPnIRx[core][irqId].IGR = 0x1U;
             }
         }
     }
@@ -689,37 +605,29 @@ void IntCtrl_Ip_GenerateDirectedCpuInterruptPrivileged(IRQn_Type eIrqNumber, Int
     {
         if (eCpuTarget == INTCTRL_IP_TARGET_SELF)
         {
-            u32Target = MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM);
+            target = MSCM_CPXNUM_CPN_MASK & (IP_MSCM->CPXNUM);
         }
         else
         {
-            u32Target = (uint32)eCpuTarget;
+            target = (uint32)eCpuTarget;
         }
 
         /* Generate Directed CPU Interrupt to target core */
-        MSCM_IRCPnIRx->IRCPnIRx[u32Target][u32IrqId].IGR = 0x1U;
+        MSCM_IRCPnIRx->IRCPnIRx[target][irqId].IGR = 0x1U;
     }
 }
 #endif /* INT_CTRL_IP_MSI_AVAILABLE == STD_ON */
-#define PLATFORM_STOP_SEC_CODE
-#include "Platform_MemMap.h"
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL == STD_ON */
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL*/
 /*==================================================================================================
 *                                       GLOBAL FUNCTIONS
 ==================================================================================================*/
-#ifdef  PLATFORM_IP_ENABLE_INT_CTRL
-#if  (PLATFORM_IP_ENABLE_INT_CTRL == STD_ON)
-#define PLATFORM_START_SEC_CODE
-#include "Platform_MemMap.h"
+
+
+
+
+
 /**
- * @brief      Initializes the configured interrupts at interrupt controller level.
- * @details    Initializes the configured interrupts at interrupt controller level.
- *
- * @param[in]  pIntCtrlCtrlConfig    The interrupt controler configuration.
- *
- * @return     IntCtrl_Ip_StatusType
- *
+ * @internal
+ * @brief         Initializes the configured interrupts at interrupt controller level.
  * @implements    IntCtrl_Ip_Init_Activity
  */
 IntCtrl_Ip_StatusType IntCtrl_Ip_Init(const IntCtrl_Ip_CtrlConfigType *pIntCtrlCtrlConfig)
@@ -733,28 +641,25 @@ IntCtrl_Ip_StatusType IntCtrl_Ip_Init(const IntCtrl_Ip_CtrlConfigType *pIntCtrlC
     DevAssert(pIntCtrlCtrlConfig != NULL_PTR);
     DevAssert(pIntCtrlCtrlConfig->u32ConfigIrqCount <= INT_CTRL_IP_IRQ_COUNT);
 #endif
-    uint32 u32IrqIdx;
-    for (u32IrqIdx = 0; u32IrqIdx < pIntCtrlCtrlConfig->u32ConfigIrqCount; u32IrqIdx++)
+    uint32 irqIdx;
+    for (irqIdx = 0; irqIdx < pIntCtrlCtrlConfig->u32ConfigIrqCount; irqIdx++)
     {
-        IntCtrl_Ip_ClearPending(pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].eIrqNumber);
-        IntCtrl_Ip_SetPriority(pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].eIrqNumber,
-                               pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].u8IrqPriority);
+        IntCtrl_Ip_ClearPending(pIntCtrlCtrlConfig->aIrqConfig[irqIdx].eIrqNumber);
+        IntCtrl_Ip_SetPriority(pIntCtrlCtrlConfig->aIrqConfig[irqIdx].eIrqNumber,
+                               pIntCtrlCtrlConfig->aIrqConfig[irqIdx].u8IrqPriority);
 
         /* Install the configured handler */
-        IntCtrl_Ip_InstallHandler(pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].eIrqNumber,
-                                  pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].pfHandler,
+        IntCtrl_Ip_InstallHandler(pIntCtrlCtrlConfig->aIrqConfig[irqIdx].eIrqNumber,
+                                  pIntCtrlCtrlConfig->aIrqConfig[irqIdx].pfHandler,
                                   NULL_PTR);
-        if (pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].bIrqEnabled)
+
+        if (pIntCtrlCtrlConfig->aIrqConfig[irqIdx].bIrqEnabled)
         {
-            IntCtrl_Ip_EnableIrq(pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].eIrqNumber);
+            IntCtrl_Ip_EnableIrq(pIntCtrlCtrlConfig->aIrqConfig[irqIdx].eIrqNumber);
         }
         else
         {
-        /* NVIC: Initialize all isr source which does not exist in configuration since each core will control separate isr controller*/
-        /* GIC: Initialize only isr source which exist in configuration. The rest of isr source will be left untouch due to GICD controller is shared among the cores inside cluster*/
-#if ((INT_CTRL_IP_CORTEXR == STD_OFF) && (INT_CTRL_IP_CORTEXA == STD_OFF))
-            IntCtrl_Ip_DisableIrq(pIntCtrlCtrlConfig->aIrqConfig[u32IrqIdx].eIrqNumber);
-#endif
+            IntCtrl_Ip_DisableIrq(pIntCtrlCtrlConfig->aIrqConfig[irqIdx].eIrqNumber);
         }
     }
 
@@ -762,15 +667,8 @@ IntCtrl_Ip_StatusType IntCtrl_Ip_Init(const IntCtrl_Ip_CtrlConfigType *pIntCtrlC
 }
 
 /**
- * @brief      Installs a handler for an IRQ.
- * @details    Installs a handler for an IRQ.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- * @param[in]  pfNewHandler  Pointer function to the new handler.
- * @param[in]  pfOldHandler  Pointer function to the old handler.
- *
- * @return     void
- *
+ * @internal
+ * @brief         Installs a handler for an IRQ.
  * @implements    IntCtrl_Ip_InstallHandler_Activity
  */
 void IntCtrl_Ip_InstallHandler(IRQn_Type eIrqNumber,
@@ -781,13 +679,8 @@ void IntCtrl_Ip_InstallHandler(IRQn_Type eIrqNumber,
 }
 
 /**
- * @brief      Enables an interrupt request.
- * @details    Enables an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- *
+ * @internal
+ * @brief         Enables an interrupt request.
  * @implements    IntCtrl_Ip_EnableIrq_Activity
  */
 void IntCtrl_Ip_EnableIrq(IRQn_Type eIrqNumber)
@@ -796,13 +689,8 @@ void IntCtrl_Ip_EnableIrq(IRQn_Type eIrqNumber)
 }
 
 /**
- * @brief      Disables an interrupt request.
- * @details    Disables an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- *
+ * @internal
+ * @brief         Disables an interrupt request.
  * @implements    IntCtrl_Ip_DisableIrq_Activity
  */
 void IntCtrl_Ip_DisableIrq(IRQn_Type eIrqNumber)
@@ -811,14 +699,8 @@ void IntCtrl_Ip_DisableIrq(IRQn_Type eIrqNumber)
 }
 
 /**
- * @brief      Sets the priority for an interrupt request.
- * @details    Sets the priority for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- * @param[in]  u8Priority    Priority of the interrupt.
- *
- * @return     Priority of the corresponding interurpt
- *
+ * @internal
+ * @brief         Sets the priority for an interrupt request.
  * @implements    IntCtrl_Ip_SetPriority_Activity
  */
 void IntCtrl_Ip_SetPriority(IRQn_Type eIrqNumber, uint8 u8Priority)
@@ -827,13 +709,8 @@ void IntCtrl_Ip_SetPriority(IRQn_Type eIrqNumber, uint8 u8Priority)
 }
 
 /**
- * @brief      Gets the priority for an interrupt request.
- * @details    Gets the priority for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     Priority of the corresponding interurpt
- *
+ * @internal
+ * @brief         Gets the priority for an interrupt request.
  * @implements    IntCtrl_Ip_GetPriority_Activity
  */
 uint8 IntCtrl_Ip_GetPriority(IRQn_Type eIrqNumber)
@@ -842,13 +719,8 @@ uint8 IntCtrl_Ip_GetPriority(IRQn_Type eIrqNumber)
 }
 
 /**
- * @brief      Clears the pending flag for an interrupt request.
- * @details    Clears the pending flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- *
+ * @internal
+ * @brief         Clears the pending flag for an interrupt request.
  * @implements    IntCtrl_Ip_ClearPending_Activity
  */
 void IntCtrl_Ip_ClearPending(IRQn_Type eIrqNumber)
@@ -859,13 +731,8 @@ void IntCtrl_Ip_ClearPending(IRQn_Type eIrqNumber)
 
 #if (INT_CTRL_IP_STANDALONE_APIS == STD_ON)
 /**
- * @brief      Sets the pending flag for an interrupt request.
- * @details    Sets the pending flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     void
- *
+ * @internal
+ * @brief         Sets the pending flag for an interrupt request.
  * @implements    IntCtrl_Ip_SetPending_Activity
  */
 void IntCtrl_Ip_SetPending(IRQn_Type eIrqNumber)
@@ -874,40 +741,27 @@ void IntCtrl_Ip_SetPending(IRQn_Type eIrqNumber)
 }
 
 /**
- * @brief      Gets the pending flag for an interrupt request.
- * @details    Gets the pending flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     State of the given interurpt source.
- *                  - TRUE: The interrupt source is pended
- *                  - FALSE: The interrupt source is not pended
- *
+ * @internal
+ * @brief         Gets the pending flag for an interrupt request.
  * @implements    IntCtrl_Ip_GetPending_Activity
  */
 boolean IntCtrl_Ip_GetPending(IRQn_Type eIrqNumber)
 {
     /* Get Pending Interrupt */
-    return Call_IntCtrl_Ip_GetPendingPrivileged(eIrqNumber);
+    return (Call_IntCtrl_Ip_GetPendingPrivileged(eIrqNumber) > 0U)? TRUE : FALSE;
 }
+
 
 #if ((INT_CTRL_IP_CORTEXM == STD_ON) && (INT_CTRL_IP_CORTEXM0PLUS == STD_OFF))
 /**
- * @brief      Gets the active flag for an interrupt request.
- * @details    Gets the active flag for an interrupt request.
- *
- * @param[in]  eIrqNumber    Interrupt number.
- *
- * @return     State of the given interurpt source.
- *                  - TRUE: Active
- *                  - FALSE: Inactive
- *
+ * @internal
+ * @brief         Gets the active flag for an interrupt request.
  * @implements    IntCtrl_Ip_GetActive_Activity
- */
+ */    
 boolean IntCtrl_Ip_GetActive(IRQn_Type eIrqNumber)
 {
     /*Gets the active flag for an interrupt request */
-    return Call_IntCtrl_Ip_GetActivePrivileged(eIrqNumber);
+    return (Call_IntCtrl_Ip_GetActivePrivileged(eIrqNumber) > 0U)? TRUE : FALSE;
 }
 #endif
 #endif /* INT_CTRL_IP_STANDALONE_APIS*/
@@ -916,46 +770,26 @@ boolean IntCtrl_Ip_GetActive(IRQn_Type eIrqNumber)
 
 #if (INT_CTRL_IP_MSI_AVAILABLE == STD_ON)
 /**
- * @brief      Clear directed cpu Interrupt interrupt flag.
- * @details    Clear directed cpu Interrupt interrupt flag.
- *
- * @param[in]  eIrqNumber   Interrupt number.
- *
- * @return     void
- *
+ * @internal
+ * @brief         Clear directed cpu Interrupt interrupt flag.
  * @implements    IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged_Activity
  */
 void IntCtrl_Ip_ClearDirectedCpuInterrupt(IRQn_Type eIrqNumber)
 {
     Call_IntCtrl_Ip_ClearDirectedCpuInterruptPrivileged(eIrqNumber);
 }
-
 /**
- * @brief      Get directed cpu Interrupt interrupt flag.
- * @details    Get directed cpu Interrupt interrupt flag.
- *
- * @param[in]  eIrqNumber   Interrupt number.
- *
- * @return The state of a unique MSI based on the initiating core.
- *             - TRUE: Interupt signal is asserted.
- *             - FALSE: No interrupt signal is asserted.
- *
+ * @internal
+ * @brief         Get directed cpu Interrupt interrupt flag.
  * @implements    IntCtrl_Ip_GetDirectedCpuInterrupt_Activity
  */
 boolean IntCtrl_Ip_GetDirectedCpuInterrupt(IRQn_Type eIrqNumber)
 {
-    return Call_IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(eIrqNumber);
+    return (Call_IntCtrl_Ip_GetDirectedCpuInterruptPrivileged(eIrqNumber) > 0U)? TRUE : FALSE;
 }
-
 /**
- * @brief      Generates an interrupt request to a CPU target.
- * @details    Generates an interrupt request to a CPU target.
- *
- * @param[in]  eIrqNumber   Interrupt number.
- * @param[in]  eCpuTarget   CPU target.
- *
- * @return void
- *
+ * @internal
+ * @brief         Generates an interrupt request to a CPU target.
  * @implements    IntCtrl_Ip_GenerateDirectedCpuInterrupt_Activity
  */
 void IntCtrl_Ip_GenerateDirectedCpuInterrupt(IRQn_Type eIrqNumber, IntCtrl_Ip_IrqTargetType eCpuTarget)
@@ -965,11 +799,5 @@ void IntCtrl_Ip_GenerateDirectedCpuInterrupt(IRQn_Type eIrqNumber, IntCtrl_Ip_Ir
 #endif /* INT_CTRL_IP_MSI_AVAILABLE == STD_ON */
 #define PLATFORM_STOP_SEC_CODE
 #include "Platform_MemMap.h"
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL == STD_ON */
-#endif /* PLATFORM_IP_ENABLE_INT_CTRL */
-
-#ifdef __cplusplus
-}
-#endif
 
 /** @} */

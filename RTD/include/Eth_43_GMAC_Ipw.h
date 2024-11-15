@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -43,7 +43,6 @@ extern "C"{
 ==================================================================================================*/
 #include "Eth_43_GMAC_Ipw_Cfg.h"
 #include "EthIf.h"
-#include "Gmac_Ip_Types.h"
 
 /*==================================================================================================
 *                              SOURCE FILE VERSION INFORMATION
@@ -52,7 +51,7 @@ extern "C"{
 #define ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION     4
 #define ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION     7
 #define ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION  0
-#define ETH_43_GMAC_IPW_SW_MAJOR_VERSION             5
+#define ETH_43_GMAC_IPW_SW_MAJOR_VERSION             4
 #define ETH_43_GMAC_IPW_SW_MINOR_VERSION             0
 #define ETH_43_GMAC_IPW_SW_PATCH_VERSION             0
 
@@ -65,8 +64,7 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_IPW_AR_RELEASE_MAJOR_VERSION    != ETH_43_GMAC_IPW_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_IPW_AR_RELEASE_MINOR_VERSION    != ETH_43_GMAC_IPW_CFG_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION != ETH_43_GMAC_IPW_CFG_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_IPW_AR_RELEASE_REVISION_VERSION != ETH_43_GMAC_IPW_CFG_AR_RELEASE_REVISION_VERSION))
     #error "AUTOSAR Version Numbers of Eth_43_GMAC_Ipw.h and Eth_43_GMAC_Ipw_Cfg.h are different"
 #endif
 #if ((ETH_43_GMAC_IPW_SW_MAJOR_VERSION != ETH_43_GMAC_IPW_CFG_SW_MAJOR_VERSION) || \
@@ -85,18 +83,6 @@ extern "C"{
 /*==================================================================================================
                                            CONSTANTS
 ==================================================================================================*/
-
-/*==================================================================================================
-*                                      LOCAL VARIABLES
-==================================================================================================*/
-#define ETH_43_GMAC_START_SEC_VAR_CLEARED_32
-#include "Eth_43_GMAC_MemMap.h"
-
-extern Eth_43_GMAC_axTxBufferIdxMapType Eth_43_GMAC_axTxBufferIdxMap[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED][ETH_43_GMAC_MAX_TXFIFO_SUPPORTED * ETH_43_GMAC_MAX_TXBUFF_SUPPORTED];
-
-#define ETH_43_GMAC_STOP_SEC_VAR_CLEARED_32
-#include "Eth_43_GMAC_MemMap.h"
-
 #define ETH_43_GMAC_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Eth_43_GMAC_MemMap.h"
 
@@ -120,14 +106,6 @@ extern const Eth_43_GMAC_Ipw_CtrlConfigType *Eth_43_GMAC_Ipw_apxInternalCfg[ETH_
                                  GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
 
-extern Eth_43_GMAC_QueueInfo Eth_43_GMAC_axTransmissionRequests[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED][ETH_43_GMAC_MAX_TXFIFO_SUPPORTED];
-
-/**
- * @brief        Last queue tail updated in the transmission requests
- * @details      Keeps track of the last queue tail updated in the "Eth_43_GMAC_axTransmissionRequests"
- *               in its state before the update.
-*/
-extern Eth_43_GMAC_axTxBufferIdxMapType *Eth_43_GMAC_pLastTransmissionRequestQueueTail;
 
 #define ETH_43_GMAC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Eth_43_GMAC_MemMap.h"
@@ -137,7 +115,6 @@ extern Eth_43_GMAC_axTxBufferIdxMapType *Eth_43_GMAC_pLastTransmissionRequestQue
 #define ETH_43_GMAC_START_SEC_CODE
 #include "Eth_43_GMAC_MemMap.h"
 
-void Eth_43_GMAC_Ipw_SafetyIrqCallback(const uint8 CtrlIdx, const Gmac_Ip_SafetyErrorType Error);
 
 extern boolean Eth_43_GMAC_Ipw_CheckAccessToController(const uint8 CtrlIdx);
 extern Std_ReturnType Eth_43_GMAC_Ipw_TxTimeAwareShaperInit ( \
@@ -316,7 +293,7 @@ extern void Eth_43_GMAC_Ipw_EnableEgressTimeStamp( \
 
 extern void Eth_43_GMAC_Ipw_GetEgressTimeStamp  ( \
                                         const uint8 CtrlIdx, \
-                                        const Eth_BufIdxType BufIdx, \
+                                        const uint8 FifoIdx, \
                                         Eth_TimeStampQualType *TimeQual, \
                                         Eth_TimeStampType *TimeStamp \
                                         );

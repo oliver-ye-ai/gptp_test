@@ -7,22 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 /**
 *   @file       Clock_Ip_FracDiv.c
-*   @version    5.0.0
+*   @version    4.0.0
 *
 *   @brief   CLOCK driver implementations.
 *   @details CLOCK driver implementations.
@@ -55,7 +55,7 @@ extern "C"{
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MAJOR_VERSION_C       4
 #define CLOCK_IP_FRACDIV_AR_RELEASE_MINOR_VERSION_C       7
 #define CLOCK_IP_FRACDIV_AR_RELEASE_REVISION_VERSION_C    0
-#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               5
+#define CLOCK_IP_FRACDIV_SW_MAJOR_VERSION_C               4
 #define CLOCK_IP_FRACDIV_SW_MINOR_VERSION_C               0
 #define CLOCK_IP_FRACDIV_SW_PATCH_VERSION_C               0
 
@@ -107,13 +107,6 @@ extern "C"{
 *                                        GLOBAL VARIABLES
 ==================================================================================================*/
 
-
-/*==================================================================================================
-*                                    GLOBAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
-
-
 /*==================================================================================================
 *                                    LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
@@ -124,8 +117,6 @@ extern "C"{
 
 static void Clock_Ip_CallbackFracDivEmpty(Clock_Ip_FracDivConfigType const* Config);
 static Clock_Ip_DfsStatusType Clock_Ip_CallbackFracDivEmptyComplete(Clock_Ip_NameType DfsName);
-
-
 
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
@@ -152,20 +143,14 @@ static Clock_Ip_DfsStatusType Clock_Ip_CallbackFracDivEmptyComplete(Clock_Ip_Nam
     return STATUS_DFS_NOT_ENABLED;
 }
 
-
-
-
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
-
-
-
 /* Clock stop section code */
 #define MCU_STOP_SEC_CODE
 
 #include "Mcu_MemMap.h"
 
+/*==================================================================================================
+*                                        GLOBAL FUNCTIONS
+==================================================================================================*/
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
@@ -177,12 +162,10 @@ static Clock_Ip_DfsStatusType Clock_Ip_CallbackFracDivEmptyComplete(Clock_Ip_Nam
 const Clock_Ip_FracDivCallbackType Clock_Ip_axFracDivCallbacks[CLOCK_IP_FRACTIONAL_DIVIDER_CALLBACKS_COUNT] =
 {
     {
-        &Clock_Ip_CallbackFracDivEmpty,            /* Reset */
-        &Clock_Ip_CallbackFracDivEmpty,            /* Set */
-        &Clock_Ip_CallbackFracDivEmptyComplete,    /* Complete */
+        Clock_Ip_CallbackFracDivEmpty,            /* Reset */
+        Clock_Ip_CallbackFracDivEmpty,            /* Set */
+        Clock_Ip_CallbackFracDivEmptyComplete,    /* Complete */
     },
-
-
 };
 
 /* Clock stop constant section data */

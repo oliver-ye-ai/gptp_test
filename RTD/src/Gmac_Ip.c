@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -62,7 +62,7 @@ extern "C"{
 #define GMAC_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define GMAC_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define GMAC_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define GMAC_IP_SW_MAJOR_VERSION_C               5
+#define GMAC_IP_SW_MAJOR_VERSION_C               4
 #define GMAC_IP_SW_MINOR_VERSION_C               0
 #define GMAC_IP_SW_PATCH_VERSION_C               0
 
@@ -75,14 +75,12 @@ extern "C"{
 #endif
 #if (( GMAC_IP_AR_RELEASE_MAJOR_VERSION_C    !=  GMAC_IP_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_AR_RELEASE_MINOR_VERSION_C    !=  GMAC_IP_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_AR_RELEASE_REVISION_VERSION_C !=  GMAC_IP_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_AR_RELEASE_REVISION_VERSION_C !=  GMAC_IP_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip.c and Gmac_Ip.h are different"
 #endif
 #if (( GMAC_IP_SW_MAJOR_VERSION_C !=  GMAC_IP_SW_MAJOR_VERSION) || \
      ( GMAC_IP_SW_MINOR_VERSION_C !=  GMAC_IP_SW_MINOR_VERSION) || \
-     ( GMAC_IP_SW_PATCH_VERSION_C !=  GMAC_IP_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_SW_PATCH_VERSION_C !=  GMAC_IP_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip.c and Gmac_Ip.h are different"
 #endif
 
@@ -92,14 +90,12 @@ extern "C"{
 #endif
 #if (( GMAC_IP_AR_RELEASE_MAJOR_VERSION_C    !=  GMAC_IP_HW_ACCESS_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_AR_RELEASE_MINOR_VERSION_C    !=  GMAC_IP_HW_ACCESS_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_AR_RELEASE_REVISION_VERSION_C !=  GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_AR_RELEASE_REVISION_VERSION_C !=  GMAC_IP_HW_ACCESS_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip.c and Gmac_Ip_Hw_Access.h are different"
 #endif
 #if (( GMAC_IP_SW_MAJOR_VERSION_C !=  GMAC_IP_HW_ACCESS_SW_MAJOR_VERSION) || \
      ( GMAC_IP_SW_MINOR_VERSION_C !=  GMAC_IP_HW_ACCESS_SW_MINOR_VERSION) || \
-     ( GMAC_IP_SW_PATCH_VERSION_C !=  GMAC_IP_HW_ACCESS_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_SW_PATCH_VERSION_C !=  GMAC_IP_HW_ACCESS_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip.c and Gmac_Ip_Hw_Access.h are different"
 #endif
 
@@ -109,14 +105,12 @@ extern "C"{
 #endif
 #if (( GMAC_IP_AR_RELEASE_MAJOR_VERSION_C    !=  GMAC_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MAJOR_VERSION) || \
      ( GMAC_IP_AR_RELEASE_MINOR_VERSION_C    !=  GMAC_IP_TRUSTEDFUNCTIONS_AR_RELEASE_MINOR_VERSION) || \
-     ( GMAC_IP_AR_RELEASE_REVISION_VERSION_C !=  GMAC_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION) \
-    )
+     ( GMAC_IP_AR_RELEASE_REVISION_VERSION_C !=  GMAC_IP_TRUSTEDFUNCTIONS_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Gmac_Ip.c and Gmac_Ip_TrustedFunctions.h are different"
 #endif
 #if (( GMAC_IP_SW_MAJOR_VERSION_C !=  GMAC_IP_TRUSTEDFUNCTIONS_SW_MAJOR_VERSION) || \
      ( GMAC_IP_SW_MINOR_VERSION_C !=  GMAC_IP_TRUSTEDFUNCTIONS_SW_MINOR_VERSION) || \
-     ( GMAC_IP_SW_PATCH_VERSION_C !=  GMAC_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION)    \
-    )
+     ( GMAC_IP_SW_PATCH_VERSION_C !=  GMAC_IP_TRUSTEDFUNCTIONS_SW_PATCH_VERSION))
     #error "Software Version Numbers of Gmac_Ip.c and Gmac_Ip_TrustedFunctions.h are different"
 #endif
 
@@ -124,8 +118,7 @@ extern "C"{
     #if (STD_ON == GMAC_SET_USER_ACCESS_ALLOWED_AVAILABLE)
         /* Checks against RegLockMacros.h */
         #if ((GMAC_IP_AR_RELEASE_MAJOR_VERSION_C != REGLOCKMACROS_AR_RELEASE_MAJOR_VERSION) || \
-             (GMAC_IP_AR_RELEASE_MINOR_VERSION_C != REGLOCKMACROS_AR_RELEASE_MINOR_VERSION)    \
-            )
+             (GMAC_IP_AR_RELEASE_MINOR_VERSION_C != REGLOCKMACROS_AR_RELEASE_MINOR_VERSION))
             #error "AUTOSAR Version Numbers of Gmac_Ip.h and RegLockMacros.h are different"
         #endif
     #endif /* (STD_ON == GMAC_SET_USER_ACCESS_ALLOWED_AVAILABLE) */
@@ -133,16 +126,15 @@ extern "C"{
      /* Checks against Devassert.h*/
     #if (STD_ON == GMAC_IP_DEV_ERROR_DETECT)
         #if (( GMAC_IP_AR_RELEASE_MAJOR_VERSION_C    !=  DEVASSERT_AR_RELEASE_MAJOR_VERSION) || \
-             ( GMAC_IP_AR_RELEASE_MINOR_VERSION_C    !=  DEVASSERT_AR_RELEASE_MINOR_VERSION)    \
-            )
+            ( GMAC_IP_AR_RELEASE_MINOR_VERSION_C    !=  DEVASSERT_AR_RELEASE_MINOR_VERSION))
             #error "AUTOSAR Version Numbers of Gmac_Ip.c and Devassert.h are different"
         #endif
     #endif
 #endif
 
-/*==================================================================================================
-*                                          LOCAL MACROS
-==================================================================================================*/
+/*******************************************************************************
+ * Definitions
+ ******************************************************************************/
 
 #define GMAC_TX_STAT_ERR_MASK    (0x00007F0DU)
 #define GMAC_TX_STAT_TTSS_MASK   (0x00020000U)
@@ -174,7 +166,6 @@ extern "C"{
 #define GMAC_RDES3_FD_MASK      (0x20000000U)
 #define GMAC_RDES3_INTE_MASK    (0x40000000U)
 #define GMAC_RDES3_BUF1V_MASK   (0x01000000U)
-#define GMAC_RDES3_BUF2V_MASK   (0x02000000U)
 #define GMAC_RDES3_RS1V_MASK    (0x04000000U)
 #define GMAC_RDES3_RS0V_MASK    (0x02000000U)
 
@@ -208,15 +199,6 @@ extern "C"{
 
 #define GMAC_BYTE_MASK                   (0xFFU)
 
-#define GMAC_IPV6_GET_HIGHER_BYTE(x)              ((uint32)((uint16)(x) & 0xFFU))
-#define GMAC_IPV6_GET_LOWER_BYTE(x)               ((uint32)(((uint16)(x) & 0xFF00U) >> 8U))
-#define GMAC_IPV6_LOWER_BITS_MASK                 (0x1FU)
-#define GMAC_IPV6_HIGHER_BITS_MASK                (0x60U)
-
-#define GMAC_MAC_L3_L4_CONTROL_REG_OFFSET(x)     ((x) * 0x30U)
-
-#define GMAC_MAC_PPS_CONTROL_REG_OFFSET(x)       ((x) * 0x10U)
-
 #define GMAC_MDIO_CSR_NO                 (9U)
 
 #define GMAC_BUFFDESCR_IS_ALIGNED(x)         (((Gmac_Ip_PtrSizeType)(x) & (FEATURE_GMAC_BUFFDESCR_ALIGNMENT_BYTES - 1UL)) == 0UL)
@@ -237,14 +219,9 @@ extern "C"{
 #endif
 
 #define FEATURE_GMAC_NUM_COUNTER_REG                (uint32)(GMAC_CTR_NUMBER_OF_COUNTERS)
-
-/*==================================================================================================
-*                                         LOCAL CONSTANTS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                         LOCAL VARIABLES
-==================================================================================================*/
+/*******************************************************************************
+ * Variables
+ ******************************************************************************/
 #define ETH_43_GMAC_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "Eth_43_GMAC_MemMap.h"
 
@@ -268,17 +245,6 @@ static Gmac_Ip_TxTimeAwareShaper Gmac_Ip_TxTimeAwareShaperData[FEATURE_GMAC_NUM_
 
 /** @brief Table storing information related to the method of Tx Data Buffers Management.*/
 static const boolean Gmac_Ip_InstHasExternalTxBufferManagement[FEATURE_GMAC_NUM_INSTANCES] = GMAC_IP_INST_HAS_EXTERNAL_TX_BUFFERS;
-
-#define ETH_43_GMAC_STOP_SEC_CONST_BOOLEAN
-#include "Eth_43_GMAC_MemMap.h"
-#endif
-
-#if (STD_ON == GMAC_IP_HAS_RX_L3_L4_FILTERS)
-#define ETH_43_GMAC_START_SEC_CONST_BOOLEAN
-#include "Eth_43_GMAC_MemMap.h"
-
-/** @brief Table storing information about allowing the use of layer 3 and layert 4 filters relatives to each controller.*/
-static const boolean Gmac_Ip_InstHasRxL3L4FilterManagement[FEATURE_GMAC_NUM_INSTANCES] = GMAC_IP_INST_HAS_RX_L3_L4_FILTERS;
 
 #define ETH_43_GMAC_STOP_SEC_CONST_BOOLEAN
 #include "Eth_43_GMAC_MemMap.h"
@@ -317,64 +283,47 @@ extern const uint16 Gmac_aRxExternalBuffLength[];
 
 #define ETH_43_GMAC_STOP_SEC_CONST_16
 #include "Eth_43_GMAC_MemMap.h"
-
-/*==================================================================================================
-*                                        GLOBAL CONSTANTS
-==================================================================================================*/
-
-/*==================================================================================================
-*                                        GLOBAL VARIABLES
-==================================================================================================*/
-
-/*==================================================================================================
-*                                    LOCAL FUNCTION PROTOTYPES
-==================================================================================================*/
-
+/*******************************************************************************
+ * Prototypes
+ ******************************************************************************/
 #define ETH_43_GMAC_START_SEC_CODE
 #include "Eth_43_GMAC_MemMap.h"
 
 static uint32 Gmac_Ip_ComputeCRC32(const uint8 *Mac, uint8 Size);
 
-static Gmac_Ip_StatusType Gmac_Ip_InitDMA(uint8 Instance, const Gmac_CtrlConfigType *Config);
-static void Gmac_Ip_InitStateStructure(uint8 Instance, const Gmac_CtrlConfigType *Config);
+static Gmac_Ip_StatusType Gmac_Ip_InitDMA(uint8 Instance,
+                                          const Gmac_CtrlConfigType *Config);
+static void Gmac_Ip_InitStateStructure(uint8 Instance,
+                                       const Gmac_CtrlConfigType *Config);
 static void Gmac_Ip_InitTxBD(uint8 Instance,
-                             const Gmac_Ip_ConfigType *Config,
-                             const Gmac_Ip_TxRingConfigType TxRingConfig[]
+                            const Gmac_Ip_ConfigType *Config,
+                            const Gmac_Ip_TxRingConfigType TxRingConfig[]
                             );
 static void Gmac_Ip_InitRxBD(uint8 Instance,
-                             const Gmac_Ip_ConfigType *Config,
-                             const Gmac_Ip_RxRingConfigType RxRingConfig[]
+                            const Gmac_Ip_ConfigType *Config,
+                            const Gmac_Ip_RxRingConfigType RxRingConfig[]
                             );
-static void Gmac_Ip_InitSubsystem(GMAC_Type *Base,
-                                  uint8 Instance,
-                                  const Gmac_CtrlConfigType *Config
-                                  );
 
 #if (FEATURE_GMAC_ASP_ALL || FEATURE_GMAC_ASP_ECC)
-static void Gmac_Ip_InitSafetyEvents(GMAC_Type *Base, const Gmac_Ip_ConfigType *Config);
+static void Gmac_Ip_InitSafetyEvents(GMAC_Type *Base,
+                                     const Gmac_Ip_ConfigType *Config);
 #endif
 
-static uint8 Gmac_Ip_WriteGateControlList(uint8 Instance,
-                                          uint16 AddrGateList,
-                                          uint32 Data,
-                                          boolean IsGCLA
-                                         );
+static uint8 Gmac_Ip_WriteGateControlList(
+                                    uint8 Instance,
+                                    uint16 AddrGateList,
+                                    uint32 Data,
+                                    boolean IsGCLA
+                                        );
 
 static void Gmac_Ip_InitMTL(uint8 Instance, const Gmac_CtrlConfigType *Config);
 
-static void Gmac_Ip_InitMAC(GMAC_Type *Base, const Gmac_CtrlConfigType *Config);
-
-#if (STD_ON == GMAC_IP_HAS_RX_L3_L4_FILTERS)
-static void Gmac_Ip_InitRxL3L4Filter(GMAC_Type *Base,
-                                     const Gmac_Ip_ConfigType *Config,
-                                     const Gmac_Ip_RxL3L4FilterConfigType RxL3L4FilterConfig[]
-                                    );
-#endif
+static void Gmac_Ip_InitMAC(GMAC_Type *Base,
+                            const Gmac_CtrlConfigType *Config);
 
 static void Gmac_Ip_GetTimestamp(const GMAC_Type *Base,
                                  const Gmac_Ip_BufferDescriptorType * Bd,
-                                 Gmac_Ip_TimestampType * Timestamp
-                                );
+                                 Gmac_Ip_TimestampType * Timestamp);
 
 static boolean Gmac_Ip_RestoreRxCtxtDescr(Gmac_Ip_BufferDescriptorType *Bd);
 
@@ -397,13 +346,10 @@ static void Gmac_Ip_ReadTimeStampInfo(uint8 Instance,
 static void Gmac_Ip_TxTimeAwareShaperInit(uint8 Instance,
                                           const Gmac_CtrlConfigType *Config
                                           );
-#if (STD_ON == GMAC_IP_LPI_ENABLE)
-static inline void Gmac_Ip_LPIConfigInit(GMAC_Type *Base, const Gmac_Ip_ConfigType *Config);
-#endif
 
-/*==================================================================================================
-*                                         LOCAL FUNCTIONS
-==================================================================================================*/
+/*******************************************************************************
+ * Private functions
+ ******************************************************************************/
 
 /*FUNCTION**********************************************************************
  *
@@ -581,8 +527,6 @@ static Gmac_Ip_StatusType Gmac_Ip_InitDMA(uint8 Instance,
 static void Gmac_Ip_InitSafetyEvents(GMAC_Type *Base,
                                      const Gmac_Ip_ConfigType *Config)
 {
-    uint32 ErrorStatusFlags;
-
     /* Mask correctable error IRQs */
     Base->MTL_ECC_INTERRUPT_ENABLE = 0U;
 
@@ -597,10 +541,6 @@ static void Gmac_Ip_InitSafetyEvents(GMAC_Type *Base,
     }
 
 #if FEATURE_GMAC_ASP_ALL
-    /* Clear the interrupt flags before enabling the interrupts by reading the register. */
-    ErrorStatusFlags = Base->MAC_DPP_FSM_INTERRUPT_STATUS;
-    (void)ErrorStatusFlags;
-
     /* Configure Datapath Parity Protection */
     if ((Config->SafetyInterrupts & (uint32)GMAC_SAF_ERR_DATA_PATH_PARITY) != 0U)
     {
@@ -800,21 +740,6 @@ static void Gmac_Ip_InitMTL(uint8 Instance,
 
     /* Set the global Tx Scheduling Algorithm affecting all Tx Queues */
     Gmac_apxBases[Instance]->MTL_OPERATION_MODE = GMAC_MTL_OPERATION_MODE_SCHALG((uint32)(Config->Gmac_pCtrlConfig->TxSchedAlgo));
-#ifdef GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE
-    #if (GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE == STD_ON)
-    /* Set the arbitration scheme between the Transmit and Receive paths of all channels */
-    GMAC_SetArbitrationScheme(Gmac_apxBases[Instance], Config->Gmac_pCtrlConfig->DMAArbitrationScheme);
-   
-    /* Set the priority over TX and Rx */
-    GMAC_SetTransmitPriority(Gmac_apxBases[Instance], Config->Gmac_pCtrlConfig->DMATransmitPriority);
-    
-    /* Set the Transmit Arbitration Algorithm */
-    GMAC_SetTransmitArbitrationAlgorithm(Gmac_apxBases[Instance], Config->Gmac_pCtrlConfig->DMATransmitArbitrationAlgorithm);
-    
-    /* Set the priority ratio for Weighted Round Robin arbitration algorithm in DMA */
-    GMAC_SetPriorityRatio(Gmac_apxBases[Instance], Config->Gmac_pCtrlConfig->DMAPriorityRatio);
-    #endif
-#endif
 
     /* Configure MTL Tx Queues */
     for (i = 0U; i < Config->Gmac_pCtrlConfig->TxRingCount; ++i)
@@ -872,44 +797,12 @@ static void Gmac_Ip_InitMTL(uint8 Instance,
 static void Gmac_Ip_InitMAC(GMAC_Type *Base,
                             const Gmac_CtrlConfigType *Config)
 {
-    uint32 Flags;
-
     Base->MAC_Q0_TX_FLOW_CTRL = 0U;
 
-    /* Clear the interrupt flags before enabling the interrupts. */
-    if ((Base->DMA_INTERRUPT_STATUS & GMAC_DMA_INTERRUPT_STATUS_MACIS_MASK) != 0U)
-    {
-        Flags = Base->MAC_INTERRUPT_STATUS;
-
-    #if FEATURE_GMAC_RGMII_EN || FEATURE_GMAC_SMII_EN
-        if ((Flags & GMAC_MAC_INTERRUPT_STATUS_RGSMIIIS_MASK) != 0U)
-        {
-            (void)Base->MAC_PHYIF_CONTROL_STATUS;
-        }
-    #endif
-        if ((Flags & GMAC_MAC_INTERRUPT_STATUS_FPEIS_MASK) != 0U)
-        {
-            (void)Base->MAC_FPE_CTRL_STS;
-        }
-        if (((Flags & GMAC_MAC_INTERRUPT_STATUS_RXSTSIS_MASK) != 0U) ||
-            ((Flags & GMAC_MAC_INTERRUPT_STATUS_TXSTSIS_MASK) != 0U))
-        {
-            (void)Base->MAC_RX_TX_STATUS;
-        }
-    }
-
-    /* Enable the interrupts. */
     Base->MAC_INTERRUPT_ENABLE = Config->Gmac_pCtrlConfig->Interrupts;
 
     Base->MAC_CONFIGURATION = Config->Gmac_pCtrlConfig->MacConfig;
     Base->MAC_EXT_CONFIGURATION = Config->Gmac_pCtrlConfig->ExtendedMacConfig;
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-    /* Clear type of split an the offset. */
-    Base->MAC_EXT_CFG1 = Base->MAC_EXT_CFG1 & ~(GMAC_MAC_EXT_CFG1_SPLOFST_MASK | GMAC_MAC_EXT_CFG1_SPLM_MASK);
-    /* Set the type of spliting + offset if L2 split. */
-    Base->MAC_EXT_CFG1 |= Config->Gmac_pCtrlConfig->ExtendedMacConfig1;
-#endif
-
     Base->MAC_CONFIGURATION |= (uint32)(((uint32)Config->Gmac_pCtrlConfig->Speed) << GMAC_MAC_CONFIGURATION_FES_SHIFT);
     Base->MAC_CONFIGURATION |= GMAC_MAC_CONFIGURATION_DM(Config->Gmac_pCtrlConfig->Duplex);
     if (Config->Gmac_pCtrlConfig->EnableCtrl)
@@ -940,9 +833,6 @@ static void Gmac_Ip_InitStateStructure(uint8 Instance,
 #if (FEATURE_GMAC_ASP_ALL || FEATURE_GMAC_ASP_ECC)
     Config->Gmac_pCtrlState->SafetyCallback = Config->Gmac_pCtrlConfig->SafetyCallback;
 #endif
-#if (GMAC_IP_LPI_ENABLE == STD_ON)
-    Config->Gmac_pCtrlState->LPICallback    = Config->Gmac_pCtrlConfig->LPICallback;
-#endif
     Config->Gmac_pCtrlState->Callback    = Config->Gmac_pCtrlConfig->Callback;
     Config->Gmac_pCtrlState->RxRingCount = Config->Gmac_pCtrlConfig->RxRingCount;
     Config->Gmac_pCtrlState->TxRingCount = Config->Gmac_pCtrlConfig->TxRingCount;
@@ -951,10 +841,6 @@ static void Gmac_Ip_InitStateStructure(uint8 Instance,
         Config->Gmac_pCtrlState->RxChCallback[i]  = Config->Gmac_paCtrlRxRingConfig[i].Callback;
         Config->Gmac_pCtrlState->RxCurrentDesc[i] = Config->Gmac_paCtrlRxRingConfig[i].RingDesc;
         Config->Gmac_pCtrlState->RxAllocDesc[i]   = Config->Gmac_paCtrlRxRingConfig[i].RingDesc;
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-        Config->Gmac_pCtrlState->HeaderSplitOffset[i]  = Config->Gmac_paCtrlRxRingConfig[i].HeaderSplitOffset;
-        Config->Gmac_pCtrlState->SplitHeaderSupport[i] = Config->Gmac_paCtrlRxRingConfig[i].SplitHeaderSupport;
-#endif
     }
     for (i = 0; i < Config->Gmac_pCtrlConfig->TxRingCount; i++)
     {
@@ -977,24 +863,6 @@ static void Gmac_Ip_InitStateStructure(uint8 Instance,
     Gmac_apxState[Instance] = Config->Gmac_pCtrlState;
 }
 
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : Gmac_Ip_InitSubsystem
- * Description   : Initializes GMAC Subsystem
- *
- *END**************************************************************************/
-static void Gmac_Ip_InitSubsystem(GMAC_Type *Base,
-                                  uint8 Instance,
-                                  const Gmac_CtrlConfigType *Config
-                                  )
-{
-        Gmac_Ip_InitMTL(Instance, Config);
-        Gmac_Ip_SetMacAddr(Instance, Config->Gmac_pau8CtrlPhysAddr);
-        Gmac_Ip_InitMAC(Base, Config);
-        Gmac_Ip_InitStateStructure(Instance, Config);
-}
-
 /*FUNCTION**********************************************************************
  *
  * Function Name : Gmac_Ip_InitTxBD
@@ -1008,7 +876,6 @@ static void Gmac_Ip_InitTxBD(uint8 Instance,
 {
     uint8 i;
     uint16 j;
-    uint32 Flags;
 
     /* Configure Transmit Ring */
     for (i = 0U; i < Config->TxRingCount; i++)
@@ -1043,14 +910,6 @@ static void Gmac_Ip_InitTxBD(uint8 Instance,
             Gmac_apxChBases[Instance][i]->DMA_TX_CONTROL = GMAC_DMA_CH0_TX_CONTROL_TxPBL(TxRingConfig[i].DmaBurstLength) | GMAC_DMA_CH0_TX_CONTROL_OSF(1);
         }
 
-        /* Clear the interrupt flags before enabling the interrupts. */
-        if ((Gmac_apxBases[Instance]->DMA_INTERRUPT_STATUS & ((uint32)((uint32)1U << (uint32)i))) != 0U)
-        {
-            Flags = Gmac_apxChBases[Instance][i]->DMA_STATUS;
-            /* Write 1 to clear the bit field. */
-            Gmac_apxChBases[Instance][i]->DMA_STATUS = Flags;
-        }
-
         /* Enable the interrupts */
         Gmac_apxChBases[Instance][i]->DMA_INTERRUPT_ENABLE = TxRingConfig[i].Interrupts |
                 (((TxRingConfig[i].Interrupts & GMAC_CH_NORMAL_INTERRUPTS) != 0U) ? (uint32)GMAC_DMA_CH0_INTERRUPT_ENABLE_NIE_MASK : 0U) |
@@ -1061,15 +920,6 @@ static void Gmac_Ip_InitTxBD(uint8 Instance,
             /* Start the Transmit DMA */
             Gmac_apxChBases[Instance][i]->DMA_TX_CONTROL |= GMAC_DMA_CH0_TX_CONTROL_ST_MASK;
         }
-#ifdef GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE
-    #if (GMAC_IP_DMA_PRIORITY_CONFIGURATION_ENABLE == STD_ON)
-        if (Config->DMATransmitArbitrationAlgorithm != GMAC_DMA_TX_FIXED_PRIORITY)
-        {
-            GMAC_SetTransmitChannelWeight(Instance, i, TxRingConfig[i].TransmitChannelWeight);
-        }
-    #endif
-#endif
-
     }
 }
 
@@ -1086,7 +936,6 @@ static void Gmac_Ip_InitRxBD(uint8 Instance,
 {
     uint8 i;
     uint16 j;
-    uint32 Flags;
 
     /* Configure Receive Ring */
     for (i = 0U; i < Config->RxRingCount; i++)
@@ -1097,28 +946,10 @@ static void Gmac_Ip_InitRxBD(uint8 Instance,
             {
                 RxRingConfig[i].RingDesc[j].Des0  = (uint32)(Gmac_Ip_PtrSizeType)(&RxRingConfig[i].Buffer[RxRingConfig[i].BufferLen * j]);
                 RxRingConfig[i].RingDesc[j].Des1  = 0U;
-
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-                if (TRUE == RxRingConfig[i].SplitHeaderSupport)
-                {
-                    /* Address to the Buffer2 or Payload of the recevied frame. */
-                    RxRingConfig[i].RingDesc[j].Des2  = RxRingConfig[i].RingDesc[j].Des0 + (uint32)RxRingConfig[i].HeaderSplitOffset;
-                }
-                else
-                {
-                    RxRingConfig[i].RingDesc[j].Des2  = 0U;
-                }
-#else
                 RxRingConfig[i].RingDesc[j].Des2  = 0U;
-#endif
                 RxRingConfig[i].RingDesc[j].Info0 = RxRingConfig[i].RingDesc[j].Des0;
                 RxRingConfig[i].RingDesc[j].Info1 = (uint32)((uint32)RxRingConfig[i].BufferLen & GMAC_INFO1_LENGTH_MASK);
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-                /* When receive split header functions is enable -> Buffer2 or Payload data address buffer should be marked as valid. */
-                RxRingConfig[i].RingDesc[j].Des3  = GMAC_RDES3_OWN_MASK | GMAC_RDES3_INTE_MASK | GMAC_RDES3_BUF1V_MASK | GMAC_RDES3_BUF2V_MASK;
-#else
                 RxRingConfig[i].RingDesc[j].Des3  = GMAC_RDES3_OWN_MASK | GMAC_RDES3_INTE_MASK | GMAC_RDES3_BUF1V_MASK;
-#endif
             }
             else
             {
@@ -1151,26 +982,10 @@ static void Gmac_Ip_InitRxBD(uint8 Instance,
             Gmac_apxChBases[Instance][i]->DMA_RX_CONTROL = GMAC_DMA_CH0_RX_CONTROL_RxPBL(RxRingConfig[i].DmaBurstLength) | GMAC_DMA_CH0_RX_CONTROL_RBSZ_13_y(((uint32)RxRingConfig[i].BufferLen) >> FEATURE_GMAC_LOG2_DATA_BUS_WIDTH_BYTES);
         }
 
-        /* Clear the interrupt flags before enabling the interrupts. */
-        if ((Gmac_apxBases[Instance]->DMA_INTERRUPT_STATUS & ((uint32)((uint32)1U << (uint32)i))) != 0U)
-        {
-            Flags = Gmac_apxChBases[Instance][i]->DMA_STATUS;
-            /* Write 1 to clear the bit field, write 0 has no effect. */
-            Gmac_apxChBases[Instance][i]->DMA_STATUS = Flags;
-        }
-
         /* Enable the interrupts */
         Gmac_apxChBases[Instance][i]->DMA_INTERRUPT_ENABLE |= RxRingConfig[i].Interrupts |
                 (((RxRingConfig[i].Interrupts & GMAC_CH_NORMAL_INTERRUPTS) != 0U) ? (uint32)GMAC_DMA_CH0_INTERRUPT_ENABLE_NIE_MASK : 0U) |
                 (((RxRingConfig[i].Interrupts & GMAC_CH_ABNORMAL_INTERRUPTS) != 0U) ? (uint32)GMAC_DMA_CH0_INTERRUPT_ENABLE_AIE_MASK : 0U);
-
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-        if (TRUE == RxRingConfig[i].SplitHeaderSupport)
-        {
-            /* Enable split header functionality for the current DMA channel. */
-            Gmac_apxChBases[Instance][i]->DMA_CONTROL |= GMAC_DMA_CH0_CONTROL_SPH_MASK;
-        }
-#endif
 
         if (Config->EnableCtrl)
         {
@@ -1179,121 +994,6 @@ static void Gmac_Ip_InitRxBD(uint8 Instance,
         }
     }
 }
-
-#if (STD_ON == GMAC_IP_HAS_RX_L3_L4_FILTERS)
-/*FUNCTION**********************************************************************
- *
- * Function Name : Gmac_Ip_InitRxL3L4Filter
- * Description   : Initializes Rx Layer 3 and Layer 4 Filters
- *
- *END**************************************************************************/
-static void Gmac_Ip_InitRxL3L4Filter(GMAC_Type *Base, const Gmac_Ip_ConfigType *Config, const Gmac_Ip_RxL3L4FilterConfigType RxL3L4FilterConfig[])
-{
-    uint8 FilterNum;
-    volatile uint32 *ControlFilterRegAddr;
-    volatile uint32 *Layer3RegAddr;
-    volatile uint32 *Layer4RegAddr;
-
-    if ((Base->MAC_CONFIGURATION & GMAC_MAC_CONFIGURATION_IPC_MASK) == 0U)
-    {
-        Base->MAC_CONFIGURATION |= GMAC_MAC_CONFIGURATION_IPC_MASK;
-    }
-
-    for (FilterNum = 0U; FilterNum < Config->RxL3L4FilterCount; FilterNum++)
-    {
-        ControlFilterRegAddr = (uint32*)((Gmac_Ip_PtrSizeType)(&Base->MAC_L3_L4_CONTROL0) + GMAC_MAC_L3_L4_CONTROL_REG_OFFSET(FilterNum));
-        Layer3RegAddr = (uint32*)((Gmac_Ip_PtrSizeType)(&Base->MAC_LAYER3_ADDR0_REG0) + GMAC_MAC_L3_L4_CONTROL_REG_OFFSET(FilterNum));
-        Layer4RegAddr = (uint32*)((Gmac_Ip_PtrSizeType)(&Base->MAC_LAYER4_ADDRESS0) + GMAC_MAC_L3_L4_CONTROL_REG_OFFSET(FilterNum));
-
-        *ControlFilterRegAddr |= RxL3L4FilterConfig[FilterNum].MacL3L4FilterEnable;
-
-        if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_DMCHEN0_MASK) != 0U)
-        {
-            *ControlFilterRegAddr |= GMAC_MAC_L3_L4_CONTROL0_DMCHN0(RxL3L4FilterConfig[FilterNum].DMAChannel);
-        }
-        if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_L4DPM0_MASK) != 0U)
-        {
-            *Layer4RegAddr |= GMAC_MAC_LAYER4_ADDRESS0_L4DP0(RxL3L4FilterConfig[FilterNum].Layer4DestinationPortNumber);
-        }
-        if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_L4SPM0_MASK) != 0U)
-        {
-            *Layer4RegAddr |= GMAC_MAC_LAYER4_ADDRESS0_L4SP0(RxL3L4FilterConfig[FilterNum].Layer4SourcePortNumber);
-        }
-
-        if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_L3PEN0_MASK) == 0U) /* IPv4 Packet */
-        {
-            *ControlFilterRegAddr |= GMAC_MAC_L3_L4_CONTROL0_L3HSBM0(RxL3L4FilterConfig[FilterNum].Layer3IPv4SourceBitsMatch) |
-                                     GMAC_MAC_L3_L4_CONTROL0_L3HDBM0(RxL3L4FilterConfig[FilterNum].Layer3IPv4DestBitsMatch);
-
-            if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_L3SAM0_MASK) != 0U)
-            {
-                *Layer3RegAddr |= ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4SourceAddress[0U] << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                  ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4SourceAddress[1U] << GMAC_BYTE_2_IN_ADDR_SHIFT) |
-                                  ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4SourceAddress[2U] << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                  ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4SourceAddress[3U] << GMAC_BYTE_0_IN_ADDR_SHIFT);
-            }
-            if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_L3DAM0_MASK) != 0U)
-            {
-                *(Layer3RegAddr + 1U) |= ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4DestinationAddress[0U] << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                         ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4DestinationAddress[1U] << GMAC_BYTE_2_IN_ADDR_SHIFT) |
-                                         ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4DestinationAddress[2U] << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                         ((uint32)RxL3L4FilterConfig[FilterNum].Layer3IPv4DestinationAddress[3U] << GMAC_BYTE_0_IN_ADDR_SHIFT);
-            }
-        }
-        else /* IPv6 Packet */
-        {
-            *ControlFilterRegAddr |= GMAC_MAC_L3_L4_CONTROL0_L3HSBM0(RxL3L4FilterConfig[FilterNum].Layer3IPv6BitsMatch & GMAC_IPV6_LOWER_BITS_MASK) |
-                                    GMAC_MAC_L3_L4_CONTROL0_L3HDBM0((RxL3L4FilterConfig[FilterNum].Layer3IPv6BitsMatch & GMAC_IPV6_HIGHER_BITS_MASK) >> 5U);
-
-            if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_L3SAM0_MASK) != 0U)
-            {
-                *Layer3RegAddr |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[0U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                  (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[0U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                  (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[1U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                  (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[1U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-
-                *(Layer3RegAddr + 1U) |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[2U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[2U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                         (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[3U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[3U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-
-                *(Layer3RegAddr + 2U) |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[4U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[4U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                         (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[5U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[5U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-
-                *(Layer3RegAddr + 3U) |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[6U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[6U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                         (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[7U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6SourceAddress[7U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-            }
-            else if ((*ControlFilterRegAddr & GMAC_MAC_L3_L4_CONTROL0_L3DAM0_MASK) != 0U)
-            {
-                *Layer3RegAddr |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[0U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                  (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[0U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                  (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[1U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                  (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[1U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-
-                *(Layer3RegAddr + 1U) |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[2U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[2U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                         (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[3U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[3U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-
-                *(Layer3RegAddr + 2U) |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[4U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[4U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                         (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[5U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[5U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-
-                *(Layer3RegAddr + 3U) |= (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[6U]) << GMAC_BYTE_3_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[6U]) << GMAC_BYTE_2_IN_ADDR_SHIFT)|
-                                         (GMAC_IPV6_GET_LOWER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[7U]) << GMAC_BYTE_1_IN_ADDR_SHIFT) |
-                                         (GMAC_IPV6_GET_HIGHER_BYTE(RxL3L4FilterConfig[FilterNum].Layer3IPv6DestinationAddress[7U]) << GMAC_BYTE_0_IN_ADDR_SHIFT);
-            }
-        }
-    }
-}
-#endif
-
 /*FUNCTION**********************************************************************
  *
  * Function Name : Gmac_Ip_GetTimestamp
@@ -1468,48 +1168,21 @@ static Gmac_Ip_PayloadType Gmac_Ip_GetPayloadType(uint32 PayloadTypeVal)
 {
     Gmac_Ip_PayloadType PayloadType;
 
-    switch (PayloadTypeVal)
+    if (1U == PayloadTypeVal)
     {
-        case 0x1U:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_UDP;
-            break;
-        }
-        case 0x2U:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_TCP;
-            break;
-        }
-        case 0x3U:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_ICMP;
-            break;
-        }
-        case 0x4U:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_IGMP_OR_DCB;
-            break;
-        }
-        case 0x5U:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_AV_UNTAGGED_CTRL_PKT;
-            break;
-        }
-        case 0x6U:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_AV_TAGGED_DATA_PKT;
-            break;
-        }
-        case 0x7U:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_AV_TAGGED_CTRL_PKT;
-            break;
-        }
-        default:
-        {
-            PayloadType = GMAC_IP_PAYLOAD_TYPE_UNKNOWN;
-            break;
-        }
+        PayloadType = GMAC_IP_PAYLOAD_TYPE_UDP;
+    }
+    else if (2U == PayloadTypeVal)
+    {
+        PayloadType = GMAC_IP_PAYLOAD_TYPE_TCP;
+    }
+    else if (3U == PayloadTypeVal)
+    {
+        PayloadType = GMAC_IP_PAYLOAD_TYPE_ICMP;
+    }
+    else
+    {
+        PayloadType = GMAC_IP_PAYLOAD_TYPE_UNKNOWN;
     }
 
     return PayloadType;
@@ -1535,7 +1208,6 @@ static void Gmac_Ip_TxTimeAwareShaperInit(uint8 Instance,
     Gmac_Ip_TxTimeAwareShaperData[Instance].PreemptionClassic = Config->Gmac_pCtrlTxTimeAwareShaper->PreemptionClassic;
     Gmac_Ip_TxTimeAwareShaperData[Instance].HoldAdvanceTime = Config->Gmac_pCtrlTxTimeAwareShaper->HoldAdvanceTime;
     Gmac_Ip_TxTimeAwareShaperData[Instance].GateControlDepth = Config->Gmac_pCtrlTxTimeAwareShaper->GateControlDepth;
-    Gmac_Ip_TxTimeAwareShaperData[Instance].GateControlList = Config->Gmac_pCtrlTxTimeAwareShaper->GateControlList;
     for (GateListNum = 0U; GateListNum < Gmac_Ip_TxTimeAwareShaperData[Instance].GateControlDepth; GateListNum++)
     {
         Gmac_Ip_TxTimeAwareShaperData[Instance].GateControlList[GateListNum].GateControl = Config->Gmac_pCtrlTxTimeAwareShaper->GateControlList[GateListNum].GateControl;
@@ -1548,22 +1220,6 @@ static void Gmac_Ip_TxTimeAwareShaperInit(uint8 Instance,
     Gmac_Ip_TxTimeAwareShaperData[Instance].CycleTimeNanoSecond = Config->Gmac_pCtrlTxTimeAwareShaper->CycleTimeNanoSecond;
     Gmac_Ip_TxTimeAwareShaperData[Instance].ExtendedTime = Config->Gmac_pCtrlTxTimeAwareShaper->ExtendedTime;
 }
-
-#if (STD_ON == GMAC_IP_LPI_ENABLE)
-/*FUNCTION**********************************************************************
- *
- * Function Name : Gmac_Ip_LPIConfigInit
- * Description   : Program Low Power Idle mode
- *
- *END**************************************************************************/
-static inline void Gmac_Ip_LPIConfigInit(GMAC_Type *Base, const Gmac_Ip_ConfigType *Config)
-{
-    Base->MAC_LPI_CONTROL_STATUS |= Config->LPIConfig;
-    Base->MAC_LPI_TIMERS_CONTROL |= GMAC_MAC_LPI_TIMERS_CONTROL_LST(Config->LPILSTimer) | GMAC_MAC_LPI_TIMERS_CONTROL_TWT(Config->LPITWTimer);
-    Base->MAC_LPI_ENTRY_TIMER |= GMAC_MAC_LPI_ENTRY_TIMER_LPIET(Config->LPIEntryTimer);
-}
-#endif
-
 #if (STD_ON == GMAC_SET_USER_ACCESS_ALLOWED_AVAILABLE)
 /*FUNCTION**********************************************************************
  *
@@ -1588,9 +1244,10 @@ void Gmac_Ip_ClrUserAccessAllowed(const GMAC_Type *Base)
 }
 #endif
 
-/*==================================================================================================
-*                                        GLOBAL FUNCTIONS
-==================================================================================================*/
+
+/*******************************************************************************
+ * Code
+ ******************************************************************************/
 
 /*FUNCTION**********************************************************************
  *
@@ -1657,18 +1314,11 @@ Gmac_Ip_StatusType Gmac_Ip_Init(uint8 Instance,
 #if (FEATURE_GMAC_ASP_ALL || FEATURE_GMAC_ASP_ECC)
         Gmac_Ip_InitSafetyEvents(Base, Config->Gmac_pCtrlConfig);
 #endif
-        Gmac_Ip_InitSubsystem(Base, Instance, Config);
-
-#if (STD_ON == GMAC_IP_HAS_RX_L3_L4_FILTERS)
-        if (Gmac_Ip_InstHasRxL3L4FilterManagement[Instance])
-        {
-            Gmac_Ip_InitRxL3L4Filter(Base, Config->Gmac_pCtrlConfig, Config->Gmac_paCtrlRxL3L4FilterConfig);
-        }
-#endif
+        Gmac_Ip_InitMTL(Instance, Config);
+        Gmac_Ip_SetMacAddr(Instance, Config->Gmac_pau8CtrlPhysAddr);
+        Gmac_Ip_InitMAC(Base, Config);
+        Gmac_Ip_InitStateStructure(Instance, Config);
         Gmac_Ip_TxTimeAwareShaperInit(Instance, Config);
-#if (STD_ON == GMAC_IP_LPI_ENABLE)
-        Gmac_Ip_LPIConfigInit(Base, Config->Gmac_pCtrlConfig);
-#endif
     }
 
     return Status;
@@ -1703,12 +1353,12 @@ Gmac_Ip_StatusType Gmac_Ip_EnableTimeGateScheduling(uint8 Instance, const boolea
             GMAC_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, GMAC_TIMEOUT_VALUE_US);
             do
             {
-                SwitchToSWList = (((Gmac_apxBases[Instance]->MTL_EST_CONTROL & GMAC_MTL_EST_CONTROL_SSWL_MASK) == 0U) ? ((boolean)TRUE) : ((boolean)FALSE));
+                SwitchToSWList = ((Gmac_apxBases[Instance]->MTL_EST_CONTROL & GMAC_MTL_EST_CONTROL_SSWL_MASK) == 0U);
                 TimeoutOccurred = GMAC_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks);
             }
             while (!SwitchToSWList && !TimeoutOccurred);
 
-            if ((TimeoutOccurred) || (GMAC_STATUS_SUCCESS != Status) || ((Gmac_apxBases[Instance]->MTL_EST_STATUS & GMAC_MTL_EST_STATUS_BTRE_MASK) != 0U))
+            if ((!TimeoutOccurred) || (GMAC_STATUS_SUCCESS != Status) || ((Gmac_apxBases[Instance]->MTL_EST_STATUS & GMAC_MTL_EST_STATUS_BTRE_MASK) != 0U))
             {
                 Status = GMAC_STATUS_ERROR;
             }
@@ -1956,8 +1606,7 @@ Gmac_Ip_StatusType Gmac_Ip_GetTxBuff(uint8 Instance,
 #if (GMAC_TX_SPORADIC_BIG_BUFFERS == STD_ON)
                 }
                 else
-                {
-                    /* Save the initial data buffer address to restore when the transfer is finished.*/
+                {   /* Save the initial data buffer address to restore when the transfer is finished.*/
                     Bd->Padding0 = Bd->Des0;
                     /* Save the initial data buffer length to restore when the transfer is finished.*/
                     Bd->Padding1 = Bd->Info1 & GMAC_INFO1_LENGTH_MASK;
@@ -1969,7 +1618,7 @@ Gmac_Ip_StatusType Gmac_Ip_GetTxBuff(uint8 Instance,
                     /* Set the new length of the buffer */
                     Bd->Info1 = (uint32)((uint32)(Buff->Length & GMAC_INFO1_LENGTH_MASK));
                     Gmac_apxState[Instance]->TxBigBufferInUse++;
-                }
+                 }
 #endif
                 Bd->Info1 |= GMAC_INFO1_LOCKED_MASK;
 
@@ -1988,7 +1637,7 @@ Gmac_Ip_StatusType Gmac_Ip_GetTxBuff(uint8 Instance,
             }
 #endif
         }
-        }
+    }
 
     return Status;
 }
@@ -2556,7 +2205,7 @@ void Gmac_Ip_SetRxExternalBuffer(uint8 Instance,
     GMAC_DEV_ASSERT(Gmac_apxState[Instance] != NULL_PTR);
     GMAC_DEV_ASSERT(Ring < Gmac_apxState[Instance]->RxRingCount);
     GMAC_DEV_ASSERT(Buff != NULL_PTR);
-    GMAC_DEV_ASSERT(Buff[0U].Data != NULL_PTR);
+    GMAC_DEV_ASSERT(Buff->Data != NULL_PTR);
 
     Base = Gmac_apxChBases[Instance][Ring];
     Bd = Gmac_apxState[Instance]->RxAllocDesc[Ring];
@@ -2564,30 +2213,13 @@ void Gmac_Ip_SetRxExternalBuffer(uint8 Instance,
     RingLength = Base->DMA_RXDESC_RING_LENGTH + 1UL;
 
     /* Set the data buffer address*/
-    Bd->Des0 = (Gmac_Ip_PtrSizeType)Buff[0U].Data;
+    Bd->Des0 = (Gmac_Ip_PtrSizeType)Buff->Data;
     Bd->Des1 = 0U;
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-    if (TRUE == Gmac_apxState[Instance]->SplitHeaderSupport[Ring])
-    {
-        /* Address to the Buffer2 or Payload of the recevied frame. */
-        Bd->Des2 = (Gmac_Ip_PtrSizeType)Buff[1U].Data;
-    }
-    else
-    {
-        Bd->Des2 = 0U;
-    }
-#else
     Bd->Des2 = 0U;
-#endif
-    Bd->Info0 = (Gmac_Ip_PtrSizeType)Buff[0U].Data;
+    Bd->Info0 = (Gmac_Ip_PtrSizeType)Buff->Data;
     /* Set the data buffer length*/
     Bd->Info1 = (uint32)((uint32)Gmac_aRxExternalBuffLength[Instance] & GMAC_INFO1_LENGTH_MASK);
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-    /* When receive split header functions is enable -> Buffer2 or Payload data address buffer should be marked as valid. */
-    Bd->Des3 = GMAC_RDES3_OWN_MASK | GMAC_RDES3_INTE_MASK | GMAC_RDES3_BUF1V_MASK | GMAC_RDES3_BUF2V_MASK;
-#else
-    Bd->Des3 = GMAC_RDES3_OWN_MASK | GMAC_RDES3_INTE_MASK | GMAC_RDES3_BUF1V_MASK;
-#endif
+    Bd->Des3  = GMAC_RDES3_OWN_MASK | GMAC_RDES3_INTE_MASK | GMAC_RDES3_BUF1V_MASK;
 
     /* Go to the next descriptor*/
     Gmac_apxState[Instance]->RxAllocDesc[Ring]++;
@@ -2659,36 +2291,18 @@ void Gmac_Ip_ProvideRxBuff(uint8 Instance,
         Bd->Des0 = (uint32)(Gmac_Ip_PtrSizeType)Bd->Padding0;
 #endif
         Bd->Des1 = 0U;
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-        if (TRUE == Gmac_apxState[Instance]->SplitHeaderSupport[Ring])
-        {
-            /* Address to the Buffer2 or Payload of the recevied frame. */
-            Bd->Des2 = Bd->Des0 + (uint32)Gmac_apxState[Instance]->HeaderSplitOffset[Ring];
-        }
-        else
-        {
-            Bd->Des2 = 0U;
-        }
-#else
         Bd->Des2 = 0U;
-#endif
-
 #if (GMAC_RX_SPORADIC_BIG_BUFFERS == STD_OFF)
         Bd->Info0 = (uint32)(Gmac_Ip_PtrSizeType)Buff->Data;
 #else
         Bd->Info0 = (uint32)(Gmac_Ip_PtrSizeType)Bd->Padding0;
         Bd->Padding0 = 0U;
-#endif
 
+#endif
         Bd->Info1 &= ~GMAC_INFO1_CONSUMED_MASK;
         /* Barrier which ensures that DES0, DES1, DES2 are updated before DES3. */
         MCAL_DATA_SYNC_BARRIER();
-#if (STD_ON == GMAC_IP_RX_HEADER_SPLIT)
-        /* When receive split header functions is enable -> Buffer2 or Payload data address buffer should be marked as valid. */
-        Bd->Des3 = GMAC_RDES3_OWN_MASK | GMAC_RDES3_INTE_MASK | GMAC_RDES3_BUF1V_MASK | GMAC_RDES3_BUF2V_MASK;
-#else
         Bd->Des3 = GMAC_RDES3_OWN_MASK | GMAC_RDES3_INTE_MASK | GMAC_RDES3_BUF1V_MASK;
-#endif
 
         Gmac_apxState[Instance]->RxAllocDesc[Ring]++;
         if ((Gmac_Ip_PtrSizeType)Gmac_apxState[Instance]->RxAllocDesc[Ring] >= (Gmac_Ip_PtrSizeType)&ListBd[RingLength])
@@ -3363,8 +2977,7 @@ void Gmac_Ip_SetAddrPerfectFilter(uint8 Instance,
 
     Base = Gmac_apxBases[Instance];
 
-    if (Enable)
-    {
+    if (Enable) {
         GMAC_DEV_ASSERT(MacAddr != NULL_PTR);
 
         /* Set destination/source Address filtering. */
@@ -3417,7 +3030,7 @@ void Gmac_Ip_SetAddrPerfectFilter(uint8 Instance,
  * Function Name : Gmac_Ip_SetArpOffloading
  * Description   : Enables/Disables recognition of ARP requests and automatic
  * transmission of ARP responses.
- *
+ * implements     Gmac_Ip_SetArpOffloading_Activity
  *END**************************************************************************/
 void Gmac_Ip_SetArpOffloading(uint8 Instance,
                                const uint8 *DstAddr,
@@ -3990,7 +3603,6 @@ Gmac_Ip_StatusType Gmac_Ip_SetSysTimeCorr(uint8 Instance,
 Gmac_Ip_StatusType Gmac_Ip_SetRateRatioCorr(uint8 Instance,
                                             float64 RateRatio)
 {
-
     GMAC_Type *Base;
     Gmac_Ip_StatusType Status = GMAC_STATUS_TIMEOUT;
     uint32 StartTime;
@@ -3999,37 +3611,29 @@ Gmac_Ip_StatusType Gmac_Ip_SetRateRatioCorr(uint8 Instance,
 
     Base = Gmac_apxBases[Instance];
 
-    if(RateRatio > (float64)0.0F)
+    Base->MAC_TIMESTAMP_ADDEND = GMAC_MAC_TIMESTAMP_ADDEND_TSAR((uint32)((float64)0x100000000ULL / RateRatio));
+
+    Base->MAC_TIMESTAMP_CONTROL |= GMAC_MAC_TIMESTAMP_CONTROL_TSADDREG_MASK;
+    /* Add fault label for testing */
+    #ifdef MCAL_ENABLE_FAULT_INJECTION
+        MCAL_FAULT_INJECTION_POINT(ETH_RATE_RATIO_TIMEOUT);
+    #endif
+
+    GMAC_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, GMAC_TIMEOUT_VALUE_US);
+
+    do
     {
-        Base->MAC_TIMESTAMP_ADDEND = GMAC_MAC_TIMESTAMP_ADDEND_TSAR((uint32)((float64)0x100000000ULL / RateRatio));
-
-        Base->MAC_TIMESTAMP_CONTROL |= GMAC_MAC_TIMESTAMP_CONTROL_TSADDREG_MASK;
-        /* Add fault label for testing */
-        #ifdef MCAL_ENABLE_FAULT_INJECTION
-            MCAL_FAULT_INJECTION_POINT(ETH_RATE_RATIO_TIMEOUT);
-        #endif
-
-        GMAC_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, GMAC_TIMEOUT_VALUE_US);
-
-        do
+        if ((Base->MAC_TIMESTAMP_CONTROL & GMAC_MAC_TIMESTAMP_CONTROL_TSADDREG_MASK) == 0U)
         {
-            if ((Base->MAC_TIMESTAMP_CONTROL & GMAC_MAC_TIMESTAMP_CONTROL_TSADDREG_MASK) == 0U)
-            {
-                Status = GMAC_STATUS_SUCCESS;
-                break;
-            }
+            Status = GMAC_STATUS_SUCCESS;
+            break;
         }
-        while (!GMAC_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
-
-        Base->MAC_TIMESTAMP_CONTROL |= GMAC_MAC_TIMESTAMP_CONTROL_TSCFUPDT_MASK;
-
     }
-    else
-    {
-        GMAC_DEV_ASSERT(FALSE);
-    }
+    while (!GMAC_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
+
+    Base->MAC_TIMESTAMP_CONTROL |= GMAC_MAC_TIMESTAMP_CONTROL_TSCFUPDT_MASK;
+
     return Status;
-
 }
 
 /*FUNCTION**********************************************************************
@@ -4125,132 +3729,6 @@ void Gmac_Ip_SetTxThreshold(uint8 Instance,
 
     GMAC_SetTxThreshold(Gmac_apxQueueBases[Instance][Ring], ThresholdValue);
 }
-
-#if (STD_ON == GMAC_IP_PPS_OUTPUT_SUPPORT)
-/*FUNCTION**********************************************************************
- *
- * Function Name : Gmac_Ip_GeneratePulsePerSecond
- * Description   : Perform generating pulse(s) on Pulse Per Second
- *
- *END**************************************************************************/
-void Gmac_Ip_SetPpsSignalMode(uint8 Instance, boolean SignalMode)
-{
-    GMAC_Type *Base;
-
-    GMAC_DEV_ASSERT(Instance <  FEATURE_GMAC_NUM_INSTANCES);
-    Base = Gmac_apxBases[Instance];
-    if (SignalMode)
-    {
-        /* Enable flexible PPS output mode. */
-        Base->MAC_PPS_CONTROL |= GMAC_MAC_PPS_CONTROL_PPSEN0(1U);
-    }
-    else
-    {
-        /* Disable flexible PPS output mode. */
-        Base->MAC_PPS_CONTROL &= ~GMAC_MAC_PPS_CONTROL_PPSEN0_MASK;
-    }
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : Gmac_Ip_PPSOutputSignalInit
- * Description   : Program Flexible Pulse-per-second output
- *
- *END**************************************************************************/
-void Gmac_Ip_PPSOutputSignalInit(uint8 Instance, uint32 ModuleClk, uint8 PPSOutputsNum, const Gmac_Ip_FlexiblePPSOutput PPSOutputConfig[])
-{
-    GMAC_Type *Base;
-    uint8 PPSOutputCount;
-    uint32 PPSInterval;
-    uint32 PPSWidth;
-    volatile uint32 *MacPPSIntervalRegAddr;
-    volatile uint32 *MacPPSWidthRegAddr;
-
-    GMAC_DEV_ASSERT(Instance <  FEATURE_GMAC_NUM_INSTANCES);
-    Base = Gmac_apxBases[Instance];
-
-    for (PPSOutputCount = 0U; PPSOutputCount < PPSOutputsNum; PPSOutputCount++)
-    {
-        PPSInterval = (uint32)(ModuleClk / PPSOutputConfig[PPSOutputCount].PPSFrequency - 1U);
-        PPSWidth = (uint32)(100U / PPSOutputConfig[PPSOutputCount].PPSDutyCycle - 1U);
-
-        Base->MAC_PPS_CONTROL |= ((GMAC_MAC_PPS_CONTROL_TRGTMODSEL0(PPSOutputConfig[PPSOutputCount].PPSModeSelect)) << (8U * PPSOutputCount));
-        MacPPSIntervalRegAddr = (uint32*)((Gmac_Ip_PtrSizeType)(&Base->MAC_PPS0_INTERVAL) + GMAC_MAC_PPS_CONTROL_REG_OFFSET(PPSOutputCount));
-        MacPPSWidthRegAddr = (uint32*)((Gmac_Ip_PtrSizeType)(&Base->MAC_PPS0_WIDTH) + GMAC_MAC_PPS_CONTROL_REG_OFFSET(PPSOutputCount));
-
-        *MacPPSIntervalRegAddr |= GMAC_MAC_PPS0_INTERVAL_PPSINT0(PPSInterval);
-        *MacPPSWidthRegAddr |= GMAC_MAC_PPS0_WIDTH_PPSWIDTH0(PPSWidth);
-    }
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : Gmac_Ip_GeneratePulsePerSecond
- * Description   : Perform generating pulse(s) on Pulse Per Second
- *
- *END**************************************************************************/
-Gmac_Ip_StatusType Gmac_Ip_GeneratePulsePerSecondOutput(uint8 Instance, uint8 PPSOutputIdx, Gmac_Ip_PPSTargetTime * PPSTargetTime, Gmac_Ip_PPSOutputCmd PPSOutputCmd)
-{
-    GMAC_Type *Base;
-    Gmac_Ip_StatusType Status = GMAC_STATUS_BUSY;
-    uint32 StartTime;
-    uint32 ElapsedTime;
-    uint32 TimeoutTicks;
-    volatile uint32 *MacPPSSecondRegAddr;
-    volatile uint32 *MacPPSNanosecondRegAddr;
-
-    GMAC_DEV_ASSERT(Instance <  FEATURE_GMAC_NUM_INSTANCES);
-    GMAC_DEV_ASSERT(PPSTargetTime != NULL_PTR);
-
-    Base = Gmac_apxBases[Instance];
-    MacPPSSecondRegAddr = (uint32*)((Gmac_Ip_PtrSizeType)(&Base->MAC_PPS0_TARGET_TIME_SECONDS) + GMAC_MAC_PPS_CONTROL_REG_OFFSET(PPSOutputIdx));
-    MacPPSNanosecondRegAddr = (uint32*)((Gmac_Ip_PtrSizeType)(&Base->MAC_PPS0_TARGET_TIME_NANOSECONDS) + GMAC_MAC_PPS_CONTROL_REG_OFFSET(PPSOutputIdx));
-
-    Base->MAC_PPS_CONTROL |= ((GMAC_MAC_PPS_CONTROL_PPSCTRL_PPSCMD(PPSOutputCmd)) << (8U * PPSOutputIdx));
-
-    GMAC_StartTimeOut(&StartTime, &ElapsedTime, &TimeoutTicks, GMAC_TIMEOUT_VALUE_US);
-    do
-    {
-        if (((*MacPPSNanosecondRegAddr) & GMAC_MAC_PPS0_TARGET_TIME_NANOSECONDS_TRGTBUSY0_MASK) == 0U)
-        {
-            Status = GMAC_STATUS_SUCCESS;
-            break;
-        }
-    }
-    while (!GMAC_TimeoutExpired(&StartTime, &ElapsedTime, TimeoutTicks));
-
-    if (GMAC_STATUS_SUCCESS == Status)
-    {
-        *MacPPSSecondRegAddr = GMAC_MAC_PPS0_TARGET_TIME_SECONDS_TSTRH0(PPSTargetTime->seconds);
-        *MacPPSNanosecondRegAddr |= GMAC_MAC_PPS0_TARGET_TIME_NANOSECONDS_TTSL0(PPSTargetTime->nanoseconds);
-    }
-
-    return Status;
-}
-#endif /* (STD_ON == GMAC_IP_PPS_OUTPUT_SUPPORT) */
-
-#if (STD_ON == GMAC_IP_LPI_ENABLE)
-void Gmac_Ip_EnteringTxLpi(uint8 Instance, uint32 ModuleClk)
-{
-    uint16 LPITic1usCntr;
-
-    GMAC_DEV_ASSERT(Instance <  FEATURE_GMAC_NUM_INSTANCES);
-
-    LPITic1usCntr = ModuleClk / 1000000U - 1U;
-    Gmac_apxBases[Instance]->MAC_1US_TIC_COUNTER |= GMAC_MAC_1US_TIC_COUNTER_TIC_1US_CNTR(LPITic1usCntr);
-
-    /* Enable LPI mode. */
-    Gmac_apxBases[Instance]->MAC_LPI_CONTROL_STATUS |= GMAC_MAC_LPI_CONTROL_STATUS_LPIEN(1U);
-}
-
-void Gmac_Ip_ExitingTxLpi(uint8 Instance)
-{
-    GMAC_DEV_ASSERT(Instance <  FEATURE_GMAC_NUM_INSTANCES);
-
-    /* Disable LPI mode. */
-    Gmac_apxBases[Instance]->MAC_LPI_CONTROL_STATUS &= ~GMAC_MAC_LPI_CONTROL_STATUS_LPIEN_MASK;
-}
-#endif /* (STD_ON == GMAC_IP_LPI_ENABLE) */
 
 #define ETH_43_GMAC_STOP_SEC_CODE
 #include "Eth_43_GMAC_MemMap.h"

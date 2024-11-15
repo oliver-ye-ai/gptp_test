@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -47,10 +47,6 @@ extern "C"{
 #include "Det.h"
 #endif
 
-#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
-#include "MemAcc_Sema4.h"
-#endif  /*(MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)*/
-
 #include "SchM_MemAcc.h"
 
 /*==================================================================================================
@@ -60,7 +56,7 @@ extern "C"{
 #define MEMACC_AR_RELEASE_MAJOR_VERSION_C       4
 #define MEMACC_AR_RELEASE_MINOR_VERSION_C       7
 #define MEMACC_AR_RELEASE_REVISION_VERSION_C    0
-#define MEMACC_SW_MAJOR_VERSION_C               5
+#define MEMACC_SW_MAJOR_VERSION_C               4
 #define MEMACC_SW_MINOR_VERSION_C               0
 #define MEMACC_SW_PATCH_VERSION_C               0
 
@@ -86,27 +82,6 @@ extern "C"{
     )
     #error "Software Version Numbers of MemAcc.c and MemAcc.h are different"
 #endif
-
-#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
-#if (MEMACC_VENDOR_ID_C != MEMACC_SEMA4_VENDOR_ID)
-    #error "MemAcc.c and MemAcc_Sema4.h have different vendor ids"
-#endif
-/* Check if current file and MemAcc_Sema4.h file are of the same Autosar version */
-#if ((MEMACC_AR_RELEASE_MAJOR_VERSION_C    != MEMACC_SEMA4_AR_RELEASE_MAJOR_VERSION) || \
-     (MEMACC_AR_RELEASE_MINOR_VERSION_C    != MEMACC_SEMA4_AR_RELEASE_MINOR_VERSION) || \
-     (MEMACC_AR_RELEASE_REVISION_VERSION_C != MEMACC_SEMA4_AR_RELEASE_REVISION_VERSION) \
-    )
-    #error "AutoSar Version Numbers of MemAcc.c and MemAcc_Sema4.h are different"
-#endif
-
-/* Check if current file and MemAcc_Sema4.h file are of the same software version */
-#if ((MEMACC_SW_MAJOR_VERSION_C != MEMACC_SEMA4_SW_MAJOR_VERSION) || \
-     (MEMACC_SW_MINOR_VERSION_C != MEMACC_SEMA4_SW_MINOR_VERSION) || \
-     (MEMACC_SW_PATCH_VERSION_C != MEMACC_SEMA4_SW_PATCH_VERSION) \
-    )
-    #error "Software Version Numbers of MemAcc.c and MemAcc_Sema4.h are different"
-#endif
-#endif /*(MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)*/
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if (MEMACC_DEV_ERROR_DETECT == STD_ON)
@@ -180,7 +155,56 @@ static uint16                              MemAcc_au16MemHwResources[MEMACC_MEM_
 /*==================================================================================================
 *                                         LOCAL CONSTANTS
 ==================================================================================================*/
+#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
+#define MEMACC_START_SEC_VAR_CLEARED_8
+#include "MemAcc_MemMap.h"
 
+ /**
+ * @brief XRDC assigned DomainID
+ */
+static uint8 MemAcc_u8DomainID;
+
+#define MEMACC_STOP_SEC_VAR_CLEARED_8
+#include "MemAcc_MemMap.h"
+
+#define MEMACC_START_SEC_CONST_8
+#include "MemAcc_MemMap.h"
+
+static const uint8 Memacc_u8Sema4Gate[MEMACC_MEM_HW_RESOURCE_COUNT] = MEMACC_SEMA4GATE;
+
+#define MEMACC_STOP_SEC_CONST_8
+#include "MemAcc_MemMap.h"
+
+#define MEMACC_START_SEC_VAR_CLEARED_UNSPECIFIED
+#include "MemAcc_MemMap.h"
+
+ /**
+ * @brief job status in multi core feature
+ */
+static MemAcc_MCoreHwJobStatusType MemAcc_MCoreHwJobStatus;    /* implicit zero initialization: MEMACC_MCORE_HW_JOB_IDLE */
+
+#define MEMACC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
+#include "MemAcc_MemMap.h"
+
+#endif /* MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON */
+
+
+#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
+#if (MEMACC_TIMEOUT_SUPERVISION_ENABLED == STD_ON)
+#define MEMACC_START_SEC_VAR_CLEARED_32
+#include "MemAcc_MemMap.h"
+
+/**
+ * @brief Timeout counter used in multi core access requests.
+ */
+static uint32 MemAcc_u32MCoreTimeout_ElapsedTicks;
+static uint32 MemAcc_u32MCoreTimeout_TimeoutTicks;
+static uint32 MemAcc_u32MCoreTimeout_CurrentTicks;
+
+#define MEMACC_STOP_SEC_VAR_CLEARED_32
+#include "MemAcc_MemMap.h"
+#endif /* MEMACC_TIMEOUT_SUPERVISION_ENABLED == STD_ON */
+#endif /* MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON */
 /*==================================================================================================
 *                                         LOCAL VARIABLES
 ==================================================================================================*/
@@ -188,6 +212,16 @@ static uint16                              MemAcc_au16MemHwResources[MEMACC_MEM_
 /*==================================================================================================
 *                                        GLOBAL CONSTANTS
 ==================================================================================================*/
+
+#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
+static MemAcc_MCoreReqReturnType    MemAcc_RequestMCore(uint8 Sema4Gate);
+static Std_ReturnType               MemAcc_ReleaseMCore(uint8 Sema4Gate);
+static Std_ReturnType               MemAcc_MCoreInitSema4sLock(void);
+static Std_ReturnType               MemAcc_MCoreInitSema4sUnLock(void);
+#if (MEMACC_TIMEOUT_SUPERVISION_ENABLED == STD_ON)
+static Std_ReturnType               MemAcc_MCoreCheckTimeout(void);
+#endif
+#endif
 
 /*==================================================================================================
 *                                        GLOBAL VARIABLES
@@ -223,10 +257,10 @@ static void MemAcc_ReportDevError(uint32 ApiId,
 static Std_ReturnType MemAcc_ValidateMulticoreAddressArea(uint32 AreaIndex)
 {
     Std_ReturnType RetVal;
-    uint8 UserId;
+    uint8 CoreId;
 
-    UserId = (uint8)MemAcc_GetUserID();
-    if ((uint32)1U != (((MemAcc_pConfigPtr->PartitionMapping[AreaIndex]) & ((uint32)1U << UserId)) >> UserId))
+    CoreId = (uint8)MemAcc_GetCoreID();
+    if ((uint32)1U != (((MemAcc_pConfigPtr->PartitionMapping[AreaIndex]) & ((uint32)1U << CoreId)) >> CoreId))
     {
         RetVal = (Std_ReturnType)E_NOT_OK;
     }
@@ -446,6 +480,63 @@ static void MemAcc_RebasePhysicalAddress(MemAcc_JobRuntimeInfoType    *JobInfo)
     JobInfo->PhysicAddress = JobInfo->SubArea->PhysicalStartAddress + Offset;
 }
 
+
+/*
+ * Description:    Get the memory access request size for the Mem driver layer.
+ *                 And get the number of retries of a failed job.
+*/
+static void MemAcc_GetMemAccessInfo(MemAcc_JobRuntimeInfoType *JobInfo)
+{
+    /* Initialize with default value */
+    MemAcc_LengthType PhysicalSegmentSize = 0U;
+    uint8 NumOfRetries = 0U;
+
+    /* Get the according physical segmentation */
+    switch (JobInfo->JobType)
+    {
+        case MEMACC_ERASE_JOB:
+            NumOfRetries = JobInfo->SubArea->NumOfEraseRetries;
+
+            PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.SectorSize;
+            if (0U != (JobInfo->SubArea->BurstSettings & MEMACC_BURST_ERASE))
+            {
+                /* Use burst erase */
+                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.EraseBurstSize;
+            }
+            break;
+        case MEMACC_WRITE_JOB:
+            NumOfRetries = JobInfo->SubArea->NumOfWriteRetries;
+
+            PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.WritePageSize;
+            if (0U != (JobInfo->SubArea->BurstSettings & MEMACC_BURST_WRITE))
+            {
+                /* Use burst write */
+                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.WriteBurstSize;
+            }
+            break;
+        case MEMACC_READ_JOB:
+        /* fall-through */
+        case MEMACC_COMPARE_JOB:
+        /* fall-through */
+        case MEMACC_BLANKCHECK_JOB:
+            PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.ReadPageSize;
+            if (0U != (JobInfo->SubArea->BurstSettings & MEMACC_BURST_READ))
+            {
+                /* Use burst read */
+                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.ReadBurstSize;
+            }
+            break;
+        default:
+            /* Do nothing */
+            break;
+    }
+
+    /* Save to runtime information */
+    JobInfo->LengthChunk = PhysicalSegmentSize;
+    JobInfo->JobRetries  = NumOfRetries;
+}
+
+
 /*
  * Description:    Update job runtime information according to the new sub area
  *                 Obtain the physical characteristics information from the according sector batch
@@ -455,21 +546,8 @@ static void MemAcc_JobRenewSubArea(MemAcc_JobRuntimeInfoType *JobInfo)
     /* Translate logical address to physical address according to the current sub area */
     MemAcc_RebasePhysicalAddress(JobInfo);
 
-    /* Get the number of retries */
-    switch (JobInfo->JobType)
-    {
-        case MEMACC_ERASE_JOB:
-            JobInfo->JobRetries = JobInfo->SubArea->NumOfEraseRetries;
-
-            break;
-        case MEMACC_WRITE_JOB:
-            JobInfo->JobRetries = JobInfo->SubArea->NumOfWriteRetries;
-
-            break;
-        default:
-            /* Do nothing */
-            break;
-    }
+    /* Get the memory access size and the number of retries */
+    MemAcc_GetMemAccessInfo(JobInfo);
 }
 
 #if (MEMACC_DEV_ERROR_DETECT == STD_ON)
@@ -671,7 +749,7 @@ static uint32 MemAcc_ValidateMemDriverBinary(MemAcc_AddressType HeaderAddress,
     /* Check HwId is valid */
     if (MemAcc_pConfigPtr->MemApiCount <= HwId)
     {
-        ErrorId = MEMACC_E_PARAM_HW_ID;
+        ErrorId = MEMACC_E_MEM_INIT_FAILED;
     }
 
     /*Check Header address */
@@ -820,6 +898,7 @@ static void MemAcc_InitJobRequest(MemAcc_JobRuntimeInfoType    *JobRequest,
     /* Initial value */
     JobRequest->AreaIndex        = MEMACC_ADDRESS_AREA_INDEX_INVALID_U32;
     JobRequest->SubArea          = NULL_PTR;
+    JobRequest->JobResult        = MEMACC_MEM_OK;
     JobRequest->LengthChunk      = 0U;
     JobRequest->JobRetries       = 0U;
     JobRequest->PhysicAddress    = 0U;
@@ -902,9 +981,6 @@ static uint32 MemAcc_ConfigureJobRequest(MemAcc_JobRuntimeInfoType *JobRequest)
         MCAL_DATA_SYNC_BARRIER();
         MCAL_INSTRUCTION_SYNC_BARRIER();
 #endif
-        /* Update the result of the last MemAcc job */
-        JobRequest->JobResult = JobCurrent->JobResult;
-        /* Update runtime information */
         MemAcc_pJobRuntimeInfo[JobRequest->AreaIndex] = *JobRequest;
 #if (MEMACC_MULTICORE_TYPE_3_ENABLED == STD_ON)
         MCAL_DATA_SYNC_BARRIER();
@@ -914,6 +990,203 @@ static uint32 MemAcc_ConfigureJobRequest(MemAcc_JobRuntimeInfoType *JobRequest)
 
     return ErrorId;
 }
+
+#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
+/**
+ * @brief
+ * @details
+ *
+ * @param[in]        void
+ *
+ * @return           MemAcc_MCoreReqReturnType
+ * @retval           MEMACC_MCORE_ERROR         Error during attempt of getting exclusive access(abnormal sema4 behaviour, incorrect exclusive area implementation, etc)
+ * @retval           MEMACC_MCORE_TIMEOUT       Timeout during attempt of getting the sema4(sema4 was not free, timeout value too small, other higher prio operation ongoing, etc). This return value is available only when timeout supervision is enabled
+ * @retval           MEMACC_MCORE_PENDING       Sema4 not taken, exclusive access not granted yet(sema4 was not free or other higher prio operation ongoing, but timeout did not expired yet)
+ * @retval           MEMACC_MCORE_GRANTED       Sema4 taken, exclusive access granted
+ *
+ *
+ * @pre              The module has to be initialized and not busy.
+ * @pre              The requested job has to be set.
+ * @pre              The requested priority for this job has to be set(Normal, High prio).
+ * @post             Status of current job is known: error,timeout -> abort job, pending -> delay job, granted -> start/continue job in hardware.
+ *
+ *
+ *
+ */
+static MemAcc_MCoreReqReturnType MemAcc_RequestMCore(uint8 Sema4Gate)
+{
+    uint8 GetGateStatus;
+    MemAcc_MCoreReqReturnType RetVal = MEMACC_MCORE_ERROR;
+
+    GetGateStatus = Rm_SemaphoreGetStatus(Sema4Gate);
+
+    if (RM_SEMAPHORE_FREE == GetGateStatus)
+    {
+        /* SEMA4 is free */
+        if (MEMACC_MCORE_HW_JOB_STARTED == MemAcc_MCoreHwJobStatus)
+        {
+            /* The job started in hardware, but the SEMA4 was cleared. This behaviour
+                occurs when a cancel request was made on the other core. */
+            MemAcc_MCoreHwJobStatus = MEMACC_MCORE_HW_JOB_CANCELLED;
+            RetVal = MEMACC_MCORE_CANCELLED;
+        }
+        else
+        {
+            /* Attempt to take the SEMA4. */
+            if ( (Std_ReturnType)E_OK == (Std_ReturnType)(Rm_SemaphoreLockGate(Sema4Gate)) )
+            {
+                /* MEMACC_MCORE_SEMA4_JOB taken. */
+                RetVal = MEMACC_MCORE_GRANTED;
+            }
+            else
+            {
+                /* Due to race condition this core couldn't take the SEMA4. */
+                RetVal = MEMACC_MCORE_PENDING;
+            }
+        }
+    }
+    else
+    {
+        /* The other core has the job SEMA4. */
+        RetVal = MEMACC_MCORE_PENDING;
+    }
+
+    return RetVal;
+}
+
+/* Cleanup function, called: at the end of the job(successful or erroneous) and in canceled jobs, to clean all sema4s acquired by this core.*/
+static Std_ReturnType MemAcc_ReleaseMCore(uint8 Sema4Gate)
+{
+    Std_ReturnType RetVal = (Std_ReturnType)E_OK;
+
+    /* If the internal job SEMA4 is held by this core, clear it. */
+    if (MemAcc_u8DomainID == Rm_SemaphoreGetStatus(Sema4Gate))
+    {
+        if ( (Std_ReturnType)E_OK != (Std_ReturnType)(Rm_SemaphoreUnlockGate(Sema4Gate)) )
+        {
+            RetVal = E_NOT_OK;
+        }
+    }
+    else
+    {
+        /* if other cores are still ongoing */
+        if (MEMACC_MCORE_HW_JOB_STARTED == MemAcc_MCoreHwJobStatus)
+        {
+            /* Release is not successful because other cores are still taking sema4 */
+            RetVal = E_NOT_OK;
+        }
+    }
+    return RetVal;
+}
+
+static Std_ReturnType MemAcc_MCoreInitSema4sLock(void)
+{
+    Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
+    MemAcc_MCoreReqReturnType MCoreReqReturnVal = MEMACC_MCORE_ERROR;
+    uint8 Sema4Gate;
+    uint8 index = 0U;
+
+#if (STD_ON == MEMACC_TIMEOUT_SUPERVISION_ENABLED)
+    /* Load the initialization timeout value. */
+    MemAcc_u32MCoreTimeout_TimeoutTicks = OsIf_MicrosToTicks(MEMACC_MCORE_INIT_TIMEOUT, (OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+    MemAcc_u32MCoreTimeout_CurrentTicks = OsIf_GetCounter((OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+    MemAcc_u32MCoreTimeout_ElapsedTicks = 0U;
+#endif
+
+    for (index = 0; index < MEMACC_MEM_HW_RESOURCE_COUNT; index++)
+    {
+        /* Get the Sema4 Gate for the hardware resource in this job */
+        Sema4Gate = Memacc_u8Sema4Gate[index];
+
+        if(0xFFU != Sema4Gate)
+        {
+            /* Request the hardware resource in multi core mode */
+            MCoreReqReturnVal = MemAcc_RequestMCore(Sema4Gate);
+#if (STD_ON == MEMACC_TIMEOUT_SUPERVISION_ENABLED)
+            /* Wait until SEMA4 is taken or timeout is reached. */
+            while (MEMACC_MCORE_GRANTED != MCoreReqReturnVal && (E_OK == MemAcc_MCoreCheckTimeout()))
+            {
+                MemAcc_u32MCoreTimeout_ElapsedTicks += OsIf_GetElapsed(&MemAcc_u32MCoreTimeout_CurrentTicks, (OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+                /* Request the hardware resource in multi core mode */
+                MCoreReqReturnVal = MemAcc_RequestMCore(Sema4Gate);
+            }
+#endif
+            if (MEMACC_MCORE_GRANTED != MCoreReqReturnVal)
+            {
+                RetVal = E_NOT_OK;
+                break;
+            }
+            else
+            {
+                RetVal = E_OK;
+            }
+        }
+    }
+
+    return RetVal;
+    }
+
+/* Release the taken SEMA4s after the hardware initialization */
+static Std_ReturnType MemAcc_MCoreInitSema4sUnLock(void)
+{
+    Std_ReturnType RetVal = (Std_ReturnType)E_OK;
+    uint8 Sema4Gate;
+    uint8 index = 0U;
+
+#if (STD_ON == MEMACC_TIMEOUT_SUPERVISION_ENABLED)
+    /* Load the initialization timeout value. */
+    MemAcc_u32MCoreTimeout_TimeoutTicks = OsIf_MicrosToTicks(MEMACC_MCORE_INIT_TIMEOUT, (OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+    MemAcc_u32MCoreTimeout_CurrentTicks = OsIf_GetCounter((OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+    MemAcc_u32MCoreTimeout_ElapsedTicks = 0U;
+#endif
+
+    for (index = 0; index < MEMACC_MEM_HW_RESOURCE_COUNT; index++)
+    {
+        /* Get the Sema4 Gate for the hardware resource in this job */
+        Sema4Gate = Memacc_u8Sema4Gate[index];
+
+        if(0xFFU != Sema4Gate)
+        {
+            /* Release the hardware resource in multi core mode */
+            RetVal = MemAcc_ReleaseMCore(Sema4Gate);
+
+#if (STD_ON == MEMACC_TIMEOUT_SUPERVISION_ENABLED)
+            /* Wait until SEMA4 is taken or timeout is reached. */
+            while ((Std_ReturnType)E_OK != RetVal && (E_OK == MemAcc_MCoreCheckTimeout()))
+            {
+                MemAcc_u32MCoreTimeout_ElapsedTicks += OsIf_GetElapsed(&MemAcc_u32MCoreTimeout_CurrentTicks, (OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+                RetVal = MemAcc_ReleaseMCore(Sema4Gate);
+            }
+#endif
+            if ((Std_ReturnType)E_OK != RetVal)
+            {
+                break;
+            }
+        }
+    }
+
+    return RetVal;
+}
+
+#if (MEMACC_TIMEOUT_SUPERVISION_ENABLED == STD_ON)
+static Std_ReturnType MemAcc_MCoreCheckTimeout(void)
+{
+    /* save the return status */
+    Std_ReturnType RetVal = (Std_ReturnType)E_NOT_OK;
+    /* if ElapsedTicks < Timeout ticks */
+    if (MemAcc_u32MCoreTimeout_ElapsedTicks < MemAcc_u32MCoreTimeout_TimeoutTicks)
+    {
+        RetVal = E_OK;
+    }
+    else
+    {
+        RetVal = E_NOT_OK;
+    }
+
+    return RetVal;
+}
+#endif /* #if (MEMACC_TIMEOUT_SUPERVISION_ENABLED == STD_ON) */
+#endif /* #if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)*/
 
 /*==================================================================================================
                                        MEM RELATED FUNCTIONS
@@ -1049,7 +1322,6 @@ static void MemAcc_ResolveConflictMemHwResource(const uint16 AreaExecuting,
             {
                 /* All attempts have failed, stop the job immediately */
                 JobExecuting->JobState = MEMACC_JOB_STATE_STOP;
-                JobExecuting->JobResult = MEMACC_MEM_FAILED;
             }
         }
         else
@@ -1069,10 +1341,17 @@ static boolean MemAcc_RequestMemHwResource(const MemAcc_JobRuntimeInfoType *JobI
     boolean HwResourceGranted   = (boolean)TRUE;
     const uint16 AreaRequesting = JobInfo->AreaIndex;                        /* The address area index number of current job    */
     const uint8  MemHwResource  = JobInfo->SubArea->MemHwResource;           /* The hardware resource is being used current job */
-
-    /* Start of exclusive area */
-    SchM_Enter_MemAcc_MEMACC_EXCLUSIVE_AREA_16();
     const uint16 AreaExecuting  = MemAcc_au16MemHwResources[MemHwResource];  /* The address area is using the hardware resource */
+#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
+    uint8 Sema4Gate             = Memacc_u8Sema4Gate[MemHwResource];
+    MemAcc_MCoreReqReturnType MCoreReqReturnVal = MEMACC_MCORE_ERROR;
+#if (STD_ON == MEMACC_TIMEOUT_SUPERVISION_ENABLED)
+    /* Load the initialization timeout value. */
+    MemAcc_u32MCoreTimeout_TimeoutTicks = OsIf_MicrosToTicks(MEMACC_MCORE_INIT_TIMEOUT, (OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+    MemAcc_u32MCoreTimeout_CurrentTicks = OsIf_GetCounter((OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+    MemAcc_u32MCoreTimeout_ElapsedTicks = 0U;
+#endif
+#endif
 
     if (AreaExecuting == AreaRequesting)
     {
@@ -1080,18 +1359,28 @@ static boolean MemAcc_RequestMemHwResource(const MemAcc_JobRuntimeInfoType *JobI
     }
     else if (MEMACC_MEM_HW_RESOURCE_IDLE_U16 == AreaExecuting)
     {
+        /* Take the hardware resource */
+        MemAcc_au16MemHwResources[MemHwResource] = AreaRequesting;
 #if (STD_ON == MEMACC_MULTICORE_TYPE_1_ENABLED)
-        /* Request the hardware resource in multi core mode */
-        if (E_OK != MemAcc_Sema4_RequestLock(MemHwResource))
+        if(0xFFU != Sema4Gate)
         {
-            HwResourceGranted = (boolean)FALSE;
+            /* Request the hardware resource in multi core mode */
+            MCoreReqReturnVal = MemAcc_RequestMCore(Sema4Gate);
+#if (STD_ON == MEMACC_TIMEOUT_SUPERVISION_ENABLED)
+            /* Wait until SEMA4 is taken or timeout is reached. */
+            while ((MEMACC_MCORE_GRANTED != MCoreReqReturnVal) && (E_OK == MemAcc_MCoreCheckTimeout()))
+            {
+                MemAcc_u32MCoreTimeout_ElapsedTicks += OsIf_GetElapsed(&MemAcc_u32MCoreTimeout_CurrentTicks, (OsIf_CounterType)MEMACC_TIMEOUT_TYPE);
+                /* Request the hardware resource in multi core mode */
+                MCoreReqReturnVal = MemAcc_RequestMCore(Sema4Gate);
+            }
+#endif
+            if (MEMACC_MCORE_GRANTED != MCoreReqReturnVal)
+            {
+                HwResourceGranted = (boolean)FALSE;
+            }
         }
-        else
 #endif /* MEMACC_MULTICORE_TYPE_1_ENABLED */
-        {
-            /* Take the hardware resource */
-            MemAcc_au16MemHwResources[MemHwResource] = AreaRequesting;
-        }
     }
     else
     {
@@ -1100,8 +1389,6 @@ static boolean MemAcc_RequestMemHwResource(const MemAcc_JobRuntimeInfoType *JobI
         /* Try to resolve the HW resource conflicting based on address area priority */
         MemAcc_ResolveConflictMemHwResource(AreaExecuting, AreaRequesting);
     }
-    /* End of exclusive area */
-    SchM_Exit_MemAcc_MEMACC_EXCLUSIVE_AREA_16();
 
     return HwResourceGranted;
 }
@@ -1111,13 +1398,18 @@ static boolean MemAcc_RequestMemHwResource(const MemAcc_JobRuntimeInfoType *JobI
 */
 static void MemAcc_ReleaseMemHwResource(const uint8 MemHwResource)
 {
+#if (STD_ON == MEMACC_MULTICORE_TYPE_1_ENABLED)
+    uint8 Sema4Gate             = Memacc_u8Sema4Gate[MemHwResource];
+#endif
+
     /* Mark the HW resource as idle */
     MemAcc_au16MemHwResources[MemHwResource] = MEMACC_MEM_HW_RESOURCE_IDLE_U16;
-
 #if (STD_ON == MEMACC_MULTICORE_TYPE_1_ENABLED)
-
-    /* Release the hardware resource in multi core mode */
-    MemAcc_Sema4_ReleaseLock(MemHwResource);
+    if(0xFFU != Sema4Gate)
+    {
+        /* Release the hardware resource in multi core mode */
+        MemAcc_ReleaseMCore(Sema4Gate);
+    }
 #endif
 }
 
@@ -1200,96 +1492,6 @@ static void MemAcc_JobEndNotify(const MemAcc_JobRuntimeInfoType *JobInfo)
     }
 }
 
-/*
- * Description:    Calculate length transfer the for the job operation
-*/
-static void MemAcc_CalculateLengthTransfer(MemAcc_JobRuntimeInfoType *JobInfo)
-{
-    MemAcc_LengthType PhysicalSegmentSize = 0U;
-    MemAcc_LengthType RemainingSubAreaLength = 0U;
-
-    /* Get the according physical segmentation */
-    switch (JobInfo->JobType)
-    {
-        case MEMACC_ERASE_JOB:
-
-            if (0U != (JobInfo->SubArea->BurstSettings & MEMACC_BURST_ERASE))
-            {
-                /* Use burst erase */
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.EraseBurstSize;
-            }
-            else
-            {
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.SectorSize;
-            }
-            break;
-        case MEMACC_WRITE_JOB:
-            if (0U != (JobInfo->SubArea->BurstSettings & MEMACC_BURST_WRITE))
-            {
-                /* Use burst write */
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.WriteBurstSize;
-            }
-            else
-            {
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.WritePageSize;
-            }
-            /*Calculate LengthChunk base on alignment of address with write page size/burst page size.*/
-            PhysicalSegmentSize = PhysicalSegmentSize - (JobInfo->PhysicAddress & (PhysicalSegmentSize - 1U));
-            break;
-        case MEMACC_READ_JOB:
-        /* fall-through */
-        case MEMACC_BLANKCHECK_JOB:
-            if (0U != (JobInfo->SubArea->BurstSettings & MEMACC_BURST_READ))
-            {
-                /* Use burst write */
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.ReadBurstSize;
-            }
-            else
-            {
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.ReadPageSize;
-            }
-            break;
-#if (MEMACC_COMPARE_API == STD_ON)
-        case MEMACC_COMPARE_JOB:
-            if (0U != (JobInfo->SubArea->BurstSettings & MEMACC_BURST_READ))
-            {
-                /* Use burst write */
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.ReadBurstSize;
-            }
-            else
-            {
-                PhysicalSegmentSize = JobInfo->SubArea->MemSectorBatchInfo.ReadPageSize;
-            }
-            /*PhysicalSegmentSize must be less than or equal the compare buffer size*/
-            if(PhysicalSegmentSize > (MemAcc_LengthType)MEMACC_COMPARE_BUFFER_SIZE)
-            {
-                PhysicalSegmentSize = MEMACC_COMPARE_BUFFER_SIZE;
-            }
-            break;
-#endif
-        default:
-            /* Do nothing */
-            break;
-    }
-    /*Calculate remain length in the sector*/
-    RemainingSubAreaLength = (JobInfo->SubArea->Length + JobInfo->SubArea->PhysicalStartAddress) - JobInfo->PhysicAddress;
-
-    if(PhysicalSegmentSize > RemainingSubAreaLength)
-    {
-        JobInfo->LengthChunk = RemainingSubAreaLength;
-    }
-    else
-    {
-        JobInfo->LengthChunk = PhysicalSegmentSize;
-    }
-
-    /* Compute request length */
-    if (JobInfo->LengthChunk > JobInfo->LengthRemain)
-    {
-        JobInfo->LengthChunk = JobInfo->LengthRemain;
-    }
-
-}
 
 /*
  * Description:    Call the according Mem service API to serve the job operation
@@ -1298,8 +1500,11 @@ static void MemAcc_JobRequestMemService(MemAcc_JobRuntimeInfoType *JobInfo)
 {
     Std_ReturnType RequestStatus = (Std_ReturnType)E_NOT_OK;
 
-    /*Calculate the length for transferring*/
-    MemAcc_CalculateLengthTransfer(JobInfo);
+    /* Compute request length */
+    if (JobInfo->LengthChunk > JobInfo->LengthRemain)
+    {
+        JobInfo->LengthChunk = JobInfo->LengthRemain;
+    }
 
     switch (JobInfo->JobType)
     {
@@ -1335,18 +1540,9 @@ static void MemAcc_JobRequestMemService(MemAcc_JobRuntimeInfoType *JobInfo)
     }
     else
     {
-        /* The request was not accepted, try again if JobRetries > 0*/
-        if(JobInfo->JobRetries == 0U)
-        {
-            JobInfo->JobState = MEMACC_JOB_STATE_STOP;
-
-            /* Update the Job Result only when the job is finished */
-            JobInfo->JobResult = MEMACC_MEM_FAILED;
-        }
-        else
-        {
-            JobInfo->JobState = MEMACC_JOB_STATE_RETRYING;
-        }
+        /* The request was not accepted, try again */
+        JobInfo->JobState = MEMACC_JOB_STATE_RETRYING;
+        JobInfo->JobResult = MEMACC_MEM_FAILED;
     }
 }
 
@@ -1404,7 +1600,7 @@ static void MemAcc_JobAnalyzeFailureMemResult(MemAcc_JobRuntimeInfoType *JobInfo
  * @brief    Continue to process next chunk of job after the previous chunk has completed successfully.
  *
  **/
-static void MemAcc_JobProcessingOnSuccess(MemAcc_JobRuntimeInfoType *JobInfo, MemAcc_JobResultType MemAccJobResult)
+static void MemAcc_JobProcessingOnSuccess(MemAcc_JobRuntimeInfoType *JobInfo)
 {
     boolean CrossSubArea;
     boolean HwResourceGranted = (boolean)TRUE;
@@ -1424,37 +1620,32 @@ static void MemAcc_JobProcessingOnSuccess(MemAcc_JobRuntimeInfoType *JobInfo, Me
     }
 #endif /* MEMACC_COMPARE_API == STD_ON */
 
-    /* If the MEMACC_COMPARE_JOB has already been completed, do nothing and exit the function */
-    if (JobInfo->JobState != MEMACC_JOB_STATE_STOP)
+    /* Update remaining length of the job */
+    MemAcc_UpdateProcessedLength(JobInfo);
+
+    if (0U == JobInfo->LengthRemain)
     {
-        /* Update remaining length of the job */
-        MemAcc_UpdateProcessedLength(JobInfo);
-
-        if (0U == JobInfo->LengthRemain)
+        /* The job has been completed successfully */
+        JobInfo->JobState = MEMACC_JOB_STATE_STOP;
+    }
+    else
+    {
+        /* Check for ending of logical sub area boundary */
+        CrossSubArea = MemAcc_JobCrossSubAreaBoundary(JobInfo);
+        if ((boolean)TRUE == CrossSubArea)
         {
-            /* The job has been completed successfully */
-            JobInfo->JobState = MEMACC_JOB_STATE_STOP;
-            JobInfo->JobResult = MemAccJobResult;
+            HwResourceGranted = MemAcc_RenewMemHwResource(JobInfo);
+            if ((boolean)FALSE == HwResourceGranted)
+            {
+                /* The new HW resource is not ready yet, temporarily stop the job */
+                JobInfo->JobState = MEMACC_JOB_STATE_RESUMING;
+            }
         }
-        else
-        {
-            /* Check for ending of logical sub area boundary */
-            CrossSubArea = MemAcc_JobCrossSubAreaBoundary(JobInfo);
-            if ((boolean)TRUE == CrossSubArea)
-            {
-                HwResourceGranted = MemAcc_RenewMemHwResource(JobInfo);
-                if ((boolean)FALSE == HwResourceGranted)
-                {
-                    /* The new HW resource is not ready yet, temporarily stop the job */
-                    JobInfo->JobState = MEMACC_JOB_STATE_RESUMING;
-                }
-            }
 
-            if ((boolean)TRUE == HwResourceGranted)
-            {
-                /* The HW is still available, keep processing the job */
-                MemAcc_JobRequestMemService(JobInfo);
-            }
+        if ((boolean)TRUE == HwResourceGranted)
+        {
+            /* The HW is still available, keep processing the job */
+            MemAcc_JobRequestMemService(JobInfo);
         }
     }
 }
@@ -1463,7 +1654,7 @@ static void MemAcc_JobProcessingOnSuccess(MemAcc_JobRuntimeInfoType *JobInfo, Me
 /*
  * Description:    Suspend the job after a success of a chunk
 */
-static void MemAcc_JobSuspendingOnSuccess(MemAcc_JobRuntimeInfoType *JobInfo, MemAcc_JobResultType MemAccJobResult)
+static void MemAcc_JobSuspendingOnSuccess(MemAcc_JobRuntimeInfoType *JobInfo)
 {
     /* Update remaining length of the job */
     MemAcc_UpdateProcessedLength(JobInfo);
@@ -1472,7 +1663,6 @@ static void MemAcc_JobSuspendingOnSuccess(MemAcc_JobRuntimeInfoType *JobInfo, Me
     {
         /* The job has been completed successfully */
         JobInfo->JobState = MEMACC_JOB_STATE_STOP;
-        JobInfo->JobResult = MemAccJobResult;
     }
     else
     {
@@ -1495,6 +1685,8 @@ static void MemAcc_JobSuspendingOnFailure(MemAcc_JobRuntimeInfoType *JobInfo,
                                           MemAcc_MemJobResultType MemJobResult
                                          )
 {
+    MemAcc_JobAnalyzeFailureMemResult(JobInfo, MemJobResult);
+
     /* The chunk has failed */
     if (JobInfo->JobRetries > 0U)
     {
@@ -1509,8 +1701,6 @@ static void MemAcc_JobSuspendingOnFailure(MemAcc_JobRuntimeInfoType *JobInfo,
     {
         /* All attempts have failed, stop the job */
         JobInfo->JobState = MEMACC_JOB_STATE_STOP;
-        /* The job has failed, update the result and do not try again */
-        MemAcc_JobAnalyzeFailureMemResult(JobInfo, MemJobResult);
     }
 }
 
@@ -1535,6 +1725,16 @@ static void MemAcc_JobStarting(MemAcc_JobRuntimeInfoType *JobInfo)
         /* Call the according Mem service API for the job */
         MemAcc_JobRequestMemService(JobInfo);
     }
+    else
+    {
+#if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
+        /* The HW resource is busy, cancel this job*/
+        /* Set job result is failed */
+        JobInfo->JobState = MEMACC_JOB_STATE_STOP;
+        JobInfo->JobStatus = MEMACC_JOB_IDLE;
+        JobInfo->JobResult = MEMACC_MEM_FAILED;
+#endif
+    }
 }
 
 
@@ -1551,27 +1751,25 @@ static void MemAcc_JobProcessing(MemAcc_JobRuntimeInfoType *JobInfo)
     {
         case MEM_JOB_OK:
             /* The previous chunk job has been processed successfully, launch new operation */
-            MemAcc_JobProcessingOnSuccess(JobInfo, MEMACC_MEM_OK);
+            MemAcc_JobProcessingOnSuccess(JobInfo);
             break;
         case MEM_ECC_CORRECTED:
             /* The previous chunk job has been processed successfully with ECC corrected, launch new operation */
-            MemAcc_JobProcessingOnSuccess(JobInfo, MEMACC_MEM_ECC_CORRECTED);
+            MemAcc_JobProcessingOnSuccess(JobInfo);
+            /* In the last memory operation, the job result shall be set to MEMACC_MEM_ECC_CORRECTED*/
+            if (0U == JobInfo->LengthRemain)
+            {
+                JobInfo->JobResult = MEMACC_MEM_ECC_CORRECTED;
+            }
             break;
         case MEM_JOB_PENDING:
             /* The operation is still pending */
             /* TODO: check for operation timeout */
             break;
         default:
-            if(JobInfo->JobRetries == 0U)
-            {
-                JobInfo->JobState = MEMACC_JOB_STATE_STOP;
-                /* The job has failed, update the result and do not try again */
-                MemAcc_JobAnalyzeFailureMemResult(JobInfo, MemJobResult);
-            }
-            else
-            {
-                JobInfo->JobState = MEMACC_JOB_STATE_RETRYING;
-            }
+            /* The job has failed, update the result and try again */
+            MemAcc_JobAnalyzeFailureMemResult(JobInfo, MemJobResult);
+            JobInfo->JobState = MEMACC_JOB_STATE_RETRYING;
             break;
     }
 }
@@ -1582,10 +1780,19 @@ static void MemAcc_JobProcessing(MemAcc_JobRuntimeInfoType *JobInfo)
  **/
 static void MemAcc_JobRetrying(MemAcc_JobRuntimeInfoType *JobInfo)
 {
-    JobInfo->JobRetries--;
+    /* Check for retries */
+    if (JobInfo->JobRetries > 0U)
+    {
+        JobInfo->JobRetries--;
 
-    /* Try again with the same previous request */
-    MemAcc_JobRequestMemService(JobInfo);
+        /* Try again with the same previous request */
+        MemAcc_JobRequestMemService(JobInfo);
+    }
+    else
+    {
+        /* All attempts have failed, stop the job and keep result of the most recent retry*/
+        JobInfo->JobState = MEMACC_JOB_STATE_STOP;
+    }
 }
 
 
@@ -1601,10 +1808,15 @@ static void MemAcc_JobSuspending(MemAcc_JobRuntimeInfoType *JobInfo)
     switch (MemJobResult)
     {
         case MEM_JOB_OK:
-            MemAcc_JobSuspendingOnSuccess(JobInfo, MEMACC_MEM_OK);
+            MemAcc_JobSuspendingOnSuccess(JobInfo);
             break;
         case MEM_ECC_CORRECTED:
-            MemAcc_JobSuspendingOnSuccess(JobInfo, MEMACC_MEM_ECC_CORRECTED);
+            MemAcc_JobSuspendingOnSuccess(JobInfo);
+            /* In the last memory operation, the job result shall be set to MEMACC_MEM_ECC_CORRECTED*/
+            if (0U == JobInfo->LengthRemain)
+            {
+                JobInfo->JobResult = MEMACC_MEM_ECC_CORRECTED;
+            }
             break;
         case MEM_JOB_PENDING:
             /* The operation is still pending */
@@ -1720,6 +1932,8 @@ static void MemAcc_ScheduleJob(MemAcc_JobRuntimeInfoType *JobInfo)
             JobLockNotifFunc = JobInfo->LockNotif;
             JobLockNotifFunc();
         }
+        /* Call the notification if configured */
+        MemAcc_JobEndNotify(JobInfo);
     }
 }
 
@@ -1763,14 +1977,15 @@ static void MemAcc_ScheduleMemDriver(const MemAcc_JobRuntimeInfoType *JobInfo)
  */
 void MemAcc_Init(const MemAcc_ConfigType * ConfigPtr)
 {
+    MemAcc_JobResultType JobResult = MEMACC_MEM_OK;
     Std_ReturnType Status;
     uint32 Index;
 
 #if ( MEMACC_DEV_ERROR_DETECT == STD_ON )
 #if (MEMACC_MULTICORE_TYPE_3_ENABLED == STD_ON)
-    uint8 UserId;
+    uint8 CoreId;
 
-    UserId = (uint8)MemAcc_GetUserID();
+    CoreId = (uint8)MemAcc_GetCoreID();
 #endif
 #ifdef MEMACC_PRECOMPILE_SUPPORT
     if (NULL_PTR != ConfigPtr)
@@ -1798,7 +2013,7 @@ void MemAcc_Init(const MemAcc_ConfigType * ConfigPtr)
         {
 #if ( MEMACC_DEV_ERROR_DETECT == STD_ON )
 #if (MEMACC_MULTICORE_TYPE_3_ENABLED == STD_ON)
-            if ((uint32)1U != MemAcc_pConfigPtr->PartitionList[UserId])
+            if ((uint32)1U != MemAcc_pConfigPtr->PartitionList[CoreId])
             {
                 MemAcc_ReportDevError( MEMACC_INIT_ID, MEMACC_E_PARAM_POINTER );
             }
@@ -1810,8 +2025,10 @@ void MemAcc_Init(const MemAcc_ConfigType * ConfigPtr)
                 MemAcc_pJobRuntimeInfo = MemAcc_pConfigPtr->JobRuntimeInfo;
 
 #if (MEMACC_MULTICORE_TYPE_1_ENABLED == STD_ON)
+                /* Set up the DomainID for further operations. */
+                MemAcc_u8DomainID = (uint8)Rm_XrdcGetDomainID(0U);
                 /* Take the job SEMA4s to ensure that no operation is in progress during the hardware initialization. */
-                if ((Std_ReturnType)E_OK == MemAcc_Sema4_InitLock())
+                if ((Std_ReturnType)E_OK == MemAcc_MCoreInitSema4sLock())
                 {
 #endif
                     /* Initialize all Mem drivers with INDIRECT invocation type */
@@ -1821,18 +2038,18 @@ void MemAcc_Init(const MemAcc_ConfigType * ConfigPtr)
                 }
 
                 /* Release the taken SEMA4s. */
-                MemAcc_Sema4_InitUnLock();
+                if ((Std_ReturnType)E_OK != (MemAcc_MCoreInitSema4sUnLock()))
 #endif
 
-                /* Update job result and status */
+            /* Update job result and status */
                 for (Index = 0U; Index < MEMACC_ADDRESS_AREA_COUNT_U32; Index++)
                 {
-                    MemAcc_pJobRuntimeInfo[Index].JobResult = MEMACC_MEM_OK;
+                    MemAcc_pJobRuntimeInfo[Index].JobResult = JobResult;
                     MemAcc_pJobRuntimeInfo[Index].JobStatus = MEMACC_JOB_IDLE;
                     MemAcc_pJobRuntimeInfo[Index].JobType   = MEMACC_NO_JOB;
                     MemAcc_pJobRuntimeInfo[Index].JobLocked = (boolean)FALSE;
                 }
-
+    
                 /* Clear hardware resource state */
                 for (Index = 0U; Index < MEMACC_MEM_HW_RESOURCE_COUNT; Index++)
                 {
@@ -1876,21 +2093,8 @@ void MemAcc_Init(const MemAcc_ConfigType * ConfigPtr)
  */
 void MemAcc_DeInit(void)
 {
-#if (STD_ON == MEMACC_MULTICORE_TYPE_1_ENABLED)
-    uint8 MemHwResourcesIndex;
-#endif
-
     /* Deinitialize all Mem drivers with INDIRECT invocation type */
     MemAcc_DeinitMemDrivers();
-
-#if (STD_ON == MEMACC_MULTICORE_TYPE_1_ENABLED)
-
-    for (MemHwResourcesIndex = 0; MemHwResourcesIndex < MEMACC_MEM_HW_RESOURCE_COUNT; MemHwResourcesIndex++)
-    {
-        /* Release the hardware resource in multi core mode */
-        MemAcc_Sema4_ReleaseLock(MemHwResourcesIndex);
-    }
-#endif
 
     /* Deinitialize the MemAcc module */
     MemAcc_pConfigPtr = NULL_PTR;
@@ -1961,14 +2165,12 @@ void MemAcc_GetVersionInfo(Std_VersionInfoType * VersionInfoPtr)
  */
 MemAcc_JobResultType MemAcc_GetJobResult(MemAcc_AddressAreaIdType AddressAreaId)
 {
-    MemAcc_JobResultType JobResult;
+    MemAcc_JobResultType JobResult = MEMACC_MEM_FAILED;
     uint16 AreaIndex;
 
 #if ( MEMACC_DEV_ERROR_DETECT == STD_ON )
     /* Checks if the MemAcc module has been initialized */
     uint32 ErrorId = MemAcc_ValidateModuleInitialized();
-
-    JobResult = MEMACC_MEM_FAILED;
 
     if (MEMACC_E_OK == ErrorId)
     {
@@ -2042,14 +2244,8 @@ MemAcc_JobStatusType MemAcc_GetJobStatus(MemAcc_AddressAreaIdType AddressAreaId)
 
 #if ( MEMACC_DEV_ERROR_DETECT == STD_ON )
         }
-        else
-        {
-            /* The provided AddressAreaId is inconsistent with the configuration */
-            ErrorId = MEMACC_E_PARAM_ADDRESS_AREA_ID;
-        }
     }
-
-    if (MEMACC_E_OK != ErrorId)
+    else
     {
         /* Report the error */
         MemAcc_ReportDevError(MEMACC_GETJOBSTATUS_ID, ErrorId);
@@ -2407,9 +2603,14 @@ Std_ReturnType MemAcc_DeactivateMem(MemAcc_HwIdType HwId,
 #if ( MEMACC_DEV_ERROR_DETECT == STD_ON )
     uint32 ErrorId = MemAcc_ValidateModuleInitialized();
 
-    if (MEMACC_E_OK == ErrorId)
+    if (MEMACC_E_OK != ErrorId)
     {
+        /* Report the error */
+        MemAcc_ReportDevError(MEMACC_DEACTIVATEMEM_ID, ErrorId);
+    }
+    else
 #endif
+    {
         /* Check HwId is valid */
         if (MemAcc_pConfigPtr->MemApiCount > HwId)
         {
@@ -2434,19 +2635,7 @@ Std_ReturnType MemAcc_DeactivateMem(MemAcc_HwIdType HwId,
                 }
             }
         }
-#if ( MEMACC_DEV_ERROR_DETECT == STD_ON )
-        else
-        {
-            ErrorId = MEMACC_E_PARAM_HW_ID;
-        }
     }
-
-    if (MEMACC_E_OK != ErrorId)
-    {
-        /* Report the error */
-        MemAcc_ReportDevError(MEMACC_DEACTIVATEMEM_ID, ErrorId);
-    }
-#endif
     /*Not used*/
     (void)HeaderAddress;
 
@@ -2641,14 +2830,10 @@ Std_ReturnType MemAcc_Write(MemAcc_AddressAreaIdType    AddressAreaId,
     Std_ReturnType RetVal = (Std_ReturnType)E_OK;
     uint32 ErrorId;
     MemAcc_JobRuntimeInfoType JobRequest;
-    MemAcc_DataType       *SourceDataAddress;
-
-    /* Get the address of Source Data */
-    SourceDataAddress = (MemAcc_DataType *)((MemAcc_UintPtrType)(&SourceDataPtr[0]));
 
     /* Prepare for input parameter checking before update runtime information */
     JobRequest.JobType = MEMACC_WRITE_JOB;
-    MemAcc_InitJobRequest(&JobRequest, AddressAreaId, TargetAddress, SourceDataAddress, Length);
+    MemAcc_InitJobRequest(&JobRequest, AddressAreaId, TargetAddress, (MemAcc_DataType *) ((MemAcc_UintPtrType)SourceDataPtr), Length);
 
     /* Set the parameters and validate if enabling Dev error detect*/
     ErrorId = MemAcc_SetParamJobDataTransfer(&JobRequest);
@@ -2782,14 +2967,10 @@ Std_ReturnType MemAcc_Compare(MemAcc_AddressAreaIdType    AddressAreaId,
     Std_ReturnType RetVal = (Std_ReturnType)E_OK;
     uint32 ErrorId;
     MemAcc_JobRuntimeInfoType JobRequest;
-    MemAcc_DataType *DataAddress;
-
-    /* Get the address of Data */
-    DataAddress = (MemAcc_DataType *)((MemAcc_UintPtrType)(&DataPtr[0]));
 
     /* Prepare for input parameter checking before update runtime information */
     JobRequest.JobType = MEMACC_COMPARE_JOB;
-    MemAcc_InitJobRequest(&JobRequest, AddressAreaId, SourceAddress, DataAddress, Length);
+    MemAcc_InitJobRequest(&JobRequest, AddressAreaId, SourceAddress, (MemAcc_DataType *)((MemAcc_UintPtrType)DataPtr), Length);
 
     /* Set the parameters and validate if enabling Dev error detect*/
     ErrorId = MemAcc_SetParamJobDataTransfer(&JobRequest);
@@ -3245,11 +3426,6 @@ void MemAcc_MainFunction(void)
                 {
                     /* Process the requested job for this address area */
                     MemAcc_ScheduleJob(JobInfo);
-                    if(MEMACC_JOB_IDLE == MemAcc_pJobRuntimeInfo[AreaIndex].JobStatus)
-                    {
-                        /* Call the notification if configured */
-                        MemAcc_JobEndNotify(JobInfo);
-                    }
                     /*If the job is in MEMACC_JOB_STATE_RETRYING that mean there is no Mem's job pending -> don't not need to call Mem's MainFunction.*/
                     if (MEMACC_JOB_STATE_RETRYING != JobInfo->JobState)
                     {

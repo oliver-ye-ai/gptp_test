@@ -7,8 +7,8 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
@@ -43,7 +43,7 @@ extern "C"
 #define OS_AR_RELEASE_MINOR_VERSION     7   /* Minor version number of AUTOSAR specification       */
 #define OS_AR_RELEASE_REVISION_VERSION  0   /* Patch level version number of AUTOSAR specification */
 
-#define OS_SW_MAJOR_VERSION             5   /* Major version number of the implementation   */
+#define OS_SW_MAJOR_VERSION             4   /* Major version number of the implementation   */
 #define OS_SW_MINOR_VERSION             0   /* Minor version number of the implementation   */
 #define OS_SW_PATCH_VERSION             0    /* Patch level version number of the implementation */
 

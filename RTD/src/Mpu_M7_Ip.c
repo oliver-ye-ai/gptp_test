@@ -7,24 +7,22 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
 
 /**
-*   @file       Mpu_M7_Ip.c
-*
-*   @defgroup   Mpu_M7_Ip Mpu M7 IPV Driver
+*   @file Mpu_M7_Ip.c
 *   @ingroup    Platform
 *
 *   @addtogroup Mpu_M7_Ip
@@ -54,7 +52,7 @@ extern "C"
 #define CDD_PLATFORM_MPU_M7_IP_AR_RELEASE_MAJOR_VERSION_C       4
 #define CDD_PLATFORM_MPU_M7_IP_AR_RELEASE_MINOR_VERSION_C       7
 #define CDD_PLATFORM_MPU_M7_IP_AR_RELEASE_REVISION_VERSION_C    0
-#define CDD_PLATFORM_MPU_M7_IP_SW_MAJOR_VERSION_C               5
+#define CDD_PLATFORM_MPU_M7_IP_SW_MAJOR_VERSION_C               4
 #define CDD_PLATFORM_MPU_M7_IP_SW_MINOR_VERSION_C               0
 #define CDD_PLATFORM_MPU_M7_IP_SW_PATCH_VERSION_C               0
 
@@ -120,6 +118,7 @@ static const uint8 u8Mpu_M7_MemoryTypeValues[MPU_M7_MEM_NO] =
 /*==================================================================================================
 *                                   LOCAL FUNCTION PROTOTYPES
 ==================================================================================================*/
+
 void Mpu_M7_Ip_Init_Privileged(const Mpu_M7_Ip_ConfigType * pConfig);
 
 void Mpu_M7_Ip_SetRegionConfig_Privileged(uint8 u8RegionNum,
@@ -146,6 +145,9 @@ static void Mpu_M7_Ip_SetCachePolicies(uint32 * pRegionAttr,
 static void Mpu_M7_Ip_ComputeAccessRights(uint32 * pRegionAttr, Mpu_M7_Ip_AccessRightsType eAccessRights);
 
 static void Mpu_M7_Ip_GetErrorRegisters(uint32 * pMmfsr, uint32 * pAddress);
+
+
+
 
 /*==================================================================================================
 *                                       LOCAL FUNCTIONS
@@ -262,6 +264,7 @@ static void Mpu_M7_Ip_GetErrorRegisters(uint32 * pMmfsr, uint32 * pAddress)
     }
 }
 
+
 /**
  * @brief         Initializes the Memory Protection Unit general parameters and
  *                region configurations
@@ -276,6 +279,7 @@ static void Mpu_M7_Ip_GetErrorRegisters(uint32 * pMmfsr, uint32 * pAddress)
  * @pre
  *
  * */
+
 void Mpu_M7_Ip_Init_Privileged(const Mpu_M7_Ip_ConfigType * pConfig)
 {
     uint8 u8Region;
@@ -336,6 +340,7 @@ void Mpu_M7_Ip_Init_Privileged(const Mpu_M7_Ip_ConfigType * pConfig)
     MCAL_INSTRUCTION_SYNC_BARRIER();
 }
 
+
 /**
  * @brief         Configures the region selected by u8RegionNum with the data from pUserConfigPtr
  *
@@ -350,6 +355,7 @@ void Mpu_M7_Ip_Init_Privileged(const Mpu_M7_Ip_ConfigType * pConfig)
  * @pre
  *
  * */
+
 void Mpu_M7_Ip_SetRegionConfig_Privileged(uint8 u8RegionNum,
                                           const Mpu_M7_Ip_RegionConfigType * const pUserConfigPtr
                                          )
@@ -434,6 +440,7 @@ void Mpu_M7_Ip_SetRegionConfig_Privileged(uint8 u8RegionNum,
  *
  * @pre
  * */
+
 void Mpu_M7_Ip_Deinit_Privileged(void)
 {
     uint8 region;
@@ -456,7 +463,7 @@ void Mpu_M7_Ip_Deinit_Privileged(void)
 }
 
 /**
- * @brief         Enables or disabled a specific MPU region
+ * @brief         Enables or disabled a specific region
  *
  * @details       This function is Reentrant
  *
@@ -469,6 +476,7 @@ void Mpu_M7_Ip_Deinit_Privileged(void)
  * @pre
  *
  * */
+
 void Mpu_M7_Ip_EnableRegion_Privileged(uint8 u8RegionNum, boolean bEnable)
 {
     S32_MPU_Type * base = S32_MPU;
@@ -516,6 +524,7 @@ void Mpu_M7_Ip_EnableRegion_Privileged(uint8 u8RegionNum, boolean bEnable)
  * @pre
  *
  * */
+
 void Mpu_M7_Ip_SetAccessRight_Privileged(uint8 u8RegionNum, Mpu_M7_Ip_AccessRightsType eRights)
 {
     uint32 regionAttributes;
@@ -604,7 +613,7 @@ void Mpu_M7_Ip_SetRegionConfig(uint8 u8RegionNum, const Mpu_M7_Ip_RegionConfigTy
  *
  * @pre
  * */
- /* @implements   Mpu_M7_Ip_Deinit_Activity */
+ /* @implements   Mpu_M7_Ip_Deinit_Activity */ 
 void Mpu_M7_Ip_Deinit(void)
 {
 #ifdef MPU_M7_IP_ENABLE_USER_MODE_SUPPORT
@@ -628,7 +637,7 @@ void Mpu_M7_Ip_Deinit(void)
  * @pre
  *
  * */
- /* @implements   Mpu_M7_Ip_EnableRegion_Activity */
+ /* @implements   Mpu_M7_Ip_EnableRegion_Activity */ 
 void Mpu_M7_Ip_EnableRegion(uint8 u8RegionNum, boolean bEnable)
 {
 #ifdef MPU_M7_IP_ENABLE_USER_MODE_SUPPORT
@@ -681,36 +690,36 @@ void Mpu_M7_Ip_SetAccessRight(uint8 u8RegionNum, Mpu_M7_Ip_AccessRightsType eRig
  /* @implements    Mpu_M7_Ip_GetErrorDetails_Activity */
 boolean Mpu_M7_Ip_GetErrorDetails(Mpu_M7_Ip_ErrorDetailsType * pErrorDetails)
 {
-    boolean bResult = FALSE;
-    uint32  u32Mmfsr;
-    uint32  u32MmfsrCopy;
-    uint32  u32ErrorAddress;
-    uint8   u8ErrorCount = 0U;
+    boolean result = FALSE;
+    uint32  mmfsr;
+    uint32  mmfsrCopy;
+    uint32  errorAddress;
+    uint8   errorCount = 0U;
 
 #if (MPU_M7_IP_DEV_ERROR_DETECT == STD_ON)
     DevAssert(pErrorDetails != NULL_PTR);
 #endif
 
 #ifdef MPU_M7_IP_ENABLE_USER_MODE_SUPPORT
-    OsIf_Trusted_Call2params(Mpu_M7_Ip_GetErrorRegisters, &u32Mmfsr, &u32ErrorAddress);
+    OsIf_Trusted_Call2params(Mpu_M7_Ip_GetErrorRegisters, &mmfsr, &errorAddress);
 #else
-    Mpu_M7_Ip_GetErrorRegisters(&u32Mmfsr, &u32ErrorAddress);
+    Mpu_M7_Ip_GetErrorRegisters(&mmfsr, &errorAddress);
 #endif
-    u32MmfsrCopy = u32Mmfsr;
-    while (u32Mmfsr != 0U)
+    mmfsrCopy = mmfsr;
+    while (mmfsr != 0U)
     {
-        u8ErrorCount += (uint8)(u32Mmfsr & 1UL);
-        u32Mmfsr >>= 1UL;
+        errorCount += (uint8)(mmfsr & 1UL);
+        mmfsr >>= 1UL;
     }
 
-    if (u8ErrorCount > 1U)
+    if (errorCount > 1U)
     {
         pErrorDetails->eType = MPU_M7_MEMMAN_ERROR_MULTIPLE;
     }
     else
     {
-        u32Mmfsr = u32MmfsrCopy;
-        switch(u32Mmfsr)
+        mmfsr = mmfsrCopy;
+        switch(mmfsr)
         {
             case (1U << S32_SCB_CFSR_MMFSR_IACCVIOL_SHIFT):
                 pErrorDetails->eType = MPU_M7_MEMMAN_ERROR_INSTRUCTION_ACCESS;
@@ -733,15 +742,18 @@ boolean Mpu_M7_Ip_GetErrorDetails(Mpu_M7_Ip_ErrorDetailsType * pErrorDetails)
         }
     }
 
-    pErrorDetails->u32Address = u32ErrorAddress;
+    pErrorDetails->u32Address = errorAddress;
 
-    if (u8ErrorCount > 0U)
+    if (errorCount > 0U)
     {
-        bResult = TRUE;
+        result = TRUE;
     }
 
-    return bResult;
+    return result;
 }
+
+
+
 
 #define PLATFORM_STOP_SEC_CODE
 #include "Platform_MemMap.h"

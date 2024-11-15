@@ -8,8 +8,8 @@
 *   AutosarVersion     : 4.7.0
 *   AutosarRevision    : ASR_REL_4_7_REV_0000
 *   AutosarConfVariant :
-*   SW Version         : 5.0.0
-*   BuildVersion       : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version         : 4.0.0
+*   BuildVersion       : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   (c) Copyright 2020 - 2024 NXP
 *   All Rights Reserved.
@@ -51,7 +51,7 @@ extern "C"{
 #define ETHTRCV_AR_RELEASE_MAJOR_VERSION_C       4
 #define ETHTRCV_AR_RELEASE_MINOR_VERSION_C       7
 #define ETHTRCV_AR_RELEASE_REVISION_VERSION_C    0
-#define ETHTRCV_SW_MAJOR_VERSION_C               5
+#define ETHTRCV_SW_MAJOR_VERSION_C               4
 #define ETHTRCV_SW_MINOR_VERSION_C               0
 #define ETHTRCV_SW_PATCH_VERSION_C               0
 

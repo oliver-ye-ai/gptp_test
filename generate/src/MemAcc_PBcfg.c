@@ -8,12 +8,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -45,6 +45,7 @@ extern "C"{
 #include "Mem_43_INFLS.h"
 #include "SchM_Mem_43_INFLS.h"
 
+
 /*==================================================================================================
 *                                 SOURCE FILE VERSION INFORMATION
 ==================================================================================================*/
@@ -52,7 +53,7 @@ extern "C"{
 #define MEMACC_PBCFG_AR_RELEASE_MAJOR_VERSION_C       4
 #define MEMACC_PBCFG_AR_RELEASE_MINOR_VERSION_C       7
 #define MEMACC_PBCFG_AR_RELEASE_REVISION_VERSION_C    0
-#define MEMACC_PBCFG_SW_MAJOR_VERSION_C               5
+#define MEMACC_PBCFG_SW_MAJOR_VERSION_C               4
 #define MEMACC_PBCFG_SW_MINOR_VERSION_C               0
 #define MEMACC_PBCFG_SW_PATCH_VERSION_C               0
 
@@ -106,13 +107,14 @@ extern "C"{
 #include "MemAcc_MemMap.h"
 
 extern void Fee_JobEndNotification(MemAcc_AddressAreaIdType AddressAreaId, MemAcc_JobResultType JobResult); 
+
 #define MEMACC_STOP_SEC_CODE
 #include "MemAcc_MemMap.h"
 
 #define MEMACC_START_SEC_VAR_CLEARED_UNSPECIFIED
 #include "MemAcc_MemMap.h"
 
-/* Information of the current processing job of each address area */
+/* Information of the current processing job of each adddress area */
 static MemAcc_JobRuntimeInfoType MemAcc_JobRuntimeInfo[2];           
 
 #define MEMACC_STOP_SEC_VAR_CLEARED_UNSPECIFIED
@@ -149,18 +151,18 @@ static MemAcc_MemApiType MemAcc_MemApis[1] =
         0xFFFFFFFFU,                                                 /* Flags */
         0xFFFFFFFFU,                                                 /* Header */
         0xFFFFFFFFU,                                                 /* Delimiter */
-        (MemAcc_MemInitFuncType)&Mem_43_INFLS_Init,                  /* InitFunc */
-        (MemAcc_MemDeInitFuncType)&Mem_43_INFLS_DeInit,              /* DeInitFunc */
-        (MemAcc_MemMainFuncType)&Mem_43_INFLS_MainFunction,          /* MainFunc */
-        (MemAcc_MemGetJobResultFuncType)&Mem_43_INFLS_GetJobResult,  /* GetJobResultFunc */
-        (MemAcc_MemReadFuncType)&Mem_43_INFLS_Read,                  /* ReadFunc */
-        (MemAcc_MemWriteFuncType)&Mem_43_INFLS_Write,                /* WriteFunc */
-        (MemAcc_MemEraseFuncType)&Mem_43_INFLS_Erase,                /* EraseFunc */
-        (MemAcc_MemBlankCheckFuncType)&Mem_43_INFLS_BlankCheck,      /* BlankCheckFunc */
+        (MemAcc_MemInitFuncType)Mem_43_INFLS_Init,                   /* InitFunc */
+        (MemAcc_MemDeInitFuncType)Mem_43_INFLS_DeInit,               /* DeInitFunc */
+        (MemAcc_MemMainFuncType)Mem_43_INFLS_MainFunction,           /* MainFunc */
+        (MemAcc_MemGetJobResultFuncType)Mem_43_INFLS_GetJobResult,   /* GetJobResultFunc */
+        (MemAcc_MemReadFuncType)Mem_43_INFLS_Read,                   /* ReadFunc */
+        (MemAcc_MemWriteFuncType)Mem_43_INFLS_Write,                 /* WriteFunc */
+        (MemAcc_MemEraseFuncType)Mem_43_INFLS_Erase,                 /* EraseFunc */
+        (MemAcc_MemBlankCheckFuncType)Mem_43_INFLS_BlankCheck,       /* BlankCheckFunc */
         NULL_PTR,                                                    /* PropagateErrorFunc */
         NULL_PTR,                                                    /* SuspendFunc */
         NULL_PTR,                                                    /* ResumeFunc */
-        (MemAcc_MemHwSpecificServiceFuncType)&Mem_43_INFLS_HwSpecificService /* HwSpecificServiceFunc */
+        (MemAcc_MemHwSpecificServiceFuncType)Mem_43_INFLS_HwSpecificService /* HwSpecificServiceFunc */
     }
 };
 
@@ -176,7 +178,7 @@ static const MemAcc_MemInvocationType MemAcc_MemInvocation[1U] =
     MEMACC_MEM_INDIRECT_STATIC
 };
 /* Configuration of sub address areas */
-static const MemAcc_SubAddressAreaType MemAcc_MemAccAddressAreaConfiguration_0_SubAreas[2U] = 
+static const MemAcc_SubAddressAreaType MemAcc_MemAccAddressAreaConfiguration_0_SubAreas[1U] = 
 {
     {                                                                
         /* MemAccSubAddressAreaConfiguration_0 */                    
@@ -187,7 +189,7 @@ static const MemAcc_SubAddressAreaType MemAcc_MemAccAddressAreaConfiguration_0_S
         0U,                                                          /* NumOfWriteRetries */
         0U,                                                          /* BurstSettings */
         MEMACC_MEM_INDIRECT_STATIC,                                  /* MemInvocation */
-        &(MemAcc_MemApis[MEMACC_MEM_43_INFLS_DRIVER_ID]),            /* MemApi */
+        &(MemAcc_MemApis[0]),                                        /* MemApi */
         0U,                                                          /* MemInstanceId */
         {                                                            
             8192U,                                                   /* SectorEraseSize           */
@@ -197,30 +199,8 @@ static const MemAcc_SubAddressAreaType MemAcc_MemAccAddressAreaConfiguration_0_S
             1U,                                                      /* ReadPageBurstSize         */
             8U                                                       /* WritePageBurstSize        */
         },                                                           
-        MEMACC_MEM_43_INFLS_MEMINSTANCE_0_ID,                        /* MemoryHardwareInstanceId  */
-        MEMACC_MEM_43_INFLS_DRIVER_ID                                /* MemoryDriverId            */
-    },
-    {                                                                
-        /* MemAccSubAddressAreaConfiguration_1 */                    
-        8192U,                                                       /* LogicalStartAddress */
-        268443648U,                                                  /* PhysicalStartAddress */
-        8192U,                                                       /* Length */
-        0U,                                                          /* NumOfEraseRetries */
-        0U,                                                          /* NumOfWriteRetries */
-        0U,                                                          /* BurstSettings */
-        MEMACC_MEM_DIRECT_STATIC,                                    /* MemInvocation */
-        &(MemAcc_MemApis[MEMACC_MEM_43_INFLS_DRIVER_ID]),            /* MemApi */
-        0U,                                                          /* MemInstanceId */
-        {                                                            
-            8192U,                                                   /* SectorEraseSize           */
-            1U,                                                      /* ReadPageSize              */
-            8U,                                                      /* WritePageSize             */
-            8192U,                                                   /* SectorEraseBurstSize      */
-            1U,                                                      /* ReadPageBurstSize         */
-            8U                                                       /* WritePageBurstSize        */
-        },                                                           
-        MEMACC_MEM_43_INFLS_MEMINSTANCE_0_ID,                        /* MemoryHardwareInstanceId  */
-        MEMACC_MEM_43_INFLS_DRIVER_ID                                /* MemoryDriverId            */
+        MEMACC_MEM_HW_INTERNAL,                                      /* MemHwResource     */
+        MEMACC_MEM_43_INFLS_HW_ID                                    /* MemoryDriverHwId  */
     }
 };
 static const MemAcc_SubAddressAreaType MemAcc_MemAccAddressAreaConfiguration_1_SubAreas[1U] = 
@@ -234,7 +214,7 @@ static const MemAcc_SubAddressAreaType MemAcc_MemAccAddressAreaConfiguration_1_S
         0U,                                                          /* NumOfWriteRetries */
         0U,                                                          /* BurstSettings */
         MEMACC_MEM_INDIRECT_STATIC,                                  /* MemInvocation */
-        &(MemAcc_MemApis[MEMACC_MEM_43_INFLS_DRIVER_ID]),            /* MemApi */
+        &(MemAcc_MemApis[0]),                                        /* MemApi */
         0U,                                                          /* MemInstanceId */
         {                                                            
             8192U,                                                   /* SectorEraseSize           */
@@ -244,8 +224,8 @@ static const MemAcc_SubAddressAreaType MemAcc_MemAccAddressAreaConfiguration_1_S
             1U,                                                      /* ReadPageBurstSize         */
             8U                                                       /* WritePageBurstSize        */
         },                                                           
-        MEMACC_MEM_43_INFLS_MEMINSTANCE_0_ID,                        /* MemoryHardwareInstanceId  */
-        MEMACC_MEM_43_INFLS_DRIVER_ID                                /* MemoryDriverId            */
+        MEMACC_MEM_HW_INTERNAL,                                      /* MemHwResource     */
+        MEMACC_MEM_43_INFLS_HW_ID                                    /* MemoryDriverHwId  */
     }
 };
 
@@ -255,11 +235,11 @@ static const MemAcc_AddressAreaType MemAcc_AddressAreas[2] =
     {
         /* MemAccAddressAreaConfiguration_0 */                       
         0U,                                                          /* AreaId */
-        16384U,                                                      /* AreaLength */
+        8192U,                                                       /* AreaLength */
         0U,                                                          /* Priority */
         1U,                                                          /* BufferAlignment */
         Fee_JobEndNotification,                                      /* JobEndNotif */
-        2U,                                                          /* SubAreaCount */
+        1U,                                                          /* SubAreaCount */
         MemAcc_MemAccAddressAreaConfiguration_0_SubAreas             /* SubAreas */
     },
     {

@@ -7,12 +7,12 @@
 * Autosar Version : 4.7.0
 * Autosar Revision : ASR_REL_4_7_REV_0000
 * Autosar Conf.Variant :
-* SW Version : 5.0.0
-* Build Version : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+* SW Version : 4.0.0
+* Build Version : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 * Copyright 2020 - 2024 NXP
 *
-* NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+* NXP Confidential. This software is owned or controlled by NXP and may only be
 * used strictly in accordance with the applicable license terms. By expressly
 * accepting such terms or by downloading, installing, activating and/or otherwise
 * using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +52,7 @@ extern "C"{
 #define PIT_IP_DEFINES_AR_RELEASE_MAJOR_VERSION_CFG     4
 #define PIT_IP_DEFINES_AR_RELEASE_MINOR_VERSION_CFG     7
 #define PIT_IP_DEFINES_AR_RELEASE_REVISION_VERSION_CFG  0
-#define PIT_IP_DEFINES_SW_MAJOR_VERSION_CFG             5
+#define PIT_IP_DEFINES_SW_MAJOR_VERSION_CFG             4
 #define PIT_IP_DEFINES_SW_MINOR_VERSION_CFG             0
 #define PIT_IP_DEFINES_SW_PATCH_VERSION_CFG             0
 
@@ -76,40 +76,48 @@ extern "C"{
 /**
 * @brief These defines indicate that at least one channel from each module is used in all configurations.
 */
-#define PIT_IP_USED (STD_ON) 
-#define PIT_IP_RTI_USED (STD_OFF) 
+#define PIT_IP_USED   (STD_ON) 
+#define PIT_IP_RTI_USED   (STD_OFF) 
+#define PIT_IP_RTI_CHANNEL_EXISTS
 /**
 * @brief This define is used to select between interrupt on each channel and source interrupt
 *        on entire module sources hardware implementations.
 *
 */
 #define PIT_GPT_IP_MODULE_SINGLE_INTERRUPT	(STD_ON)
-/*================================================================================================*/
+/**
+*
+* @brief IRQ Defines for each channel used
+*/
+#define PIT_0_ISR_USED 
+
+/**
+*
+* @brief PIT_IP_PECULIAR exists on current platform
+*/
+#define PIT_IP_PECULIAR_INSTANCES (STD_OFF)
+
+/**
+*
+* @brief Module Disable for PIT bit exists on current platform
+*/
+#define PIT_IP_MDIS_BIT_EXISTS    (STD_ON)
+/**
+*
+* @brief PIT_IP_INSTANCE_GAP_EXISTS
+*/
+#define PIT_IP_INSTANCE_GAP_EXISTS (STD_OFF)
+/**
+*
+* @brief  CRS_FSS_AND_RTU_BASE_ADDR_OF_PIT_REGISTERS_CONCATENATED
+*/
+#define CRS_FSS_AND_RTU_BASE_ADDR_OF_PIT_REGISTERS_CONCATENATED (STD_OFF)
 /**
  * @brief   This define is STD_ON when on the same platform there are interrupts for all channels in one ISR,
  *          but also interrupt for each channel separately
  *
  */
 #define PIT_GPT_IP_MODULE_SINGLE_AND_MULTIPLE_INTERRUPTS    (STD_OFF)
-#define PIT_IP_RTI_CHANNEL_EXISTS
-/**
-* @brief This defines
-*
-*/
-#define PIT_IP_PECULIAR_INSTANCES (STD_OFF)
-/**
-*
-* @brief IRQ Defines for each channel used
-*/
-#define PIT_0_ISR_USED
-
-/**
-*
-* @brief Module Disable for PIT bit exists on current platform
-*/
-#define PIT_IP_INSTANCE_GAP_EXISTS (STD_OFF)
-#define CRS_FSS_AND_RTU_BASE_ADDR_OF_PIT_REGISTERS_CONCATENATED (STD_OFF)
-#define PIT_IP_MDIS_BIT_EXISTS    (STD_ON)
 
 /*==================================================================================================
 *                                             ENUMS

@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -42,8 +42,6 @@ extern "C"{
 ==================================================================================================*/
 #include "C40_Ip.h"
 
-#include "SchM_Mem_43_INFLS.h"
-
 #if (STD_ON == C40_IP_SYNCRONIZE_CACHE)
 #include "Cache_Ip.h"
 #endif
@@ -64,7 +62,7 @@ extern "C"{
 #define C40_IP_AR_RELEASE_MAJOR_VERSION_C     4
 #define C40_IP_AR_RELEASE_MINOR_VERSION_C     7
 #define C40_IP_AR_RELEASE_REVISION_VERSION_C  0
-#define C40_IP_SW_MAJOR_VERSION_C             5
+#define C40_IP_SW_MAJOR_VERSION_C             4
 #define C40_IP_SW_MINOR_VERSION_C             0
 #define C40_IP_SW_PATCH_VERSION_C             0
 
@@ -183,7 +181,6 @@ static const C40_Ip_ConfigType * C40_Ip_pConfigPtr;
 #define MEM_43_INFLS_START_SEC_VAR_CLEARED_32
 #include "Mem_43_INFLS_MemMap.h"
 
-#if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
 #if ((STD_ON == C40_IP_PROGRAM_VERIFICATION_ENABLED) || (STD_ON == C40_IP_SYNCRONIZE_CACHE))
 static uint32 C40_Ip_u32ProgrammedAddress;
 static uint32 C40_Ip_u32ProgrammedLength;
@@ -195,7 +192,6 @@ static const uint8 *C40_Ip_pProgrammedData;
 #if ((STD_ON == C40_IP_ERASE_VERIFICATION_ENABLED) || (STD_ON == C40_IP_SYNCRONIZE_CACHE))
 static uint32 C40_Ip_u32ErasedSectorAddress;
 #endif
-#endif /* (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED) */
 
 static uint32 C40_Ip_u32SectorId;
 static uint32 C40_Ip_u32BitPosition;
@@ -204,7 +200,6 @@ static uint32 C40_Ip_u32LogicalAddressCheckFail;
 #define MEM_43_INFLS_STOP_SEC_VAR_CLEARED_32
 #include "Mem_43_INFLS_MemMap.h"
 
-#if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
 #define MEM_43_INFLS_START_SEC_VAR_INIT_BOOLEAN
 #include "Mem_43_INFLS_MemMap.h"
 
@@ -212,12 +207,11 @@ static boolean C40_Ip_bAsync = TRUE;
 
 #define MEM_43_INFLS_STOP_SEC_VAR_INIT_BOOLEAN
 #include "Mem_43_INFLS_MemMap.h"
-#endif
 
 #define MEM_43_INFLS_START_SEC_VAR_INIT_UNSPECIFIED
 #include "Mem_43_INFLS_MemMap.h"
 
-#if ((C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON))
+#if ( (C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON) )
 static volatile C40_Ip_StatusType C40_Ip_eReadStatus = C40_IP_STATUS_ERROR;
 #else
 static C40_Ip_StatusType C40_Ip_eReadStatus = C40_IP_STATUS_ERROR;
@@ -286,20 +280,16 @@ static inline void C40_Ip_SynchronizeCache(uint32 Address,
 static inline void C40_Ip_FlashAccessCalloutStart(void);
 static inline void C40_Ip_FlashAccessCalloutFinish(void);
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-static inline boolean C40_Ip_ValidUTestAddress(uint32 Address);
 static inline boolean C40_Ip_ValidCodeAddress(uint32 Address);
 static inline boolean C40_Ip_ValidDataAddress(uint32 Address);
 static inline boolean C40_Ip_ValidAddress(uint32 Address);
 static inline boolean C40_Ip_ValidRangeAddress(uint32 StartAddress,
                                                uint32 Length
                                               );
-#endif
+
 
 static uint32 C40_Ip_GetSectorID(C40_Ip_VirtualSectorsType VirtualSector);
-#if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
 static uint32 C40_Ip_GetBaseAddressOfSector(C40_Ip_VirtualSectorsType VirtualSectors);
-#endif /* (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED) */
 static C40_Ip_FlashBlocksNumberType C40_Ip_GetCodeBlockNumber(uint32 TargetAddress);
 static C40_Ip_StatusType C40_Ip_CheckLockDomainID(C40_Ip_VirtualSectorsType VirtualSector,
                                                   uint8 DomainIdValue
@@ -389,7 +379,7 @@ void C40_Ip_MainInterfaceWriteLogicalAddress(uint32 Address); /* Trusted Functio
 
 void C40_Ip_EccDataErrorSuppression(void); /* Trusted Function */
 
-#if ((C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON))
+#if ( (C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON) )
 uint32 C40_Ip_GetPflashDataErrorSuppressionStatus(void); /* Trusted Function */
 static C40_Ip_StatusType C40_Ip_InvalidPrefetchBuff(uint32 StartAddress);
 static C40_Ip_StatusType C40_Ip_EccTest(uint32 ReadAddress);
@@ -397,6 +387,8 @@ static C40_Ip_StatusType C40_Ip_EccTest(uint32 ReadAddress);
 /* ------------ ECC Function End ------------------- */
 
 /* ------------ Utest Function Start  ------------------- */
+
+static inline boolean C40_Ip_ValidUTestAddress(uint32 Address);
 
 #if (STD_ON == C40_IP_UTEST_MODE_API)
 static boolean C40_Ip_CheckSelectBlock(uint32 SelectBlock);
@@ -411,9 +403,6 @@ static C40_Ip_StatusType C40_Ip_UTestCheckBusy(void);
 static C40_Ip_StatusType C40_Ip_CheckUserTestStatusExecution(const C40_Ip_MisrType *MisrExpectedValues,
                                                              C40_Ip_UtestStateType *OpStatus
                                                             );
-static uint32 C40_Ip_GetBlockStartAddress(C40_Ip_FlashBlocksNumberType BlockNumber);
-static C40_Ip_StatusType C40_Ip_EccLogicCheckStatus(void);
-static C40_Ip_StatusType C40_Ip_DisableUtestMode(C40_Ip_StatusType ReturnStatus);
 #endif /* STD_ON == C40_IP_UTEST_MODE_API */
 /* ------------ Utest Function End  ------------------- */
 
@@ -447,7 +436,7 @@ void C40_Ip_SetUserAccessAllowed(void)
 {
 #if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
     /* Set UAA bit in REG_PROT register of FLASH controlled */
-    SET_USER_ACCESS_ALLOWED(IP_FLASH_BASE, C40_IP_MAIN_INTERFACE_REG_PROT_SIZE);
+    SET_USER_ACCESS_ALLOWED(IP_FLASH_BASE, C40_MAIN_INTERFACE_REG_PROT_SIZE);
 #endif
 }
 #endif /* STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT */
@@ -476,17 +465,6 @@ static inline void C40_Ip_FlashAccessCalloutFinish(void)
     }
 }
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-/**
- * Function Name    C40_Ip_ValidUTestAddress
- * Description      Checks the address is a valid UTest address
- */
-static inline boolean C40_Ip_ValidUTestAddress(uint32 Address)
-{
-    /* Check if it is within the UTest address space or not */
-    return ((C40_IP_UTEST_BLOCK_BASE_ADDR <= (Address)) && ((Address) <= C40_IP_UTEST_BLOCK_END_ADDR));
-}
-
 /**
  * Function Name    C40_Ip_ValidCodeAddress
  * Description      Checks the address is a valid Code flash address
@@ -494,7 +472,7 @@ static inline boolean C40_Ip_ValidUTestAddress(uint32 Address)
 static inline boolean C40_Ip_ValidCodeAddress(uint32 Address)
 {
     /* Check if it is within the program flash address space or not */
-    return ((C40_IP_CODE_BLOCK_0_BASE_ADDR <= (Address)) && ((Address) <= C40_IP_CODE_BLOCK_END_ADDR));
+    return ( (C40_IP_CODE_BLOCK_0_BASE_ADDR <= (Address)) && ((Address) <= C40_IP_CODE_BLOCK_END_ADDR) );
 }
 
 /**
@@ -504,7 +482,7 @@ static inline boolean C40_Ip_ValidCodeAddress(uint32 Address)
 static inline boolean C40_Ip_ValidDataAddress(uint32 Address)
 {
     /* Check if it is within the data flash address space or not */
-    return ((C40_IP_DATA_BLOCK_BASE_ADDR <= (Address)) && ((Address) <= C40_IP_DATA_BLOCK_END_ADDR));
+    return ( (C40_IP_DATA_BLOCK_BASE_ADDR <= (Address)) && ((Address) <= C40_IP_DATA_BLOCK_END_ADDR) );
 }
 
 /**
@@ -514,7 +492,7 @@ static inline boolean C40_Ip_ValidDataAddress(uint32 Address)
 static inline boolean C40_Ip_ValidAddress(uint32 Address)
 {
     /* Check if it is within the program flash or data flash or UTest space or not */
-    return (C40_Ip_ValidCodeAddress(Address) || C40_Ip_ValidDataAddress(Address) || C40_Ip_ValidUTestAddress(Address));
+    return ( C40_Ip_ValidCodeAddress(Address) || C40_Ip_ValidDataAddress(Address) || C40_Ip_ValidUTestAddress(Address) );
 }
 
 /**
@@ -550,7 +528,7 @@ static inline boolean C40_Ip_ValidRangeAddress(uint32 StartAddress,
 
     return RetVal;
 }
-#endif /* (C40_IP_DEV_ERROR_DETECT == STD_ON) */
+
 
 /**
  * Function Name    C40_Ip_GetSectorID
@@ -567,10 +545,10 @@ static uint32 C40_Ip_GetSectorID(C40_Ip_VirtualSectorsType VirtualSector)
         /* Sector is in the Data Block */
         C40_Ip_u32SectorId = (uint32)VirtualSector;
     }
-    else if ((C40_IP_MAX_VIRTUAL_SECTOR) == (uint32)VirtualSector)
+    else if (C40_IP_MAX_VIRTUAL_SECTOR == (uint32)VirtualSector)
     {
         /* Sector is in Utest */
-        C40_Ip_u32SectorId = 0U;
+        C40_Ip_u32SectorId = (uint32)VirtualSector - C40_IP_MAX_VIRTUAL_SECTOR;
     }
     else
     {
@@ -596,7 +574,6 @@ static uint32 C40_Ip_GetSectorID(C40_Ip_VirtualSectorsType VirtualSector)
     return C40_Ip_u32SectorId;
 }
 
-#if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
 /**
  * Function Name    C40_Ip_GetBaseAddressOfSector
  * Description      Get baseAddress of sector
@@ -626,7 +603,6 @@ static uint32 C40_Ip_GetBaseAddressOfSector(C40_Ip_VirtualSectorsType VirtualSec
 
     return BaseAddressofSector;
 }
-#endif /* (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED) */
 
 /**
  * Function Name    C40_Ip_GetCodeBlockNumber
@@ -684,12 +660,11 @@ static C40_Ip_StatusType C40_Ip_CheckLockDomainID(C40_Ip_VirtualSectorsType Virt
     uint32 ShiftValue = 0U;
     uint32 CheckRegister = 0U;
 
-    /* Sector is not Utest sector (ShiftValue = 0 when it is Utest sector) */
     if ((uint32)VirtualSector != C40_IP_MAX_VIRTUAL_SECTOR)
     {
         ShiftValue = (C40_Ip_u32SectorId - ((C40_Ip_u32SectorId/4U)*4U))*8U;
     }
-    /* Get domain ID information of the master currently acquiring the lock bit */
+
     if ((uint32)VirtualSector <= C40_IP_MAX_VIRTUAL_SECTOR)
     {
 #if (STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT)
@@ -700,7 +675,7 @@ static C40_Ip_StatusType C40_Ip_CheckLockDomainID(C40_Ip_VirtualSectorsType Virt
     }
 
     /* Check register's value */
-    if ((0U != (CheckRegister & C40_Ip_u32BitPosition)) && (TempLockMasterRegister != 0U))
+    if ( (0U != (CheckRegister & C40_Ip_u32BitPosition)) && (TempLockMasterRegister != 0U) )
     {
         LockDomainIDValue = (uint8)(((*(volatile uint32*)(TempLockMasterRegister)) >> ShiftValue) & 0xFFU);
         /* Any effort to modify(1 to 0, or 0 to1) the lock bit by a master with different domain id will result transfer error.   */
@@ -832,14 +807,14 @@ static uint32 C40_Ip_ReadData(uint32 ReadAddress,
     uint32 CombinedAddress = ReadAddress | DesAddress;
 
     /* Both the lowest two bits are zero: 4 bytes aligned */
-    if ((0UL == (CombinedAddress & 0x03UL)) && (SizeLeft >= C40_IP_SIZE_4BYTE))
+    if ( (0UL == (CombinedAddress & 0x03UL)) && (SizeLeft >= C40_IP_SIZE_4BYTE) )
     {
         /* 4 bytes operation */
         ReadSize = C40_IP_SIZE_4BYTE;
         *((uint32 *)DesAddress) = C40_Ip_ReadData32(ReadAddress);
     }
     /* Both the lowest one bit are zero: 2 bytes aligned */
-    else if ((0UL == (CombinedAddress & 0x01UL)) && (SizeLeft >= C40_IP_SIZE_2BYTE))
+    else if ( (0UL == (CombinedAddress & 0x01UL)) && (SizeLeft >= C40_IP_SIZE_2BYTE) )
     {
         /* 2 bytes operation */
         ReadSize = C40_IP_SIZE_2BYTE;
@@ -898,7 +873,7 @@ static C40_Ip_StatusType C40_Ip_ClearPreviousRead(uint32 ReadAddress)
     C40_Ip_ClearAllErrorFlagsMainInterface();
 #endif
 
-#if ((STD_ON == C40_IP_ECC_CHECK) || (STD_ON == C40_IP_ECC_CHECK_BY_AUTOSAR_OS))
+#if ( (STD_ON == C40_IP_ECC_CHECK) || (STD_ON == C40_IP_ECC_CHECK_BY_AUTOSAR_OS) )
     /* Invalidate prefect buffer before reading to make sure ecc will occur all times */
     Status = C40_Ip_InvalidPrefetchBuff(ReadAddress);
     if (C40_IP_STATUS_SUCCESS != Status)
@@ -924,7 +899,7 @@ static C40_Ip_StatusType C40_Ip_CheckReadCompareStatus(uint32 ReadAddress,
                                                        boolean CompareResult
                                                       )
 {
-#if ((C40_IP_ECC_CHECK == STD_OFF) && (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_OFF))
+#if ( (C40_IP_ECC_CHECK == STD_OFF) && (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_OFF) )
     (void)ReadAddress;
 #endif
     C40_Ip_StatusType Status = C40_IP_STATUS_ERROR;
@@ -956,7 +931,7 @@ static C40_Ip_StatusType C40_Ip_CheckReadCompareStatus(uint32 ReadAddress,
         /* Clear all error flags: write 1 to clear */
         C40_Ip_pFlashBaseAddress->MCRS &= ErrorFlags;
     }
-#if ((C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON))
+#if ( (C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON) )
     /* Step 2: Checking if eec uncorrected happened */
     else if (C40_IP_STATUS_ECC_UNCORRECTED == C40_Ip_eReadStatus)
     {
@@ -1092,24 +1067,24 @@ static uint32 C40_Ip_CompareBlank(uint32 ReadAddress,
     uint32 ReadSize;
 
     /* The lowest two bits are zero: 4 bytes aligned */
-    if ((0UL == (ReadAddress & 0x03UL)) && (SizeLeft >= C40_IP_SIZE_4BYTE))
+    if ( (0UL == (ReadAddress & 0x03UL)) && (SizeLeft >= C40_IP_SIZE_4BYTE) )
     {
         /* 4 bytes operation */
         ReadSize = C40_IP_SIZE_4BYTE;
-        *CompareResult = (C40_IP_ERASED_VALUE_32 == C40_Ip_ReadData32(ReadAddress));
+        *CompareResult = ( C40_IP_ERASED_VALUE_32 == C40_Ip_ReadData32(ReadAddress) );
     }
     /* The lowest one bit are zero: 2 bytes aligned */
-    else if ((0UL == (ReadAddress & 0x01UL)) && (SizeLeft >= C40_IP_SIZE_2BYTE))
+    else if ( (0UL == (ReadAddress & 0x01UL)) && (SizeLeft >= C40_IP_SIZE_2BYTE) )
     {
         /* 2 bytes operation */
         ReadSize = C40_IP_SIZE_2BYTE;
-        *CompareResult = (C40_IP_ERASED_VALUE_16 == C40_Ip_ReadData16(ReadAddress));
+        *CompareResult = ( C40_IP_ERASED_VALUE_16 == C40_Ip_ReadData16(ReadAddress) );
     }
     else
     {
         /* 1 byte operation */
         ReadSize = C40_IP_SIZE_1BYTE;
-        *CompareResult = (C40_IP_ERASED_VALUE_8 == C40_Ip_ReadData8(ReadAddress));
+        *CompareResult = ( C40_IP_ERASED_VALUE_8 == C40_Ip_ReadData8(ReadAddress) );
     }
 
     return ReadSize;
@@ -1131,24 +1106,24 @@ static uint32 C40_Ip_CompareData(uint32 ReadAddress,
     uint32 CombinedAddress = ReadAddress | DataAddress;
 
     /* Both the lowest two bits are zero: 4 bytes aligned */
-    if ((0UL == (CombinedAddress & 0x03UL)) && (SizeLeft >= C40_IP_SIZE_4BYTE))
+    if ( (0UL == (CombinedAddress & 0x03UL)) && (SizeLeft >= C40_IP_SIZE_4BYTE) )
     {
         /* 4 bytes operation */
         ReadSize = C40_IP_SIZE_4BYTE;
-        *CompareResult = (C40_Ip_ReadData32(ReadAddress) == C40_Ip_ReadData32(DataAddress));
+        *CompareResult = ( C40_Ip_ReadData32(ReadAddress) == C40_Ip_ReadData32(DataAddress) );
     }
     /* Both the lowest one bit are zero: 2 bytes aligned */
-    else if ((0UL == (CombinedAddress & 0x01UL)) && (SizeLeft >= C40_IP_SIZE_2BYTE))
+    else if ( (0UL == (CombinedAddress & 0x01UL)) && (SizeLeft >= C40_IP_SIZE_2BYTE) )
     {
         /* 2 bytes operation */
         ReadSize = C40_IP_SIZE_2BYTE;
-        *CompareResult = (C40_Ip_ReadData16(ReadAddress) == C40_Ip_ReadData16(DataAddress));
+        *CompareResult = ( C40_Ip_ReadData16(ReadAddress) == C40_Ip_ReadData16(DataAddress) );
     }
     else
     {
         /* 1 byte operation */
         ReadSize = C40_IP_SIZE_1BYTE;
-        *CompareResult = (C40_Ip_ReadData8(ReadAddress) == C40_Ip_ReadData8(DataAddress));
+        *CompareResult = ( C40_Ip_ReadData8(ReadAddress) == C40_Ip_ReadData8(DataAddress) );
     }
 
     return ReadSize;
@@ -1192,9 +1167,6 @@ static C40_Ip_StatusType C40_Ip_MainInterfaceAbort(void)
     uint32 CurrentTicks = OsIf_GetCounter((OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
 #endif
 
-    /* Start of exclusive area */
-    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07();
-
     /* Disable HV to finalize/abort the operation */
     C40_Ip_pFlashBaseAddress->MCR &= ~FLASH_MCR_EHV_MASK;
     MCAL_FAULT_INJECTION_POINT(C40_IP_FMEA_MAIN_INTERFACE_ABORT_INJECT_ERROR);
@@ -1213,8 +1185,6 @@ static C40_Ip_StatusType C40_Ip_MainInterfaceAbort(void)
     /* Clear ERS and PGM bits */
     C40_Ip_pFlashBaseAddress->MCR &= ~(FLASH_MCR_PGM_MASK|FLASH_MCR_ESS_MASK|FLASH_MCR_ERS_MASK);
 
-    /* End of exclusive area */
-    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_07();
     return ReturnCode;
 }
 
@@ -1283,15 +1253,11 @@ static inline C40_Ip_StatusType C40_Ip_MainInterfaceWritePreCheck(uint32 Logical
                                                                   const uint8 *SourceAddressPtr
                                                                  )
 {
-    C40_Ip_StatusType         ReturnCode;
+    C40_Ip_StatusType ReturnCode;
     C40_Ip_VirtualSectorsType VirtualSector;
-    uint32                    Offset;
+    uint32 Offset;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    boolean CheckValidStatus = C40_Ip_ValidRangeAddress(LogicalAddress, Length);
-
-    C40_IP_DEV_ASSERT(CheckValidStatus);
-#endif
+    C40_IP_DEV_ASSERT( C40_Ip_ValidRangeAddress(LogicalAddress, Length) );
 
     /* Get sector number */
     VirtualSector = C40_Ip_GetSectorNumberFromAddress(LogicalAddress);
@@ -1300,8 +1266,8 @@ static inline C40_Ip_StatusType C40_Ip_MainInterfaceWritePreCheck(uint32 Logical
     Offset = LogicalAddress & (C40_IP_WRITE_MAX_SIZE - 1U);
 
     /* Validates input parameters */
-    if (((LogicalAddress   & (C40_IP_WRITE_DOUBLE_WORD - 1U)) != 0U) ||    /* Must be aligned with 8-byte     */
-         ((Length           & (C40_IP_WRITE_DOUBLE_WORD - 1U)) != 0U) ||    /* Must be aligned with 8-byte     */
+    if ( ((LogicalAddress   & (C40_IP_WRITE_DOUBLE_WORD - 1U)) != 0U ) ||    /* Must be aligned with 8-byte     */
+         ((Length           & (C40_IP_WRITE_DOUBLE_WORD - 1U)) != 0U ) ||    /* Must be aligned with 8-byte     */
          ((Length + Offset) > C40_IP_WRITE_MAX_SIZE)                   ||    /* Must fall within a quad-page    */
          (0U == Length)                                                ||    /* Must not be zero                */
          (NULL_PTR == SourceAddressPtr)                                      /* Must not be NULL_PTR            */
@@ -1332,16 +1298,6 @@ static inline C40_Ip_StatusType C40_Ip_MainInterfaceWritePreCheck(uint32 Logical
     }
 
     return ReturnCode;
-}
-
-/**
- * Function Name : C40_Ip_MainInterfaceWriteLogicalAddress
- * Description   : Write the program erase address using logical address registers located in the Platform Flash Controller
- */
-void C40_Ip_MainInterfaceWriteLogicalAddress(uint32 Address)
-{
-    /* Write the program/erase address */
-    C40_Ip_pPFlashBaseAddress->PFCPGM_PEADR_L = Address;
 }
 
 /**
@@ -1425,18 +1381,13 @@ static void C40_Ip_MainInterfaceFillDataBuff(uint32 LocationWriteDataRegs,
                                              uint32 Size
                                             )
 {
+    C40_IP_DEV_ASSERT(LocationWriteDataRegs < FLASH_DATA_COUNT);
     const uint32 *DataPtr32 = (const uint32 *)((uint32)DataPtr);
     const uint8  *DataPtr8  = DataPtr;
-
     uint32 DataIndex        = LocationWriteDataRegs;
     uint32 DataNextIndex    = 0U;
     uint32 SizeLeft         = Size;
-
     volatile uint32 DataTemp32;  /* Prevent compiler optimization when working with unaligned addresses */
-
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    C40_IP_DEV_ASSERT(LocationWriteDataRegs < FLASH_DATA_COUNT);
-#endif
 
     /* Check user buffer alignment */
     if (((uint32)DataPtr & 0x3U) == 0U)
@@ -1484,6 +1435,17 @@ static void C40_Ip_MainInterfaceFillDataBuff(uint32 LocationWriteDataRegs,
     }
 }
 
+
+/**
+ * Function Name : C40_Ip_MainInterfaceWriteLogicalAddress
+ * Description   : Write the program erase address using logical address registers located in the Platform Flash Controller
+ */
+void C40_Ip_MainInterfaceWriteLogicalAddress(uint32 Address)
+{
+    /* Write the program/erase address */
+    C40_Ip_pPFlashBaseAddress->PFCPGM_PEADR_L = Address;
+}
+
 #endif /* (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED) */
 
 
@@ -1504,7 +1466,7 @@ void C40_Ip_EccDataErrorSuppression(void)
 #endif /* #if (STD_ON == C40_IP_ECC_DATA_ERROR_SUPPRESSION) */
 }
 
-#if ((C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON))
+#if ( (C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON) )
 
 /**
  * Function Name    C40_Ip_GetPflashDataErrorSuppressionStatus
@@ -1576,7 +1538,7 @@ static C40_Ip_StatusType C40_Ip_EccTest(uint32 ReadAddress)
     /* Check for errors */
     ErrorFlags = C40_Ip_pFlashBaseAddress->MCRS;
     /* If ECC flag was set and in Data sectors */
-    if ((0U != (ErrorFlags & FLASH_MCRS_EER_MASK)) && ((uint32)C40_IP_DATA_BASE_ADDRESS <= ReadAddress) && (ReadAddress <= (uint32)C40_IP_DATA_END_ADDRESS))
+    if (( 0U != (ErrorFlags & FLASH_MCRS_EER_MASK)) && ((uint32)C40_IP_DATA_BASE_ADDRESS <= ReadAddress) && (ReadAddress <= (uint32)C40_IP_DATA_END_ADDRESS))
     {
         /* If DERR_SUP was set and Single-bit and multi-bit ECC events on data flash memory accesses are suppressed */
 #if (STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT)
@@ -1616,6 +1578,18 @@ static C40_Ip_StatusType C40_Ip_EccTest(uint32 ReadAddress)
 
 
 /* ------------ Utest Function Start  ------------------- */
+
+/**
+ * Function Name    C40_Ip_ValidUTestAddress
+ * Description      Checks the address is a valid UTest address
+ */
+static inline boolean C40_Ip_ValidUTestAddress(uint32 Address)
+{
+    /* Check if it is within the UTest address space or not */
+    return ( (C40_IP_UTEST_BLOCK_BASE_ADDR <= (Address)) && ((Address) <= C40_IP_UTEST_BLOCK_END_ADDR) );
+}
+
+
 #if (STD_ON == C40_IP_UTEST_MODE_API)
 
 static boolean C40_Ip_CheckSelectBlock(uint32 SelectBlock)
@@ -1875,8 +1849,6 @@ static C40_Ip_StatusType C40_Ip_CheckUserTestStatusExecution(const C40_Ip_MisrTy
         }
     }
 
-    /* Cover requirement CPR_RTD_00285.mem_infls */
-    MCAL_FAULT_INJECTION_POINT(C40_IP_FMEA_CHECK_USER_TEST_STATUS_EXECUTION);
     if ((uint32)(C40_Ip_pFlashBaseAddress->UM9 & FLASH_UM9_MISR_MASK) != MisrExpectedValues->arrMISRValue[9])
     {
         ReturnCode = C40_IP_STATUS_ERROR;
@@ -1897,92 +1869,11 @@ static C40_Ip_StatusType C40_Ip_CheckUserTestStatusExecution(const C40_Ip_MisrTy
     }
     return ReturnCode;
 }
-
-static C40_Ip_StatusType C40_Ip_EccLogicCheckStatus(void)
-{
-    uint32 MCRSValue     = 0U;
-    C40_Ip_StatusType ReturnCode;
-
-    MCRSValue = C40_Ip_pFlashBaseAddress->MCRS;
-    /* Check if a double bit fault has raised */
-    if ((MCRSValue & FLASH_MCRS_EER_MASK) != 0U)
-    {
-        /* Clear bits MCRS_EER, MCRS_SBC (notes: write 1 to clear) keep all other bits */
-        MCRSValue &= ~(FLASH_MCRS_EEE_MASK | FLASH_MCRS_AEE_MASK | FLASH_MCRS_RVE_MASK | FLASH_MCRS_RRE_MASK | FLASH_MCRS_RWE_MASK | FLASH_MCRS_PES_MASK | FLASH_MCRS_PEP_MASK);
-        MCRSValue |= (FLASH_MCRS_EER_MASK | FLASH_MCRS_SBC_MASK);
-
-        /* Clear error bits MCRS_EER, MCRS_SBC */
-        C40_Ip_pFlashBaseAddress->MCRS = MCRSValue;
-
-        ReturnCode = C40_IP_STATUS_ECC_UNCORRECTED;
-    }
-    /* Check if a single bit fault has raised and has been corrected */
-    else if ((MCRSValue & FLASH_MCRS_SBC_MASK) != 0U)
-    {
-        /* Clear bits MCRS_EER, MCRS_SBC (notes: write 1 to clear) keep all other bits */
-        MCRSValue &= ~(FLASH_MCRS_EEE_MASK | FLASH_MCRS_AEE_MASK | FLASH_MCRS_RVE_MASK | FLASH_MCRS_RRE_MASK | FLASH_MCRS_RWE_MASK | FLASH_MCRS_PES_MASK | FLASH_MCRS_PEP_MASK);
-        MCRSValue |= (FLASH_MCRS_EER_MASK | FLASH_MCRS_SBC_MASK);
-
-        /* Clear error bits MCRS_EER, MCRS_SBC */
-        C40_Ip_pFlashBaseAddress->MCRS = MCRSValue;
-
-        ReturnCode = C40_IP_STATUS_ECC_CORRECTED;
-    }
-    else
-    {
-        ReturnCode = C40_IP_STATUS_SUCCESS;
-    }
-    return ReturnCode;
-}
-
-static C40_Ip_StatusType C40_Ip_DisableUtestMode(C40_Ip_StatusType ReturnStatus)
-{
-    C40_Ip_StatusType ReturnCode = ReturnStatus;
-
-#if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
-    /* Prepare timeout counter */
-    uint32 ElapsedTicks = 0UL;
-    uint32 TimeoutTicks = OsIf_MicrosToTicks(C40_IP_USER_TEST_WAIT, (OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
-    uint32 CurrentTicks = OsIf_GetCounter((OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
-#endif
-
-    /* Write job address has failed, create a dummy check to clear interlock and disable UTest mode */
-
-    /* One and only one ADATA register must also be written. This is referred to as an interlock write.*/
-    C40_Ip_pFlashBaseAddress->DATA[0] = FLASH_DATA_PDATA((uint32)0xFFFFFFFFU);
-
-    /* Initiate the Array Integrity Check by writing 1 to UT0_AIE bit*/
-    C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_AIE_MASK;
-
-    /* Abort the array integrity operation */
-    C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_AIE_MASK;
-
-    /* Wait the UT0_AID bit goes high */
-    while (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_AID_MASK))
-    {
-#if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
-        ElapsedTicks += OsIf_GetElapsed(&CurrentTicks, (OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
-        if (ElapsedTicks >= TimeoutTicks)
-        {
-            /*Errors Timeout because wait for the AID bit long time*/
-            ReturnCode = C40_IP_STATUS_ERROR_TIMEOUT;
-            break;
-        }
-#endif
-    }
-
-    /* Disable UTest mode */
-    C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_UTE_MASK;
-
-    return ReturnCode;
-}
-
 #endif /* STD_ON == C40_IP_UTEST_MODE_API */
 
 /*==================================================================================================
                                        GLOBAL FUNCTIONS
 ==================================================================================================*/
-#if (STD_ON == C40_IP_MAIN_INTERFACE_ENABLED)
 /**
  * @brief   Set synch/Asynch at IP layer base on the bAynch of HLD
  */
@@ -1990,7 +1881,6 @@ void C40_Ip_SetAsyncMode(const boolean Async)
 {
     C40_Ip_bAsync = Async;
 }
-#endif
 
 /**
  * Function Name    C40_Ip_GetSectorNumberFromAddress
@@ -2000,11 +1890,7 @@ C40_Ip_VirtualSectorsType C40_Ip_GetSectorNumberFromAddress(uint32 TargetAddress
 {
     C40_Ip_VirtualSectorsType VirtualSectors;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    boolean CheckValidAddress = C40_Ip_ValidAddress(TargetAddress);
-
-    C40_IP_DEV_ASSERT(CheckValidAddress);
-#endif
+    C40_IP_DEV_ASSERT( C40_Ip_ValidAddress(TargetAddress) );
 
     if      ((TargetAddress >= (uint32)C40_IP_UTEST_BLOCK_BASE_ADDR)  && (TargetAddress <= (uint32)C40_IP_UTEST_BLOCK_END_ADDR))
     {
@@ -2063,48 +1949,6 @@ C40_Ip_FlashBlocksNumberType C40_Ip_GetBlockNumberFromAddress(uint32 TargetAddre
     return BlockNumber;
 }
 
-#if (STD_ON == C40_IP_UTEST_MODE_API)
-/**
- * Function Name    C40_Ip_GetBlockStartAddress
- * Description      Get start address of block.
- */
-static uint32 C40_Ip_GetBlockStartAddress(C40_Ip_FlashBlocksNumberType BlockNumber)
-{
-    uint32 BlockStartAddr = 0U;
-
-    switch (BlockNumber)
-    {
-        case C40_IP_CODE_BLOCK_0:
-            BlockStartAddr = C40_IP_CODE_BLOCK_0_BASE_ADDR;
-            break;
-#ifdef C40_IP_CODE_BLOCK_1_BASE_ADDR
-        case C40_IP_CODE_BLOCK_1:
-            BlockStartAddr = C40_IP_CODE_BLOCK_1_BASE_ADDR;
-            break;
-#endif
-#ifdef C40_IP_CODE_BLOCK_2_BASE_ADDR
-        case C40_IP_CODE_BLOCK_2:
-            BlockStartAddr = C40_IP_CODE_BLOCK_2_BASE_ADDR;
-            break;
-#endif
-#ifdef C40_IP_CODE_BLOCK_3_BASE_ADDR
-        case C40_IP_CODE_BLOCK_3:
-            BlockStartAddr = C40_IP_CODE_BLOCK_3_BASE_ADDR;
-            break;
-#endif
-#ifdef C40_IP_DATA_BLOCK_BASE_ADDR
-        case C40_IP_DATA_BLOCK:
-            BlockStartAddr = C40_IP_DATA_BLOCK_BASE_ADDR;
-            break;
-#endif
-        default:
-            /* Do nothing */
-            break;
-    }
-
-    return BlockStartAddr;
-}
-#endif /* (STD_ON == C40_IP_UTEST_MODE_API) */
 
 #if (STD_ON == C40_IP_SECTOR_SET_LOCK_API)
 /**
@@ -2119,9 +1963,7 @@ C40_Ip_StatusType C40_Ip_SetLock(C40_Ip_VirtualSectorsType VirtualSector,
 {
     C40_Ip_StatusType ReturnCode;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
     C40_IP_DEV_ASSERT((uint32)VirtualSector <= C40_IP_MAX_VIRTUAL_SECTOR);
-#endif
 
     ReturnCode = C40_Ip_GetLock(VirtualSector);
 
@@ -2158,8 +2000,6 @@ void C40_Ip_SetLockProtect(C40_Ip_VirtualSectorsType VirtualSector)
     uint32 BlockCount;
     uint32 SectorPosition;
 
-    /* Start of exclusive area */
-    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08();
     /* All checks passed - set lock bit */
     if ((uint32)VirtualSector < C40_IP_MAX_DATA_SECTOR)
     {
@@ -2192,9 +2032,6 @@ void C40_Ip_SetLockProtect(C40_Ip_VirtualSectorsType VirtualSector)
             C40_Ip_pPFlashBaseAddress->PFCBLK_SPELOCK[BlockCount] |= C40_Ip_u32BitPosition;
         }
     }
-    /* End of exclusive area */
-    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_08();
-
 }
 #endif /* STD_ON == C40_IP_SECTOR_SET_LOCK_API */
 
@@ -2210,9 +2047,7 @@ C40_Ip_StatusType C40_Ip_GetLock(C40_Ip_VirtualSectorsType VirtualSector)
     C40_Ip_StatusType ReturnCode;
     uint32 CheckRegister;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
     C40_IP_DEV_ASSERT((uint32)VirtualSector <= C40_IP_MAX_VIRTUAL_SECTOR);
-#endif
 
     /* Sector is out of range */
     if ((uint32)VirtualSector > C40_IP_MAX_VIRTUAL_SECTOR)
@@ -2300,12 +2135,9 @@ C40_Ip_StatusType C40_Ip_ClearLock(C40_Ip_VirtualSectorsType VirtualSector,
 {
     C40_Ip_StatusType ReturnCode;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
     C40_IP_DEV_ASSERT((uint32)VirtualSector <= C40_IP_MAX_VIRTUAL_SECTOR);
-#endif
 
     ReturnCode = C40_Ip_GetLock(VirtualSector);
-
     if (C40_IP_STATUS_ERROR == ReturnCode)
     {
         /* Return immediately if encountered an error */
@@ -2321,17 +2153,11 @@ C40_Ip_StatusType C40_Ip_ClearLock(C40_Ip_VirtualSectorsType VirtualSector,
         ReturnCode = C40_Ip_CheckLockDomainID(VirtualSector, DomainIdValue);
         if (C40_IP_STATUS_SUCCESS == ReturnCode)
         {
-
-            /* Start of exclusive area */
-            SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09();
-
 #if (STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT)
             OsIf_Trusted_Call1param(C40_Ip_ClearLockProtect, VirtualSector);
 #else
             C40_Ip_ClearLockProtect(VirtualSector);
 #endif
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_09();
         }
     }
 
@@ -2393,9 +2219,7 @@ C40_Ip_StatusType C40_Ip_Init(const C40_Ip_ConfigType * InitConfig)
 {
     C40_Ip_StatusType ReturnCode;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    C40_IP_DEV_ASSERT(InitConfig != NULL_PTR);
-#endif
+    C40_IP_DEV_ASSERT(InitConfig != NULL_PTR );
 
 #if (STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT)
     /* Enable user mode support */
@@ -2503,9 +2327,7 @@ C40_Ip_StatusType C40_Ip_MainInterfaceSectorErase(C40_Ip_VirtualSectorsType Virt
     C40_Ip_StatusType ReturnCode;
     uint32 LogicalAddress;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
     C40_IP_DEV_ASSERT((uint32)VirtualSector <= C40_IP_MAX_VIRTUAL_SECTOR);
-#endif
 
 #if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
     /* Prepare timeout counter */
@@ -2517,8 +2339,6 @@ C40_Ip_StatusType C40_Ip_MainInterfaceSectorErase(C40_Ip_VirtualSectorsType Virt
     /* Checking before start a new erase operation */
     ReturnCode = C40_Ip_MainInterfaceSectorErasePreCheck(VirtualSector);
 
-    /* Start of exclusive area */
-    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10();
     if (C40_IP_STATUS_SUCCESS == ReturnCode)
     {
         /* Fault Injection point: lock sector to test MSCR_PEP bit */
@@ -2563,9 +2383,6 @@ C40_Ip_StatusType C40_Ip_MainInterfaceSectorErase(C40_Ip_VirtualSectorsType Virt
         }
     }
 
-    /* End of exclusive area */
-    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_10();
-
     return ReturnCode;
 }
 
@@ -2583,18 +2400,12 @@ C40_Ip_StatusType C40_Ip_MainInterfaceSectorEraseStatus(void)
 
     if (C40_IP_STATUS_BUSY != ReturnCode)
     {
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_11();
-
         /* terminate erase operation */
         C40_Ip_pFlashBaseAddress->MCR &= ~FLASH_MCR_EHV_MASK;
         /* Terminate erase operation */
         C40_Ip_pFlashBaseAddress->MCR &= ~FLASH_MCR_ERS_MASK;
 
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_11();
-
-#if (C40_IP_ERASE_VERIFICATION_ENABLED == STD_ON)
+#if ( C40_IP_ERASE_VERIFICATION_ENABLED == STD_ON )
         /* Verify blank check after erasing the data */
         if (C40_IP_STATUS_SUCCESS == ReturnCode)
         {
@@ -2633,12 +2444,7 @@ C40_Ip_StatusType C40_Ip_MainInterfaceWrite(uint32 LogicalAddress,
     C40_Ip_StatusType ReturnCode;
     uint32 LocationWriteDataRegs;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    boolean CheckValidStatus = C40_Ip_ValidRangeAddress(LogicalAddress, Length);
-
-    C40_IP_DEV_ASSERT(CheckValidStatus);
-#endif
-
+    C40_IP_DEV_ASSERT( C40_Ip_ValidRangeAddress(LogicalAddress, Length) );
     /* Store address to check failed operation */
     C40_Ip_u32LogicalAddressCheckFail = LogicalAddress % C40_IP_WRITE_MAX_SIZE;
     C40_Ip_eOpStatus = C40_IP_PGM_WRITE;
@@ -2653,7 +2459,7 @@ C40_Ip_StatusType C40_Ip_MainInterfaceWrite(uint32 LogicalAddress,
     /* Checking before a new write operation */
     ReturnCode = C40_Ip_MainInterfaceWritePreCheck(LogicalAddress, Length, SourceAddressPtr);
 
-#if (C40_IP_ERASE_VERIFICATION_ENABLED == STD_ON)
+#if ( C40_IP_ERASE_VERIFICATION_ENABLED == STD_ON )
     if (C40_IP_STATUS_SUCCESS == ReturnCode)
     {
         /* Verify blank check before writing the data */
@@ -2664,9 +2470,6 @@ C40_Ip_StatusType C40_Ip_MainInterfaceWrite(uint32 LogicalAddress,
         }
     }
 #endif
-
-    /* Start of exclusive area */
-    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_12();
 
     if ((C40_IP_STATUS_SUCCESS == ReturnCode) || (C40_IP_STATUS_ECC_CORRECTED == ReturnCode))
     {
@@ -2720,9 +2523,6 @@ C40_Ip_StatusType C40_Ip_MainInterfaceWrite(uint32 LogicalAddress,
         }
     }
 
-    /* End of exclusive area */
-    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_12();
-
     return ReturnCode;
 }
 
@@ -2740,18 +2540,12 @@ C40_Ip_StatusType C40_Ip_MainInterfaceWriteStatus(void)
 
     if (C40_IP_STATUS_BUSY != ReturnCode)
     {
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_13();
-
         /* Terminate write operation */
         C40_Ip_pFlashBaseAddress->MCR &= ~FLASH_MCR_EHV_MASK;
         /* Terminate write operation */
         C40_Ip_pFlashBaseAddress->MCR &= ~FLASH_MCR_PGM_MASK;
 
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_13();
-
-#if (C40_IP_PROGRAM_VERIFICATION_ENABLED == STD_ON)
+#if ( C40_IP_PROGRAM_VERIFICATION_ENABLED == STD_ON )
         /* Verify written data */
         if (C40_IP_STATUS_SUCCESS == ReturnCode)
         {
@@ -2765,7 +2559,7 @@ C40_Ip_StatusType C40_Ip_MainInterfaceWriteStatus(void)
             }
         }
 #else
-    #if (STD_ON == C40_IP_SYNCRONIZE_CACHE)
+    #if ( STD_ON == C40_IP_SYNCRONIZE_CACHE )
         /* Invalidate cache */
         C40_Ip_SynchronizeCache(C40_Ip_u32ProgrammedAddress, C40_Ip_u32ProgrammedLength);
     #endif
@@ -2794,15 +2588,9 @@ C40_Ip_StatusType C40_Ip_Read(uint32 LogicalAddress,
     uint32            ReadSize;
     C40_Ip_StatusType Status;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    boolean CheckValidStatus;
-
     C40_IP_DEV_ASSERT(Length > 0UL);
     C40_IP_DEV_ASSERT(DestAddressPtr != NULL_PTR);
-    CheckValidStatus = C40_Ip_ValidRangeAddress(LogicalAddress, Length);
-
-    C40_IP_DEV_ASSERT(CheckValidStatus);
-#endif
+    C40_IP_DEV_ASSERT( C40_Ip_ValidRangeAddress(LogicalAddress, Length) );
 
     /* Checking before reading */
     C40_Ip_eReadStatus = C40_Ip_ReadCheckInputParams(Length, DestAddressPtr);
@@ -2818,8 +2606,6 @@ C40_Ip_StatusType C40_Ip_Read(uint32 LogicalAddress,
         C40_Ip_SynchronizeCache(ReadAddress, SizeLeft);
 #endif
 
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_15();
         /* Start read operation */
         do
         {
@@ -2852,9 +2638,6 @@ C40_Ip_StatusType C40_Ip_Read(uint32 LogicalAddress,
             SizeLeft     -= ReadSize;
         }
         while (0UL < SizeLeft);
-
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_15();
     }
 
     return C40_Ip_eReadStatus;
@@ -2872,15 +2655,8 @@ C40_Ip_StatusType C40_Ip_Compare(uint32 LogicalAddress,
                                  const uint8 *SourceAddressPtr
                                 )
 {
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    boolean CheckValidStatus;
-
     C40_IP_DEV_ASSERT(Length > 0UL);
-
-    CheckValidStatus = C40_Ip_ValidRangeAddress(LogicalAddress, Length);
-
-    C40_IP_DEV_ASSERT(CheckValidStatus);
-#endif
+    C40_IP_DEV_ASSERT( C40_Ip_ValidRangeAddress(LogicalAddress, Length) );
 
     /* Check the input parameter */
     if (0U == Length)
@@ -2898,9 +2674,6 @@ C40_Ip_StatusType C40_Ip_Compare(uint32 LogicalAddress,
         C40_Ip_SynchronizeCache(LogicalAddress, Length);
 #endif
 
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_14();
-
         /* Choose the type of comparison */
         if (NULL_PTR != SourceAddressPtr)
         {
@@ -2912,9 +2685,6 @@ C40_Ip_StatusType C40_Ip_Compare(uint32 LogicalAddress,
             /* Blank check */
             C40_Ip_EraseVerify(LogicalAddress, Length);
         }
-
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_14();
     }
 
     return C40_Ip_eReadStatus;
@@ -2944,6 +2714,13 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheck(uint32 SelectBlock,
                                             )
 {
     C40_Ip_StatusType ReturnCode;
+#if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
+    /* Prepare timeout counter */
+    uint32 ElapsedTicks = 0UL;
+    uint32 TimeoutTicks = OsIf_MicrosToTicks(C40_IP_USER_TEST_WAIT, (OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+    uint32 CurrentTicks = OsIf_GetCounter((OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+#endif
+
 
     /* Check if input parameters were correct or not */
     if ((boolean)FALSE == C40_Ip_CheckSelectBlock(SelectBlock))
@@ -2959,10 +2736,6 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheck(uint32 SelectBlock,
 
     if (C40_IP_STATUS_SUCCESS == ReturnCode)
     {
-
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_19();
-
         /* Write password to UT0 register to enable test mode */
         C40_Ip_pFlashBaseAddress->UT0 = C40_IP_USER_TEST_PASSWORD;
         if (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_UTE_MASK))
@@ -3012,12 +2785,35 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheck(uint32 SelectBlock,
             }
             else
             {
-                ReturnCode = C40_Ip_DisableUtestMode(ReturnCode);
+                /* Write job address has been failed, create a dummy check to clear interlock and disable UTest mode */
+
+                /* One and only one ADATA register must also be written. This is referred to as an interlock write.*/
+                C40_Ip_pFlashBaseAddress->DATA[0] = FLASH_DATA_PDATA((uint32)0xFFFFFFFFU);
+
+                /* Initiate the Array Integrity Check by writing 1 to UT0_AIE bit*/
+                C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_AIE_MASK;
+
+                /* Abort the array integrity operation */
+                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_AIE_MASK;
+
+                /* Wait the UT0_AID bit goes high */
+                while (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_AID_MASK))
+                {
+#if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
+                    ElapsedTicks += OsIf_GetElapsed(&CurrentTicks, (OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+                    if (ElapsedTicks >= TimeoutTicks)
+                    {
+                        /*Errors Timeout because wait for the AID bit long time*/
+                        ReturnCode = C40_IP_STATUS_ERROR_TIMEOUT;
+                        break;
+                    }
+#endif
+                }
+
+                /* Disable UTest mode */
+                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_UTE_MASK;
             }
         }
-
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_19();
     }
     return ReturnCode;
 }
@@ -3035,10 +2831,8 @@ C40_Ip_StatusType C40_Ip_CheckUserTestStatus(const C40_Ip_MisrType *MisrExpected
 {
     C40_Ip_StatusType ReturnCode = C40_IP_STATUS_SUCCESS;
 
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
     C40_IP_DEV_ASSERT(NULL_PTR != MisrExpectedValues);
     C40_IP_DEV_ASSERT(NULL_PTR != TestResult);
-#endif
 
     if ((NULL_PTR == MisrExpectedValues) || (NULL_PTR == TestResult))
     {
@@ -3047,9 +2841,6 @@ C40_Ip_StatusType C40_Ip_CheckUserTestStatus(const C40_Ip_MisrType *MisrExpected
     else
     {
         *TestResult = C40_IP_OK;
-
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_16();
 
         /* There must be an UTest operation */
         if (0x0U != (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_AIE_MASK))
@@ -3077,9 +2868,6 @@ C40_Ip_StatusType C40_Ip_CheckUserTestStatus(const C40_Ip_MisrType *MisrExpected
         {
             ReturnCode = C40_IP_STATUS_ERROR_TIMEOUT;
         }
-
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_16();
     }
 
     return ReturnCode;
@@ -3106,16 +2894,8 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheckSuspend(void)
     /* There must be an UTest operation is in-progress */
     if ((0x0U != (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_AIE_MASK)) && (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & (FLASH_UT0_AISUS_MASK|FLASH_UT0_AID_MASK))))
     {
-
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_17();
-
         /* Set bit UT0_AISUS */
         C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_AISUS_MASK;
-
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_17();
-
         /* Wait the UT0_AID bit goes high */
         while (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_AID_MASK))
         {
@@ -3140,7 +2920,6 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheckSuspend(void)
     {
         ReturnCode = C40_IP_STATUS_ERROR;
     }
-
     return ReturnCode;
 }
 
@@ -3159,9 +2938,6 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheckResume(void)
     /* There must be an UTest operation */
     if (0x0U != (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_AIE_MASK))
     {
-        /* Start of exclusive area */
-        SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_18();
-
         /* The operation is in suspended state */
         if ((C40_Ip_pFlashBaseAddress->UT0 & (FLASH_UT0_AISUS_MASK | FLASH_UT0_AID_MASK)) == (FLASH_UT0_AISUS_MASK | FLASH_UT0_AID_MASK))
         {
@@ -3176,9 +2952,6 @@ C40_Ip_StatusType C40_Ip_ArrayIntegrityCheckResume(void)
         {
             /* Do nothing */
         }
-
-        /* End of exclusive area */
-        SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_18();
     }
     /* there is no resumed array integrity check */
     else
@@ -3210,6 +2983,12 @@ C40_Ip_StatusType C40_Ip_UserMarginReadCheck(uint32 SelectBlock,
                                             )
 {
     C40_Ip_StatusType ReturnCode;
+#if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
+    /* Prepare timeout counter */
+    uint32 ElapsedTicks = 0UL;
+    uint32 TimeoutTicks = OsIf_MicrosToTicks(C40_IP_USER_TEST_WAIT, (OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+    uint32 CurrentTicks = OsIf_GetCounter((OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+#endif
 
     /* Check if input parameters were correct or not */
     if ((boolean)FALSE == C40_Ip_CheckSelectBlock(SelectBlock))
@@ -3223,8 +3002,6 @@ C40_Ip_StatusType C40_Ip_UserMarginReadCheck(uint32 SelectBlock,
         ReturnCode = C40_Ip_UTestCheckBusy();
     }
 
-    /* Start of exclusive area */
-    SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_20();
 
     if (C40_IP_STATUS_SUCCESS == ReturnCode)
     {
@@ -3237,6 +3014,13 @@ C40_Ip_StatusType C40_Ip_UserMarginReadCheck(uint32 SelectBlock,
         }
         else
         {
+#if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
+            /* Prepare timeout counter */
+            C40_Ip_u32ElapsedTicks = 0UL;
+            C40_Ip_u32TimeoutTicks = OsIf_MicrosToTicks(C40_IP_WRITE_TIMEOUT, (OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+            C40_Ip_u32CurrentTicks = OsIf_GetCounter((OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+#endif
+
             /* Select the block to receive the array integrity check by doing an interlock write to that block */
             /*
             * The block selected for array integrity check do not need to be unlocked.
@@ -3275,370 +3059,36 @@ C40_Ip_StatusType C40_Ip_UserMarginReadCheck(uint32 SelectBlock,
             }
             else
             {
-                ReturnCode = C40_Ip_DisableUtestMode(ReturnCode);
-            }
-        }
-    }
+                /* Write job address has been failed, create a dummy check to clear interlock and disable UTest mode */
 
-    /* End of exclusive area */
-    SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_20();
-    return ReturnCode;
-}
+                /* One and only one ADATA register must also be written. This is referred to as an interlock write.*/
+                C40_Ip_pFlashBaseAddress->DATA[0] = FLASH_DATA_PDATA((uint32)0xFFFFFFFFU);
 
+                /* Initiate the Array Integrity Check by writing 1 to UT0_AIE bit*/
+                C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_AIE_MASK;
 
-/*FUNCTION**********************************************************************
- *
- * Function Name : C40_Ip_EccLogicCheck
- * Description   : This API will test the 'ECC Logic Check' of the Flash.
- *                 The API will simulate a single or double bit fault
- *                 depending on the user input.
- *
- *END**************************************************************************/
-C40_Ip_StatusType C40_Ip_EccLogicCheck(const uint32  AddressCheck,
-                                       const uint32 *DataValue,
-                                       const uint8   EccValue
-                                      )
-{
-    C40_Ip_StatusType ReturnCode = C40_IP_STATUS_SUCCESS;
-    C40_Ip_FlashBlocksNumberType BlockSelect;
-    uint32 BlockStartAddr;
-    uint32 BlockOffsetAddr; /* Range of BlockStartAddr to AddressCheck */
-    uint32 DWSelect      = 0U; /* Double Word Select */
+                /* Abort the array integrity operation */
+                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_AIE_MASK;
 
-    volatile uint32 DataReceive_0 = 0U;
-    volatile uint32 DataReceive_1 = 0U;
-
-    uint32 MCRSValue     = 0U;
-
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    C40_IP_DEV_ASSERT((AddressCheck % C40_IP_DWORD_SIZE) == 0U); /* support calculator the double word selected */
-#endif
-
-    /* Find position block include AddressCheck */
-    BlockSelect = C40_Ip_GetBlockNumberFromAddress(AddressCheck);
-    if(C40_IP_BLOCK_INVALID != BlockSelect)
-    {
-        /* Check if UTest activity is in progress */
-        ReturnCode = C40_Ip_UTestCheckBusy();
-
-        if (C40_IP_STATUS_SUCCESS == ReturnCode)
-        {
-            /* Start of exclusive area */
-            SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_21();
-
-            MCRSValue = C40_Ip_pFlashBaseAddress->MCRS;
-            /* Clear bits MCRS_EER, MCRS_SBC (notes: write 1 to clear) keep all other bits */
-            MCRSValue &= ~( FLASH_MCRS_EEE_MASK | FLASH_MCRS_AEE_MASK | FLASH_MCRS_RVE_MASK | FLASH_MCRS_RRE_MASK | FLASH_MCRS_RWE_MASK | FLASH_MCRS_PES_MASK | FLASH_MCRS_PEP_MASK );
-            MCRSValue |=  ( FLASH_MCRS_EER_MASK | FLASH_MCRS_SBC_MASK );
-
-            /* Clear error bits MCRS_EER, MCRS_SBC */
-            C40_Ip_pFlashBaseAddress->MCRS = MCRSValue;
-            /* Write password to UT0 register to enable Utest mode */
-            C40_Ip_pFlashBaseAddress->UT0 = C40_IP_USER_TEST_PASSWORD;
-
-            if (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_UTE_MASK))
-            {
-                /* Did not enable the Utest mode yet */
-                ReturnCode = C40_IP_STATUS_ERROR;
-            }
-            else
-            {
-                /* Get Start address of block */
-                BlockStartAddr = C40_Ip_GetBlockStartAddress(BlockSelect);
-
-                /* Calculator the double word selected */
-                BlockOffsetAddr = AddressCheck - BlockStartAddr;
-
-                DWSelect = (uint32)(BlockOffsetAddr % C40_IP_PAGE_SIZE);
-                DWSelect = (uint32)(DWSelect / C40_IP_DWORD_SIZE);
-
-                /* Write UT0_EIE to 1 enable ECC Data input */
-                C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_EIE_MASK;
-                /* Write UT0_SBCE to 1 enable SBC bit */
-                C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_SBCE_MASK;
-
-                /* Write data bits to be read */
-                C40_Ip_pFlashBaseAddress->UD0 = FLASH_UD0_EDATA(DataValue[0]);
-                C40_Ip_pFlashBaseAddress->UD1 = FLASH_UD1_EDATA(DataValue[1]);
-
-                /*Reset register UD2*/
-                C40_Ip_pFlashBaseAddress->UD2 = 0x0U;
-                /* Write check bit values (Ecc Position Bits) */
-                C40_Ip_pFlashBaseAddress->UD2 |= FLASH_UD2_EDATAC(EccValue);
-
-                /* Reset Address register */
-                C40_Ip_pFlashBaseAddress->ADR &= ~(FLASH_ADR_A0_MASK | FLASH_ADR_A1_MASK | FLASH_ADR_A2_MASK | FLASH_ADR_A5_MASK | FLASH_ADR_ADDR_MASK);
-                /* Set region (= BlockSelect) have address captured or to be accessed */
-                C40_Ip_pFlashBaseAddress->ADR |= (uint32)((uint32)(1UL << (uint32)BlockSelect) << FLASH_ADR_A0_SHIFT);
-                /* Write address offset to start read operation */
-                C40_Ip_pFlashBaseAddress->ADR |= FLASH_ADR_ADDR(BlockOffsetAddr/C40_IP_DWORD_SIZE);
-
-                /* Set the double words on the page to receive the check. */
-                C40_Ip_pFlashBaseAddress->UD2 |= (uint32)((uint32)(1UL << DWSelect) << FLASH_UD2_ED0_SHIFT );
-
-                /* Completes all instructions before this instruction complete => avoid optimal while getting data */
-                MCAL_DATA_SYNC_BARRIER();
-	            MCAL_INSTRUCTION_SYNC_BARRIER();
-
-                /* Read page address at internal address to start sequence ECC Logic Check */
-                DataReceive_0 = *(volatile uint32 *)(AddressCheck);
-                DataReceive_1 = *(volatile uint32 *)(AddressCheck + 4U);
-
-                ReturnCode = C40_Ip_EccLogicCheckStatus();
-
-                /* Reset the Address register */
-                C40_Ip_pFlashBaseAddress->ADR = (uint32)0x0U;
-                /* Clear UT0_EIE to disable ECC Data input */
-                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_EIE_MASK;
-                /* Clear UTO-SBCE bit */
-                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_SBCE_MASK;
-                /* Clear UTO-UTE bit to disable User Test Mode */
-                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_UTE_MASK;
-            }
-            /* End of exclusive area */
-            SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_21();
-        }
-
-        /* Dummy read, not used */
-        (void)DataReceive_0;
-        (void)DataReceive_1;
-    }
-
-    return ReturnCode;
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : C40_Ip_EdcAfterEccLogicCheck
- * Description   : This API will test the 'EDC after ECC Logic Check' of the Flash.
- *                 The API will simulate double bit fault.
- *
- *END**************************************************************************/
-C40_Ip_StatusType C40_Ip_EdcAfterEccLogicCheck(const uint32  AddressCheck,
-                                               const uint32 *DataValue,
-                                               const uint8   EccValue
-                                              )
-{
-    C40_Ip_StatusType ReturnCode = C40_IP_STATUS_SUCCESS;
-    C40_Ip_FlashBlocksNumberType BlockSelect;
-    uint32 BlockStartAddr;
-    uint32 BlockOffsetAddr; /* Range of BlockStartAddr to AddressCheck */
-    uint32 DWSelect      = 0U; /* Double Word Select */
-
-    volatile uint32 DataReceive_0 = 0U;
-    volatile uint32 DataReceive_1 = 0U;
-
-    uint32 MCRSValue     = 0U;
-
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    C40_IP_DEV_ASSERT((AddressCheck % C40_IP_DWORD_SIZE) == 0U); /* support calculator the double word selected */
-#endif
-
-    /* Find position block include AddressCheck */
-    BlockSelect = C40_Ip_GetBlockNumberFromAddress(AddressCheck);
-    if(C40_IP_BLOCK_INVALID != BlockSelect)
-    {
-        /* Check if UTest activity is in progress */
-        ReturnCode = C40_Ip_UTestCheckBusy();
-
-        if (C40_IP_STATUS_SUCCESS == ReturnCode)
-        {
-            /* Start of exclusive area */
-            SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_22();
-
-            MCRSValue = C40_Ip_pFlashBaseAddress->MCRS;
-            /* Clear bits MCRS_SBC, MCRS_EER MCRS_EEE, (notes: write 1 to clear) keep all other bits */
-            MCRSValue &= ~( FLASH_MCRS_AEE_MASK | FLASH_MCRS_RVE_MASK | FLASH_MCRS_RRE_MASK | FLASH_MCRS_RWE_MASK | FLASH_MCRS_PES_MASK | FLASH_MCRS_PEP_MASK );
-            MCRSValue |=  ( FLASH_MCRS_EER_MASK | FLASH_MCRS_SBC_MASK | FLASH_MCRS_EEE_MASK );
-
-            /* Clear error bits MCRS_EEE */
-            C40_Ip_pFlashBaseAddress->MCRS = MCRSValue;
-            /* Write password to UT0 register to enable Utest mode */
-            C40_Ip_pFlashBaseAddress->UT0 = C40_IP_USER_TEST_PASSWORD;
-
-            if (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_UTE_MASK))
-            {
-                /* Did not enable the Utest mode yet */
-                ReturnCode = C40_IP_STATUS_ERROR;
-            }
-            else
-            {
-                /* Get Start address of block */
-                BlockStartAddr = C40_Ip_GetBlockStartAddress(BlockSelect);
-
-                /* Calculator the double word selected */
-                BlockOffsetAddr = AddressCheck - BlockStartAddr;
-
-                DWSelect = (uint32)(BlockOffsetAddr % C40_IP_PAGE_SIZE);
-                DWSelect = (uint32)(DWSelect / C40_IP_DWORD_SIZE);
-
-                /* Write UT0_EDIE to 1 Enable EDC after ECC Data Input */
-                C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_EDIE_MASK;
-
-                /* Write data bits to be read */
-                C40_Ip_pFlashBaseAddress->UD3 = FLASH_UD3_EDDATA(DataValue[0]);
-                C40_Ip_pFlashBaseAddress->UD4 = FLASH_UD4_EDDATA(DataValue[1]);
-
-                /*Reset register UD2*/
-                C40_Ip_pFlashBaseAddress->UD5 = 0x0U;
-                /* Write check bit values (Ecc Position Bits) */
-                C40_Ip_pFlashBaseAddress->UD5 |= FLASH_UD5_EDDATAC(EccValue);
-
-                /* Reset Address register */
-                C40_Ip_pFlashBaseAddress->ADR &= ~(FLASH_ADR_A0_MASK | FLASH_ADR_A1_MASK | FLASH_ADR_A2_MASK | FLASH_ADR_A5_MASK | FLASH_ADR_ADDR_MASK);
-                /* Set region (= BlockSelect) have address captured or to be accessed */
-                C40_Ip_pFlashBaseAddress->ADR |= (uint32)((uint32)(1UL << (uint32)BlockSelect) << FLASH_ADR_A0_SHIFT);
-                /* Write address offset to start read operation */
-                C40_Ip_pFlashBaseAddress->ADR |= FLASH_ADR_ADDR(BlockOffsetAddr/C40_IP_DWORD_SIZE);
-
-                /* Set the double words on the page to receive the check. */
-                C40_Ip_pFlashBaseAddress->UD5 |= (uint32)((uint32)(1UL << DWSelect) << FLASH_UD5_EDD0_SHIFT );
-
-                /* Completes all instructions before this instruction complete => avoid optimal while getting data */
-                MCAL_DATA_SYNC_BARRIER();
-	            MCAL_INSTRUCTION_SYNC_BARRIER();
-
-                /* Read page address at internal address to start sequence ECC Logic Check */
-                DataReceive_0 = *(volatile uint32 *)(AddressCheck);
-                DataReceive_1 = *(volatile uint32 *)(AddressCheck + 4U);
-
-                MCRSValue = C40_Ip_pFlashBaseAddress->MCRS;
-                /* Check if EDC after ECC Error raised */
-                if ((MCRSValue & FLASH_MCRS_EEE_MASK) != 0U)
+                /* Wait the UT0_AID bit goes high */
+                while (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_AID_MASK))
                 {
-                    /* Clear bits MCRS_EEE MCRS_EER MCRS_SBC (notes: write 1 to clear) keep all other bits */
-                    MCRSValue &= ~( FLASH_MCRS_AEE_MASK | FLASH_MCRS_RVE_MASK | FLASH_MCRS_RRE_MASK | FLASH_MCRS_RWE_MASK | FLASH_MCRS_PES_MASK | FLASH_MCRS_PEP_MASK );
-                    MCRSValue |=  ( FLASH_MCRS_EEE_MASK | FLASH_MCRS_EER_MASK | FLASH_MCRS_SBC_MASK );
-                    /* Write 1 to clear the MCR_EEE MCRS_EER MCRS_SBC bit of MCRS */
-                    C40_Ip_pFlashBaseAddress->MCRS = MCRSValue;
-
-                    ReturnCode = C40_IP_STATUS_ECC_UNCORRECTED;
+#if (STD_ON == C40_IP_TIMEOUT_SUPERVISION_ENABLED)
+                    ElapsedTicks += OsIf_GetElapsed(&CurrentTicks, (OsIf_CounterType)C40_IP_TIMEOUT_TYPE);
+                    if (ElapsedTicks >= TimeoutTicks)
+                    {
+                        /*Errors Timeout because wait for the AID bit long time*/
+                        ReturnCode = C40_IP_STATUS_ERROR_TIMEOUT;
+                        break;
+                    }
+#endif
                 }
 
-                /* Reset the Address register */
-                C40_Ip_pFlashBaseAddress->ADR = (uint32)0x0U;
-                /* Clear UTO-EDIE bit */
-                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_EDIE_MASK;
-                /* Clear UTO-UTE bit to disable User Test Mode */
+                /* Disable UTest mode */
                 C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_UTE_MASK;
             }
-            /* End of exclusive area */
-            SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_22();
         }
     }
-    /* Dummy read, not used */
-    (void)DataReceive_0;
-    (void)DataReceive_1;
-
-    return ReturnCode;
-}
-
-/*FUNCTION**********************************************************************
- *
- * Function Name : C40_Ip_AddressEncodeLogicCheck
- * Description   : This API will test the 'Address Encode Logic Check' of the Flash.
- *
- *END**************************************************************************/
-C40_Ip_StatusType C40_Ip_AddressEncodeLogicCheck(const uint32  AddressCheck,
-                                                 const uint32 *InvertBits
-                                                )
-{
-    C40_Ip_StatusType ReturnCode = C40_IP_STATUS_ERROR;
-
-    C40_Ip_FlashBlocksNumberType BlockSelect;
-    uint32 BlockStartAddr;
-    uint32 BlockOffsetAddr; /* Range of BlockStartAddr to AddressCheck */
-
-    volatile uint32 DataReceive  = 0U;
-
-    uint32 MCRSValue    = 0U;
-
-#if (C40_IP_DEV_ERROR_DETECT == STD_ON)
-    C40_IP_DEV_ASSERT((AddressCheck % C40_IP_DWORD_SIZE) == 0U); /* support calculator the double word selected */
-#endif
-
-    /* Find position block include AddressCheck */
-    BlockSelect = C40_Ip_GetBlockNumberFromAddress(AddressCheck);
-    if(C40_IP_BLOCK_INVALID != BlockSelect)
-    {
-        /* Check if UTest activity is in progress */
-        ReturnCode = C40_Ip_UTestCheckBusy();
-
-        if (C40_IP_STATUS_SUCCESS == ReturnCode)
-        {
-            /* Start of exclusive area */
-            SchM_Enter_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_23();
-
-            MCRSValue = C40_Ip_pFlashBaseAddress->MCRS;
-            /* Clear bits MCRS_AEE (notes: write 1 to clear) keep all other bits */
-            MCRSValue &= ~(FLASH_MCRS_EER_MASK | FLASH_MCRS_SBC_MASK | FLASH_MCRS_EEE_MASK | FLASH_MCRS_RVE_MASK | FLASH_MCRS_RRE_MASK | FLASH_MCRS_RWE_MASK | FLASH_MCRS_PES_MASK | FLASH_MCRS_PEP_MASK);
-            MCRSValue |=  (FLASH_MCRS_AEE_MASK);
-
-            /* Clear error bits MCRS_AEE */
-            C40_Ip_pFlashBaseAddress->MCRS = MCRSValue;
-            /* Write password to UT0 register to enable Utest mode */
-            C40_Ip_pFlashBaseAddress->UT0 = C40_IP_USER_TEST_PASSWORD;
-
-            if (0x0U == (C40_Ip_pFlashBaseAddress->UT0 & FLASH_UT0_UTE_MASK))
-            {
-                /* Did not enable the Utest mode yet */
-                ReturnCode = C40_IP_STATUS_ERROR;
-            }
-            else
-            {
-                /* Get Start address of block */
-                BlockStartAddr = C40_Ip_GetBlockStartAddress(BlockSelect);
-                /* Calculator Block Ofset */
-                BlockOffsetAddr = AddressCheck - BlockStartAddr;
-
-                /* Write UT0_AEIE to 1 Enable Address Encode Invert */
-                C40_Ip_pFlashBaseAddress->UT0 |= FLASH_UT0_AEIE_MASK;
-
-                /* Write address bit(s) to be inverted */
-                C40_Ip_pFlashBaseAddress->UA0 = FLASH_UA0_AEI(InvertBits[0]);
-                C40_Ip_pFlashBaseAddress->UA1 = FLASH_UA1_AEI(InvertBits[1]);
-
-                /* Reset Address register */
-                C40_Ip_pFlashBaseAddress->ADR &= ~(FLASH_ADR_A0_MASK | FLASH_ADR_A1_MASK | FLASH_ADR_A2_MASK | FLASH_ADR_A5_MASK | FLASH_ADR_ADDR_MASK);
-                /* Set region (= BlockSelect) have address captured or to be accessed */
-                C40_Ip_pFlashBaseAddress->ADR |= (uint32)((uint32)(1UL << (uint32)BlockSelect) << FLASH_ADR_A0_SHIFT);
-                /* Write address offset to start read operation */
-                C40_Ip_pFlashBaseAddress->ADR |= FLASH_ADR_ADDR(BlockOffsetAddr/C40_IP_DWORD_SIZE);
-
-                /* Completes all instructions before this instruction complete => avoid optimal while getting data */
-                MCAL_DATA_SYNC_BARRIER();
-	            MCAL_INSTRUCTION_SYNC_BARRIER();
-
-                /* Read page address at internal address to start sequence ECC Logic Check */
-                DataReceive = *(volatile uint32 *)(AddressCheck);
-
-                MCRSValue = C40_Ip_pFlashBaseAddress->MCRS;
-                if ((MCRSValue & FLASH_MCRS_AEE_MASK) != 0U)
-                {
-                    ReturnCode = C40_IP_STATUS_SUCCESS;
-
-                    /* Clear bits MCRS_AEE (notes: write 1 to clear) keep all other bits */
-                    MCRSValue &= ~(FLASH_MCRS_EER_MASK | FLASH_MCRS_SBC_MASK | FLASH_MCRS_EEE_MASK | FLASH_MCRS_RVE_MASK | FLASH_MCRS_RRE_MASK | FLASH_MCRS_RWE_MASK | FLASH_MCRS_PES_MASK | FLASH_MCRS_PEP_MASK);
-                    MCRSValue |=  (FLASH_MCRS_AEE_MASK);
-
-                    /* Write 1 to clear the MCR_AEE bit of MCRS */
-                    C40_Ip_pFlashBaseAddress->MCRS = MCRSValue;
-                }
-
-                /* Reset the Address register */
-                C40_Ip_pFlashBaseAddress->ADR = (uint32)0x0U;
-                /* Clear UTO-AEIE bit */
-                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_AEIE_MASK;
-                /* Clear UTO-UTE bit to disable User Test Mode */
-                C40_Ip_pFlashBaseAddress->UT0 &= ~FLASH_UT0_UTE_MASK;
-            }
-            /* End of exclusive area */
-            SchM_Exit_Mem_43_INFLS_MEM_EXCLUSIVE_AREA_23();
-        }
-    }
-    /* Dummy read, not used */
-    (void)DataReceive;
-
     return ReturnCode;
 }
 #endif /* (STD_ON == C40_IP_UTEST_MODE_API) */
@@ -3672,10 +3122,10 @@ uint32 C40_Ip_GetFailedAddress(void)
     CapturedRegion = ADRValue & C40_IP_FAILED_ADDRESS_REGION_MASK;
 
     /* Select the memory address space */
-    if ((ADRValue & FLASH_ADR_SAD_MASK) != 0U)
+    if ( (ADRValue & FLASH_ADR_SAD_MASK) != 0U )
     {
         /* Address captured or to be accessed is from the UTest NVM array space*/
-        if ((ADRValue & C40_IP_REGION_0_MASK) != 0U)
+        if ( (ADRValue & C40_IP_REGION_0_MASK) != 0U )
         {
             Addr = C40_IP_UTEST_BLOCK_BASE_ADDR;
         }
@@ -3719,7 +3169,7 @@ uint32 C40_Ip_GetFailedAddress(void)
 }
 
 
-#if ((C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON))
+#if ( (C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON) )
 void C40_Ip_ReportEccUnCorrectedError(void)
 {
     /* save read status */

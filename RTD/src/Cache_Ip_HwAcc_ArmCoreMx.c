@@ -7,17 +7,17 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *   
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be 
-*   used strictly in accordance with the applicable license terms.  By expressly 
-*   accepting such terms or by downloading, installing, activating and/or otherwise 
-*   using the software, you are agreeing that you have read, and that you agree to 
-*   comply with and are bound by, such license terms.  If you do not agree to be 
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
+*   used strictly in accordance with the applicable license terms. By expressly
+*   accepting such terms or by downloading, installing, activating and/or otherwise
+*   using the software, you are agreeing that you have read, and that you agree to
+*   comply with and are bound by, such license terms. If you do not agree to be
 *   bound by the applicable license terms, then you may not retain, install,
 *   activate or otherwise use the software.
 ==================================================================================================*/
@@ -25,7 +25,7 @@
 /**
 *   @file    Cache_Ip_HwAcc_ArmCoreMx.c
 *
-*   @version 5.0.0
+*   @version 4.0.0
 *
 *   @brief   AUTOSAR Mcl - Cache Ip driver header file.
 *   @details
@@ -53,7 +53,7 @@ extern "C"{
 #define CACHE_IP_HWACC_ARMCOREMX_AR_RELEASE_MAJOR_VERSION_C        4
 #define CACHE_IP_HWACC_ARMCOREMX_AR_RELEASE_MINOR_VERSION_C        7
 #define CACHE_IP_HWACC_ARMCOREMX_AR_RELEASE_REVISION_VERSION_C     0
-#define CACHE_IP_HWACC_ARMCOREMX_SW_MAJOR_VERSION_C                5
+#define CACHE_IP_HWACC_ARMCOREMX_SW_MAJOR_VERSION_C                4
 #define CACHE_IP_HWACC_ARMCOREMX_SW_MINOR_VERSION_C                0
 #define CACHE_IP_HWACC_ARMCOREMX_SW_PATCH_VERSION_C                0
 
@@ -164,7 +164,6 @@ void hwAcc_ArmCoreMx_DataCacheInvalidate(void)
 
     /* CACHE Type shall be selected before any other operation */
     S32_SCB->CSSELR = DCACHE_CSSELR_EN(S32_SCB->CSSELR);
-    MCAL_DATA_SYNC_BARRIER();
     cacheSetSize = CACHE_CCSIDR_SET_SIZE(S32_SCB->CCSIDR);
     cacheWaySize = CACHE_CCSIDR_WAY_SIZE(S32_SCB->CCSIDR);
     for(setIdx = 0; setIdx < cacheSetSize; setIdx++)
@@ -202,7 +201,6 @@ void hwAcc_ArmCoreMx_DataCacheClean(const boolean enInvalidate)
 
     /* CACHE Type shall be selected before any other operation */
     S32_SCB->CSSELR = DCACHE_CSSELR_EN(S32_SCB->CSSELR);
-    MCAL_DATA_SYNC_BARRIER();
     cacheSetSize = CACHE_CCSIDR_SET_SIZE(S32_SCB->CCSIDR);
     cacheWaySize = CACHE_CCSIDR_WAY_SIZE(S32_SCB->CCSIDR);
     if(TRUE == enInvalidate)
@@ -231,60 +229,45 @@ void hwAcc_ArmCoreMx_DataCacheClean(const boolean enInvalidate)
 void hwAcc_ArmCoreMx_InstructionCacheInvalidateByAddr(const uint32 addr, const uint32 length)
 {
     uint32 cacheLineSize;
-    sint32 op_size;
-    uint32 op_addr;
-    uint32 tmp_size;
+    uint32 tmpAddr;
+    uint32 endAddr;
 
+    /* CACHE Type shall be selected before any other operation */
+    S32_SCB->CSSELR = ICACHE_CSSELR_EN(S32_SCB->CSSELR);
     cacheLineSize = CACHE_CCSIDR_LINE_SIZE(S32_SCB->CCSIDR);
-
-    if (length > 0U) 
+    tmpAddr = addr;
+    endAddr = tmpAddr + length;
+    while(tmpAddr < endAddr)
     {
-        tmp_size = length + (((uint32)addr) & (cacheLineSize - 1U));
-        op_size = (sint32)tmp_size;
-        op_addr = (uint32)addr;
-
+        S32_SCB->ICIMVAU = tmpAddr;
         MCAL_DATA_SYNC_BARRIER();
-
-        do {
-            S32_SCB->ICIMVAU = op_addr;      /* register accepts only 32byte aligned values, only bits 31..5 are valid */
-            op_addr += cacheLineSize;
-            op_size -= (sint32)cacheLineSize;
-        } while (op_size > 0);
-
-      MCAL_DATA_SYNC_BARRIER();
-      MCAL_INSTRUCTION_SYNC_BARRIER();
+        MCAL_INSTRUCTION_SYNC_BARRIER();
+        tmpAddr = tmpAddr + cacheLineSize; /* Invalidate 1 line at a time. */
     }
+    MCAL_DATA_SYNC_BARRIER();
+    MCAL_INSTRUCTION_SYNC_BARRIER();
 }
 
 void hwAcc_ArmCoreMx_DataCacheInvalidateByAddr(const uint32 addr, const uint32 length)
 {
     uint32 cacheLineSize;
-    sint32 op_size;
-    uint32 op_addr;
-    uint32 tmp_size;
+    uint32 tmpAddr;
+    uint32 endAddr;
 
     /* CACHE Type shall be selected before any other operation */
     S32_SCB->CSSELR = DCACHE_CSSELR_EN(S32_SCB->CSSELR);
-    MCAL_DATA_SYNC_BARRIER();
     cacheLineSize = CACHE_CCSIDR_LINE_SIZE(S32_SCB->CCSIDR);
-
-    if (length > 0U)
+    tmpAddr = addr;
+    endAddr = tmpAddr + length;
+    while(tmpAddr < endAddr)
     {
-        tmp_size = length + (((uint32)addr) & (cacheLineSize - 1U));
-        op_size = (sint32)tmp_size;
-        op_addr = (uint32)addr;
-
-        MCAL_DATA_SYNC_BARRIER();
-
-        do {
-            S32_SCB->DCIMVAC = op_addr;      /* register accepts only 32byte aligned values, only bits 31..5 are valid */
-            op_addr += cacheLineSize;
-            op_size -= (sint32)cacheLineSize;
-        } while (op_size > 0);
-
+        S32_SCB->DCIMVAC = tmpAddr;
         MCAL_DATA_SYNC_BARRIER();
         MCAL_INSTRUCTION_SYNC_BARRIER();
+        tmpAddr = tmpAddr + cacheLineSize; /* Invalidate 1 line at a time. */
     }
+    MCAL_DATA_SYNC_BARRIER();
+    MCAL_INSTRUCTION_SYNC_BARRIER();
 }
 
 void hwAcc_ArmCoreMx_InstructionCacheCleanByAddr(const boolean enInvalidate, const uint32 addr, const uint32 length)
@@ -299,39 +282,32 @@ void hwAcc_ArmCoreMx_InstructionCacheCleanByAddr(const boolean enInvalidate, con
 void hwAcc_ArmCoreMx_DataCacheCleanByAddr(const boolean enInvalidate, const uint32 addr, const uint32 length)
 {
     uint32 cacheLineSize;
-    sint32 op_size;
-    uint32 op_addr;
-    uint32 tmp_size;
+    uint32 tmpAddr;
+    uint32 endAddr;
+    volatile uint32 * pDataCacheCleanByAddr;
 
     /* CACHE Type shall be selected before any other operation */
     S32_SCB->CSSELR = DCACHE_CSSELR_EN(S32_SCB->CSSELR);
-    MCAL_DATA_SYNC_BARRIER();
     cacheLineSize = CACHE_CCSIDR_LINE_SIZE(S32_SCB->CCSIDR);
-
-    if (length > 0U)
+    tmpAddr = addr;
+    endAddr = tmpAddr + length;
+    if(TRUE == enInvalidate)
     {
-        tmp_size = length + (((uint32)addr) & (cacheLineSize - 1U));
-        op_size = (sint32)tmp_size;
-        op_addr = (uint32)addr;
-
-        MCAL_DATA_SYNC_BARRIER();
-
-        do {
-            if(TRUE == enInvalidate)
-            {
-                S32_SCB->DCCIMVAC = op_addr;    /* register accepts only 32byte aligned values, only bits 31..5 are valid */
-            }
-            else
-            {
-                S32_SCB->DCCMVAC = op_addr;     /* register accepts only 32byte aligned values, only bits 31..5 are valid */
-            }
-            op_addr += cacheLineSize;
-            op_size -= (sint32)cacheLineSize;
-        } while (op_size > 0);
-
+        pDataCacheCleanByAddr = (volatile uint32*)&S32_SCB->DCCIMVAC;
+    }
+    else
+    {
+        pDataCacheCleanByAddr = (volatile uint32*)&S32_SCB->DCCMVAC;
+    }
+    while(tmpAddr < endAddr)
+    {
+        *pDataCacheCleanByAddr = tmpAddr;
         MCAL_DATA_SYNC_BARRIER();
         MCAL_INSTRUCTION_SYNC_BARRIER();
+        tmpAddr = tmpAddr + cacheLineSize; /* Clean 1 line at a time. */
     }
+    MCAL_DATA_SYNC_BARRIER();
+    MCAL_INSTRUCTION_SYNC_BARRIER();
 }
 
 void hwAcc_ArmCoreMx_InstructionCacheEnable(void)

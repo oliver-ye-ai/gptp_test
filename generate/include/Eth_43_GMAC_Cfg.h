@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -52,7 +52,7 @@ extern "C"{
 #define ETH_43_GMAC_CFG_AR_RELEASE_MAJOR_VERSION     4
 #define ETH_43_GMAC_CFG_AR_RELEASE_MINOR_VERSION     7
 #define ETH_43_GMAC_CFG_AR_RELEASE_REVISION_VERSION  0
-#define ETH_43_GMAC_CFG_SW_MAJOR_VERSION             5
+#define ETH_43_GMAC_CFG_SW_MAJOR_VERSION             4
 #define ETH_43_GMAC_CFG_SW_MINOR_VERSION             0
 #define ETH_43_GMAC_CFG_SW_PATCH_VERSION             0
 
@@ -65,29 +65,25 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_CFG_AR_RELEASE_MAJOR_VERSION    != ETH_43_GMAC_PBCFG_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_CFG_AR_RELEASE_MINOR_VERSION    != ETH_43_GMAC_PBCFG_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_CFG_AR_RELEASE_REVISION_VERSION != ETH_43_GMAC_PBCFG_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_CFG_AR_RELEASE_REVISION_VERSION != ETH_43_GMAC_PBCFG_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Eth_43_GMAC_Cfg.h and Eth_43_GMAC_PBcfg.h are different"
 #endif
 #if ((ETH_43_GMAC_CFG_SW_MAJOR_VERSION != ETH_43_GMAC_PBCFG_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_CFG_SW_MINOR_VERSION != ETH_43_GMAC_PBCFG_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_CFG_SW_PATCH_VERSION != ETH_43_GMAC_PBCFG_SW_PATCH_VERSION)    \
-    )
+     (ETH_43_GMAC_CFG_SW_PATCH_VERSION != ETH_43_GMAC_PBCFG_SW_PATCH_VERSION))
     #error "Software Version Numbers of Eth_43_GMAC_Cfg.h and Eth_43_GMAC_PBcfg.h are different"
 #endif
 
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     /* Checks against Eth_GeneralTypes.h */
     #if ((ETH_43_GMAC_CFG_AR_RELEASE_MAJOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_CFG_AR_RELEASE_MINOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_CFG_AR_RELEASE_MINOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC_Cfg.h and Eth_GeneralTypes.h are different"
     #endif
 
     /* Checks against Mcal.h */
     #if ((ETH_43_GMAC_CFG_AR_RELEASE_MAJOR_VERSION != MCAL_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_CFG_AR_RELEASE_MINOR_VERSION != MCAL_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_CFG_AR_RELEASE_MINOR_VERSION != MCAL_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC_Cfg.h and Mcal.h are different"
     #endif
 #endif
@@ -107,11 +103,11 @@ extern "C"{
     #endif /* (STD_ON == ETH_43_GMAC_ENABLE_USER_MODE_SUPPORT */
 #endif /* ifndef MCAL_ENABLE_USER_MODE_SUPPORT */
 
-/*! @brief Enables / Disables multi-partition support */
-#define ETH_43_GMAC_MULTIPARTITION_SUPPORT           (STD_OFF)
+/*! @brief Enables / Disables multicore support */
+#define ETH_43_GMAC_MULTICORE_SUPPORT           (STD_OFF)
 
-/*! @brief Number of partitions in the system as defined in EcuC */
-#define ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED       (1U)
+/*! @brief Number of cores in the system as defined in EcuC */
+#define ETH_43_GMAC_MAX_COREIDX_SUPPORTED       (1U)
 
 /*! @brief Enables / Disables PreCompile support when there is a single configuration */
 #define ETH_43_GMAC_PRECOMPILE_SUPPORT          (STD_ON)
@@ -210,32 +206,9 @@ extern "C"{
 #define ETH_43_GMAC_INGRESS_PORT_FILTER              (STD_OFF)
 /*! @brief Enables / Disables TX/RX coalescing interrupt */
 #define ETH_43_GMAC_COALESCING_INTERRUPT              (STD_OFF)
-/*! @brief Enables /  Disables Mac Sec Integration. */
-#define ETH_43_GMAC_MACSEC_SUPPORT              (STD_OFF)
-/*! @brief Enables / Disables Pulse-per-second signal outputs */
-#define ETH_43_GMAC_PPS_OUTPUT_SUPPORT              (STD_OFF)
-/*! @brief Enables / Disables Low Power Idle (LPI) mode */
-#define ETH_43_GMAC_LPI_ENABLE              (STD_OFF)
-/*! @brief Enables / Disables the configuration of StartTSN API. */
-#define ETH_43_GMAC_START_TSN_SUPPORT              (STD_OFF)
 /*==================================================================================================
 *                                             ENUMS
 ==================================================================================================*/
-#if (STD_ON == ETH_43_GMAC_PPS_OUTPUT_SUPPORT)
-/*!
- * @brief The PPS output commands.
- * @implements
- */
-typedef enum {
-    ETH_43_GMAC_NO_COMMAND                    = 0U,
-    ETH_43_GMAC_START_SINGLE_PULSE            = 1U,
-    ETH_43_GMAC_START_PULSE_TRAIN             = 2U,
-    ETH_43_GMAC_CANCEL_START                  = 3U,
-    ETH_43_GMAC_STOP_PULSE_TRAIN_AT_TIME      = 4U,
-    ETH_43_GMAC_STOP_PULSE_TRAIN_IMMEDIATELY  = 5U,
-    ETH_43_GMAC_CANCEL_STOP_PULSE_TRAIN       = 6U,
-} Eth_43_GMAC_PPSOutputCmd;
-#endif
 
 /*==================================================================================================
 *                                STRUCTURES AND OTHER TYPEDEFS
@@ -339,30 +312,6 @@ typedef struct
 /* Forward IPW structure declarations */
 struct sEth_43_GMAC_Ipw_CtrlConfigType;
 
-#if (STD_ON == ETH_43_GMAC_PPS_OUTPUT_SUPPORT)
-/**
-* @brief         Type used to express Pulse-per-second target time.
-* @details       Variables of this type are used to express Pulse-per-second target time.
-* Implements     Eth_PPSTargetTime
-*/
-typedef struct
-{
-    uint32 nanoseconds;  /**< @brief Nanoseconds part of the time. */
-    uint32 seconds;      /**< @brief Seconds part of the time. */
-} Eth_43_GMAC_PPSTargetTime;
-
-/**
-* @brief         Type used to express configured parameter of Pulse-per-second configuration.
-* @details       Variables of this type are used to express Pulse-per-second target time.
-*
-*/
-typedef struct
-{
-    Eth_43_GMAC_PPSOutputCmd PPSOutputCmd;        /*!< The PPS output commands */
-    Eth_43_GMAC_PPSTargetTime PPSTargetTime;      /*!< The PPS target time */
-} Eth_43_GMAC_PPSConfigType;
-#endif
-
 /**
 * @brief         Type for Ethernet driver configuration values storage.
 * @details       This type is used to collect and pass all configuration data
@@ -397,128 +346,13 @@ typedef struct
 */
 typedef struct
 {
-#if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
-    uint32 PartitionId;
+#if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
+    uint32 PartitionCoreId;
 #endif
     const Eth_43_GMAC_CtrlCfgType *Eth_43_GMAC_apCtrlConfig[ETH_43_GMAC_MAX_CTRLIDX_SUPPORTED];
 
 } Eth_43_GMAC_ConfigType;
 
-#if defined(ETH_43_GMAC_MACSEC_SUPPORT)
-#if (STD_ON == ETH_43_GMAC_MACSEC_SUPPORT)
-/*!
- * @brief Controls validation of received frames.
- */
-typedef enum
-{
-    MKA_VALIDATE_DISABLED = 0U, /**< Disable validation, remove SecTAGs and ICVs (if present) from received frames. */
-    MKA_VALIDATE_CHECKED,       /**< Enable validation, do not discard invalid frames. */
-    MKA_VALIDATE_STRICT         /**< Enable validation and discard invalid frames. */
-} Mka_ValidateFramesType;
-
-/*!
- * @brief Indicates the offset in case of integrity with confidentiality.
- */
-typedef enum
-{
-    MKA_CONFIDENTIALITY_NONE      = 0xFF,  /**< Confidentiality protection disabled. */
-    MKA_CONFIDENTIALITY_OFFSET_0  = 0U,       /**< Zero initial octets of each user data without confidentiality protection. */
-    MKA_CONFIDENTIALITY_OFFSET_30 = 30U,      /**< 30 initial octets of each user data without confidentiality protection. */
-    MKA_CONFIDENTIALITY_OFFSET_50 = 50U      /**< 50 initial octets of each user data without confidentiality protection. */
-} Mka_ConfidentialityOffsetType;
-
-/*!
- * @brief SAK key reference.
- */
-typedef struct
-{
-    const uint8 *HashKeyPtr; /**< Pointer to the Hash Key. */
-    const uint8 *SakKeyPtr;  /**< Pointer to the SAK. */
-    const uint8 *SaltKeyPtr; /**< Pointer to the Salt. */
-} Mka_SakKeyPtrType;
-
-/*!
- * @brief MACsec Entity (SecY) transmission statistics.
- */
-typedef struct
-{
-    uint64 OutPkts_Untagged;    /**< The number of packets transmitted without a SecTAG. */
-    uint64 OutPkts_TooLong;     /**< The number of transmitted packets discarded because their length is greater than the accepted maximum length (mtu) of the Port. */
-    uint64 OutOctets_Protected; /**< The number of plain text octets integrity protected but not encrypted in transmitted frames. */
-    uint64 OutOctets_Encrypted; /**< The number of plain text octets integrity protected and encrypted in transmitted frames. */
-} Mka_Stats_Tx_SecYType;
-
-/*!
- * @brief MACsec Entity (SecY) reception statistics.
- */
-typedef struct
-{
-    uint64 InPkts_Untagged;    /**< The number of packets without the MACsec tag (SecTAG) received if ValidateFrames was not  VALIDATE_STRICT . */
-    uint64 InPkts_NoTag;       /**< The number of received packets without a SecTAG discarded because ValidateFrames was  VALIDATE_STRICT . */
-    uint64 InPkts_BadTag;      /**< The number of received packets discarded with an invalid SecTAG, zero value PN, or invalid ICV. */
-    uint64 InPkts_NoSa;        /**< The number of received packets with an unknown SCI or for an unused SA by the security entity. */
-    uint64 InPkts_NoSaError;   /**< The number of packets discarded because the received SCI is unknown or the SA is not in use. */
-    uint64 InPkts_Overrun;     /**< The number of packets discarded because they exceeded cryptographic performance capabilities. */
-    uint64 InOctets_Validated; /**< The number of plain text octets recovered from packets that were integrity protected but not encrypted. */
-    uint64 InOctets_Decrypted; /**< The number of plain text octets recovered from packets that were integrity protected and encrypted. */
-} Mka_Stats_Rx_SecYType;
-
-/*!
- * @brief Secure Channel transmission statistics.
- */
-typedef struct
-{
-    uint64 OutPkts_Protected; /**< The number of integrity protected but not encrypted packets for this transmit SC. */
-    uint64 OutPkts_Encrypted; /**< The number of integrity protected and encrypted packets for this transmit SC. */
-} Mka_Stats_Tx_ScType;
-
-/*!
- * @brief Secure Channel reception statistics.
- */
-typedef struct
-{
-    uint64 InPkts_Ok;        /**< The number of packets received for this secure channel successfully validated and within the replay window. */
-    uint64 InPkts_Unchecked; /**< The number of packets received for this secure channel, if ValidateFrames was  VALIDATE_DISABLED . */
-    uint64 InPkts_Delayed;   /**< The number of received packets, for this secure channel, with packet number (PN) lower than the lowest acceptable packet number (LowestPn) and ReplayProtect false. */
-    uint64 InPkts_Late;      /**< The number of packets discarded, for this secure channel, because the received packet number (PN) was lower than the lowest acceptable packet number (LowestPn) and
-                                  ReplayProtect was true. */
-    uint64 InPkts_Invalid;   /**< The number of packets, for this secure channel, that failed validation but could be received because ValidateFrames was  VALIDATE_ CHECKED  and the data was not
-                                  encrypted (so the original frame could be recovered). */
-    uint64 InPkts_NotValid;  /**< The number of packets discarded, for this secure channel, because validation failed and ValidateFrames was  VALIDATE_STRICT  or the data was encrypted
-                                  (so the original frame could not be recovered). */
-} Mka_Stats_Rx_ScType;
-
-/*!
- * @brief Security Entity statistics.
- */
-typedef struct
-{
-    Mka_Stats_Tx_SecYType StatsTxPhy; /**< Set of statistics in the Security Entity Phy by transmission. */
-    Mka_Stats_Rx_SecYType StatsRxPhy; /**< Set of statistics in the Security Entity Phy by reception. */
-    Mka_Stats_Tx_ScType StatsTxSc;    /**< Set of statistics in the Security Entity s Secure Channel by reception. */
-    Mka_Stats_Rx_ScType StatsRxSc;    /**< Set of statistics in the Security Entity s Secure Channel by reception. */
-} Mka_Stats_SecYType;
-
-/*!
- * @brief Structure to configure a referred SecY.
- */
-typedef struct
-{
-    boolean ProtectFrames;                               /**< Indicates status if the MACsec protection of the frames is active or not. */
-    boolean ReplayProtect;                               /**< Indicates status if replay protection is enable or disable. */
-    uint32 ReplayWindow;                                 /**< If ReplayProtect is enable, indicates the used replay protect window. */
-    Mka_ValidateFramesType ValidateFrames;               /**< Status of the validation of the frames. See Mka_ValidateFramesType for possible values. */
-    uint64 CurrentCipherSuite;                           /**< Indicates which cipher suite is used in the SecY to update. */
-    Mka_ConfidentialityOffsetType ConfidentialityOffset; /**< Set the Confidentiality Offset. See Mka_ConfidentialityOffsetType for possible values. */
-    boolean ControlledPortEnabled;                       /**< Status if the controlled port is enabled or disabled. */
-    const uint16 *BypassedVlanPtrs;                      /**< Pointer to the list of bypassed VLANs. */
-    uint8 BypassedVlansLength;                           /**< Length of the list of bypassed VLANs. */
-    const uint16 *BypassedEtherTypesPtr;                 /**< Pointer to the list of the bypassed Ethernet Types. */
-    uint8 BypassedEtherTypesLength;                      /**< Length of the list of the bypassed Ethernet Types. */
-} Mka_MacSecConfigType;
-
-#endif /*defined(ETH_43_GMAC_MACSEC_SUPPORT) */
-#endif  /*(STD_ON == ETH_43_GMAC_MACSEC_SUPPORT) */
 /*==================================================================================================
 *                                GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/

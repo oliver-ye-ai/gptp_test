@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -44,6 +44,9 @@ extern "C"{
 * 3) internal and external interfaces from this unit
 ==================================================================================================*/
 #include "MemAcc_Cfg.h"
+#if (STD_ON == MEMACC_MULTICORE_TYPE_1_ENABLED)
+#include "CDD_Rm.h"
+#endif
 #if (MEMACC_MULTICORE_TYPE_3_ENABLED == STD_ON)
 #include "Mcal.h"
 #endif
@@ -54,7 +57,7 @@ extern "C"{
 #define MEMACC_AR_RELEASE_MAJOR_VERSION       4
 #define MEMACC_AR_RELEASE_MINOR_VERSION       7
 #define MEMACC_AR_RELEASE_REVISION_VERSION    0
-#define MEMACC_SW_MAJOR_VERSION               5
+#define MEMACC_SW_MAJOR_VERSION               4
 #define MEMACC_SW_MINOR_VERSION               0
 #define MEMACC_SW_PATCH_VERSION               0
 
@@ -80,6 +83,14 @@ extern "C"{
      (MEMACC_SW_PATCH_VERSION != MEMACC_SW_PATCH_VERSION_CFG) \
     )
     #error "Software Version Numbers of MemAcc.h and MemAcc_Cfg.h are different"
+#endif
+#if (STD_ON == MEMACC_MULTICORE_TYPE_1_ENABLED)
+/* Check if header file and CDD_Rm.h header file are of the same Autosar version */
+#if ((MEMACC_AR_RELEASE_MAJOR_VERSION != RM_AR_RELEASE_MAJOR_VERSION) || \
+        (MEMACC_AR_RELEASE_MINOR_VERSION != RM_AR_RELEASE_MINOR_VERSION) \
+    )
+    #error "AutoSar Version Numbers of MemAcc.h and CDD_Rm.h are different"
+#endif
 #endif
 
 #if (MEMACC_MULTICORE_TYPE_3_ENABLED == STD_ON)
@@ -158,13 +169,12 @@ extern "C"{
 #define MEMACC_APPLICATIONLOCKNOTIFICATION_ID      0x14U  /**< @brief Service ID of function MemAcc_ApplicationLockNotification   */
 
 #if (MEMACC_MULTICORE_TYPE_3_ENABLED == STD_ON)
-    #define MemAcc_GetUserID()            OsIf_GetUserId()
+    #define MemAcc_GetCoreID()            OsIf_GetCoreID()
 #endif
 
 /*==================================================================================================
 *                                            CONSTANTS
 ==================================================================================================*/
-#ifndef MEMACC_PRECOMPILE_SUPPORT
 #define MEMACC_START_SEC_CONFIG_DATA_UNSPECIFIED
 #include "MemAcc_MemMap.h"
 
@@ -172,7 +182,7 @@ MEMACC_CONFIG_EXT
 
 #define MEMACC_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "MemAcc_MemMap.h"
-#endif
+
 /*==================================================================================================
 *                                              ENUMS
 ==================================================================================================*/

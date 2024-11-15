@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -54,7 +54,7 @@ extern "C"{
 #define ETH_43_GMAC_AR_RELEASE_MINOR_VERSION     7
 #define ETH_43_GMAC_AR_RELEASE_REVISION_VERSION  0
 /* implements Eth_Version_define */
-#define ETH_43_GMAC_SW_MAJOR_VERSION             5
+#define ETH_43_GMAC_SW_MAJOR_VERSION             4
 #define ETH_43_GMAC_SW_MINOR_VERSION             0
 #define ETH_43_GMAC_SW_PATCH_VERSION             0
 
@@ -67,22 +67,19 @@ extern "C"{
 #endif
 #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION    != ETH_43_GMAC_CFG_AR_RELEASE_MAJOR_VERSION) || \
      (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION    != ETH_43_GMAC_CFG_AR_RELEASE_MINOR_VERSION) || \
-     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION != ETH_43_GMAC_CFG_AR_RELEASE_REVISION_VERSION) \
-    )
+     (ETH_43_GMAC_AR_RELEASE_REVISION_VERSION != ETH_43_GMAC_CFG_AR_RELEASE_REVISION_VERSION))
      #error "AUTOSAR Version Numbers of Eth_43_GMAC.h and Eth_43_GMAC_Cfg.h are different"
 #endif
 #if ((ETH_43_GMAC_SW_MAJOR_VERSION != ETH_43_GMAC_CFG_SW_MAJOR_VERSION) || \
      (ETH_43_GMAC_SW_MINOR_VERSION != ETH_43_GMAC_CFG_SW_MINOR_VERSION) || \
-     (ETH_43_GMAC_SW_PATCH_VERSION != ETH_43_GMAC_CFG_SW_PATCH_VERSION)    \
-    )
+     (ETH_43_GMAC_SW_PATCH_VERSION != ETH_43_GMAC_CFG_SW_PATCH_VERSION))
     #error "Software Version Numbers of Eth_43_GMAC.h and Eth_43_GMAC_Cfg.h are different"
 #endif
 
 /* Checks against Eth_GeneralTypes.h */
 #ifndef DISABLE_MCAL_INTERMODULE_ASR_CHECK
     #if ((ETH_43_GMAC_AR_RELEASE_MAJOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MAJOR_VERSION) || \
-         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MINOR_VERSION)    \
-        )
+         (ETH_43_GMAC_AR_RELEASE_MINOR_VERSION != ETH_GENERALTYPES_AR_RELEASE_MINOR_VERSION))
         #error "AUTOSAR Version Numbers of Eth_43_GMAC.h and Eth_GeneralTypes.h are different"
     #endif
 #endif
@@ -112,13 +109,6 @@ extern "C"{
 #if STD_ON == ETH_43_GMAC_VERSION_INFO_API
     /*! @brief Service ID of Eth_43_GMAC_GetVersionInfo */
     #define ETH_43_GMAC_SID_GETVERSIONINFO          0x0D
-#endif
-
-#if defined(ETH_43_GMAC_START_TSN_SUPPORT)
-    #if (STD_ON == ETH_43_GMAC_START_TSN_SUPPORT)
-/*! @brief Service ID of Eth_43_GMAC_StartTSN */
-#define ETH_43_GMAC_SID_START_TSN                   0x0E
-    #endif
 #endif
 
 #if STD_ON == ETH_43_GMAC_UPDATE_PHYS_ADDR_FILTER_API
@@ -171,12 +161,9 @@ extern "C"{
 /*! @brief Service ID of Eth_SendFrame */
 #define ETH_43_GMAC_SID_SENDFRAME               0x24
 #endif
-
 #if (STD_ON == ETH_43_GMAC_HAS_EXTERNAL_RX_BUFFERS)
 /*! @brief Service ID of Eth_ProvideRxBuffer */
-#define ETH_43_GMAC_SID_PROVIDERXBUFFER         0x38
-/*! @brief Service ID of Eth_ProvideRxBufferInfo */
-#define ETH_43_GMAC_SID_PROVIDERXBUFFERINFO     0x37
+#define ETH_43_GMAC_SID_PROVIDERXBUFFER         0x25
 #endif
 #endif
 
@@ -239,83 +226,6 @@ extern "C"{
 #define ETH_43_GMAC_SID_SET_SI_PHYADDR      0x36
 #endif
 
-#if defined(ETH_43_GMAC_MACSEC_SUPPORT)
-#if (STD_ON == ETH_43_GMAC_MACSEC_SUPPORT)
-
-/*! @brief Service ID of Eth_MacSecUpdateSecY */
-#define ETH_43_GMAC_SID_MACSEC_UPDATE_SECY      0x4D
-
-/*! @brief Service ID of Eth_MacSecUpdateSecYNotification */
-#define ETH_43_GMAC_SID_MACSEC_UPDATE_SECY_NOTIFICATION     0x58
-
-/*! @brief Service ID of Eth_MacSecInitRxSc */
-#define ETH_43_GMAC_SID_MACSEC_INIT_RX_SC     0x4E
-
-/*! @brief Service ID of Eth_MacSecResetRxSc */
-#define ETH_43_GMAC_SID_MACSEC_RESET_RX_SC     0x4F
-
-/*! @brief Service ID of Eth_MacSecAddTxSaNotification */
-#define ETH_43_GMAC_SID_MACSEC_ADD_TX_SA     0x50
-
-/*! @brief Service ID of Eth_MacSecAddTxSaNotification */
-#define ETH_43_GMAC_SID_MACSEC_ADD_TX_SA_NOTIFICATION     0x59
-
-/*! @brief Service ID of Eth_MacSecAddUpdateTxSa */
-#define ETH_43_GMAC_SID_MACSEC_UPDATE_TX_SA    0x51
-
-/*! @brief Service ID of Eth_MacSecDeleteTxSa */
-#define ETH_43_GMAC_SID_MACSEC_DELETE_TX_SA    0x52
-
-/*! @brief Service ID of Eth_MacSecAddRxSa */
-#define ETH_43_GMAC_SID_MACSEC_ADD_RX_SA    0x53
-
-/*! @brief Service ID of Eth_MacSecAddRxSaNotification */
-#define ETH_43_GMAC_SID_MACSEC_ADD_RX_SA_NOTIFICATION    0x5a
-
-/*! @brief Service ID of Eth_MacSecAddUpdateRxSa */
-#define ETH_43_GMAC_SID_MACSEC_UPDATE_RX_SA    0x54
-
-/*! @brief Service ID of Eth_MacSecDeleteRxSa */
-#define ETH_43_GMAC_SID_MACSEC_DELETE_RX_SA    0x55
-
-/*! @brief Service ID of Eth_MacSecGetTxSaNextPn */
-#define ETH_43_GMAC_SID_MACSEC_GET_TX_SA_NEXTPN    0x56
-
-/*! @brief Service ID of Eth_MacSecGetMacSecStats  */
-#define ETH_43_GMAC_SID_MACSEC_GET_STATS    0x57
-
-/*! @brief Service ID of Eth_MacSecGetMacSecStatsNotification  */
-#define ETH_43_GMAC_SID_MACSEC_GET_STATS_NOTIFICATION    0x5B
-
-#define ETH_43_GMAC_SID_MACSEC_INIT    0x5C
-#endif
-#endif
-
-#if defined(ETH_43_GMAC_FILL_LEVEL_API_ENABLE)
-#if (ETH_43_GMAC_FILL_LEVEL_API_ENABLE == STD_ON)
-/*! @brief Service ID of Eth_GetRxRingFillLevel */
-#define ETH_43_GMAC_SID_GET_RX_RING_FILL_LEVEL  0x5D
-
-/*! @brief Service ID of Eth_GetTxRingFillLevel */
-#define ETH_43_GMAC_SID_GET_TX_RING_FILL_LEVEL  0x5E
-#endif
-#endif
-
-
-#if (STD_ON == ETH_43_GMAC_PPS_OUTPUT_SUPPORT)
-/*! @brief Service ID of Eth_SetPpsSignalMode */
-#define ETH_43_GMAC_SID_SETPPSSIGNALMODE        0x25
-/*! @brief Service ID of Eth_SetPpsSignalMode */
-#define ETH_43_GMAC_SID_UPDATEPPSCONFIG         0x39
-#endif
-
-#if STD_ON == ETH_43_GMAC_LPI_ENABLE
-/*! @brief Service ID of Eth_SetPpsSignalMode */
-#define ETH_43_GMAC_SID_ENTERINGTXLPI        0x40
-/*! @brief Service ID of Eth_SetPpsSignalMode */
-#define ETH_43_GMAC_SID_EXITINGTXLPI         0x41
-#endif
-
 /* DET error codes */
 #if STD_ON == ETH_43_GMAC_DEV_ERROR_DETECT
     /*! @brief Development Error ID for "Invalid Controller Index" */
@@ -329,8 +239,8 @@ extern "C"{
     #define ETH_43_GMAC_E_INV_PARAM         ((uint8)0x04)
     /*! @brief Development Error ID for "Invalid Controller Mode" */
     #define ETH_43_GMAC_E_INV_MODE          ((uint8)0x05)
-    /*! @brief Development Error ID for "Invalid Partition ID" */
-    #if (STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT)
+    /*! @brief Development Error ID for "Invalid Core ID" */
+    #if (STD_ON == ETH_43_GMAC_MULTICORE_SUPPORT)
         #define ETH_43_GMAC_E_PARAM_CONFIG      ((uint8)0x07)
     #endif
     /*! @brief Development Error ID for "Invalid Configuration pointer argument" */
@@ -339,8 +249,6 @@ extern "C"{
 
     /*! @brief Runtime Error ID for "Failure or incorrect communication with the Ethernet Controller" */
     #define ETH_43_GMAC_E_COMMUNICATION       ((uint8)0x06)
-
-
 
 /*==================================================================================================
 *                                      DEFINES AND MACROS
@@ -358,6 +266,7 @@ extern "C"{
 /**
  *  @brief Structure which is used for grouping the interrupt coalescing settings
  *  @details If hardware does not support
+ * implements Eth_IntCoalescingConfigType_structure
  */
 typedef struct
 {
@@ -384,19 +293,6 @@ typedef struct
 } Eth_43_GMAC_MultiBufferFrameType;
 #endif
 
-#if (STD_ON == ETH_43_GMAC_HAS_EXTERNAL_RX_BUFFERS)
-/**
-* @brief         Type used to express the ethernet buffer with split header feature.
-* @details       Variables of this type are used to express the ethernet buffer with split header feature.
-* Implements     Eth_RxBufferInfo
-*/
-typedef struct
-{
-    uint8* HeaderBuffDataAddress;    /**< @brief Pointer to the ethernet header buffer address */
-    uint8* PayloadBuffDataAddress;   /**< @brief Pointer to the ethernet payload data buffer address */
-} Eth_43_GMAC_RxBufferInfo;
-#endif
-
 /*==================================================================================================
 *                                GLOBAL VARIABLE DECLARATIONS
 ==================================================================================================*/
@@ -407,14 +303,6 @@ typedef struct
 #if STD_OFF == ETH_43_GMAC_PRECOMPILE_SUPPORT
 ETH_43_GMAC_CONFIG_EXT
 #endif
-
-#if (ETH_43_GMAC_PRECOMPILE_SUPPORT == STD_ON)
-    #if STD_ON == ETH_43_GMAC_MULTIPARTITION_SUPPORT
-        extern const Eth_43_GMAC_ConfigType * const Eth_43_GMAC_apxPredefinedConfig[ETH_43_GMAC_MAX_PARTITIONIDX_SUPPORTED];
-    #else
-        extern const Eth_43_GMAC_ConfigType Eth_43_GMAC_xPredefinedConfig;
-    #endif
-#endif /* #if (ETH_43_GMAC_PRECOMPILE_SUPPORT == STD_ON) */
 
 #define ETH_43_GMAC_STOP_SEC_CONFIG_DATA_UNSPECIFIED
 #include "Eth_43_GMAC_MemMap.h"
@@ -444,25 +332,6 @@ ETH_43_GMAC_CONFIG_EXT
 * implements    Eth_Init_Activity
 */
 void Eth_43_GMAC_Init(const Eth_43_GMAC_ConfigType *CfgPtr);
-
-#if defined(ETH_43_GMAC_START_TSN_SUPPORT)
-    #if (STD_ON == ETH_43_GMAC_START_TSN_SUPPORT)
-/**
- * @brief   Ethernet controller function for starting TSN.
- * @details This function enables the statically configured TSN settings. If stream gating or time aware shaping is used, the API must be called after the clock is synchronized.
- *          Eth_StartTSN shall:
- *             - Populate all tables related to 802.1qci .
- *
- * @param[in]     CtrlIdx Index of the controller
- * 
- * @return Result of the operation
- * @retval E_OK        success
- * @retval E_NOT_OK    driver not initialized, invalid Switch ID, or populating tables failed
- *
- */
-Std_ReturnType Eth_43_GMAC_StartTSN(const uint8 CtrlIdx);
-    #endif
-#endif
 
 /**
 * @brief         Enables or disables the given controller
@@ -859,8 +728,8 @@ Std_ReturnType Eth_43_GMAC_SetCorrectionTime ( \
 *                stamping
 * @param[out]    TimeQualPtr Quality of HW time stamp, e.g. based on current drift
 * @param[out]    TimeStampPtr Current time stamp
-* implements    Eth_GetEgressTimeStamp_Activity
 */
+/* implements    Eth_GetEgressTimeStamp_Activity */
 Std_ReturnType Eth_43_GMAC_GetEgressTimeStamp ( \
                                 uint8 CtrlIdx, \
                                 Eth_BufIdxType BufIdx, \
@@ -878,8 +747,8 @@ Std_ReturnType Eth_43_GMAC_GetEgressTimeStamp ( \
 *                time stamping
 * @param[out]    TimeQualPtr Quality of HW time stamp, e.g. based on current drift
 * @param[out]    TimeStampPtr Current time stamp
-* implements    Eth_GetIngressTimeStamp_Activity
 */
+/* implements    Eth_GetIngressTimeStamp_Activity */
 Std_ReturnType Eth_43_GMAC_GetIngressTimeStamp ( \
                                 uint8 CtrlIdx, \
                                 const Eth_DataType *DataPtr, \
@@ -901,8 +770,8 @@ Std_ReturnType Eth_43_GMAC_GetIngressTimeStamp ( \
 */
 Std_ReturnType Eth_43_GMAC_GetCurrentTime  ( \
                                 uint8 CtrlIdx, \
-                                Eth_TimeStampQualType *timeQualPtr, \
-                                Eth_TimeStampType *timeStampPtr \
+                                Eth_TimeStampQualType *TimeQualPtr, \
+                                Eth_TimeStampType *TimeStampPtr \
                                           );
 
 /**
@@ -915,8 +784,8 @@ Std_ReturnType Eth_43_GMAC_GetCurrentTime  ( \
 *                enable the TimeStamp
 * @param[in]     BufIdx Index of the message buffer, where Application expects egress time
 *                stamping
-* implements    Eth_EnableEgressTimeStamp_Activity
 */
+/* implements    Eth_EnableEgressTimeStamp_Activity */
 void Eth_43_GMAC_EnableEgressTimeStamp   ( \
                                 uint8 CtrlIdx, \
                                 Eth_BufIdxType BufIdx \
@@ -936,19 +805,6 @@ void Eth_43_GMAC_EnableEgressTimeStamp   ( \
 void Eth_43_GMAC_ProvideRxBuffer(uint8 CtrlIdx, \
                                         uint8 FifoIdx, \
                                         uint8* BufferDataAddress);
-
-/**
-* @brief         Provides the Rx buffer used for Split header feature, in which the header and data will be received on a given buffer.
-*
-* @api
-* @param[in]     CtrlIdx Index of the controller
-* @param[in]     FifoIdx Index of the Fifo for which the current Buffer is provided.
-* @param[in]     RxBufferInfo Pointer to the memoriy where the header buffer and the payload data buffer are located.
-*
-*/
-void Eth_43_GMAC_ProvideRxBufferInfo(uint8 CtrlIdx, \
-                                            uint8 FifoIdx, \
-                                            Eth_43_GMAC_RxBufferInfo * RxBufferInfo);
 #endif
 
 /**
@@ -1145,6 +1001,8 @@ void Eth_43_GMAC_GetVersionInfo(Std_VersionInfoType *VersionInfoPtr);
 
 * @param[in]    TxIntCoalescingConfig Structure which contains the value for the Timer Thresholds (in ticks) and the
                 Packets threshold. If Hardware does not support one of the the two configurations, that value should be set to 0.
+
+* implements    Eth_ConfigureTxIntCoalescing_Activity
 */
 Std_ReturnType Eth_43_GMAC_ConfigureTxIntCoalescing(uint8 CtrlIdx, uint8 FifoIdx, Eth_IntCoalescingConfigType TxIntCoalescingConfig);
 
@@ -1159,6 +1017,7 @@ Std_ReturnType Eth_43_GMAC_ConfigureTxIntCoalescing(uint8 CtrlIdx, uint8 FifoIdx
 
 * @param[in]    RxIntCoalescingConfig Structure which contains the value for the Timer Thresholds (in ticks) and the
                 Packets threshold. If Hardware does not support one of the the two configurations, that value should be set to 0.
+* implements    Eth_ConfigureRxIntCoalescing_Activity
 */
 Std_ReturnType Eth_43_GMAC_ConfigureRxIntCoalescing(uint8 CtrlIdx, uint8 FifoIdx, Eth_IntCoalescingConfigType RxIntCoalescingConfig);
 
@@ -1212,8 +1071,9 @@ Std_ReturnType Eth_43_GMAC_StopTas( uint8 CtrlIdx);
  *
  * @api
  *
+ * @implements Eth_EnableIngressPortFiltering_Activity
  */
-Std_ReturnType Eth_43_GMAC_EnableIngressPortFiltering( uint8 CtrlIdx, boolean Enable );
+Std_ReturnType Eth_43_GMAC_EnableIngressPortFiltering( uint8 CtrlIndex, boolean Enable );
 
 /**
  * @brief           Add ingress port filter table entry.
@@ -1230,8 +1090,9 @@ Std_ReturnType Eth_43_GMAC_EnableIngressPortFiltering( uint8 CtrlIdx, boolean En
  *
  * @api
  *
+ * @implements Eth_AddIngressPortFilterTableEntry_Activity
  */
-Std_ReturnType Eth_43_GMAC_AddIngressPortFilterTableEntry( uint8 CtrlIdx, uint32 *MatchedEntries,
+Std_ReturnType Eth_43_GMAC_AddIngressPortFilterTableEntry( uint8 CtrlIndex, uint32 *MatchedEntries,
                                                                    Eth_43_GMAC_IngressPortFilterEntryDataType * IngressPortFilterTableEntry );
 
 /**
@@ -1249,8 +1110,9 @@ Std_ReturnType Eth_43_GMAC_AddIngressPortFilterTableEntry( uint8 CtrlIdx, uint32
  *
  * @api
  *
+ * @implements Eth_QueryIngressPortFilterTableEntry_Activity
  */
-Std_ReturnType Eth_43_GMAC_QueryIngressPortFilterTableEntry( uint8 CtrlIdx, uint32 *MatchedEntries,
+Std_ReturnType Eth_43_GMAC_QueryIngressPortFilterTableEntry( uint8 CtrlIndex, uint32 *MatchedEntries,
                                                                      Eth_43_GMAC_IngressPortFilterEntryDataType * IngressPortFilterTableEntry );
 
 /**
@@ -1267,8 +1129,9 @@ Std_ReturnType Eth_43_GMAC_QueryIngressPortFilterTableEntry( uint8 CtrlIdx, uint
  *
  * @api
  *
+ * @implements Eth_DeleteIngressPortFilterTableEntry_Activity
  */
-Std_ReturnType Eth_43_GMAC_DeleteIngressPortFilterTableEntry( uint8 CtrlIdx, uint32 *MatchedEntries,
+Std_ReturnType Eth_43_GMAC_DeleteIngressPortFilterTableEntry( uint8 CtrlIndex, uint32 *MatchedEntries,
                                                                       uint32 IngressPortFilterEntryId );
 
 #endif
@@ -1287,6 +1150,7 @@ Std_ReturnType Eth_43_GMAC_DeleteIngressPortFilterTableEntry( uint8 CtrlIdx, uin
  *
  * @api
  *
+ * @implements Eth_GetSyncState_Activity
  */
 Std_ReturnType Eth_43_GMAC_GetSyncState( uint8 CtrlIdx, boolean *SyncState);
 #endif
@@ -1306,398 +1170,10 @@ Std_ReturnType Eth_43_GMAC_GetSyncState( uint8 CtrlIdx, boolean *SyncState);
  *
  * @api
  *
+ * @implements Eth_SetSiPhysAddr_Activity
  */
-Std_ReturnType Eth_43_GMAC_SetSiPhysAddr( uint8 CtrIdx, uint8 SiIdx,  const uint8 *PhysAddrPtr );
+Std_ReturnType Eth_43_GMAC_SetSiPhysAddr( const uint8 CtrlIndex, const uint8 SiId,  const uint8 *MacAddr );
 #endif
-
-#if defined(ETH_43_GMAC_MACSEC_SUPPORT)
-#if (STD_ON == ETH_43_GMAC_MACSEC_SUPPORT)
-/**
- * @brief           Requests the Ethernet to update the SecY/PAC of the PHY with the provided
-                    parameters.
- * @details         A Transmission Secure Channel with the provided SCI shall be configured during
-                    the first call. A pointer to a MACsec Basic Parameters Configuration file shall be provided to
-                    create the Secure Channel.
- *
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       MACsecCfgPtr Pointer to the structure to configure a MACsec Entity (SecY)
- * @param[in]       TxSci Secure Channel Identifier for the MACsec’s Transmission Secure channel
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecUpdateSecY( const uint8 CtrlIdx, const Mka_MacSecConfigType* MACsecCfgPtr, uint64 TxSci );
-
-/**
- * @brief           Callback to notify that EthSwt_MacSecUpdateSecY finished.
- * @details         Synchronous
- * 
- * @param[in]       CtrlIndex Index of the ethernet controller
- *
- * @return          void
- *
- * @api
- *
- */
-void Eth_43_GMAC_MacSecUpdateSecYNotification( const uint8 CtrlIdx );
-
-/**
- * @brief           Requests the Ethernet Switch Driver to configure a Reception Secure Channel for the given
-                    Secure Channel Identifier..
- * @details         Asynchronous
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       Sci Secure Channel Identifier for the MACsec’s Reception Secure channel
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecInitRxSc(const uint8 CtrlIdx, uint64 Sci );
-
-/**
- * @brief           Requests the Ethernet Switch Driver to reset to default the MACsec values of the Reception
-                    Secure Channel for the given Secure Channel Identifier.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       Sci Secure Channel Identifier for the MACsec’s Reception Secure channel
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecResetRxSc(const uint8 CtrlIdx, uint64 Sci );
-
-/**
- * @brief           Requests the Ethernet Switch Driver to create a Transmission Secure Association in the
-                    Transceiver. The Short Secure Channel Identifier is included to support XPN configurations. 
- * @details         Asynchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       An Association Number to use in the MACsec’s transmission secure association.
- * @param[in]       NextPn Next accepted Packet Number in the MACsec’s transmission secure association
- * @param[in]       Ssci Short Secure Channel Identifiert used in the MACsec’s transmission secure association.
- * @param[in]       KeysPtr Pointer to the SAKs Key (and needed Key information) to use in the MACsec’s transmission secure association.
- * @param[in]       Active Boolean to enable/disable the MACsec’s transmission secure association.
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecAddTxSa( uint8 CtrlIdx, uint8 An, uint64 NextPn, uint32 Ssci, const Mka_SakKeyPtrType* KeysPtr, boolean Active );
-
-/**
- * @brief           Callback to notify that EthSwt_MacSecAddTxSa finished.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- *
- * @return          void
- *
- * @api
- *
- */
-void Eth_43_GMAC_MacSecAddTxSaNotification( const uint8 CtrlIdx );
-
-/**
- * @brief           Requests the Ethernet Switch Driver to update the Transmission Secure Association with the
-                    given Packet Number. The Active parameter is included to change the specified AN status.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       An Association Number to use in the MACsec’s transmission secure association.
- * @param[in]       NextPn Next accepted Packet Number in the MACsec’s transmission secure association
- * @param[in]       Active Boolean to enable/disable the MACsec’s transmission secure association.
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecUpdateTxSa( const uint8 CtrlIdx, uint8 An, uint64 NextPn, boolean Active );
-
-/**
- * @brief           Request the Ethernet Switch Driver to remove the Transmission Secure Association identified
-                    by the provided Association Number.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       An Association Number to use in the MACsec’s transmission secure association.
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecDeleteTxSa( const uint8 CtrlIdx, uint8 An );
-
-/**
- * @brief           Request the Ethernet Switch Driver to create a Reception Secure Association in the
-                    Transceiver. The Short Secure Channel Identifier is included to support XPN configurations
- * @details         Asynchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       An Association Number to use in the MACsec’s transmission secure association.
- * @param[in]       LowestPn Lowest accepted Packet Number in the MACsec’s reception secure association
- * @param[in]       Ssci Short Secure Channel Identifiert used in the MACsec’s transmission secure association.
- * @param[in]       KeysPtr Pointer to the SAKs Key (and needed Key information) to use in the MACsec’s transmission secure association.
- * @param[in]       Active Boolean to enable/disable the MACsec’s transmission secure association.
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecAddRxSa( const uint8 CtrlIdx, uint8 An, uint64 LowestPn, uint32 Ssci, const Mka_SakKeyPtrType* KeysPtr, boolean Active );
-
-/**
- * @brief           Callback to notify that EthSwt_MacSecAddRxSa finished.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- *
- * @return          void
- *
- * @api
- *
- */
-void Eth_43_GMAC_MacSecAddRxSaNotification( const uint8 CtrlIdx );
-
-/**
- * @brief           Request the Ethernet Switch Driver to update the Reception Secure Association with the given
-                    Packet Number. The Active parameter is included to change the specified AN status.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       An Association Number to use in the MACsec’s reception secure  association
- * @param[in]       LowestPn Lowest accepted Packet Number in the MACsec’s reception secure association
- * @param[in]       Active Boolean to enable/disable the MACsec’s reception secure association.
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecUpdateRxSa( const uint8 CtrlIdx, uint8 An, uint64 LowestPn, boolean Active );
-
-/**
- * @brief           Request the Ethernet Switch Driver to remove the Reception Secure Association identified
-                    by the provided Association Number.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       An Association Number to use in the MACsec’s reception secure association.
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecDeleteRxSa( const uint8 CtrlIdx, uint8 An );
-
-/**
- * @brief           Request the Ethernet Switch Driver to return the Packet Number that is used for the next packet
-                    in the given Transmission Secure Association.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       An Association Number to use in the MACsec’s reception secure association.
- * @param[out]      NextPnPtr Pointer to the Next Packet Number read out from the MACsec Entity (SecY).
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecGetTxSaNextPn( const uint8 CtrlIdx, uint8 An, uint64* NextPnPtr );
-
-/**
- * @brief           Request the Ethernet Switch Driver to provide MACsec statistics
- * @details         Asynchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- *
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecGetMacSecStats( const uint8 CtrlIdx );
-
-/**
- * @brief           Callback to notify that EthSwt_MacSecGetMacSecStats finished and provide the requested statistics.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       MacSecStats Pointer to a structure including the MACsec statistics of an MKA participant
- * 
- * @return          void
- *
- * @api
- *
- */
-void Eth_43_GMAC_MacSecGetMacSecStatsNotification( const uint8 CtrlIdx, const Mka_Stats_SecYType* MacSecStats );
-
-/**
- * @brief           Requests to set the Controlled Port enabled parameter of a PAE.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       ControlledPortEnabled Boolean to activate the Controlled Port of the PAE
- * 
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecSetControlledPortEnabled( const uint8 CtrlIdx, boolean ControlledPortEnabled );
-
-
-/**
- * @brief           Requests to set the Controlled Port enabled parameter of a PAE.
- * @details         Synchronous.
-
- * @param[in]       CtrlIndex Index of the ethernet controller
- * @param[in]       ControlledPortEnabled Boolean to activate the Controlled Port of the PAE
- * 
- * @return          Result of the operation
- * @retval          E_OK        The request has been accepted.
- * @retval          E_NOT_OK    The request has not been accepted.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_MacSecInit( const uint8 CtrlIdx);
-
-#endif /* (STD_ON == ETH_43_GMAC_MACSEC_SUPPORT) */
-#endif /* defined(ETH_43_GMAC_MACSEC_SUPPORT)*/
-
-
-#if (STD_ON == ETH_43_GMAC_PPS_OUTPUT_SUPPORT)
-/**
- * @brief           Set Pulse-per-second (PPS) output signal mode
- * @details         This function set Pulse-per-second (PPS) output signal mode for the given ethernet controller
- *
- * @param[in]       CtrlIdx Index of the ethernet controller
- * @param[in]       SignalMode TRUE: PPS signal generation is enabled. FALSE: PPS signal generation is disabled
- *
- * @return          Result of the operation
- * @retval          E_OK        successful.
- * @retval          E_NOT_OK    failed.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_SetPpsSignalMode(uint8 CtrlIdx, boolean SignalMode);
-
-/**
- * @brief           Update Pulse-per-second (PPS) output signal configuration
- * @details         This function update Pulse-per-second (PPS) output signal configuration for the given ethernet controller
- *
- * @param[in]       CtrlIdx Index of the ethernet controller
- * @param[in]       PPSOutputIdx The index of PPS output
- * @param[in]       PPSConfig The updated configuration
- *
- * @return          Result of the operation
- * @retval          E_OK        successful.
- * @retval          E_NOT_OK    failed.
- *
- * @api
- *
- */
-Std_ReturnType Eth_43_GMAC_UpdatePpsConfig(uint8 CtrlIdx, uint8 PPSOutputIdx, Eth_43_GMAC_PPSConfigType * PPSConfig);
-#endif /* STD_ON == ETH_43_GMAC_PPS_OUTPUT_SUPPORT */
-
-#if STD_ON == ETH_43_GMAC_LPI_ENABLE
-/**
- * @brief           Entering Tx Low Power Idle (LPI) mode
- * @details         This function enables the given ethernet controller to operate in Low Power Idle (LPI) mode
- *
- * @param[in]       CtrlIdx Index of the ethernet controller
- *
- * @api
- *
- */
-void Eth_43_GMAC_EnteringTxLpi(uint8 CtrlIdx);
-
-/**
- * @brief           Exiting Tx Low Power Idle (LPI) mode
- * @details         This function makes the given ethernet controller exit Low Power Idle (LPI) mode
- *
- * @param[in]       CtrlIdx Index of the ethernet controller
- *
- * @api
- *
- */
-void Eth_43_GMAC_ExitingTxLpi(uint8 CtrlIdx);
-#endif /* STD_ON == ETH_43_GMAC_LPI_ENABLE */
-
-#if defined(ETH_43_GMAC_FILL_LEVEL_API_ENABLE)
-#if (ETH_43_GMAC_FILL_LEVEL_API_ENABLE == STD_ON)
-
-/**
- * @brief Get data on how much of a Rx Ring is occupied
- * @details Get information about the size of an Rx Ring, about how much of it is currently occupied/in-use,
- *          and about its maximum fill level at any moment from initialization to present.
- * @param[in]   CtrlIndex           Index of the current controller
- * @param[in]   RingIdx             Index of the queried Rx ring on the controller
- * @param[in]   FillInfo            Pointer to data structure to be populated with information about the Rx ring
- * 
- * @return          Result of the operation
- * @retval          E_OK        successful.
- * @retval          E_NOT_OK    failed.
- * 
- * @api
-*/
-Std_ReturnType Eth_43_GMAC_GetRxRingFillLevel(const uint8 CtrlIdx, const uint8 RingIdx, Eth_43_GMAC_FillLevelInfo *FillInfo);
-
-/**
- * @brief Get data on how much of a Tx Ring is occupied
- * @details Get information about the size of an Tx Ring, about how much of it is currently occupied/in-use,
- *          and about its maximum fill level at any moment from initialization to present.
- * @param[in]   CtrlIndex           Index of the current controller
- * @param[in]   RingIdx             Index of the queried Tx ring on the controller
- * @param[in]   FillInfo            Pointer to data structure to be populated with information about the Tx ring
- * 
- * @return          Result of the operation
- * @retval          E_OK        successful.
- * @retval          E_NOT_OK    failed.
- * 
- * @api
-*/
-Std_ReturnType Eth_43_GMAC_GetTxRingFillLevel(const uint8 CtrlIdx, const uint8 RingIdx, Eth_43_GMAC_FillLevelInfo *FillInfo);
-#endif  /* STD_ON == ETH_43_GMAC_FILL_LEVEL_API_ENABLE  */
-#endif /* defined(ETH_43_GMAC_FILL_LEVEL_API_ENABLE) */
 
 #define ETH_43_GMAC_STOP_SEC_CODE
 #include "Eth_43_GMAC_MemMap.h"

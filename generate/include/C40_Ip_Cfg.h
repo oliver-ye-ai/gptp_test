@@ -7,12 +7,12 @@
 *   Autosar Version      : 4.7.0
 *   Autosar Revision     : ASR_REL_4_7_REV_0000
 *   Autosar Conf.Variant :
-*   SW Version           : 5.0.0
-*   Build Version        : S32K3_RTD_5_0_0_D2408_ASR_REL_4_7_REV_0000_20241002
+*   SW Version           : 4.0.0
+*   Build Version        : S32K3_RTD_4_0_0_P14_D2403_ASR_REL_4_7_REV_0000_20240328
 *
 *   Copyright 2020 - 2024 NXP
 *
-*   NXP Confidential and Proprietary. This software is owned or controlled by NXP and may only be
+*   NXP Confidential. This software is owned or controlled by NXP and may only be
 *   used strictly in accordance with the applicable license terms. By expressly
 *   accepting such terms or by downloading, installing, activating and/or otherwise
 *   using the software, you are agreeing that you have read, and that you agree to
@@ -56,7 +56,7 @@ extern "C"{
 #define C40_IP_AR_RELEASE_MAJOR_VERSION_CFG           4
 #define C40_IP_AR_RELEASE_MINOR_VERSION_CFG           7
 #define C40_IP_AR_RELEASE_REVISION_VERSION_CFG        0
-#define C40_IP_SW_MAJOR_VERSION_CFG                   5
+#define C40_IP_SW_MAJOR_VERSION_CFG                   4
 #define C40_IP_SW_MINOR_VERSION_CFG                   0
 #define C40_IP_SW_PATCH_VERSION_CFG                   0
 
@@ -96,8 +96,9 @@ extern "C"{
                                        DEFINES AND MACROS
 ==================================================================================================*/
 
-/* Development error detection for C40_IP API */
-#define C40_IP_DEV_ERROR_DETECT                (STD_OFF)
+/*! Enable development error check */
+#define C40_IP_DEV_ASSERT(x)                   (void)(x)
+
 #define C40_IP_UTEST_MODE_API                  (STD_OFF)
 #define C40_IP_SECTOR_SET_LOCK_API             (STD_OFF)
 
@@ -116,6 +117,7 @@ extern "C"{
 
 /* Enable Multi-Core support when using MemAcc*/
 #define C40_IP_MULTICORE_ENABLED               (STD_OFF)
+
 #define C40_IP_ENABLE_USER_MODE_SUPPORT        (STD_OFF)
 #ifndef MCAL_ENABLE_USER_MODE_SUPPORT
     #if (STD_ON == C40_IP_ENABLE_USER_MODE_SUPPORT)
@@ -140,21 +142,13 @@ extern "C"{
 
 #define C40_IP_ECC_CHECK                       (STD_ON)
 #define C40_IP_ECC_CHECK_BY_AUTOSAR_OS         (STD_ON)
-#if ((C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON))
+#if ( (C40_IP_ECC_CHECK == STD_ON) || (C40_IP_ECC_CHECK_BY_AUTOSAR_OS == STD_ON) )
     #define C40_IP_ECC_VALUE                   (0x55155515U)
 #endif
 
-/**
- * @brief  number of data sector
- */
+
 #define C40_IP_MAX_DATA_SECTOR                 (16U)
-/**
- * @brief  number of sector in a code block.
- */
 #define C40_IP_NUM_OF_SECTOR_PER_BLOCK         (128U)
-/**
- * @brief  number of supper sector in a code block.
- */
 #define C40_IP_NUM_OF_SUPPER_SECTOR_PER_BLOCK  (12U)
 
 /* Code block 0 addresses */
@@ -181,8 +175,8 @@ extern "C"{
 #define C40_IP_UTEST_BLOCK_BASE_ADDR           (0x1B000000U)
 #define C40_IP_UTEST_BLOCK_END_ADDR            (0x1B001FFFU)
 
-/* Memory flash sector characteristics (this value is maximum index (included Utest sector)) */
-#define C40_IP_MAX_VIRTUAL_SECTOR              (528U)
+/* Memory flash sector characteristics */
+#define C40_IP_MAX_VIRTUAL_SECTOR              (527U)
 
 #define C40_IP_CODE_BLOCK_SIZE                 (0x400000U)
 #define C40_IP_CODE_BLOCK_END_ADDR             (C40_IP_CODE_BLOCK_0_BASE_ADDR + C40_IP_CODE_BLOCK_SIZE - 1U)
